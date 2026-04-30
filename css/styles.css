@@ -139,6 +139,37 @@ body {
 
 .coverage-tags { display: flex; flex-wrap: wrap; gap: 0.25rem; }
 
+/* ── Tag Color Palette (Mermaid B4 — consistent everywhere) ── */
+:root {
+  --tag-defense: #5c8cc4;        /* Blue */
+  --tag-defense-bg: rgba(92,140,196,0.14);
+  --tag-defense-border: rgba(92,140,196,0.4);
+
+  --tag-targeting: #5caaa0;      /* Teal (NEW) */
+  --tag-targeting-bg: rgba(92,170,160,0.14);
+  --tag-targeting-border: rgba(92,170,160,0.4);
+
+  --tag-damage: #c4895c;         /* Orange/amber */
+  --tag-damage-bg: rgba(196,137,92,0.14);
+  --tag-damage-border: rgba(196,137,92,0.4);
+
+  --tag-condition: #8b6cc4;      /* Purple */
+  --tag-condition-bg: rgba(139,108,196,0.14);
+  --tag-condition-border: rgba(139,108,196,0.4);
+
+  --tag-reliability: #5caa6f;    /* Green */
+  --tag-reliability-bg: rgba(92,170,111,0.14);
+  --tag-reliability-border: rgba(92,170,111,0.4);
+
+  --tag-action: #d4a853;         /* Gold */
+  --tag-action-bg: rgba(212,168,83,0.14);
+  --tag-action-border: rgba(212,168,83,0.4);
+
+  --tag-special: #b8b0c4;        /* Silver/gray (NEW color) */
+  --tag-special-bg: rgba(184,176,196,0.12);
+  --tag-special-border: rgba(184,176,196,0.35);
+}
+
 .ctag {
   font-family: 'Inter', sans-serif;
   font-size: 0.65rem;
@@ -153,17 +184,82 @@ body {
   cursor: help;
 }
 
-.ctag.lit {
-  opacity: 1;
-  color: var(--gold);
-  background: rgba(212,168,83,0.12);
-  border-color: rgba(212,168,83,0.35);
+/* Browser/slot tags — full opacity by default (only sidebar dims unlit) */
+.spell-table .ctag,
+.slot-tags .ctag { opacity: 1; }
+
+/* Sidebar lit state — colored per group */
+.ctag.lit { opacity: 1; }
+
+.ctag.tag-defense.lit,
+.spell-table .ctag.tag-defense,
+.slot-tags .ctag.tag-defense.lit,
+.slot-tags .ctag.tag-defense {
+  color: var(--tag-defense);
+  background: var(--tag-defense-bg);
+  border-color: var(--tag-defense-border);
 }
 
-.ctag.lit.danger {
+.ctag.tag-targeting.lit,
+.spell-table .ctag.tag-targeting,
+.slot-tags .ctag.tag-targeting.lit,
+.slot-tags .ctag.tag-targeting {
+  color: var(--tag-targeting);
+  background: var(--tag-targeting-bg);
+  border-color: var(--tag-targeting-border);
+}
+
+.ctag.tag-damage.lit,
+.spell-table .ctag.tag-damage,
+.slot-tags .ctag.tag-damage.lit,
+.slot-tags .ctag.tag-damage {
+  color: var(--tag-damage);
+  background: var(--tag-damage-bg);
+  border-color: var(--tag-damage-border);
+}
+
+.ctag.tag-condition.lit,
+.spell-table .ctag.tag-condition,
+.slot-tags .ctag.tag-condition.lit,
+.slot-tags .ctag.tag-condition {
+  color: var(--tag-condition);
+  background: var(--tag-condition-bg);
+  border-color: var(--tag-condition-border);
+}
+
+.ctag.tag-reliability.lit,
+.spell-table .ctag.tag-reliability,
+.slot-tags .ctag.tag-reliability.lit,
+.slot-tags .ctag.tag-reliability {
+  color: var(--tag-reliability);
+  background: var(--tag-reliability-bg);
+  border-color: var(--tag-reliability-border);
+}
+
+.ctag.tag-action.lit,
+.spell-table .ctag.tag-action,
+.slot-tags .ctag.tag-action.lit,
+.slot-tags .ctag.tag-action {
+  color: var(--tag-action);
+  background: var(--tag-action-bg);
+  border-color: var(--tag-action-border);
+}
+
+.ctag.tag-special.lit,
+.spell-table .ctag.tag-special,
+.slot-tags .ctag.tag-special.lit,
+.slot-tags .ctag.tag-special {
+  color: var(--tag-special);
+  background: var(--tag-special-bg);
+  border-color: var(--tag-special-border);
+}
+
+/* Incap warning takes precedence */
+.ctag.lit.danger,
+.ctag.danger.lit {
   color: var(--accent-red);
-  background: rgba(196,92,92,0.12);
-  border-color: rgba(196,92,92,0.35);
+  background: rgba(196,92,92,0.14);
+  border-color: rgba(196,92,92,0.4);
 }
 
 /* ── MAIN CONTENT ── */
@@ -630,6 +726,22 @@ body {
   margin-left: 0.3rem;
 }
 
+/* Parked heighten badge — dimmed to indicate "no extra benefit" */
+.heightened-badge.parked {
+  color: var(--text-dim);
+  background: rgba(174,168,186,0.06);
+  border: 1px dashed rgba(174,168,186,0.25);
+  font-style: italic;
+}
+
+.spell-table tr.parked-row td {
+  opacity: 0.65;
+}
+
+.spell-table tr.parked-row .spell-name-link {
+  color: var(--text);
+}
+
 /* ── BROWSER ADVICE ── */
 .browser-advice {
   font-size: 0.82rem;
@@ -901,10 +1013,15 @@ body {
 }
 
 .checklist-card h4 .cl-icon { font-size: 1.1rem; }
-.checklist-card.defense h4 { color: var(--accent-red); }
-.checklist-card.effect h4 { color: var(--accent-purple); }
-.checklist-card.reliability h4 { color: var(--accent-blue); }
-.checklist-card.action h4 { color: var(--accent-teal); }
+/* Card heading colors match the corresponding sidebar tag-group palette */
+.checklist-card.defense h4 { color: var(--tag-defense); }
+.checklist-card.effect h4 { color: var(--tag-damage); }
+.checklist-card.reliability h4 { color: var(--tag-reliability); }
+.checklist-card.action h4 { color: var(--tag-action); }
+.checklist-card.defense { border-color: var(--tag-defense-border); }
+.checklist-card.effect { border-color: var(--tag-damage-border); }
+.checklist-card.reliability { border-color: var(--tag-reliability-border); }
+.checklist-card.action { border-color: var(--tag-action-border); }
 
 .cl-items { list-style: none; font-size: 0.85rem; }
 .cl-items li { padding: 0.25rem 0; padding-left: 1.3rem; position: relative; line-height: 1.4; }

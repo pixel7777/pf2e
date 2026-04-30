@@ -1,6 +1,14 @@
 """
 Merge spell.json (full catalog) + curated.json (Mathfinder ratings) → data/spells.js
 Outputs a browser-loadable JS file assigning window.SPELL_DATA.
+
+Tag classification follows Mermaid A (Cycle 02 spec):
+- Defense: Fort, Ref, Will, AC, Auto derived from saving_throw
+- Targeting: ST, AoE (+ Burst/Line/Cone/Area subtypes) from area_type/target
+- Action: 1-action, Reaction, 3-action from actions field
+- Duration: Sustain-action, Persistent from duration_raw
+- Incap: from Incapacitation trait
+- Auto-effect: only for offensive spells with no save (role-gated for curated)
 """
 
 import json
@@ -13,9 +21,15 @@ SPELL_JSON = os.path.join(PROJECT_ROOT, "source", "spell.json")
 CURATED_JSON = os.path.join(PROJECT_ROOT, "data", "curated.json")
 OUTPUT_JS = os.path.join(PROJECT_ROOT, "data", "spells.js")
 
+OFFENSIVE_ROLES = {'damage', 'debuff', 'silverBullets'}
+AOE_AREA_TYPES = {'burst', 'circle', 'emanation', 'cube', 'cuboid', 'cylinder', 'square'}
+DAMAGE_TRAITS = {
+    'Fire', 'Cold', 'Electricity', 'Acid', 'Force', 'Void', 'Vitality',
+    'Sonic', 'Mental', 'Poison', 'Spirit', 'Light', 'Darkness'
+}
+
 
 def extract_aon_id(spell):
-    """Extract numeric AoN ID from spell's id field (e.g., 'spell-1536' → 1536)."""
     sid = spell.get("id", "")
     if sid.startswith("spell-"):
         try:
@@ -25,8 +39,104 @@ def extract_aon_id(spell):
     return None
 
 
+def compute_defense_tag(spell):
+    save = spell.get("saving_throw") or ""
+    save_lower = save.lower()
+    if "fortitude" in save_lower:
+        return "Fort"
+    if "reflex" in save_lower:
+        return "Ref"
+    if "will" in save_lower:
+        return "Will"
+    return None
+
+
+def compute_targeting_tags(spell):
+    tags = []
+    area_types = spell.get("area_type") or []
+    target = (spell.get("target") or "").lower()
+
+    has_area = False
+    for at in area_types:
+        at_lower = at.lower()
+        if at_lower in ('burst', 'circle', 'emanation', 'cube', 'cuboid', 'cylinder', 'square'):
+            tags.append("Burst")
+            tags.append("AoE")
+            has_area = True
+        elif at_lower == 'line':
+            tags.append("Line")
+            tags.append("AoE")
+            has_area = True
+        elif at_lower == 'cone':
+            tags.append("Cone")
+            tags.append("AoE")
+            has_area = True
+        elif at_lower in ('other', 'varies'):
+            tags.append("Area")
+            tags.append("AoE")
+            has_area = True
+
+    if not has_area and ("1 creature" in target or "1 willing creature" in target):
+        tags.append("ST")
+
+    return list(dict.fromkeys(tags))
+
+
+def compute_action_tag(spell):
+    actions_str = (spell.get("actions") or "").lower()
+    if "reaction" in actions_str:
+        return "Reaction"
+    if "three action" in actions_str:
+        return "3-action"
+    if "single action" in actions_str or actions_str == "1":
+        return "1-action"
+    return None
+
+
+def compute_duration_tags(spell):
+    tags = []
+    duration = (spell.get("duration_raw") or "").lower()
+    if "sustain" in duration:
+        tags.append("Sustain-action")
+    text = (spell.get("text") or "").lower()
+    if "persistent" in duration or "persistent damage" in text[:500]:
+        tags.append("Persistent")
+    return tags
+
+
+def has_incapacitation(spell):
+    traits = spell.get("trait_raw") or []
+    return "Incapacitation" in traits
+
+
+def has_damage_trait(spell):
+    traits = set(spell.get("trait_raw") or [])
+    return bool(traits & DAMAGE_TRAITS)
+
+
+def compute_auto_tags(spell):
+    """Compute all auto-derivable tags from spell.json data."""
+    tags = []
+
+    defense = compute_defense_tag(spell)
+    if defense:
+        tags.append(defense)
+
+    tags.extend(compute_targeting_tags(spell))
+
+    action = compute_action_tag(spell)
+    if action:
+        tags.append(action)
+
+    tags.extend(compute_duration_tags(spell))
+
+    if has_incapacitation(spell):
+        tags.append("Incap")
+
+    return tags
+
+
 def slim_spell(spell):
-    """Extract only the fields the app needs from a full spell.json entry."""
     return {
         "name": spell.get("name", ""),
         "aonId": extract_aon_id(spell),
@@ -40,11 +150,11 @@ def slim_spell(spell):
         "target": spell.get("target", ""),
         "range": spell.get("range_raw", ""),
         "url": spell.get("url", ""),
+        "computedTags": compute_auto_tags(spell),
     }
 
 
 def build_curated_index(curated_data):
-    """Build a lookup: (aonId, tradition, rank, role) → curated entry."""
     index_by_aon = {}
     index_by_name = {}
 
@@ -65,6 +175,35 @@ def build_curated_index(curated_data):
     return index_by_aon, index_by_name
 
 
+def fix_auto_effect_in_curated(curated_data):
+    """Fix Auto-effect tags in curated entries per Mermaid A.
+
+    Auto-effect should ONLY appear on spells that:
+    1. Have save = "Auto" (no save/attack roll)
+    2. Are in an offensive role (damage, debuff, silverBullets)
+
+    Buffs, prebuffs, oneAction (unless explicitly tagged by curator),
+    and reactions do NOT get Auto-effect.
+    """
+    fixed_count = 0
+    for tradition, entries in curated_data.get("traditions", {}).items():
+        for entry in entries:
+            tags = entry.get("tags", [])
+            if "Auto-effect" not in tags:
+                continue
+
+            role = entry.get("role", "")
+            save = entry.get("save", "")
+
+            should_have = (save == "Auto" and role in OFFENSIVE_ROLES)
+
+            if not should_have:
+                entry["tags"] = [t for t in tags if t != "Auto-effect"]
+                fixed_count += 1
+
+    return fixed_count
+
+
 def main():
     print("Loading spell.json...")
     with open(SPELL_JSON, 'r', encoding='utf-8') as f:
@@ -74,6 +213,10 @@ def main():
     print("Loading curated.json...")
     with open(CURATED_JSON, 'r', encoding='utf-8') as f:
         curated_data = json.load(f)
+
+    print("Fixing Auto-effect tags in curated data...")
+    fixed = fix_auto_effect_in_curated(curated_data)
+    print(f"  Removed Auto-effect from {fixed} non-offensive curated entries")
 
     curated_by_aon, curated_by_name = build_curated_index(curated_data)
     tag_defs = curated_data.get("tagDefs", {})
@@ -86,7 +229,6 @@ def main():
         if slim["aonId"] is None:
             continue
 
-        # Check if this spell has curated entries for any tradition
         curated_entries = []
         for tradition in slim["traditions"]:
             key = (slim["aonId"], tradition)
@@ -99,10 +241,13 @@ def main():
             total_curated_matches += 1
         else:
             slim["curated"] = False
+            no_save = not spell.get("saving_throw")
+            if no_save and has_damage_trait(spell):
+                slim["computedTags"].insert(0, "Auto")
+                slim["computedTags"].append("Auto-effect")
 
         merged.append(slim)
 
-    # Sort: curated first, then alphabetical
     merged.sort(key=lambda s: (0 if s["curated"] else 1, s["name"].lower()))
 
     output = {

@@ -27,16 +27,90 @@
     search: 'Search All'
   };
 
-  var roleAdvice = {
-    damage: 'Top-tier slots: best native-rank blasts + strong heightened. Mid-tier: heightened spells that still compete. Low-tier: never put "evergreen" damage here.',
-    debuff: 'Always native rank for top-tier — higher-rank debuffs have more "permission" to land. Low-tier: reactions and 1-action options only.',
-    buff: 'Heighten key buffs to max rank. Low-tier slots: pre-buffs cast before combat from cheap slots.',
-    silverBullets: 'These solve specific problems regardless of spell rank. Prepare them in low-tier slots — their value doesn\'t depend on rank.',
-    reactions: 'React on enemy turns at no action cost. Prepare at native rank in low-tier slots.',
-    oneAction: 'Pair with 2-action spells for a full turn. Low-tier slots are ideal.',
-    prebuffs: 'Cast before combat from low-rank slots for free value. Duration matters more than rank.',
-    search: 'Search the full spell catalog. Curated picks are highlighted with a gold star.'
+  // ── Mermaid B3: Context-Dependent Advice Matrix ──
+  // Indexed by [role][tier] → base advice
+  var adviceMatrix = {
+    damage: {
+      top: 'Your main combat damage. Native-rank blasts compete best here. Compare native options vs heightened — for AoE, native often wins (Chain Lightning > heightened Fireball). For single-target, heightening can work (Thunderstrike).',
+      mid: 'Transition zone. Heightened damage spells that still compete. Backup healing at 2nd-highest rank.',
+      low: 'Do NOT put "evergreen" damage here. Use for: 1-action damage (Force Barrage), sustained (Floating Flame), or reactions (Brine Dragon\'s Bile).'
+    },
+    debuff: {
+      top: 'Always native rank. Higher-rank debuffs have more "permission" — Vision of Death beats heightened Fear, Slow beats heightened Agitate. This is where native rank matters most.',
+      mid: 'Heightened debuffs that still compete. Some native-rank debuffs unlock here.',
+      low: 'Reactions and 1-action options only. Don\'t waste on evergreen debuffs at low rank.'
+    },
+    buff: {
+      top: 'Heighten Heal/Soothe to max rank. Check if a native buff replaces your heightened one (Heroism replaces Bless at R5).',
+      mid: 'Backup heals. Buffs with good heightening formulas.',
+      low: 'Pre-buffs cast before combat. Duration matters more than rank here.'
+    },
+    silverBullets: {
+      top: 'Rarely — silver bullets are most efficient in low slots. If one IS here, it solves a specific high-value problem.',
+      mid: 'Occasionally.',
+      low: 'Perfect home. Effect matters more than DC/rank. Acid Grip, Laughing Fit, Earthbind, Revealing Light.'
+    },
+    reactions: {
+      top: 'Rarely occupies top slots.',
+      mid: 'Occasionally.',
+      low: 'Ideal. No action cost = great value from cheap slots. Interposing Earth, Hidebound, Lose the Path.'
+    },
+    oneAction: {
+      top: 'Rarely.',
+      mid: 'Occasionally.',
+      low: 'Ideal. Pair with 2-action main spell. Force Barrage (1-action mode), Sure Strike, Timely Tutor.'
+    },
+    prebuffs: {
+      top: 'Almost never.',
+      mid: 'Rarely.',
+      low: 'Ideal. Cast before combat for free value. False Vitality, Element Sense, Tailwind.'
+    },
+    search: {
+      top: 'Search the full spell catalog. Curated picks are highlighted with a gold star.',
+      mid: 'Search the full spell catalog. Curated picks are highlighted with a gold star.',
+      low: 'Search the full spell catalog. Curated picks are highlighted with a gold star.'
+    }
   };
+
+  // Tradition-specific additions, indexed by [tradition][role][tier]
+  // Per spec Mermaid B3 — additions are role-specific.
+  // Arcane's "Any tier — All four defenses available" applies to damage role.
+  var traditionAdvice = {
+    arcane: {
+      damage: {
+        top: 'Arcane has widest damage type coverage — prioritize filling defense gaps over raw power.',
+        mid: 'All four defenses available. Lean into that variety.',
+        low: 'All four defenses available. Lean into that variety.'
+      }
+    },
+    divine: {
+      damage: { top: 'Limited blast options natively. Flames Oracle compensates. Otherwise lean into Fort/Will targeting.' },
+      debuff: { '*': 'Strong Fort and Will targeting. Reflex options are limited — consider attack roll spells.' }
+    },
+    occult: {
+      damage: { top: 'Limited blast options. Psychic class features compensate. Otherwise use buff/debuff as primary.' },
+      buff:   { '*': 'Best buff tradition (10/10). Lean in — this is your superpower.' }
+    },
+    primal: {
+      debuff: { '*': 'Will targeting is your gap. Use attack roll spells (AC) to work around it.' },
+      damage: { top: 'Strong Fort and Reflex coverage. Will gap means attack rolls are important for diversity.' }
+    }
+  };
+
+  function getAdvice(role, tier, tradition) {
+    var roleAdvice = adviceMatrix[role];
+    if (!roleAdvice) return '';
+    var base = roleAdvice[tier] || roleAdvice['low'] || '';
+
+    var tradAdv = traditionAdvice[tradition];
+    if (!tradAdv || !tradAdv[role]) return base;
+
+    var roleSlice = tradAdv[role];
+    var addition = roleSlice[tier] || roleSlice['*'];
+
+    if (addition) return base + ' ' + addition;
+    return base;
+  }
 
   window.Browser = {
     show: function(tradition, level, rank) {
@@ -85,7 +159,6 @@
 
       browser.innerHTML = html;
 
-      // Event delegation for spell row clicks
       var tableWrap = document.getElementById('spellTable-' + tradition);
       tableWrap.addEventListener('click', function(e) {
         if (e.target.closest('.spell-name-link') && e.target.tagName === 'A') return;
@@ -132,7 +205,10 @@
     renderSpells: function(tradition, level, rank) {
       var role = currentRole[tradition] || 'damage';
       var adviceEl = document.getElementById('advice-' + tradition);
-      if (adviceEl) adviceEl.textContent = roleAdvice[role] || '';
+      if (adviceEl) {
+        var tier = App.getTier(level, rank);
+        adviceEl.textContent = getAdvice(role, tier, tradition);
+      }
 
       var tableEl = document.getElementById('spellTable-' + tradition);
       if (!tableEl) return;
@@ -160,6 +236,7 @@
         var s = spells[i];
         var isCurated = s.curated || s._curated;
         var rowClass = isCurated ? ' curated-row' : '';
+        if (s._parked) rowClass += ' parked-row';
 
         html += '<tr class="' + rowClass + '" data-spell-idx="' + i + '" style="cursor:pointer;">';
 
@@ -172,13 +249,22 @@
         } else {
           html += '<span class="spell-name-link">' + s.name + '</span>';
         }
-        if (s.heightenedFrom && s.heightenedFrom > 0) {
+        // Heighten badge — meaningful vs parked vs native
+        if (s._displayRank && s._displayRank > (s._nativeRank || 0)) {
+          if (s._parked) {
+            html += ' <span class="heightened-badge parked" title="Parked: no curated entry at slot rank — heightening to slot rank with no extra benefit">H⬆' + s._displayRank + ' (parked)</span>';
+          } else {
+            html += ' <span class="heightened-badge" title="Meaningful heighten: curated entry confirms value at this rank">H⬆' + s._displayRank + '</span>';
+          }
+        } else if (s.heightenedFrom && s.heightenedFrom > 0 && !s._displayRank) {
+          // Search-tab fallback: catalog spells at native rank
           html += ' <span class="heightened-badge">H⬆' + s.rank + '</span>';
         }
         html += '</td>';
 
-        // Rank
-        html += '<td>' + (s.rank || '—') + '</td>';
+        // Rank — show display rank for parked entries
+        var displayRank = s._displayRank || s.rank || '—';
+        html += '<td>' + displayRank + '</td>';
 
         // Save
         html += '<td>' + (s.save || '—') + '</td>';
@@ -187,7 +273,8 @@
         html += '<td><div class="slot-tags">';
         var tags = s.tags || [];
         for (var t = 0; t < Math.min(tags.length, 5); t++) {
-          html += '<span class="ctag" data-tag="' + tags[t] + '">' + tags[t] + '</span>';
+          var groupClass = Coverage.getGroupClass(tags[t]);
+          html += '<span class="ctag ' + groupClass + '" data-tag="' + tags[t] + '">' + tags[t] + '</span>';
         }
         if (tags.length > 5) html += '<span class="ctag">+' + (tags.length - 5) + '</span>';
         html += '</div></td>';
@@ -202,38 +289,77 @@
       tableEl.innerHTML = html;
     },
 
-    getCuratedForRole: function(tradition, role, maxRank) {
+    // ── Mermaid B2: Heighten Deduplication ──
+    // Group curated entries by aonId (per tradition + role).
+    // For a slot at rank N, show ONE entry per group: the highest entry with rank <= N.
+    // Tag the displayed entry as either "meaningful" or "parked".
+    getCuratedForRole: function(tradition, role, slotRank) {
       var curated = getCuratedSpells(tradition);
-      var results = [];
 
+      // Step 1: filter to (this role, rank <= slotRank)
+      var roleEntries = [];
       for (var i = 0; i < curated.length; i++) {
         var s = curated[i];
         if (s.role !== role) continue;
-        if (s.rank > maxRank) continue;
+        if (s.rank > slotRank) continue;
+        roleEntries.push(s);
+      }
+
+      // Step 2: group by aonId
+      var groups = {};
+      for (var i = 0; i < roleEntries.length; i++) {
+        var s = roleEntries[i];
+        var key = s.aonId || ('name:' + s.name.toLowerCase());
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(s);
+      }
+
+      // Step 3: for each group, pick the entry with the highest rank
+      var results = [];
+      for (var key in groups) {
+        var entries = groups[key];
+        // Sort by rank descending
+        entries.sort(function(a, b) { return (b.rank || 0) - (a.rank || 0); });
+        var best = entries[0];
+
+        // Determine if meaningful or parked
+        // Meaningful: best.rank == slotRank (curated entry exists exactly at slot rank)
+        // Parked: best.rank < slotRank (no curated entry at slot rank — would be heightened with no extra benefit)
+        // Native: best.rank == slotRank AND heightenedFrom == 0 (no heighten badge at all)
+        var isParked = (best.rank < slotRank);
+        var displayRank = isParked ? slotRank : best.rank;
+        var nativeRank = best.heightenedFrom || best.rank;
+
         var entry = {
-          name: s.name,
-          aonId: s.aonId,
-          rank: s.rank,
-          save: s.save,
-          tags: s.tags,
-          notes: s.notes,
-          heightenedFrom: s.heightenedFrom,
-          role: s.role,
+          name: best.name,
+          aonId: best.aonId,
+          rank: best.rank,
+          save: best.save,
+          tags: best.tags,
+          notes: best.notes,
+          heightenedFrom: best.heightenedFrom,
+          role: best.role,
           curated: true,
-          _curated: true
+          _curated: true,
+          _displayRank: displayRank,
+          _nativeRank: nativeRank,
+          _parked: isParked
         };
         results.push(entry);
       }
 
-      // For ranked roles (damage, debuff, buff), sort by rank descending then name
+      // Sort results
       if (role === 'damage' || role === 'debuff' || role === 'buff') {
+        // Rank descending (display rank), then meaningful before parked, then name
         results.sort(function(a, b) {
-          if (b.rank !== a.rank) return b.rank - a.rank;
+          if (b._displayRank !== a._displayRank) return b._displayRank - a._displayRank;
+          if (a._parked !== b._parked) return a._parked ? 1 : -1;
           return a.name.localeCompare(b.name);
         });
       } else {
         results.sort(function(a, b) {
           if (a.rank !== b.rank) return a.rank - b.rank;
+          if (a._parked !== b._parked) return a._parked ? 1 : -1;
           return a.name.localeCompare(b.name);
         });
       }
@@ -253,9 +379,13 @@
       var all = getAllSpells();
       var curatedSet = {};
       var curatedSpells = getCuratedSpells(tradition);
+      // Index curated by aonId only (not rank) so we can find the best curated overlay for any catalog entry
       for (var i = 0; i < curatedSpells.length; i++) {
-        var key = curatedSpells[i].aonId + '-' + curatedSpells[i].rank;
-        curatedSet[key] = curatedSpells[i];
+        var aid = curatedSpells[i].aonId;
+        if (!aid) continue;
+        if (!curatedSet[aid] || curatedSpells[i].rank > curatedSet[aid].rank) {
+          curatedSet[aid] = curatedSpells[i];
+        }
       }
 
       var results = [];
@@ -267,15 +397,14 @@
         if (saveFilter && s.save !== saveFilter) continue;
         if (query && s.name.toLowerCase().indexOf(query) === -1) continue;
 
-        var key = s.aonId + '-' + s.rank;
-        var curatedEntry = curatedSet[key];
+        var curatedEntry = curatedSet[s.aonId];
 
         var entry = {
           name: s.name,
           aonId: s.aonId,
           rank: s.rank,
           save: s.save || s.saving_throw || '',
-          tags: curatedEntry ? curatedEntry.tags : (s.traits || []),
+          tags: curatedEntry ? curatedEntry.tags : (s.computedTags || s.traits || []),
           notes: curatedEntry ? curatedEntry.notes : (s.summary || ''),
           heightenedFrom: curatedEntry ? curatedEntry.heightenedFrom : 0,
           curated: !!curatedEntry,
@@ -284,7 +413,6 @@
         results.push(entry);
       }
 
-      // Sort: curated first, then alphabetical
       results.sort(function(a, b) {
         if (a.curated !== b.curated) return a.curated ? -1 : 1;
         return a.name.localeCompare(b.name);

@@ -121,6 +121,7 @@
       // Auto-populate slots from class data
       this.autoPopulateSlots(tradition, level);
       this.renderSlots(tradition, level);
+      Coverage.update(tradition, level);
     },
 
     showOverview: function(tradition) {
@@ -259,7 +260,8 @@
             html += '<td><div class="slot-tags">';
             var tags = spell.tags || [];
             for (var t = 0; t < Math.min(tags.length, 4); t++) {
-              html += '<span class="ctag lit" data-tag="' + tags[t] + '">' + tags[t] + '</span>';
+              var groupClass = Coverage.getGroupClass(tags[t]);
+              html += '<span class="ctag lit ' + groupClass + '" data-tag="' + tags[t] + '">' + tags[t] + '</span>';
             }
             html += '</div></td>';
             html += '<td><button class="slot-clear-btn" onclick="Planner.clearSlot(\'' + tradition + '\',' + level + ',' + r + ',' + idx + ',event)">✕</button></td>';
