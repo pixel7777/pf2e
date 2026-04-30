@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PF2e Spell Planner — Prepared Caster Edition</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- ═══════ HEADER + NAV ═══════ -->
+<header class="site-header">
+  <div class="site-title">
+    PF2e Spell Planner
+    <small>Prepared Caster Edition &middot; Based on Mathfinder</small>
+  </div>
+  <nav class="tab-bar">
+    <button class="tab-btn active" data-page="overview">Overview</button>
+    <button class="tab-btn" data-page="arcane">Arcane</button>
+    <button class="tab-btn" data-page="divine">Divine</button>
+    <button class="tab-btn" data-page="occult">Occult</button>
+    <button class="tab-btn" data-page="primal">Primal</button>
+  </nav>
+</header>
+
+<div class="body-layout">
+
+  <!-- ── SIDEBAR (Coverage Tracker) ── -->
+  <aside class="sidebar" style="display:none;">
+    <div class="sidebar-title">Coverage Tracker</div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Defense</div>
+      <div class="coverage-tags">
+        <span class="ctag" data-tag="AC">AC</span>
+        <span class="ctag" data-tag="Fort">Fort</span>
+        <span class="ctag" data-tag="Ref">Ref</span>
+        <span class="ctag" data-tag="Will">Will</span>
+        <span class="ctag" data-tag="Auto">Auto</span>
+      </div>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Damage Types</div>
+      <div class="coverage-tags">
+        <span class="ctag" data-tag="Fire">Fire</span>
+        <span class="ctag" data-tag="Cold">Cold</span>
+        <span class="ctag" data-tag="Elec">Elec</span>
+        <span class="ctag" data-tag="Force">Force</span>
+        <span class="ctag" data-tag="Mental">Mental</span>
+        <span class="ctag" data-tag="Acid">Acid</span>
+        <span class="ctag" data-tag="Void">Void</span>
+        <span class="ctag" data-tag="Bludg">Bludg</span>
+        <span class="ctag" data-tag="Pierc">Pierc</span>
+        <span class="ctag" data-tag="Varies">Varies</span>
+        <span class="ctag" data-tag="Untyped">Untyped</span>
+      </div>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Spell Traits</div>
+      <div class="coverage-tags">
+        <span class="ctag" data-tag="Mental-trait">Mental-trait</span>
+      </div>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Conditions</div>
+      <div class="coverage-tags">
+        <span class="ctag" data-tag="Frightened">Frightened</span>
+        <span class="ctag" data-tag="Slowed">Slowed</span>
+        <span class="ctag" data-tag="Dazzled">Dazzled</span>
+        <span class="ctag" data-tag="Blinded">Blinded</span>
+        <span class="ctag" data-tag="Prone">Prone</span>
+        <span class="ctag" data-tag="Stunned">Stunned</span>
+        <span class="ctag" data-tag="Confused">Confused</span>
+        <span class="ctag" data-tag="Stupefied">Stupefied</span>
+        <span class="ctag" data-tag="Clumsy">Clumsy</span>
+      </div>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Reliability</div>
+      <div class="coverage-tags">
+        <span class="ctag" data-tag="Auto-effect">Auto-effect</span>
+        <span class="ctag" data-tag="Success-effect">Success-effect</span>
+        <span class="ctag danger" data-tag="Incap">Incap &#9888;</span>
+      </div>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Action Economy</div>
+      <div class="coverage-tags">
+        <span class="ctag" data-tag="1-action">1-action</span>
+        <span class="ctag" data-tag="Reaction">Reaction</span>
+        <span class="ctag" data-tag="Sustain-action">Sustain</span>
+        <span class="ctag" data-tag="3-action">3-action</span>
+      </div>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Special</div>
+      <div class="coverage-tags">
+        <span class="ctag" data-tag="Coverage">Coverage</span>
+        <span class="ctag" data-tag="Multimodal">Multimodal</span>
+        <span class="ctag" data-tag="Silver Bullet">Silver Bullet</span>
+        <span class="ctag" data-tag="Pre-buff">Pre-buff</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main class="main-content">
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- OVERVIEW PAGE -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="tradition-page active" id="page-overview">
+      <div class="guide-page">
+
+        <div class="hero">
+          <h1>Spell Selection in Under 10 Minutes</h1>
+          <p>A structured process for choosing prepared spells at any level. Learn the framework here, then dive into your tradition.</p>
+        </div>
+
+        <!-- TIER MAP -->
+        <h2 class="section-label">The Tier Map</h2>
+        <p class="section-intro">Think in tiers relative to your max rank, not absolute spell ranks. Your top-tier slots carry your combat effectiveness; your low-tier slots solve niche problems.</p>
+
+        <div class="tier-map-grid">
+          <div class="tier-card top">
+            <span class="tier-symbol">&#9670;</span>
+            <h3>Top Tier</h3>
+            <p class="tier-desc">Your <strong>max rank and one below</strong>. These define your turn-to-turn effectiveness. Fill with the best native-rank spells and strong heightened options.</p>
+            <p class="tier-ranks">Always your top 2 ranks of slots</p>
+          </div>
+          <div class="tier-card mid">
+            <span class="tier-symbol">&#9671;</span>
+            <h3>Mid Tier</h3>
+            <p class="tier-desc"><strong>One rank below top tier.</strong> Transition zone: heightened spells that still compete, and native-rank spells that unlock new capabilities.</p>
+            <p class="tier-ranks">Usually 1 rank — the bridge between your best and your utility</p>
+          </div>
+          <div class="tier-card low">
+            <span class="tier-symbol">&#9675;</span>
+            <h3>Low Tier</h3>
+            <p class="tier-desc"><strong>Everything below mid.</strong> Silver bullets, reactions, 1-action spells, pre-buffs, utility. These slots solve specific problems, not general ones.</p>
+            <p class="tier-ranks">All remaining ranks — don't waste these on "evergreen" damage or debuffs</p>
+          </div>
+        </div>
+
+        <!-- TIER TABLE -->
+        <div class="tier-table-wrap">
+          <table class="tier-table">
+            <thead>
+              <tr>
+                <th>Your Level</th>
+                <th>Max Rank</th>
+                <th><span style="color:var(--top-tier)">&#9670; Top</span></th>
+                <th><span style="color:var(--mid-tier)">&#9671; Mid</span></th>
+                <th><span style="color:var(--low-tier)">&#9675; Low</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="col-level">1–2</td><td class="col-max">1</td><td class="tag-top">Rank 1</td><td class="em-dash">—</td><td class="em-dash">—</td></tr>
+              <tr><td class="col-level">3–4</td><td class="col-max">2</td><td class="tag-top">Rank 2, 1</td><td class="em-dash">—</td><td class="em-dash">—</td></tr>
+              <tr><td class="col-level">5–6</td><td class="col-max">3</td><td class="tag-top">Rank 3, 2</td><td class="tag-mid">Rank 1</td><td class="em-dash">—</td></tr>
+              <tr><td class="col-level">7–8</td><td class="col-max">4</td><td class="tag-top">Rank 4, 3</td><td class="tag-mid">Rank 2</td><td class="tag-low">Rank 1</td></tr>
+              <tr><td class="col-level">9–10</td><td class="col-max">5</td><td class="tag-top">Rank 5, 4</td><td class="tag-mid">Rank 3</td><td class="tag-low">Rank 1–2</td></tr>
+              <tr><td class="col-level">11–12</td><td class="col-max">6</td><td class="tag-top">Rank 6, 5</td><td class="tag-mid">Rank 4</td><td class="tag-low">Rank 1–3</td></tr>
+              <tr><td class="col-level">13–14</td><td class="col-max">7</td><td class="tag-top">Rank 7, 6</td><td class="tag-mid">Rank 5</td><td class="tag-low">Rank 1–4</td></tr>
+              <tr><td class="col-level">15–16</td><td class="col-max">8</td><td class="tag-top">Rank 8, 7</td><td class="tag-mid">Rank 6</td><td class="tag-low">Rank 1–5</td></tr>
+              <tr><td class="col-level">17–18</td><td class="col-max">9</td><td class="tag-top">Rank 9, 8</td><td class="tag-mid">Rank 7</td><td class="tag-low">Rank 1–6</td></tr>
+              <tr><td class="col-level">19–20</td><td class="col-max">10</td><td class="tag-top">Rank 10, 9</td><td class="tag-mid">Rank 8</td><td class="tag-low">Rank 1–7</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- WHAT GOES IN EACH TIER -->
+        <h2 class="section-label">What Goes in Each Tier</h2>
+        <p class="section-intro">Each tier serves a different purpose depending on your role. This is the same across all traditions — only the specific spells change.</p>
+
+        <div class="wgiet-grid">
+          <div class="wg-header"></div>
+          <div class="wg-header">Damage</div>
+          <div class="wg-header">Debuff / Control</div>
+          <div class="wg-header">Buff / Support</div>
+
+          <div class="wg-tier-label top">&#9670; Top</div>
+          <div class="wg-cell">Best native-rank blasts + heightened spells that scale well. Your combat core.</div>
+          <div class="wg-cell"><strong>Always native rank</strong> — higher-rank spells have more "permission." Top-rank control spells outclass anything heightened.</div>
+          <div class="wg-cell">Heighten key buffs to max rank. Duration and effect scale with rank.</div>
+
+          <div class="wg-tier-label mid">&#9671; Mid</div>
+          <div class="wg-cell">Heightened damage spells that still compete. Backup AoE.</div>
+          <div class="wg-cell">Transition zone — some native debuffs unlock here.</div>
+          <div class="wg-cell">Duration buffs, backup resistances.</div>
+
+          <div class="wg-tier-label low">&#9675; Low</div>
+          <div class="wg-cell">Silver bullets, reactions, 1-action spells. <span class="wg-warning">&#9888; Never put "evergreen" damage here.</span></div>
+          <div class="wg-cell">Reactions, 1-action spells. <span class="wg-warning">&#9888; Never put rank-scaling debuffs here — they need high rank to land.</span></div>
+          <div class="wg-cell">Pre-buffs cast before combat. Out-of-combat utility.</div>
+        </div>
+
+        <div class="callout">
+          <strong>Mix and match roles.</strong> You don't have to commit fully to one role. A top-tier damage dealer with debuff riders and low-tier pre-buffs is a perfectly valid — and common — build.
+        </div>
+
+        <!-- DECISION FLOW -->
+        <h2 class="section-label">Condensed Decision Flow</h2>
+        <p class="section-intro">Work through these five steps when building your prepared list. Top to bottom, every time you level up or re-prepare.</p>
+
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="flow-connector"><div class="flow-number">1</div><div class="flow-line"></div></div>
+            <div class="flow-content">
+              <h4>Pick Your Role Emphasis</h4>
+              <p>Damage? Debuff/Control? Buff/Support? A blend? Your tradition's strengths should guide this — check the tradition page ratings.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-connector"><div class="flow-number">2</div><div class="flow-line"></div></div>
+            <div class="flow-content">
+              <h4>Fill Top-Tier Slots by Role</h4>
+              <p>These are your most impactful spells. Native-rank spells and strong heightened options both belong here.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-connector"><div class="flow-number">3</div><div class="flow-line"></div></div>
+            <div class="flow-content">
+              <h4>Fill Mid-Tier Slots</h4>
+              <p>Heightened spells that still compete at this rank, plus any transition-rank native spells that offer new capabilities.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-connector"><div class="flow-number">4</div><div class="flow-line"></div></div>
+            <div class="flow-content">
+              <h4>Fill Low-Tier Slots</h4>
+              <p>Silver bullets, reaction spells, 1-action options for action efficiency, pre-combat buffs, and out-of-combat utility.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-connector"><div class="flow-number">5</div><div class="flow-line"></div></div>
+            <div class="flow-content">
+              <h4>Run the Coverage Checklists</h4>
+              <p>Check your defense spread, effect variety, reliability, and action efficiency. Gaps are swap candidates. Then check the Campaign-Specific Gotchas below.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- COVERAGE CHECKLISTS -->
+        <h2 class="section-label">Coverage Checklists</h2>
+        <p class="section-intro">After picking spells, scan these four areas. Each tradition page tags every spell and will help you evaluate coverage. Gaps = swap candidates.</p>
+
+        <div class="checklist-grid">
+          <div class="checklist-card defense">
+            <h4><span class="cl-icon">&#9876;</span> Defense Coverage</h4>
+            <ul class="cl-items">
+              <li><strong>AC</strong> — Targeted by attack roll spells</li>
+              <li><strong>Fortitude</strong> — Availability varies by tradition</li>
+              <li><strong>Reflex</strong> — Availability varies by tradition</li>
+              <li><strong>Will</strong> — Availability varies sharply by tradition</li>
+            </ul>
+            <p class="cl-advice">Aim to cover at least 3 of 4 defenses in your top-tier slots. Prioritize <em>avoiding the target's highest defense</em> over chasing their lowest.</p>
+          </div>
+
+          <div class="checklist-card effect">
+            <h4><span class="cl-icon">&#10039;</span> Effect Variety</h4>
+            <ul class="cl-items">
+              <li><strong>Damage types covered</strong> — Aim for 3+ in top-tier slots</li>
+              <li><strong>Conditions imposed</strong> — Variety over repetition</li>
+              <li><strong>AoE options</strong> — For mobs or whole-party support</li>
+              <li><strong>Single-target options</strong> — For bosses and focus fire</li>
+            </ul>
+            <p class="cl-advice">Don't just target different saves with the same type of effect. Mix your outcomes — damage, conditions, and positioning effects serve different tactical needs.</p>
+          </div>
+
+          <div class="checklist-card reliability">
+            <h4><span class="cl-icon">&#9733;</span> Reliability</h4>
+            <ul class="cl-items">
+              <li><strong>Auto-hit/auto-effect</strong> — Always does something</li>
+              <li><strong>Success effects</strong> — Meaningful on enemy save success</li>
+              <li><strong>No single-target Incapacitation</strong> — Bosses auto-upgrade saves</li>
+            </ul>
+            <p class="cl-advice">Your list should never have turns where you might do literally nothing. Mix auto-effects with save-based options for consistent output.</p>
+          </div>
+
+          <div class="checklist-card action">
+            <h4><span class="cl-icon">&#9201;</span> Action Efficiency</h4>
+            <ul class="cl-items">
+              <li><strong>1-action spells</strong> — Pair with 2-action spells</li>
+              <li><strong>Sustain spells</strong> — One action to maintain</li>
+              <li><strong>Reactions</strong> — Act on enemy turns</li>
+              <li><strong>Cantrips</strong> — Shield, Guidance as fallbacks</li>
+            </ul>
+            <p class="cl-advice">Very class/subclass dependent. You may use non-MAP skills (Recall Knowledge, Demoralize, Bon Mot) instead of 1-action spells.</p>
+          </div>
+        </div>
+
+        <!-- CAMPAIGN GOTCHAS -->
+        <h2 class="section-label">Campaign-Specific Gotchas</h2>
+        <p class="section-intro">Check these before finalizing your list. Your GM's encounter tendencies can invalidate otherwise-great spell choices.</p>
+
+        <div class="gotcha-grid">
+          <div class="gotcha">
+            <p class="gotcha-q">Heavy on constructs or mindless?</p>
+            <p class="gotcha-a">Filter out Mental trait spells. Prioritize Fort/Reflex saves, physical, elemental, and force damage.</p>
+          </div>
+          <div class="gotcha">
+            <p class="gotcha-q">Heavy on undead?</p>
+            <p class="gotcha-a">Mental immunity again. Bring fire, force, vitality. Non-mental debuffs (Slow). Heal damages undead directly.</p>
+          </div>
+          <div class="gotcha">
+            <p class="gotcha-q">Many flyers?</p>
+            <p class="gotcha-a">Bring flight options and grounding spells. Check your tradition page for what's available at your rank.</p>
+          </div>
+          <div class="gotcha">
+            <p class="gotcha-q">Many enemy casters?</p>
+            <p class="gotcha-a">Befuddle (Stupefied), Dispel Magic, Slow (action denial). Wall of Stone/Force to block line of effect.</p>
+          </div>
+          <div class="gotcha">
+            <p class="gotcha-q">Frequent boss fights?</p>
+            <p class="gotcha-a">Prioritize single-target with success effects. Avoid incapacitation. Vision of Death, Synesthesia, Dehydrate shine here.</p>
+          </div>
+          <div class="gotcha">
+            <p class="gotcha-q">Long adventuring days (5+ combats)?</p>
+            <p class="gotcha-a">Invest in sustain spells, staves, and cantrip fallbacks. Sustained spells stretch slots across more encounters.</p>
+          </div>
+        </div>
+
+        <!-- ITEMS REMINDER -->
+        <h2 class="section-label">Items Reminder</h2>
+        <p class="section-intro">Your spell list isn't your only toolkit. Budget gold for these — they cover the gaps your preparations can't.</p>
+
+        <div>
+          <div class="item-row">
+            <span class="item-icon">&#128221;</span>
+            <div>
+              <h4>Staves</h4>
+              <p>Your best friend as a prepared caster. Grants encounter-to-encounter flexibility you otherwise lack. Budget for a fully upgraded staff — it's your most important item purchase.</p>
+            </div>
+          </div>
+          <div class="item-row">
+            <span class="item-icon">&#128220;</span>
+            <div>
+              <h4>Scrolls</h4>
+              <p>Silver bullets you don't want to burn a preparation slot on. You can only activate a scroll if the spell is on your spell list and you can cast spells of that rank.</p>
+            </div>
+          </div>
+          <div class="item-row">
+            <span class="item-icon">&#10024;</span>
+            <div>
+              <h4>Wands</h4>
+              <p>Repeatable low-rank buffs: Longstrider, See the Unseen, Resist Energy. One cast per day without using a slot.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="source-footer">
+          Source: Mathfinder video series (21 videos), synthesized through the Spell Selection Field Guide.<br>
+          Spell data verified against Archives of Nethys.
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- ARCANE TRADITION -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="tradition-page" id="page-arcane">
+      <div class="export-bar">
+        <button class="export-btn" onclick="Export.copyToClipboard('arcane')">Copy to Clipboard</button>
+        <button class="export-btn" onclick="Export.downloadMd('arcane')">Download .md</button>
+      </div>
+
+      <div class="class-selector">
+        <label>Class:</label>
+        <select id="classSelect-arcane"></select>
+      </div>
+
+      <div class="level-tab-bar" id="levelTabBar-arcane">
+        <button class="level-tab active" data-level="0" data-tradition="arcane" onclick="Planner.showOverview('arcane')">Overview</button>
+      </div>
+
+      <div id="overview-arcane">
+        <div class="overview-hero">
+          <h1>Arcane Tradition</h1>
+          <p>Prepared Caster Spell Planner</p>
+        </div>
+
+        <div class="section-label">Arcane at a Glance</div>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Role</th><th>Rating</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr class="star-row"><td><strong>Damage</strong></td><td>&#9733;&#9733;&#9733;&#9733; Best</td><td>All defense targets, all damage types, best rider effects</td></tr>
+              <tr class="star-row"><td><strong>Debuffing</strong></td><td>&#9733;&#9733;&#9733;&#9733; Best</td><td>Will-targeting blasts (Agonizing Despair, Vision of Death, Phantasmal Calamity) that other traditions lack</td></tr>
+              <tr class="star-row"><td><strong>Battlefield Control</strong></td><td>&#9733;&#9733;&#9733;&#9733; Best</td><td>Walls, terrain, zoning — deepest toolkit</td></tr>
+              <tr><td><strong>Buffing</strong></td><td>&#9733;&#9733;&#9733; Good</td><td>Haste, Fly, Blur, Invisibility, True Target — no Bless/Heroism</td></tr>
+              <tr><td><strong>Mitigation</strong></td><td>&#9733;&#9733;&#9733; Good</td><td>False Vitality, Resist Energy, Fire Shield, reactions</td></tr>
+              <tr class="cannot-row"><td><strong>Healing</strong></td><td>&#10007; Cannot</td><td>No Heal, no Soothe. Let the party handle it</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-label">Arcane's Superpower</div>
+        <div class="superpower-box">
+          Widest defense coverage of any tradition — all four defenses well-served. You have the luxury of choice. Your job is variety, not specialization.
+        </div>
+
+        <div class="section-label">Defense Coverage</div>
+        <div class="defense-note">
+          Arcane covers all four defenses well. Damage role should target at least AC + 2 of 3 saves in their top tier slots.<br>
+          <strong>Arcane's advantage:</strong> Will-targeting BLASTS. Other traditions get Will debuffs but not Will damage.
+        </div>
+
+        <div class="section-label">Arcane's Gaps</div>
+        <div class="gap-box">
+          <h4>No Healing</h4>
+          <ul>
+            <li>No Heal, no Soothe, no restorative magic.</li>
+            <li>Options: Wands for out-of-combat recovery, Staves if your class gives access, or make it the party's problem.</li>
+          </ul>
+          <br>
+          <h4>No Bless / Heroism</h4>
+          <ul>
+            <li>Your party buff game is Haste, Fly, Blur, Invisibility, True Target — speed, stealth, and accuracy, not raw stat bonuses.</li>
+          </ul>
+          <br>
+          <h4>Versatility Cost Warning</h4>
+          <ul>
+            <li>Arcane has the deepest toolkit for damage, debuff, control, utility, AND silver bullets. If you go full blaster, your party may depend on you for all those other roles too. Consider keeping at least one control and one silver bullet even in your top-tier slots.</li>
+          </ul>
+        </div>
+
+        <div class="section-label">Items Reminder</div>
+        <div class="items-box">
+          <ul>
+            <li><strong>Staves</strong> — Your best friend as a prepared caster. Grants encounter-to-encounter flexibility you otherwise lack. Budget for a fully upgraded staff.</li>
+            <li><strong>Scrolls</strong> — Silver bullets you don't want to burn a preparation slot on.</li>
+            <li><strong>Wands</strong> — Repeatable low-rank buffs: Longstrider, See the Unseen, Resist Energy.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="levelPanels-arcane"></div>
+      <div class="spell-browser browser-hidden" id="browser-arcane"></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- DIVINE TRADITION -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="tradition-page" id="page-divine">
+      <div class="export-bar">
+        <button class="export-btn" onclick="Export.copyToClipboard('divine')">Copy to Clipboard</button>
+        <button class="export-btn" onclick="Export.downloadMd('divine')">Download .md</button>
+      </div>
+
+      <div class="class-selector">
+        <label>Class:</label>
+        <select id="classSelect-divine"></select>
+      </div>
+
+      <div class="level-tab-bar" id="levelTabBar-divine">
+        <button class="level-tab active" data-level="0" data-tradition="divine" onclick="Planner.showOverview('divine')">Overview</button>
+      </div>
+
+      <div id="overview-divine">
+        <div class="overview-hero">
+          <h1>Divine Tradition</h1>
+          <p>Prepared Caster Spell Planner</p>
+        </div>
+
+        <div class="section-label">Divine at a Glance</div>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Role</th><th>Rating</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Damage</strong></td><td>&#9733;&#9733; Workable</td><td>Limited without class features (Flames Oracle makes it work). Hardest-to-resist damage types (void, vitality, spirit)</td></tr>
+              <tr><td><strong>Debuffing</strong></td><td>&#9733;&#9733; Workable</td><td>Fort/Will covered, Reflex weak. Fear, Command, Agonizing Despair available</td></tr>
+              <tr><td><strong>Battlefield Control</strong></td><td>&#9733;&#9733; Workable</td><td>At higher ranks — no Walls until Eclipse Burst R7, limited terrain options</td></tr>
+              <tr class="star-row"><td><strong>Buffing</strong></td><td>&#9733;&#9733;&#9733;&#9733; Best</td><td>9/10, tied close with Occult — Bless, Heroism, Benediction, Zealous Conviction</td></tr>
+              <tr><td><strong>Mitigation</strong></td><td>&#9733;&#9733;&#9733; Good</td><td>Resist Energy, Shield Other, Sanctuary, Breath of Life</td></tr>
+              <tr class="star-row"><td><strong>Healing</strong></td><td>&#9733;&#9733;&#9733;&#9733; Best</td><td>Tied with Primal — Heal, Restoration, Remove Disease, Breath of Life, Regenerate</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-label">Divine's Superpower</div>
+        <div class="superpower-box">
+          Best buff+heal combination. Cleric is the most forgiving prepared caster (healing font always relevant, Wisdom boosts Perception+Will, better armor/HP). Hardest-to-resist damage types (void, vitality, spirit).
+        </div>
+
+        <div class="section-label">Defense Coverage</div>
+        <div class="defense-note">
+          Divine covers Fort and Will well. Reflex is the tradition's weakness — accept it and compensate with class features, items, or party composition.<br>
+          <strong>AC:</strong> Limited — Searing Light, Chilling Darkness are attack roll options.<br>
+          <strong>Fortitude:</strong> Good — Concordant Choir, Sudden Blight, Divine Wrath, Spirit Blast, Enervation.<br>
+          <strong>Reflex:</strong> Weak — Inner Radiance Torrent, Holy Cascade, Flame Strike, Eclipse Burst.<br>
+          <strong>Will:</strong> Good — Fear, Command, Agonizing Despair, Calm Emotions, Shadow Blast.
+        </div>
+
+        <div class="section-label">Divine's Gaps</div>
+        <div class="gap-box">
+          <h4>No Blasting Without Class Features</h4>
+          <ul>
+            <li>No Fireball, no Lightning Bolt, no Force Barrage. Damage options are workable but thin.</li>
+            <li>Compensate with class features (Flames Oracle), attack roll spells, scrolls/staves, or lean into buff+heal.</li>
+          </ul>
+          <br>
+          <h4>No Haste, No Slow, No Invisibility</h4>
+          <ul>
+            <li>Heroism instead of Haste. Condition-stacking debuffs instead of Slow. Sanctuary instead of Invisibility.</li>
+          </ul>
+          <br>
+          <h4>No Walls Until R7</h4>
+          <ul>
+            <li>No Wall of Stone, Wall of Fire, Wall of Force. Eclipse Burst at R7 is your first real area denial.</li>
+          </ul>
+          <br>
+          <h4>Reflex Targeting Is Weak</h4>
+          <ul>
+            <li>Inner Radiance Torrent (R2), Holy Cascade (R4), Flame Strike (R5), Eclipse Burst (R7) are your options. Accept the gap.</li>
+          </ul>
+        </div>
+
+        <div class="section-label">Items Reminder</div>
+        <div class="items-box">
+          <ul>
+            <li><strong>Staves</strong> — Look for staves with damage options to compensate for Divine's thin blasting.</li>
+            <li><strong>Scrolls</strong> — Offensive scrolls for gap-filling. Scrolls of Breath of Life as backup.</li>
+            <li><strong>Wands</strong> — Repeatable low-rank buffs: Bless, Resist Energy, Restoration.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="levelPanels-divine"></div>
+      <div class="spell-browser browser-hidden" id="browser-divine"></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- OCCULT TRADITION -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="tradition-page" id="page-occult">
+      <div class="export-bar">
+        <button class="export-btn" onclick="Export.copyToClipboard('occult')">Copy to Clipboard</button>
+        <button class="export-btn" onclick="Export.downloadMd('occult')">Download .md</button>
+      </div>
+
+      <div class="class-selector">
+        <label>Class:</label>
+        <select id="classSelect-occult"></select>
+      </div>
+
+      <div class="level-tab-bar" id="levelTabBar-occult">
+        <button class="level-tab active" data-level="0" data-tradition="occult" onclick="Planner.showOverview('occult')">Overview</button>
+      </div>
+
+      <div id="overview-occult">
+        <div class="overview-hero">
+          <h1>Occult Tradition</h1>
+          <p>Prepared Caster Spell Planner</p>
+        </div>
+
+        <div class="section-label">Occult at a Glance</div>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Role</th><th>Rating</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Damage</strong></td><td>&#9733;&#9733; Workable</td><td>Mental damage common but fails vs mindless. Force Barrage is your non-Mental lifeline.</td></tr>
+              <tr class="star-row"><td><strong>Debuffing</strong></td><td>&#9733;&#9733;&#9733;&#9733; Best (tied)</td><td>DEEPEST Will-targeting debuff list. Synesthesia, Phantom Pain, Hideous Laughter, Paralyze, Confusion.</td></tr>
+              <tr><td><strong>Battlefield Control</strong></td><td>&#9733;&#9733; Workable</td><td>Limited at low ranks. Black Tentacles R5, Chromatic Wall R5, Wall of Force R6.</td></tr>
+              <tr class="star-row"><td><strong>Buffing</strong></td><td>&#9733;&#9733;&#9733;&#9733;&#9733; Best</td><td>10/10 per Mathfinder. Bless, Heroism, Haste, Soothe, Invisibility, True Target. THE buffing tradition.</td></tr>
+              <tr><td><strong>Mitigation</strong></td><td>&#9733;&#9733;&#9733; Good</td><td>False Vitality, Resist Energy, Blur, Shadow Siphon, Drop Dead</td></tr>
+              <tr><td><strong>Healing</strong></td><td>&#9733;&#9733;&#9733; Good</td><td>Soothe (not Heal), Restoration, Vampiric Touch/Feast</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-label">Occult's Superpower</div>
+        <div class="superpower-box">
+          Unmatched buffing (10/10) + deepest debuff toolkit. The mind-magic tradition. If your party needs a force multiplier, Occult is it.
+        </div>
+
+        <div class="section-label">Defense Coverage</div>
+        <div class="defense-note">
+          Occult is weak on AC and Reflex. Your strength is Will (deepest list of any tradition) with solid Fort options. Consider skipping AC entirely and targeting all 3 saves.<br>
+          <strong>Occult's advantage:</strong> Unmatched Will-targeting depth — both debuffs AND damage. Plus the best buff suite in the game.
+        </div>
+
+        <div class="section-label">Occult's Gaps</div>
+        <div class="gap-box">
+          <h4>Limited Blast Damage</h4>
+          <ul>
+            <li>Mostly Mental (useless vs mindless/constructs). Force Barrage at every rank for reliable non-Mental damage.</li>
+            <li>Spirit Blast at R6 for Fort-targeting force damage — non-Mental!</li>
+            <li>Let the party handle damage while you multiply them via buffs+debuffs.</li>
+          </ul>
+          <br>
+          <h4>AC and Reflex Targeting LIMITED</h4>
+          <ul>
+            <li>Inner Radiance Torrent (R2, Ref) and Shadow Blast (R5, Ref or Will) are your main Ref options.</li>
+            <li>Containment (R4, Ref) for Ref-targeting control. Accept the gap.</li>
+          </ul>
+          <br>
+          <h4>Versatility Cost Warning</h4>
+          <ul>
+            <li>Deep in buff+debuff but shallow in damage and control. Communicate your role early — you're the force multiplier, not the artillery.</li>
+          </ul>
+        </div>
+
+        <div class="section-label">Items Reminder</div>
+        <div class="items-box">
+          <ul>
+            <li><strong>Staves</strong> — Grants encounter-to-encounter flexibility. Budget for a fully upgraded staff.</li>
+            <li><strong>Scrolls</strong> — Elemental damage scrolls to cover the Mental-only gap (fire, cold, electricity).</li>
+            <li><strong>Wands</strong> — Repeatable low-rank buffs: Soothe, Resist Energy, False Vitality, Invisibility.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="levelPanels-occult"></div>
+      <div class="spell-browser browser-hidden" id="browser-occult"></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- PRIMAL TRADITION -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="tradition-page" id="page-primal">
+      <div class="export-bar">
+        <button class="export-btn" onclick="Export.copyToClipboard('primal')">Copy to Clipboard</button>
+        <button class="export-btn" onclick="Export.downloadMd('primal')">Download .md</button>
+      </div>
+
+      <div class="class-selector">
+        <label>Class:</label>
+        <select id="classSelect-primal"></select>
+      </div>
+
+      <div class="level-tab-bar" id="levelTabBar-primal">
+        <button class="level-tab active" data-level="0" data-tradition="primal" onclick="Planner.showOverview('primal')">Overview</button>
+      </div>
+
+      <div id="overview-primal">
+        <div class="overview-hero">
+          <h1>Primal Tradition</h1>
+          <p>Prepared Caster Spell Planner</p>
+        </div>
+
+        <div class="section-label">Primal at a Glance</div>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Role</th><th>Rating</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr class="star-row"><td><strong>Damage</strong></td><td>&#9733;&#9733;&#9733;&#9733; Best</td><td>Great AoE, good sustained, all physical+energy damage types. Tied with Arcane</td></tr>
+              <tr><td><strong>Debuffing</strong></td><td>&#9733;&#9733; Workable</td><td>Will-targeting is WEAK — only Fear and Lose the Path. Fort debuffs are strong</td></tr>
+              <tr class="star-row"><td><strong>Battlefield Control</strong></td><td>&#9733;&#9733;&#9733;&#9733; Best</td><td>Walls, terrain, zoning — tied with Arcane</td></tr>
+              <tr><td><strong>Buffing</strong></td><td>&#9733;&#9733; Workable</td><td>Haste, Fly, Barkskin, Stoneskin — no Bless/Heroism</td></tr>
+              <tr><td><strong>Mitigation</strong></td><td>&#9733;&#9733;&#9733; Good</td><td>Reactions, Resist Energy, Fire Shield, Stoneskin</td></tr>
+              <tr class="star-row"><td><strong>Healing</strong></td><td>&#9733;&#9733;&#9733;&#9733; Best</td><td>Has Heal, Regenerate, Moment of Renewal. Tied with Divine</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-label">Primal's Superpower</div>
+        <div class="superpower-box">
+          Strongest combined damage+control+healing tradition. The ONLY tradition that can blast AND heal from the same list. You are the most self-sufficient caster in the game.
+        </div>
+
+        <div class="section-label">Defense Coverage</div>
+        <div class="defense-note">
+          Primal has excellent Fort and Ref targeting but WEAK Will targeting. Compensate with AC-targeting attack roll spells.<br>
+          <strong>Primal's gap:</strong> Will-targeting is your blind spot. You have NO Will-targeting blasts. Fear and Lose the Path are your only Will options, and they're debuffs, not damage.
+        </div>
+
+        <div class="section-label">Primal's Gaps</div>
+        <div class="gap-box">
+          <h4>Will Targeting is WEAK</h4>
+          <ul>
+            <li>Only two Will-targeting spells: Fear and Lose the Path. Neither deals damage.</li>
+            <li>Attack roll spells (AC targeting) compensate: Horizon Thunder Sphere, Hydraulic Push, Searing Light.</li>
+          </ul>
+          <br>
+          <h4>No Befuddle / Stupefied</h4>
+          <ul>
+            <li>Can't directly counter enemy spellcasters. Lean on Slow and Wall of Stone.</li>
+          </ul>
+          <br>
+          <h4>No Bless / Heroism</h4>
+          <ul>
+            <li>Buff game is Haste, Fly, Barkskin, Stoneskin, Moon Frenzy — speed, defense, and transformation.</li>
+          </ul>
+          <br>
+          <h4>No Force Barrage</h4>
+          <ul>
+            <li>No auto-hit, no-save damage option. Reliability comes from Dehydrate (success effect) and sustained spells (Cinder Swarm).</li>
+          </ul>
+        </div>
+
+        <div class="section-label">Items Reminder</div>
+        <div class="items-box">
+          <ul>
+            <li><strong>Staves</strong> — ESPECIALLY valuable on Primal casters (per Mathfinder). Budget for a fully upgraded staff.</li>
+            <li><strong>Scrolls</strong> — Will-targeting scrolls from other traditions if your class allows.</li>
+            <li><strong>Wands</strong> — Repeatable low-rank buffs: Longstrider, Resist Energy, Barkskin.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="levelPanels-primal"></div>
+      <div class="spell-browser browser-hidden" id="browser-primal"></div>
+    </div>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Data files -->
+<script src="data/spells.js"></script>
+<script src="data/curated.js"></script>
+<script src="data/classes.js"></script>
+
+<!-- App modules -->
+<script src="js/app.js"></script>
+<script src="js/planner.js"></script>
+<script src="js/browser.js"></script>
+<script src="js/coverage.js"></script>
+<script src="js/export.js"></script>
+
+</body>
+</html>
