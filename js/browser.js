@@ -97,9 +97,17 @@
     }
   };
 
+  // Roles whose value is mostly defined by being in cheap slots — for these,
+  // the "mid" tier is functionally the same as "low" (e.g., at Lv 5–6 there's
+  // no proper low tier, so R1 is mid by the field-guide table, but a silver
+  // bullet at R1 should still get the substantive low-tier guidance).
+  var LOW_SLOT_ROLES = { silverBullets: 1, reactions: 1, oneAction: 1, prebuffs: 1 };
+
   function getAdvice(role, tier, tradition) {
     var roleAdvice = adviceMatrix[role];
     if (!roleAdvice) return '';
+    // Fall through to low text for low-slot-focused roles when at mid tier.
+    if (tier === 'mid' && LOW_SLOT_ROLES[role]) tier = 'low';
     var base = roleAdvice[tier] || roleAdvice['low'] || '';
 
     var tradAdv = traditionAdvice[tradition];

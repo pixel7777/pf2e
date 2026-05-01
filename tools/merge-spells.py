@@ -175,6 +175,35 @@ def build_curated_index(curated_data):
     return index_by_aon, index_by_name
 
 
+SUBTYPE_TAGS = {'Emanation', 'Burst', 'Cone', 'Line', 'Area'}
+
+
+def augment_aoe_in_curated(curated_data):
+    """Ensure curated entries with a subtype tag (Emanation/Burst/Cone/Line/Area)
+    also carry the umbrella 'AoE' tag, so the sidebar's Targeting section lights up.
+
+    Per Mermaid A, AoE is the umbrella tag and the subtypes are subordinate.
+    Some curated entries pre-date this rule and only carry the subtype.
+    """
+    added_count = 0
+    for tradition, entries in curated_data.get("traditions", {}).items():
+        for entry in entries:
+            tags = entry.get("tags", [])
+            has_subtype = any(t in SUBTYPE_TAGS for t in tags)
+            if has_subtype and "AoE" not in tags:
+                # Insert AoE right after the first subtype tag for readability
+                new_tags = []
+                inserted = False
+                for t in tags:
+                    new_tags.append(t)
+                    if not inserted and t in SUBTYPE_TAGS:
+                        new_tags.append("AoE")
+                        inserted = True
+                entry["tags"] = new_tags
+                added_count += 1
+    return added_count
+
+
 def fix_auto_effect_in_curated(curated_data):
     """Fix Auto-effect tags in curated entries per Mermaid A.
 
@@ -217,6 +246,10 @@ def main():
     print("Fixing Auto-effect tags in curated data...")
     fixed = fix_auto_effect_in_curated(curated_data)
     print(f"  Removed Auto-effect from {fixed} non-offensive curated entries")
+
+    print("Augmenting AoE tag where subtype is present...")
+    aoe_added = augment_aoe_in_curated(curated_data)
+    print(f"  Added AoE tag to {aoe_added} curated entries")
 
     curated_by_aon, curated_by_name = build_curated_index(curated_data)
     tag_defs = curated_data.get("tagDefs", {})
