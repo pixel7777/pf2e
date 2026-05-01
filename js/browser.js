@@ -41,8 +41,8 @@
       low: 'Reactions and 1-action options only. Don\'t waste on evergreen debuffs at low rank.'
     },
     buff: {
-      top: 'Heighten Heal/Soothe to max rank. Check if a native buff replaces your heightened one (Heroism replaces Bless at R5).',
-      mid: 'Backup heals. Buffs with good heightening formulas.',
+      top: 'Heighten your reliable buffs to max rank. As you level, check if a native buff replaces a heightened older one.',
+      mid: 'Backup buffs and heals. Buffs with good heightening formulas.',
       low: 'Pre-buffs cast before combat. Duration matters more than rank here.'
     },
     silverBullets: {
@@ -81,19 +81,22 @@
         top: 'Arcane has widest damage type coverage — prioritize filling defense gaps over raw power.',
         mid: 'All four defenses available. Lean into that variety.',
         low: 'All four defenses available. Lean into that variety.'
-      }
+      },
+      buff: { '*': 'No healing (no Heal, no Soothe) and no Bless/Heroism. Lean on Haste, Fly, Blur, Invisibility, True Target — speed, stealth, accuracy.' }
     },
     divine: {
       damage: { top: 'Limited blast options natively. Flames Oracle compensates. Otherwise lean into Fort/Will targeting.' },
-      debuff: { '*': 'Strong Fort and Will targeting. Reflex options are limited — consider attack roll spells.' }
+      debuff: { '*': 'Strong Fort and Will targeting. Reflex options are limited — consider attack roll spells.' },
+      buff:   { top: 'Heighten Heal to max rank. Bless → Heroism at R5; keep heightening Heroism. Best buff+heal combo (9/10).' }
     },
     occult: {
       damage: { top: 'Limited blast options. Psychic class features compensate. Otherwise use buff/debuff as primary.' },
-      buff:   { '*': 'Best buff tradition (10/10). Lean in — this is your superpower.' }
+      buff:   { '*': 'Best buff tradition (10/10). Heighten Soothe (no Heal). Bless → Heroism at R5. Lean in — this is your superpower.' }
     },
     primal: {
       debuff: { '*': 'Will targeting is your gap. Use attack roll spells (AC) to work around it.' },
-      damage: { top: 'Strong Fort and Reflex coverage. Will gap means attack rolls are important for diversity.' }
+      damage: { top: 'Strong Fort and Reflex coverage. Will gap means attack rolls are important for diversity.' },
+      buff:   { top: 'Heighten Heal to max rank. No Bless/Heroism — buff via Haste, Fly, Barkskin, Stoneskin, Moon Frenzy.' }
     }
   };
 
