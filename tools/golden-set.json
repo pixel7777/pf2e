@@ -346,17 +346,17 @@
   {
     "aonId": 1382,
     "name": "Brine Dragon Bile",
-    "why": "Damage + reactions. Reaction casting. Acid damage (persistent). Tests that reaction spells still get full offense analysis. Note: spell.json lacks Attack trait, so Cycle 03 left defense_tags empty — populator will tag Auto as a structured-data fallback (data-quality limitation).",
+    "why": "Damage + reactions. Reaction casting. Persistent acid damage. Text says 'Make a ranged spell attack' — but AoN's spell.json never gives reactions the Attack trait, so Cycle 03 left defense_tags empty. The populator must read the text and emit AC. Tests text-based AC detection.",
     "expected": {
       "damage_types": ["Acid"],
       "conditions_imposed": [],
       "conditions_by_outcome": null,
       "roles_added": ["damage"],
-      "defense_tags_added": ["Auto"],
-      "reliability_tags_added": ["Auto-effect"],
+      "defense_tags_added": ["AC"],
+      "reliability_tags_added": [],
       "targeting_tags_added": [],
       "heighten_quality": "scales-well"
     },
-    "tolerance": ["heighten_quality", "defense_tags_added", "reliability_tags_added"]
+    "tolerance": ["heighten_quality"]
   }
 ]

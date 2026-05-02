@@ -172,14 +172,21 @@ Every spell must end up with at least one role. Emit whatever roles apply.
 
 ## defense_tags_added — array
 
-The populator augments defense_tags with ONLY one value: "Auto".
+The populator augments defense_tags with two possible values: "AC" and "Auto".
+
+The structured-data pass (Cycle 03) caught Fort/Ref/Will from the saving_throw field and AC from either saving_throw="AC" or the Attack trait. But Archives of Nethys's data has gaps — many spells describe a spell attack in their text without carrying the Attack trait (especially reaction spells, where the Attack trait is never applied). The populator closes those gaps by reading the description.
+
+Add "AC" if AND ONLY IF:
+1. The spell's existing defense_tags is empty OR does not already include "AC", AND
+2. The description text explicitly describes an attack roll. Phrases that count: "spell attack", "ranged spell attack", "melee spell attack", "make a spell attack roll", "attack roll against [the target's] AC". A spell that merely *deals damage* without rolling to hit does NOT get AC — only spells where the caster makes an attack roll.
 
 Add "Auto" if AND ONLY IF:
-1. The spell's existing defense_tags is empty (no Fort/Ref/Will/AC), AND
-2. The spell is offensive — has a combat role you're emitting (damage, debuff, or control).
+1. The spell's existing defense_tags is empty AND you did NOT add "AC" above, AND
+2. The spell is offensive — has a combat role you're emitting (damage, debuff, or control), AND
+3. The text confirms the spell affects enemies without any save and without an attack roll. Force Barrage's "It automatically hits" is the canonical case. Wall of Stone's offensive control with no save also qualifies.
 
 Otherwise → [].
-NEVER add Fort, Ref, Will, or AC — those are computed upstream from structured fields.
+NEVER add Fort, Ref, or Will — those are computed upstream from the saving_throw field. AC and Auto are mutually exclusive; a spell with an attack roll uses AC, never Auto.
 
 ## reliability_tags_added — array
 
@@ -369,8 +376,11 @@ def parse_and_validate(content):
     if not isinstance(result["defense_tags_added"], list):
         return None, "defense_tags_added not list"
     for v in result["defense_tags_added"]:
-        if v != "Auto":
-            return None, "defense_tags_added must only contain 'Auto', got %r" % v
+        if v not in ("Auto", "AC"):
+            return None, "defense_tags_added may only contain 'Auto' or 'AC', got %r" % v
+    # Mutual exclusion: AC and Auto contradict each other.
+    if "AC" in result["defense_tags_added"] and "Auto" in result["defense_tags_added"]:
+        return None, "defense_tags_added cannot contain both AC and Auto"
 
     if not isinstance(result["reliability_tags_added"], list):
         return None, "reliability_tags_added not list"
@@ -415,7 +425,7 @@ def analyze_spell(api_key, model, raw_spell, spell_data_entry, max_retries=5):
         target=json.dumps(raw_spell.get("target") or ""),
         area_type=json.dumps(raw_spell.get("area_type") or []),
         duration_raw=json.dumps(raw_spell.get("duration_raw") or ""),
-        markdown=raw_spell.get("markdown", "")[:8000],
+        markdown=raw_spell.get("markdown", "")[:12000],
     )
 
     last_error = None
