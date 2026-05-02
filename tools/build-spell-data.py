@@ -5,10 +5,13 @@ Populates all structured-data fields. Semantic-analysis fields are present
 as empty placeholders ([], null, false).
 
 Filter: spell_type == "Spell" AND level >= 1 (excludes Cantrips, Focus, Rituals).
-Dedupe: when a spell name appears in both legacy_core and remaster_core
-sources, keep only the remaster entry. See Decision 017 (pending) for the
-rationale and the deferred editorial rename map for spells that were renamed
-or removed during the remaster.
+Rename filter (Cycle 05, Decision 018): drop legacy_core entries whose names
+appear in data/legacy-renames.json — the remaster equivalent already exists
+under its new name. Applied BEFORE era dedupe.
+Era dedupe (Cycle 04, Decision 018): when a spell name still appears in both
+legacy_core and remaster_core sources, keep only the remaster entry.
+Every spell object carries an `era` field (remaster_core | legacy_core | other)
+so the frontend can dim/badge/filter legacy content.
 """
 
 import json
@@ -22,8 +25,9 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
 SPELL_JSON = os.path.join(PROJECT_ROOT, "source", "spell.json")
 OUTPUT_JS = os.path.join(PROJECT_ROOT, "data", "spell-data.js")
+LEGACY_RENAMES_JSON = os.path.join(PROJECT_ROOT, "data", "legacy-renames.json")
 
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 
 # Era classification by primary_source. Adventure paths and Lost Omens books
 # fall into "other" — they are not deduped against core entries.
@@ -51,6 +55,76 @@ def era(spell):
     if ps in LEGACY_SOURCES:
         return "legacy_core"
     return "other"
+
+
+def load_rename_map():
+    """Load data/legacy-renames.json. Returns a dict keyed by lowercased old_name,
+    plus the raw entry list for logging.
+    """
+    with open(LEGACY_RENAMES_JSON, "r", encoding="utf-8") as f:
+        entries = json.load(f)
+
+    seen = set()
+    by_old_lower = {}
+    for entry in entries:
+        for field in ("old_name", "new_name", "status"):
+            if field not in entry:
+                raise ValueError("legacy-renames.json entry missing field %r: %r" % (field, entry))
+        key = entry["old_name"].lower()
+        if key in seen:
+            raise ValueError("legacy-renames.json: duplicate old_name %r" % entry["old_name"])
+        seen.add(key)
+        by_old_lower[key] = entry
+    return by_old_lower, entries
+
+
+def apply_rename_filter(rank_spells, rename_map):
+    """Drop legacy_core entries whose names appear in the rename map, but only
+    if a spell with the corresponding new_name actually exists in the dataset.
+
+    Returns (kept_spells, dropped, warnings, unmatched).
+      dropped: list of (old_name, new_name, status, dropped_id) tuples
+      warnings: list of strings (new_name missing — kept the entry)
+      unmatched: list of old_names that didn't match any spell at all
+                 (expected for cantrips/focus spells/rituals not in rank set)
+    """
+    names_present_lower = {s.get("name", "").lower() for s in rank_spells}
+
+    kept = []
+    dropped = []
+    warnings = []
+    matched_old_names = set()
+
+    for spell in rank_spells:
+        name_lower = spell.get("name", "").lower()
+        entry = rename_map.get(name_lower)
+        if entry is None:
+            kept.append(spell)
+            continue
+        # Name matched — but only act on legacy_core entries.
+        if era(spell) != "legacy_core":
+            kept.append(spell)
+            matched_old_names.add(name_lower)
+            continue
+        # Verify the new_name exists before dropping.
+        if entry["new_name"].lower() not in names_present_lower:
+            warnings.append(
+                "rename target missing for %r → %r (%s); keeping legacy entry %s" % (
+                    entry["old_name"], entry["new_name"], entry["status"], spell.get("id", "?"),
+                )
+            )
+            kept.append(spell)
+            matched_old_names.add(name_lower)
+            continue
+        dropped.append((entry["old_name"], entry["new_name"], entry["status"], spell.get("id", "")))
+        matched_old_names.add(name_lower)
+
+    unmatched = sorted(
+        rename_map[k]["old_name"]
+        for k in rename_map.keys()
+        if k not in matched_old_names
+    )
+    return kept, dropped, warnings, unmatched
 
 
 def dedupe_by_era(rank_spells):
@@ -257,6 +331,7 @@ def build_spell_object(spell):
         "tradition": spell.get("tradition") or [],
         "rarity": spell.get("rarity", "Common"),
         "url": spell.get("url", ""),
+        "era": era(spell),
         "roles": roles,
         "defense_tags": defense_tags,
         "targeting_tags": targeting_tags,
@@ -299,6 +374,11 @@ def print_verify_stats(spell_objects):
     print("\nSpells per tradition:")
     for t in sorted(trad_counts):
         print("  %s: %d" % (t, trad_counts[t]))
+
+    era_counts = Counter(s["era"] for s in spell_objects)
+    print("\nEra distribution:")
+    for e in sorted(era_counts):
+        print("  %s: %d" % (e, era_counts[e]))
 
     pattern_counts = Counter(s["heighten_pattern"] for s in spell_objects)
     print("\nHeighten patterns:")
@@ -386,6 +466,23 @@ def main():
         sum(1 for s in all_spells if s.get("spell_type") == "Cantrip"),
         sum(1 for s in all_spells if s.get("spell_type") == "Focus"),
     ))
+
+    print("\nLoading data/legacy-renames.json...")
+    rename_map, rename_entries = load_rename_map()
+    print("  %d rename entries loaded" % len(rename_entries))
+
+    pre_rename_count = len(rank_spells)
+    rank_spells, rename_dropped, rename_warnings, rename_unmatched = apply_rename_filter(rank_spells, rename_map)
+    print("  %d -> %d after rename filter (%d legacy entries dropped)" % (
+        pre_rename_count, len(rank_spells), len(rename_dropped),
+    ))
+    if rename_warnings:
+        print("  WARNINGS (new_name missing — entry kept):")
+        for w in rename_warnings:
+            print("    " + w)
+    if rename_unmatched:
+        print("  Unmatched old_names (expected — focus/cantrip/ritual not in rank set, or already absent):")
+        print("    %d entries: %s" % (len(rename_unmatched), ", ".join(rename_unmatched[:8]) + ("..." if len(rename_unmatched) > 8 else "")))
 
     pre_count = len(rank_spells)
     rank_spells, dropped = dedupe_by_era(rank_spells)
