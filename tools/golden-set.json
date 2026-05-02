@@ -153,9 +153,9 @@
     "tolerance": ["heighten_quality", "conditions_imposed", "conditions_by_outcome"]
   },
   {
-    "aonId": 244,
-    "name": "Ray of Enfeeblement",
-    "why": "Dual defense (AC + Fort). Debuff (Enfeebled). Tests interaction of attack roll + saving throw. heighten_pattern=none → no-heighten.",
+    "aonId": 1513,
+    "name": "Enfeeble",
+    "why": "Remaster replacement for Ray of Enfeeblement (Cycle 05 rename filter dropped the legacy entry). Single-defense Fort, non-basic save. Debuff (Enfeebled at Success/Failure/Crit Failure). Tests Success-effect reliability tag for a non-basic-save spell with a meaningful Success condition. heighten_pattern=none → no-heighten.",
     "expected": {
       "damage_types": [],
       "conditions_imposed": ["Enfeebled"],
