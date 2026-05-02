@@ -5,13 +5,17 @@ Populates all structured-data fields. Semantic-analysis fields are present
 as empty placeholders ([], null, false).
 
 Filter: spell_type == "Spell" AND level >= 1 (excludes Cantrips, Focus, Rituals).
+Dedupe: when a spell name appears in both legacy_core and remaster_core
+sources, keep only the remaster entry. See Decision 017 (pending) for the
+rationale and the deferred editorial rename map for spells that were renamed
+or removed during the remaster.
 """
 
 import json
 import os
 import re
 import sys
-from collections import Counter
+from collections import Counter, defaultdict
 from datetime import datetime, timezone
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -19,7 +23,77 @@ PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
 SPELL_JSON = os.path.join(PROJECT_ROOT, "source", "spell.json")
 OUTPUT_JS = os.path.join(PROJECT_ROOT, "data", "spell-data.js")
 
-VERSION = "0.1.0"
+VERSION = "0.2.0"
+
+# Era classification by primary_source. Adventure paths and Lost Omens books
+# fall into "other" — they are not deduped against core entries.
+LEGACY_SOURCES = {
+    "Core Rulebook",
+    "Advanced Player's Guide",
+    "Secrets of Magic",
+    "Dark Archive",
+    "Book of the Dead",
+    "Guns & Gears",
+    "Gods & Magic",
+}
+REMASTER_SOURCES = {
+    "Player Core", "Player Core 2", "GM Core", "Monster Core",
+    "Howl of the Wild", "War of Immortals",
+    "Divine Mysteries", "Dark Archives (Remastered)",
+    "Rage of Elements",
+}
+
+
+def era(spell):
+    ps = spell.get("primary_source", "") or ""
+    if ps in REMASTER_SOURCES:
+        return "remaster_core"
+    if ps in LEGACY_SOURCES:
+        return "legacy_core"
+    return "other"
+
+
+def dedupe_by_era(rank_spells):
+    """For each spell name with duplicates, prefer remaster_core > legacy_core > other.
+    Within the same era, prefer the highest aonId (most recently added).
+
+    Returns (kept_spells, dropped_summary) where dropped_summary is a list of
+    (name, dropped_id, kept_id, era_dropped, era_kept) tuples.
+    """
+    by_name = defaultdict(list)
+    for s in rank_spells:
+        by_name[s.get("name", "")].append(s)
+
+    era_priority = {"remaster_core": 2, "legacy_core": 1, "other": 0}
+
+    def aon_int(s):
+        sid = s.get("id", "") or ""
+        if sid.startswith("spell-"):
+            try:
+                return int(sid[6:])
+            except ValueError:
+                return 0
+        return 0
+
+    kept = []
+    dropped = []
+    for name, group in by_name.items():
+        if len(group) == 1:
+            kept.append(group[0])
+            continue
+        # Sort: highest era_priority first, then highest aonId first
+        ranked = sorted(group, key=lambda s: (-era_priority[era(s)], -aon_int(s)))
+        winner = ranked[0]
+        kept.append(winner)
+        for loser in ranked[1:]:
+            dropped.append((
+                name,
+                loser.get("id", ""),
+                winner.get("id", ""),
+                era(loser),
+                era(winner),
+            ))
+    return kept, dropped
 
 
 def extract_aon_id(spell):
@@ -312,6 +386,13 @@ def main():
         sum(1 for s in all_spells if s.get("spell_type") == "Cantrip"),
         sum(1 for s in all_spells if s.get("spell_type") == "Focus"),
     ))
+
+    pre_count = len(rank_spells)
+    rank_spells, dropped = dedupe_by_era(rank_spells)
+    print("  %d -> %d after era dedupe (%d duplicates dropped)" % (pre_count, len(rank_spells), len(dropped)))
+    drop_eras = Counter("%s -> %s" % (d_era, k_era) for (_, _, _, d_era, k_era) in dropped)
+    for transition, n in drop_eras.most_common():
+        print("    %s: %d" % (transition, n))
 
     spell_objects = []
     skipped = 0
