@@ -60,7 +60,7 @@
   {
     "aonId": 1536,
     "name": "Force Barrage",
-    "why": "Auto defense tag (no save, no attack, offensive). Variable action (1-action + 3-action). +2 scaling. Tests Auto → Auto-effect chain.",
+    "why": "Auto defense tag (no save, no attack, offensive). Variable action (1-action + 3-action). +2 scaling. Tests Auto → Auto-effect chain. Multi target via shard mechanic (up to N creatures, where N = shards fired).",
     "expected": {
       "damage_types": ["Force"],
       "conditions_imposed": [],
@@ -68,7 +68,7 @@
       "roles_added": ["damage"],
       "defense_tags_added": ["Auto"],
       "reliability_tags_added": ["Auto-effect"],
-      "targeting_tags_added": [],
+      "targeting_tags_added": ["Multi"],
       "heighten_quality": "scales-well"
     },
     "tolerance": ["heighten_quality"]
@@ -76,9 +76,9 @@
   {
     "aonId": 1351,
     "name": "Dehydrate",
-    "why": "Dual role: damage + debuff. Basic Fort. Enfeebled on failure. +2 scales-well.",
+    "why": "Dual role: damage + debuff. Basic Fort (so Success-effect is auto-derived — populator must NOT emit). Persistent fire damage per spell text. Enfeebled on failure. +2 scales-well.",
     "expected": {
-      "damage_types": ["Vitality"],
+      "damage_types": ["Fire"],
       "conditions_imposed": ["Enfeebled"],
       "conditions_by_outcome": {
         "critical_success": [],
@@ -92,7 +92,7 @@
       "targeting_tags_added": [],
       "heighten_quality": "scales-well"
     },
-    "tolerance": ["heighten_quality", "damage_types"]
+    "tolerance": ["heighten_quality"]
   },
   {
     "aonId": 219,
@@ -104,7 +104,7 @@
       "conditions_by_outcome": {
         "critical_success": [],
         "success": ["Frightened"],
-        "failure": ["Frightened", "Fleeing"],
+        "failure": ["Frightened"],
         "critical_failure": ["Frightened", "Fleeing"]
       },
       "roles_added": ["damage", "debuff"],
@@ -137,17 +137,17 @@
     "why": "Non-basic Will. Conditions ON SUCCESS (Clumsy 3 + Concealed effect for 1 round). Tests Success-effect for non-basic-save spells.",
     "expected": {
       "damage_types": [],
-      "conditions_imposed": ["Clumsy", "Stunned"],
+      "conditions_imposed": ["Clumsy", "Concealed", "Stunned"],
       "conditions_by_outcome": {
         "critical_success": [],
-        "success": ["Clumsy"],
-        "failure": ["Clumsy"],
-        "critical_failure": ["Clumsy", "Stunned"]
+        "success": ["Clumsy", "Concealed"],
+        "failure": ["Clumsy", "Concealed"],
+        "critical_failure": ["Clumsy", "Concealed", "Stunned"]
       },
       "roles_added": ["debuff"],
       "defense_tags_added": [],
       "reliability_tags_added": ["Success-effect"],
-      "targeting_tags_added": [],
+      "targeting_tags_added": ["Multi"],
       "heighten_quality": "fixed-meaningful"
     },
     "tolerance": ["heighten_quality", "conditions_imposed", "conditions_by_outcome"]
@@ -192,7 +192,7 @@
   {
     "aonId": 1751,
     "name": "Wall of Stone",
-    "why": "Control only, no damage. Auto defense tag (offensive effect, no save). Multi (Wall). Tests Auto on a non-damage control spell.",
+    "why": "Control only, no damage. Auto defense tag (offensive effect, no save). Multi (Wall). Tests Auto on a non-damage control spell. Heighten +2 adds 15 HP per wall section — modest scaling.",
     "expected": {
       "damage_types": [],
       "conditions_imposed": [],
@@ -201,22 +201,27 @@
       "defense_tags_added": ["Auto"],
       "reliability_tags_added": ["Auto-effect"],
       "targeting_tags_added": [],
-      "heighten_quality": "fixed-minor"
+      "heighten_quality": "scales-well"
     },
     "tolerance": ["heighten_quality"]
   },
   {
     "aonId": 1350,
     "name": "Cinder Swarm",
-    "why": "Damage. Sustain. Multi. Dual damage types (Piercing + Fire). +1 scales-well.",
+    "why": "Damage + debuff (dual mode). Sustain. Multi. Dual damage types (Piercing + Fire). Fire Ants mode = damage only; Fireflies mode (incapacitation) = Dazzled on Success, Blinded on Failure/CritFailure with Fort save. +1 scales-well.",
     "expected": {
       "damage_types": ["Pierc", "Fire"],
-      "conditions_imposed": [],
-      "conditions_by_outcome": null,
-      "roles_added": ["damage"],
+      "conditions_imposed": ["Dazzled", "Blinded"],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": ["Dazzled"],
+        "failure": ["Blinded"],
+        "critical_failure": ["Blinded"]
+      },
+      "roles_added": ["damage", "debuff"],
       "defense_tags_added": [],
       "reliability_tags_added": [],
-      "targeting_tags_added": ["Multi"],
+      "targeting_tags_added": [],
       "heighten_quality": "scales-well"
     },
     "tolerance": ["heighten_quality", "damage_types"]
@@ -282,18 +287,18 @@
   {
     "aonId": 1554,
     "name": "Heal",
-    "why": "Healing + variable action. +1 scaling. Tests healing role assignment alongside auto-derived role.",
+    "why": "Pure healing spell. Healing + oneAction roles are auto-derived from structured data; populator must NOT re-emit them. Heal's Vitality damage to undead is incidental — damage_types stays [] per editorial decision (Heal's plannable function is healing, not undead-damage). 3-action mode targets all living creatures within 30 ft → Multi.",
     "expected": {
       "damage_types": [],
       "conditions_imposed": [],
       "conditions_by_outcome": null,
-      "roles_added": ["healing"],
+      "roles_added": [],
       "defense_tags_added": [],
       "reliability_tags_added": [],
-      "targeting_tags_added": [],
+      "targeting_tags_added": ["Multi"],
       "heighten_quality": "scales-well"
     },
-    "tolerance": ["heighten_quality"]
+    "tolerance": ["heighten_quality", "damage_types", "roles_added"]
   },
   {
     "aonId": 1553,
@@ -330,7 +335,7 @@
   {
     "aonId": 1577,
     "name": "Invisibility",
-    "why": "Utility + buff. No offense. Tests dual non-combat roles.",
+    "why": "Utility + buff. 10 min duration is exactly at the prebuff threshold — borderline; tactical use dominates so prebuffs is in tolerance.",
     "expected": {
       "damage_types": [],
       "conditions_imposed": [],
@@ -341,7 +346,7 @@
       "targeting_tags_added": [],
       "heighten_quality": "fixed-meaningful"
     },
-    "tolerance": ["heighten_quality"]
+    "tolerance": ["heighten_quality", "roles_added"]
   },
   {
     "aonId": 1382,

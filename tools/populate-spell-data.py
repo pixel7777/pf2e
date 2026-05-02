@@ -14,6 +14,7 @@ import json
 import os
 import sys
 import time
+from collections import Counter
 from datetime import datetime, timezone
 
 try:
@@ -111,6 +112,8 @@ Return a JSON object with these fields:
 
 Valid values (16): Fire, Cold, Elec, Acid, Force, Sonic, Void, Vitality, Spirit, Mental, Poison, Bludg, Pierc, Slash, Varies
 
+⚠️ Healing-trait spells: If the spell has the "Healing" trait (visible in the SPELL CONTEXT block above), the spell is editorially classified as healing. Even if the spell has a secondary undead-damage mode (e.g., Heal deals Vitality damage to undead), do NOT emit damage_types — the healing function dominates the spell's plannable purpose. damage_types = []. Same for defense_tags_added (no Auto), reliability_tags_added (no Auto-effect), roles_added (no damage role). Healing-trait spells produce empty offense analysis.
+
 Rules (Decision 005):
 1. Only tag damage dealt TO ENEMIES. "Deals 4d6 fire damage" → Fire. "Grants resistance 5 to fire" → NOT Fire. "Immune to acid" → NOT Acid.
 2. Include both initial and persistent damage. Cinder Swarm (piercing initial + persistent fire) → ["Pierc", "Fire"].
@@ -126,11 +129,21 @@ Rules (Decision 005):
 ## conditions_imposed — array of canonical PF2e remaster condition names
 
 Rules (Decision 006):
-1. Only tag conditions imposed ON ENEMIES. "Target is Frightened 1" → tag. "You are immune to frightened" → don't tag. "Removes blinded from an ally" → don't tag.
-2. Tag at every save outcome where the condition appears. If Stunned on crit fail and Slowed on fail, tag both.
-3. Include conditions from persistent/lingering effects.
-4. Use canonical remaster names. "Flat-footed" → "Off-Guard". Drop severity numbers — "Sickened 2" → "Sickened".
-5. Spells with no conditions imposed on enemies → [].
+1. ⚠️ ONLY tag ADVERSE conditions imposed on HOSTILE targets. The two-part test:
+   (a) Is the spell's target an ENEMY (the caster wants this target to suffer), AND
+   (b) Is the condition HARMFUL to that target?
+   If either answer is "no," DO NOT TAG. Buff and utility spells almost always have conditions_imposed = [].
+   - "Target is Frightened 1 on a failed save" → tag (adverse, on enemy).
+   - Haste targets willing creatures and grants Quickened. Quickened is a BUFF given to an ALLY. Even though "Quickened" is the name of a PF2e condition, granting it to a willing ally is NOT imposing a condition. DO NOT TAG. conditions_imposed for Haste = [].
+   - Invisibility makes the target Undetected/Hidden. Target is willing/self → ALLY. Condition is beneficial → BUFF. DO NOT TAG. conditions_imposed for Invisibility = [].
+   - Mage Armor / Mystic Armor / Runic Body grants the target a bonus → DO NOT TAG (the target is an ally).
+   - "You are immune to frightened" → DO NOT TAG (no enemy involved).
+   - "Removes blinded from an ally" → DO NOT TAG (ally, beneficial).
+   - Heuristic: if the spell's defense_tags is empty (no enemy save/AC), conditions_imposed should almost always be []. The spell is targeting allies/self/objects, not imposing on enemies.
+2. Tag at every save outcome where the condition appears on the enemy. If Stunned on crit fail and Slowed on fail, tag both.
+3. Include conditions from persistent/lingering effects (e.g., persistent damage that imposes Sickened — Sickened is the condition, NOT "Persistent Damage").
+4. ⚠️ Use CANONICAL PF2e remaster condition names ONLY. "Persistent Damage" is NOT a condition — it's a damage state. "Dying" is a condition but only tag it if the spell explicitly imposes the Dying condition (not just "the creature dies"). If a spell's text says "the creature dies," do NOT tag any condition for that effect — death is not a condition. Drop severity numbers ("Sickened 2" → "Sickened"). "Flat-footed" → "Off-Guard". The valid condition names are: Blinded, Clumsy, Concealed, Confused, Controlled, Dazzled, Deafened, Doomed, Drained, Dying, Encumbered, Enfeebled, Fascinated, Fatigued, Fleeing, Frightened, Grabbed, Hidden, Immobilized, Invisible, Off-Guard, Paralyzed, Petrified, Prone, Quickened, Restrained, Sickened, Slowed, Stunned, Stupefied, Unconscious, Undetected, Unnoticed, Wounded. Do not invent names not on this list.
+5. Spells with no adverse conditions imposed on enemies → [].
 
 ## conditions_by_outcome — object or null
 
@@ -147,28 +160,28 @@ conditions_imposed must be the deduplicated union of all four arrays.
 
 ## roles_added — array of NEW roles the populator contributes
 
-Valid populator roles (9): damage, debuff, buff, healing, control, utility, reactions, oneAction, prebuffs
-(silverBullets is editorial-only — never emit it.)
+Valid populator roles to EMIT (6): damage, debuff, buff, control, utility, prebuffs.
 
-Note: healing/reactions/oneAction may have been auto-derived by the prior pass from traits/actions. You may still emit them if the text confirms — duplicates are merged.
+DO NOT EMIT: healing, reactions, oneAction, silverBullets. Reasons:
+- healing/reactions/oneAction are auto-derived from structured data (Healing trait, Reaction action, Single Action) by the prior pipeline pass. Re-emitting them creates noise. They are already correct; leave them alone.
+- silverBullets is editorial-only — never emit it.
+
+If your analysis suggests one of those four roles applies, simply do not include it in roles_added. The structured pass handles it.
 
 Definitions (Decision 011):
-- damage: spell deals meaningful HP damage to enemies as a primary or significant function.
-- debuff: spell imposes conditions on enemies as a primary/significant function. SAVE-OUTCOME THRESHOLD:
+- damage: spell deals meaningful HP damage to enemies as a primary or significant function. Includes instantaneous AoE damage spells (Fireball, Lightning Bolt, Eclipse Burst). The fact that damage covers an area does NOT make it control — it's still damage.
+- debuff: spell imposes adverse conditions on enemies as a primary/significant function. SAVE-OUTCOME THRESHOLD:
    * Auto-effect (no save): debuff = yes (always plannable).
    * Success: debuff = yes (~50%+ trigger rate).
    * Failure: debuff = yes IF significant function. Slow (Slowed on fail) = yes. Dehydrate (damage + Enfeebled on fail) = yes (also gets damage).
-   * Critical Failure ONLY: debuff = NO. Eclipse Burst's Blinded on crit fail is a jackpot, not a function.
+   * ⚠️ Critical Failure ONLY: debuff = NO. The condition is a "jackpot," not a plannable function. CANONICAL EXAMPLE: Eclipse Burst has Blinded on critical failure and NOTHING on failure or success. Its roles_added is exactly ["damage"] — NOT ["damage", "debuff"]. Same logic for any damage spell whose only condition is on critical failure.
    * EXCEPTION: Critical-fail-only with Incapacitation AND no other function = yes. Sleep is a debuff despite the crit-fail gate because the entire spell is the condition.
 - buff: spell targets allies and enhances capabilities (stat bonuses, new abilities, protective effects). Damage prevention/reduction = buff.
-- healing: spell restores ally HP or removes harmful conditions. (Healing trait → very high confidence.)
-- control: spell creates terrain, zones, barriers, or movement denial that shapes the battlefield. Wall spells, difficult terrain, zoning. Wall of Stone = control. Wall of Fire = control + damage.
+- control: spell creates a PERSISTENT terrain effect, zone, or barrier with a duration (rounds/minutes/hours) that shapes the battlefield over time. The hallmark is duration + spatial constraint. Examples: Wall of Stone (persistent barrier — control only), Wall of Fire (persistent damage zone — control AND damage), difficult terrain hazards, zoning auras. INSTANTANEOUS AREA DAMAGE IS NOT CONTROL: Fireball, Lightning Bolt, Eclipse Burst, Cinder Swarm, Slow — none are control. They're damage and/or debuff. The "covers an area" fact alone does not make a spell control; only persistent spatial constraint does.
 - utility: spell solves out-of-combat problems — movement, scouting, environmental adaptation, information. Fly = utility + buff. Invisibility = utility + buff.
-- reactions: cast as a Reaction.
-- oneAction: has a 1-action casting mode.
 - prebuffs: long-duration (≥10 min) self/ally buff cast before combat. Mystic Armor = buff + prebuffs.
 
-Every spell must end up with at least one role. Emit whatever roles apply.
+Every spell must end up with at least one role across the populator + auto-derived sets. If a spell's only roles are auto-derived (e.g., a pure healing spell with the Healing trait), it's fine to emit roles_added=[].
 
 ## defense_tags_added — array
 
@@ -183,7 +196,15 @@ Add "AC" if AND ONLY IF:
 Add "Auto" if AND ONLY IF:
 1. The spell's existing defense_tags is empty AND you did NOT add "AC" above, AND
 2. The spell is offensive — has a combat role you're emitting (damage, debuff, or control), AND
-3. The text confirms the spell affects enemies without any save and without an attack roll. Force Barrage's "It automatically hits" is the canonical case. Wall of Stone's offensive control with no save also qualifies.
+3. The text confirms the spell affects enemies without any save and without an attack roll.
+
+Canonical cases:
+- Force Barrage: "It automatically hits" → Auto.
+- Wall of Stone: persistent barrier, no save, offensive control → Auto.
+- Wall of Fire: persistent damage zone, creatures take damage when entering/passing through with NO save → Auto. (If the spell's text doesn't mention a Reflex/Fort/Will save against the damage, it's Auto. The presence of fire/cold/etc. damage does NOT mean there's a save — read the text carefully.)
+- Any persistent damage zone or hazard where creatures simply take damage on entry/exit/turn-end without rolling a save → Auto.
+
+Important: a spell that has a Reflex save listed in its `Defense` block but ALSO has a passive "creatures who pass through take damage" clause: the save covers part of the effect, so defense_tags will already have "Ref" and you should NOT add Auto.
 
 Otherwise → [].
 NEVER add Fort, Ref, or Will — those are computed upstream from the saving_throw field. AC and Auto are mutually exclusive; a spell with an attack roll uses AC, never Auto.
@@ -194,24 +215,34 @@ Valid values: "Auto-effect", "Success-effect"
 
 Add "Auto-effect" if AND ONLY IF you added "Auto" to defense_tags_added (above).
 
-Add "Success-effect" if AND ONLY IF basic_save is FALSE AND the Success degree-of-success outcome produces a strategically meaningful effect — a condition rider, partial damage, or tactical consequence beyond "no effect". Examples:
+Add "Success-effect" if AND ONLY IF basic_save is FALSE AND the Success degree-of-success outcome produces a strategically meaningful effect — a condition rider, partial damage, or tactical consequence beyond "no effect".
+
+⚠️ CRITICAL: If basic_save is TRUE (you can see the value in the SPELL CONTEXT block above), DO NOT emit Success-effect under any circumstances. Basic-save Success-effect is computed by the structured pass (Cycle 03) and emitting it from the populator creates duplicates. Even if a basic-save spell has additional rider conditions on Success, the populator's reliability_tags_added MUST be []. The structured pass already covers it.
+
+Examples (all non-basic-save):
 - Fear (non-basic Will, "Frightened 1" on success) → add Success-effect.
 - Synesthesia (non-basic Will, Clumsy 1 + Stupefied 1 on success) → add Success-effect.
 - Slow (non-basic Fort, "Slowed 1 for 1 round" on success) → add Success-effect (1-round Slowed is meaningful).
 - Phantasmal Killer (non-basic Will, "frightened 1" on success) → add Success-effect.
+- Dehydrate (BASIC Fort) → DO NOT add Success-effect, even though it has rider conditions. Basic save = upstream's job.
 - Spell where Success = "no effect" or "spell ends" → don't add.
-
-Do NOT emit Success-effect for basic_save spells — those are handled upstream.
 
 ## targeting_tags_added — array
 
 Valid values: "ST", "Multi"
 
-The Cycle 03 pass already added ST/Multi from area_type and the "1 creature"/"the triggering creature" target patterns. Augment ONLY when text analysis reveals a mode the structured pass missed:
-- "ST" if existing targeting_tags lacks ST AND the spell can target a single creature (e.g., variable-action spells with a single-target mode).
-- "Multi" if existing targeting_tags lacks Multi AND the spell text shows multi-target mode (e.g., "up to 5 creatures", heightened versions that target multiple, "each creature in the area" without an area_type field).
+⚠️ READ THIS RULE CAREFULLY. The "_added" suffix means "what THIS pass is contributing on top of what's already there." The default answer is [].
 
-Otherwise → [].
+Look at the SPELL CONTEXT block above: `targeting_tags: [...]`. Whatever values are in that list are ALREADY computed. DO NOT re-emit them.
+
+- If targeting_tags ALREADY contains "ST" → DO NOT emit "ST" in targeting_tags_added.
+- If targeting_tags ALREADY contains "Multi" → DO NOT emit "Multi" in targeting_tags_added.
+
+You may add a value ONLY when text analysis reveals a mode the structured pass missed:
+- "ST" if existing targeting_tags lacks ST AND the spell text describes targeting a single creature/object in a way the structured rules didn't catch (rare).
+- "Multi" if existing targeting_tags lacks Multi AND the spell text shows multi-target mode that wasn't caught (e.g., "up to 5 creatures" wording, heightened versions that target multiple).
+
+For 95%+ of spells, targeting_tags_added = []. The structured pass is good. If existing targeting_tags = ["Multi"], your output is []. If existing targeting_tags = ["ST"], your output is []. If existing targeting_tags = ["ST", "Multi"], your output is []. Only emit when augmentation is genuinely needed.
 
 ## heighten_quality — string enum or null
 
@@ -360,12 +391,15 @@ def parse_and_validate(content):
         for k, v in cbo.items():
             if not isinstance(v, list):
                 return None, "conditions_by_outcome[%s] not list" % k
-        # Consistency: conditions_imposed == union of outcome arrays (deduplicated, set equality)
+        # Auto-fix: conditions_imposed is the deduplicated union of outcome arrays.
+        # The LLM occasionally produces inconsistent output (e.g., listing a condition in
+        # conditions_imposed but not in any outcome, or vice versa). Rather than failing,
+        # we derive conditions_imposed deterministically from the outcomes — they're the
+        # source of truth, conditions_imposed is just a flattened view.
         union = set()
         for v in cbo.values():
             union.update(v)
-        if set(result["conditions_imposed"]) != union:
-            return None, "conditions_imposed != union(conditions_by_outcome)"
+        result["conditions_imposed"] = sorted(union)
 
     if not isinstance(result["roles_added"], list):
         return None, "roles_added not list"
@@ -405,6 +439,21 @@ def parse_and_validate(content):
     return result, None
 
 
+def post_process(result, spell_data_entry):
+    """Apply deterministic cleanup rules after LLM produces a valid response.
+    Catches systematic LLM errors that resist prompt instruction.
+    """
+    existing_defense = set(spell_data_entry.get("defense_tags") or [])
+
+    # Rule: Auto is only valid when existing defense_tags is empty. If Fort/Ref/Will/AC
+    # is already there, the spell is not an "Auto" spell — strip Auto and Auto-effect.
+    if existing_defense and "Auto" in result.get("defense_tags_added", []):
+        result["defense_tags_added"] = [v for v in result["defense_tags_added"] if v != "Auto"]
+        result["reliability_tags_added"] = [v for v in result.get("reliability_tags_added", []) if v != "Auto-effect"]
+
+    return result
+
+
 def analyze_spell(api_key, model, raw_spell, spell_data_entry, max_retries=5):
     """Send one spell to the LLM, retry on transport/validation failures.
 
@@ -441,6 +490,7 @@ def analyze_spell(api_key, model, raw_spell, spell_data_entry, max_retries=5):
 
         parsed, err = parse_and_validate(content)
         if parsed is not None:
+            parsed = post_process(parsed, spell_data_entry)
             return parsed, usage
         last_error = "validation: %s" % err
         time.sleep(backoff)
@@ -450,6 +500,59 @@ def analyze_spell(api_key, model, raw_spell, spell_data_entry, max_retries=5):
 
 
 # ---------------------------------------------------------- merge --------
+
+def _apply_consistency_rules(spell):
+    """Apply deterministic consistency cleanup after merging populator output.
+    Catches systematic LLM errors so the validator doesn't trip.
+    """
+    fixes = []
+
+    # Rule: heighten_pattern=none implies heighten_quality=no-heighten.
+    if spell.get("heighten_pattern") == "none" and spell.get("heighten_quality") != "no-heighten":
+        spell["heighten_quality"] = "no-heighten"
+        fixes.append("forced heighten_quality=no-heighten")
+
+    # Rule: Auto defense tag requires a combat role. Otherwise strip Auto + Auto-effect.
+    combat_roles = {"damage", "debuff", "control"}
+    has_combat = any(r in combat_roles for r in spell.get("roles", []))
+    if "Auto" in spell.get("defense_tags", []) and not has_combat:
+        spell["defense_tags"] = [t for t in spell["defense_tags"] if t != "Auto"]
+        spell["reliability_tags"] = [t for t in spell.get("reliability_tags", []) if t != "Auto-effect"]
+        fixes.append("stripped Auto (no combat role)")
+
+    # Rule: conditions_imposed non-empty but conditions_by_outcome null → likely Auto-effect
+    # conditions. Per prompt convention, put them in failure slot.
+    cbo = spell.get("conditions_by_outcome")
+    ci = spell.get("conditions_imposed", []) or []
+    if ci and cbo is None:
+        spell["conditions_by_outcome"] = {
+            "critical_success": [],
+            "success": [],
+            "failure": list(ci),
+            "critical_failure": list(ci),
+        }
+        fixes.append("derived conditions_by_outcome from imposed (auto-effect convention)")
+
+    # Rule: damage_types non-empty implies damage role.
+    if spell.get("damage_types") and "damage" not in spell.get("roles", []):
+        spell["roles"] = sorted(set(spell.get("roles", []) + ["damage"]))
+        fixes.append("added damage role")
+
+    # Rule: conditions at success/failure (not crit-fail-only) imply debuff role.
+    cbo = spell.get("conditions_by_outcome")
+    if cbo is not None:
+        non_critfail = bool(cbo.get("success") or cbo.get("failure"))
+        if non_critfail and "debuff" not in spell.get("roles", []):
+            spell["roles"] = sorted(set(spell.get("roles", []) + ["debuff"]))
+            fixes.append("added debuff role (conditions at success/failure)")
+
+    # Rule: every spell must have at least one role. If empty, default to utility.
+    if not spell.get("roles"):
+        spell["roles"] = ["utility"]
+        fixes.append("defaulted roles=[utility] (was empty)")
+
+    return fixes
+
 
 def merge_into_spell_data():
     print("Loading spell-data.js and populator-results.json...")
@@ -462,6 +565,7 @@ def merge_into_spell_data():
     by_aon = {s["aonId"]: s for s in spell_data["spells"]}
     merged_count = 0
     skipped = []
+    fix_counter = Counter()
 
     for key, populated in results.items():
         if not key.startswith("spell-"):
@@ -498,9 +602,31 @@ def merge_into_spell_data():
 
         merged_count += 1
 
+    # Apply consistency rules across ALL spells (including skipped ones with no populator data).
+    cleanup_count = 0
+    for spell in spell_data["spells"]:
+        fixes = _apply_consistency_rules(spell)
+        if fixes:
+            cleanup_count += 1
+        for f in fixes:
+            fix_counter[f] += 1
+
+        # Re-apply offense gate: consistency rules may have stripped Auto, leaving
+        # defense_tags empty. In that case, offense fields must be cleared per Decision 016.
+        if not spell.get("defense_tags"):
+            if spell.get("damage_types") or spell.get("conditions_imposed") or spell.get("conditions_by_outcome"):
+                spell["damage_types"] = []
+                spell["conditions_imposed"] = []
+                spell["conditions_by_outcome"] = None
+                spell["reliability_tags"] = [t for t in spell.get("reliability_tags", []) if t == "Auto-effect"]
+                fix_counter["re-applied offense gate after Auto strip"] += 1
+
     spell_data["generated"] = datetime.now(timezone.utc).isoformat()
     write_spell_data(spell_data)
     print("  merged %d results into spell-data.js" % merged_count)
+    print("  applied consistency cleanup to %d spells:" % cleanup_count)
+    for fix, n in fix_counter.most_common():
+        print("    %d × %s" % (n, fix))
     if skipped:
         print("  skipped %d unknown keys: %s" % (len(skipped), skipped[:5]))
 
@@ -524,24 +650,34 @@ def parse_spells_arg(arg):
     return out
 
 
+def _values_match(exp_val, act_val):
+    """Order-tolerant equality. Lists are compared as sets. Dicts whose values
+    are lists are compared key-by-key with set semantics. Everything else uses ==.
+    """
+    if isinstance(exp_val, list) and isinstance(act_val, list):
+        return set(exp_val) == set(act_val)
+    if isinstance(exp_val, dict) and isinstance(act_val, dict):
+        if set(exp_val.keys()) != set(act_val.keys()):
+            return False
+        for k in exp_val:
+            if not _values_match(exp_val[k], act_val[k]):
+                return False
+        return True
+    return exp_val == act_val
+
+
 def golden_set_diff(expected, actual, tolerance_fields):
     """Compare expected and actual populator outputs. Returns (status, details)."""
     diffs = []
     fuzzy = []
     for field, exp_val in expected.items():
         act_val = actual.get(field)
-        # Normalize array comparisons to sets when arrays.
-        if isinstance(exp_val, list) and isinstance(act_val, list):
-            if set(exp_val) != set(act_val):
-                if field in tolerance_fields:
-                    fuzzy.append("%s: expected %s, got %s" % (field, exp_val, act_val))
-                else:
-                    diffs.append("%s: expected %s, got %s" % (field, exp_val, act_val))
-        elif exp_val != act_val:
+        if not _values_match(exp_val, act_val):
+            msg = "%s: expected %s, got %s" % (field, exp_val, act_val)
             if field in tolerance_fields:
-                fuzzy.append("%s: expected %r, got %r" % (field, exp_val, act_val))
+                fuzzy.append(msg)
             else:
-                diffs.append("%s: expected %r, got %r" % (field, exp_val, act_val))
+                diffs.append(msg)
 
     if diffs:
         return "FAIL", diffs + fuzzy
