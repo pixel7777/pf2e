@@ -168,6 +168,10 @@ body {
   --tag-special: #b8b0c4;        /* Silver/gray (NEW color) */
   --tag-special-bg: rgba(184,176,196,0.12);
   --tag-special-border: rgba(184,176,196,0.35);
+
+  --tag-weakness: #4dc9c9;       /* Cyan — cool contrast to warm damage orange */
+  --tag-weakness-bg: rgba(77,201,201,0.14);
+  --tag-weakness-border: rgba(77,201,201,0.4);
 }
 
 .ctag {
@@ -252,6 +256,15 @@ body {
   color: var(--tag-special);
   background: var(--tag-special-bg);
   border-color: var(--tag-special-border);
+}
+
+.ctag.tag-weakness.lit,
+.spell-table .ctag.tag-weakness,
+.slot-tags .ctag.tag-weakness.lit,
+.slot-tags .ctag.tag-weakness {
+  color: var(--tag-weakness);
+  background: var(--tag-weakness-bg);
+  border-color: var(--tag-weakness-border);
 }
 
 /* Incap warning takes precedence */
@@ -701,6 +714,22 @@ body {
 }
 
 .spell-name-link:hover { text-decoration: underline; }
+
+.aon-link {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.72rem;
+  margin-left: 0.3rem;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+.aon-link:hover { opacity: 1; color: var(--gold-light); }
+
+.ctag.danger {
+  color: var(--accent-red);
+  background: rgba(196,92,92,0.14);
+  border-color: rgba(196,92,92,0.4);
+}
 
 .curated-star {
   color: var(--gold);
