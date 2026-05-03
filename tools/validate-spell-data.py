@@ -19,7 +19,7 @@ SPELL_DATA_PATH = os.path.join(PROJECT_ROOT, "data", "spell-data.js")
 VALID_DAMAGE_TYPES = {
     "Fire", "Cold", "Elec", "Acid", "Force", "Sonic",
     "Void", "Vitality", "Spirit", "Mental", "Poison",
-    "Bludg", "Pierc", "Slash", "Varies",
+    "Bludg", "Pierc", "Slash", "Bleed", "Varies", "Unspecified",
 }
 
 VALID_ROLES = {
@@ -149,6 +149,26 @@ def hard_rule_11(spell):
     return True, None
 
 
+def hard_rule_12(spell):
+    """weaknesses_imposed must be present and a valid array of damage types."""
+    wi = spell.get("weaknesses_imposed")
+    if wi is None:
+        return False, "weaknesses_imposed field is missing"
+    if not isinstance(wi, list):
+        return False, "weaknesses_imposed is not a list"
+    invalid = [t for t in wi if t not in VALID_DAMAGE_TYPES]
+    if invalid:
+        return False, "invalid weaknesses_imposed types: %s" % invalid
+    return True, None
+
+
+def hard_rule_13(spell):
+    """defense_tags empty → weaknesses_imposed must be []."""
+    if not spell.get("defense_tags") and spell.get("weaknesses_imposed"):
+        return False, "no defense_tags but weaknesses_imposed is non-empty: %s" % spell["weaknesses_imposed"]
+    return True, None
+
+
 HARD_RULES = [
     (1, "damage_types non-empty implies 'damage' role", hard_rule_1),
     (2, "conditions at success/failure imply 'debuff' role", hard_rule_2),
@@ -161,6 +181,8 @@ HARD_RULES = [
     (9, "every spell has at least one role", hard_rule_9),
     (10, "heighten_pattern=none implies heighten_quality=no-heighten", hard_rule_10),
     (11, "Auto defense requires a combat role", hard_rule_11),
+    (12, "weaknesses_imposed is valid array of damage types", hard_rule_12),
+    (13, "no defense_tags implies no weaknesses_imposed", hard_rule_13),
 ]
 
 
@@ -238,13 +260,21 @@ def soft_rule_19(spell):
     return True, None
 
 
+def soft_rule_20(spell):
+    """weaknesses_imposed non-empty implies debuff role."""
+    if spell.get("weaknesses_imposed") and "debuff" not in spell.get("roles", []):
+        return False, "weaknesses_imposed=%s but no debuff role" % spell["weaknesses_imposed"]
+    return True, None
+
+
 PER_SPELL_SOFT_RULES = [
-    (12, "damage+condition spell should have both damage and debuff roles", soft_rule_12),
-    (13, "Healing tag implies healing role", soft_rule_13),
-    (14, "scaling pattern with no-heighten quality", soft_rule_14),
-    (15, "non-null conditions_by_outcome should have at least one populated outcome", soft_rule_15),
-    (16, "prebuffs role implies duration ≥10 minutes (skipped — duration not in spell-data.js)", soft_rule_16),
+    (14, "damage+condition spell should have both damage and debuff roles", soft_rule_12),
+    (15, "Healing tag implies healing role", soft_rule_13),
+    (16, "scaling pattern with no-heighten quality", soft_rule_14),
+    (17, "non-null conditions_by_outcome should have at least one populated outcome", soft_rule_15),
+    (18, "prebuffs role implies duration ≥10 minutes (skipped — duration not in spell-data.js)", soft_rule_16),
     (19, "damage role with defense_tags should have damage_types", soft_rule_19),
+    (20, "weaknesses_imposed non-empty implies debuff role", soft_rule_20),
 ]
 
 
@@ -274,8 +304,8 @@ def main():
 
     hard_fail_total = sum(len(r["fail"]) for r in hard_results.values())
     hard_pass_rules = sum(1 for r in hard_results.values() if not r["fail"])
-    print("Hard rules: %d checked, %d FAIL violations across %d spells, %d/11 rules clean" % (
-        len(HARD_RULES), hard_fail_total, hard_fail_total, hard_pass_rules))
+    print("Hard rules: %d checked, %d FAIL violations across %d spells, %d/%d rules clean" % (
+        len(HARD_RULES), hard_fail_total, hard_fail_total, hard_pass_rules, len(HARD_RULES)))
 
     for n, info in sorted(hard_results.items()):
         if info["fail"]:

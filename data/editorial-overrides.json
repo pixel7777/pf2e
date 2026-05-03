@@ -1,0 +1,266 @@
+[
+  {
+    "aonId": 1331,
+    "name": "Exploding Earth",
+    "reason": "Cycle 07 spot-check (Heidi sample 1): Spell uses an attack roll for the primary effect. The Fortitude save and Prone condition are a double-jackpot rider — they only fire if (a) the attack roll critically hits AND (b) the target then fails the Fort save. Same spirit as Decision 011's crit-fail-only rule (jackpot riders don't drive debuff role and shouldn't populate normal save-outcome buckets). Clear conditions; keep damage role.",
+    "overrides": {
+      "conditions_imposed": [],
+      "conditions_by_outcome": null
+    }
+  },
+  {
+    "aonId": 1124,
+    "name": "Scouring Pulse",
+    "reason": "Cycle 07 spot-check (Heidi sample 4): Spell does NOT impose Concealed — it PREVENTS Concealed (anti-stealth) and downgrades Undetected invisible creatures to Concealed (a perceptibility upgrade, not a debuff). spell.json's saving_throw is empty so basic_save defaulted to false; spell text says 'basic Reflex save'. Editorial override clears the false condition AND sets basic_save=true so Success-effect derives correctly.",
+    "overrides": {
+      "conditions_imposed": [],
+      "conditions_by_outcome": null,
+      "basic_save": true,
+      "reliability_tags": ["Success-effect"]
+    }
+  },
+  {
+    "aonId": 1686,
+    "name": "Spirit Link",
+    "reason": "Cycle 07 spot-check (Heidi sample 9): Pure HP-transfer-over-time spell with no stat bonuses, abilities, or protective effects beyond healing. Per Decision 011 'Healing spells get healing, not buff. A spell that both heals AND provides a buff effect gets both roles.' Spirit Link doesn't have a buff effect beyond the heal pattern. Remove buff role.",
+    "overrides": {
+      "roles": ["healing"]
+    }
+  },
+  {
+    "aonId": 996,
+    "name": "Shadow Raid",
+    "reason": "Cycle 07 spot-check Concealed audit: Text says 'creatures are concealed to enemies in the area' — this is an ADVANTAGE for creatures inside the area (they're harder to target), not a debuff imposed on enemies. Per Decision 006 rule 5, only tag Concealed when the primary intent is to impose it on enemies adversely. Clear false positive.",
+    "overrides": {
+      "conditions_imposed": [],
+      "conditions_by_outcome": null
+    }
+  },
+  {
+    "aonId": 1281,
+    "name": "Confetti Cloud",
+    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern (creatures inside become concealed; creatures outside are concealed to those inside). Per Decision 006 rule 5, area-obscure spells where Concealed affects both sides are not 'enemy-imposed primary intent.' Clear false positive.",
+    "overrides": {
+      "conditions_imposed": [],
+      "conditions_by_outcome": null
+    }
+  },
+  {
+    "aonId": 1606,
+    "name": "Mist",
+    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern (Obscuring-Mist-style — creatures inside and outside both gain Concealed). Decision 006 rule 5: not 'enemy-imposed.' Clear false positive.",
+    "overrides": {
+      "conditions_imposed": [],
+      "conditions_by_outcome": null
+    }
+  },
+  {
+    "aonId": 1377,
+    "name": "Rust Cloud",
+    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern. The cloud also deals slashing damage but Concealed itself is not enemy-imposed — keep the slashing damage_types, clear the Concealed false positive.",
+    "overrides": {
+      "conditions_imposed": [],
+      "conditions_by_outcome": null
+    }
+  },
+  {
+    "aonId": 989,
+    "name": "Sanguine Mist",
+    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern. Spell has basic Fortitude damage component (kept) but Concealed is not enemy-imposed. Clear false positive.",
+    "overrides": {
+      "conditions_imposed": [],
+      "conditions_by_outcome": null
+    }
+  },
+  {
+    "aonId": 918,
+    "name": "Geyser",
+    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern (steam concealment affects both sides). Clear false positive; keep damage analysis.",
+    "overrides": {
+      "conditions_imposed": [],
+      "conditions_by_outcome": null
+    }
+  },
+  {
+    "aonId": 1385,
+    "name": "Dancing Fountain",
+    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern. Clear false positive.",
+    "overrides": {
+      "conditions_imposed": [],
+      "conditions_by_outcome": null
+    }
+  },
+  {
+    "aonId": 1759,
+    "name": "Wrathful Storm",
+    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern (driving snow conceals everything in or beneath the cloud). Clear false positive but keep the multi-damage and other effects intact.",
+    "overrides": {
+      "conditions_imposed": [],
+      "conditions_by_outcome": null
+    }
+  },
+  {
+    "aonId": 2604,
+    "name": "Quicken Time",
+    "reason": "Cycle 07 spot-check Concealed audit: Area effect where 'creatures inside the area are concealed to those outside it' — same area-obscure pattern. Clear false positive.",
+    "overrides": {
+      "conditions_imposed": [],
+      "conditions_by_outcome": null
+    }
+  },
+  {
+    "aonId": 1436,
+    "name": "Acid Grip",
+    "reason": "Cycle 07 Issue 1 residual: model tags Slowed despite spell text saying '-10-foot status penalty to its Speeds' (no literal 'slowed'). Editorial override clears the false condition; conditions_by_outcome cleared to keep schema consistency rule 3 happy.",
+    "overrides": {
+      "conditions_imposed": [],
+      "conditions_by_outcome": null
+    }
+  },
+  {
+    "aonId": 1473,
+    "name": "Control Water",
+    "reason": "Cycle 07 Issue 1 residual: model tags Slowed for the water-movement penalties even though spell text doesn't literally say 'slowed'. Editorial override clears the false condition.",
+    "overrides": {
+      "conditions_imposed": [],
+      "conditions_by_outcome": null
+    }
+  },
+  {
+    "aonId": 1,
+    "name": "Abyssal Plague",
+    "reason": "Cycle 07 Phase 2 skip: model emitted invalid damage type 'Evil' (legacy alignment damage). Spell deals legacy 'evil damage' on Success and inflicts persistent Drained via the Abyssal Plague disease. Remaster mapping: evil damage → Spirit. Drained imposed at all degrees of failure.",
+    "overrides": {
+      "damage_types": ["Spirit"],
+      "conditions_imposed": ["Drained"],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": ["Drained"],
+        "critical_failure": ["Drained"]
+      },
+      "weaknesses_imposed": [],
+      "roles": ["damage", "debuff"],
+      "reliability_tags": [],
+      "heighten_quality": "no-heighten"
+    }
+  },
+  {
+    "aonId": 724,
+    "name": "Transmute Rock and Mud",
+    "reason": "Cycle 07 Phase 2 skip: model tried to add 'Ref' to defense_tags_added (rule violation). spell.json's saving_throw field is null even though spell text describes a basic Reflex save for the mud-to-rock catch — so structured pass missed it. Editorial override sets defense_tags=['Ref'] so offense-eval gate doesn't strip our offense fields. Spell creates difficult terrain (control), can deal Bludgeoning if cast on a ceiling, and impose Prone/Grabbed when mud-to-rock catches creatures. heighten_quality scales-okay (heighten_pattern=plus_2).",
+    "overrides": {
+      "defense_tags": ["Ref"],
+      "damage_types": ["Bludg"],
+      "conditions_imposed": ["Prone", "Grabbed"],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": ["Prone"],
+        "failure": ["Grabbed"],
+        "critical_failure": ["Grabbed"]
+      },
+      "weaknesses_imposed": [],
+      "roles": ["control", "damage", "debuff"],
+      "reliability_tags": [],
+      "heighten_quality": "scales-okay"
+    }
+  },
+  {
+    "aonId": 826,
+    "name": "Imp Sting",
+    "reason": "Cycle 07 Phase 2 skip: model emitted invalid damage type 'Evil'. Spell deals piercing + 1d6 evil damage initially, then poison via Imp Venom (Clumsy at stage 1, Slowed at stage 2). Remaster mapping: evil → Spirit. Conditions are Clumsy + Slowed (literal text mentions clumsy and slowed in the Imp Venom block).",
+    "overrides": {
+      "damage_types": ["Pierc", "Spirit", "Poison"],
+      "conditions_imposed": ["Clumsy", "Slowed"],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": ["Clumsy"],
+        "critical_failure": ["Clumsy", "Slowed"]
+      },
+      "weaknesses_imposed": [],
+      "roles": ["damage", "debuff"],
+      "reliability_tags": [],
+      "heighten_quality": "no-heighten"
+    }
+  },
+  {
+    "aonId": 893,
+    "name": "Demon Form",
+    "reason": "Cycle 07 Phase 2 skip: model emitted invalid weakness type 'Holy' (legacy alignment qualifier; in remaster, Holy is a damage qualifier not a damage type). The 'weakness 5 to holy' is a self-imposed cost on the caster (battle form takes weakness to holy), not a weakness imposed on enemies. Self-targeting polymorph battle form → buff role only. No offense fields populate (defense_tags is empty from structured pass).",
+    "overrides": {
+      "damage_types": [],
+      "conditions_imposed": [],
+      "conditions_by_outcome": null,
+      "weaknesses_imposed": [],
+      "roles": ["buff"],
+      "reliability_tags": [],
+      "heighten_quality": "fixed-meaningful"
+    }
+  },
+  {
+    "aonId": 1009,
+    "name": "Summon Kaiju",
+    "reason": "Cycle 07 Phase 2 skip: model emitted invalid damage type 'Earth' (not a PF2e damage type). Summon spell that produces a kaiju with multiple damage modes (electricity, sonic, void, bludgeoning, etc.) depending on which kaiju is chosen, plus Slowed riders. Defense_tags is empty at the spell level (kaiju attacks have their own DCs). Treat as control + utility (summon mechanic) at the spell level; per-kaiju damage isn't a per-spell field.",
+    "overrides": {
+      "damage_types": [],
+      "conditions_imposed": [],
+      "conditions_by_outcome": null,
+      "weaknesses_imposed": [],
+      "roles": ["control", "utility"],
+      "reliability_tags": [],
+      "heighten_quality": "no-heighten"
+    }
+  },
+  {
+    "aonId": 1364,
+    "name": "Ymeri's Mark",
+    "reason": "Cycle 07 Phase 2 skip: model emitted invalid role 'detection' (not in valid role set). Curse spell that imposes Fatigued on the target and detonates for fire damage on dismiss (basic Reflex save). Has both tracking (utility) and combat-debuff functions. Conditions imposed: Fatigued (auto, for the duration determined by Fort save).",
+    "overrides": {
+      "damage_types": ["Fire"],
+      "conditions_imposed": ["Fatigued"],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": ["Fatigued"],
+        "failure": ["Fatigued"],
+        "critical_failure": ["Fatigued"]
+      },
+      "weaknesses_imposed": [],
+      "roles": ["damage", "debuff", "utility"],
+      "reliability_tags": ["Success-effect"],
+      "heighten_quality": "scales-okay"
+    }
+  },
+  {
+    "aonId": 2127,
+    "name": "Sawtooth Terrain",
+    "reason": "Cycle 07 Phase 2 skip: model tried to add 'Ref' to defense_tags_added (rule violation). spell.json's saving_throw is null even though spell text says 'basic Reflex save' — structured pass missed it. Editorial override sets defense_tags=['Ref'] AND basic_save=true so offense gate retains our values and Success-effect rule applies. Difficult terrain + slashing + persistent bleed + speed penalty. Speed penalty is NOT Slowed (literal text says '-10-foot circumstance penalty to their Speed').",
+    "overrides": {
+      "defense_tags": ["Ref"],
+      "basic_save": true,
+      "damage_types": ["Slash", "Bleed"],
+      "conditions_imposed": [],
+      "conditions_by_outcome": null,
+      "weaknesses_imposed": [],
+      "roles": ["control", "damage"],
+      "reliability_tags": ["Success-effect"],
+      "heighten_quality": "scales-well"
+    }
+  },
+  {
+    "aonId": 2496,
+    "name": "Clockwork Devotion",
+    "reason": "Cycle 07 Phase 2 skip: model tried to add 'Ref' to defense_tags_added (rule violation). spell.json's saving_throw is null even though spell text says 'basic Reflex save' — structured pass missed it. Editorial override sets defense_tags=['Ref'] AND basic_save=true. Summon spell with two damage waves: arrival slash + departure slash + fire (basic Reflex save), persistent fire on crit fail. Treat as damage + summon-control.",
+    "overrides": {
+      "defense_tags": ["Ref"],
+      "basic_save": true,
+      "damage_types": ["Slash", "Fire"],
+      "conditions_imposed": [],
+      "conditions_by_outcome": null,
+      "weaknesses_imposed": [],
+      "roles": ["damage", "control"],
+      "reliability_tags": ["Success-effect"],
+      "heighten_quality": "no-heighten"
+    }
+  }
+]

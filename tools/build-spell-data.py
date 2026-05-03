@@ -339,6 +339,7 @@ def build_spell_object(spell):
         "damage_types": [],
         "conditions_imposed": [],
         "conditions_by_outcome": None,
+        "weaknesses_imposed": [],
         "reliability_tags": reliability_tags,
         "basic_save": basic_save,
         "st_incap": st_incap,

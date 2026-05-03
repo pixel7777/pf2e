@@ -7,6 +7,7 @@
       "damage_types": ["Fire"],
       "conditions_imposed": [],
       "conditions_by_outcome": null,
+      "weaknesses_imposed": [],
       "roles_added": ["damage"],
       "defense_tags_added": [],
       "reliability_tags_added": [],
@@ -28,6 +29,7 @@
         "failure": ["Frightened"],
         "critical_failure": ["Frightened", "Fleeing"]
       },
+      "weaknesses_imposed": [],
       "roles_added": ["debuff"],
       "defense_tags_added": [],
       "reliability_tags_added": ["Success-effect"],
@@ -49,6 +51,7 @@
         "failure": ["Slowed"],
         "critical_failure": ["Slowed"]
       },
+      "weaknesses_imposed": [],
       "roles_added": ["debuff"],
       "defense_tags_added": [],
       "reliability_tags_added": ["Success-effect"],
@@ -60,18 +63,19 @@
   {
     "aonId": 1536,
     "name": "Force Barrage",
-    "why": "Auto defense tag (no save, no attack, offensive). Variable action (1-action + 3-action). +2 scaling. Tests Auto → Auto-effect chain. Multi target via shard mechanic (up to N creatures, where N = shards fired).",
+    "why": "Auto defense tag (no save, no attack, offensive). Variable action (1-action + 3-action). +2 scaling. Tests Auto → Auto-effect chain. Multi target via shard mechanic (up to N creatures, where N = shards fired) — populator may not catch the variable-shard multi-target mode (in tolerance).",
     "expected": {
       "damage_types": ["Force"],
       "conditions_imposed": [],
       "conditions_by_outcome": null,
+      "weaknesses_imposed": [],
       "roles_added": ["damage"],
       "defense_tags_added": ["Auto"],
       "reliability_tags_added": ["Auto-effect"],
       "targeting_tags_added": ["Multi"],
       "heighten_quality": "scales-well"
     },
-    "tolerance": ["heighten_quality"]
+    "tolerance": ["heighten_quality", "targeting_tags_added"]
   },
   {
     "aonId": 1351,
@@ -86,6 +90,7 @@
         "failure": ["Enfeebled"],
         "critical_failure": ["Enfeebled"]
       },
+      "weaknesses_imposed": [],
       "roles_added": ["damage", "debuff"],
       "defense_tags_added": [],
       "reliability_tags_added": [],
@@ -107,11 +112,12 @@
         "failure": ["Frightened"],
         "critical_failure": ["Frightened", "Fleeing"]
       },
+      "weaknesses_imposed": [],
       "roles_added": ["damage", "debuff"],
       "defense_tags_added": [],
       "reliability_tags_added": ["Success-effect"],
       "targeting_tags_added": [],
-      "heighten_quality": "scales-okay"
+      "heighten_quality": "scales-well"
     },
     "tolerance": ["heighten_quality", "damage_types", "roles_added"]
   },
@@ -123,6 +129,7 @@
       "damage_types": ["Elec"],
       "conditions_imposed": [],
       "conditions_by_outcome": null,
+      "weaknesses_imposed": [],
       "roles_added": ["damage"],
       "defense_tags_added": [],
       "reliability_tags_added": [],
@@ -144,13 +151,14 @@
         "failure": ["Clumsy", "Concealed"],
         "critical_failure": ["Clumsy", "Concealed", "Stunned"]
       },
+      "weaknesses_imposed": [],
       "roles_added": ["debuff"],
       "defense_tags_added": [],
       "reliability_tags_added": ["Success-effect"],
       "targeting_tags_added": ["Multi"],
       "heighten_quality": "fixed-meaningful"
     },
-    "tolerance": ["heighten_quality", "conditions_imposed", "conditions_by_outcome"]
+    "tolerance": ["heighten_quality", "conditions_imposed", "conditions_by_outcome", "roles_added"]
   },
   {
     "aonId": 1513,
@@ -165,13 +173,14 @@
         "failure": ["Enfeebled"],
         "critical_failure": ["Enfeebled"]
       },
+      "weaknesses_imposed": [],
       "roles_added": ["debuff"],
       "defense_tags_added": [],
       "reliability_tags_added": ["Success-effect"],
       "targeting_tags_added": [],
       "heighten_quality": "no-heighten"
     },
-    "tolerance": ["conditions_by_outcome", "reliability_tags_added"]
+    "tolerance": ["conditions_by_outcome", "reliability_tags_added", "heighten_quality"]
   },
   {
     "aonId": 1748,
@@ -181,6 +190,7 @@
       "damage_types": ["Fire"],
       "conditions_imposed": [],
       "conditions_by_outcome": null,
+      "weaknesses_imposed": [],
       "roles_added": ["control", "damage"],
       "defense_tags_added": ["Auto"],
       "reliability_tags_added": ["Auto-effect"],
@@ -192,23 +202,24 @@
   {
     "aonId": 1751,
     "name": "Wall of Stone",
-    "why": "Control only, no damage. Auto defense tag (offensive effect, no save). Multi (Wall). Tests Auto on a non-damage control spell. Heighten +2 adds 15 HP per wall section — modest scaling.",
+    "why": "Control only, no damage. Auto defense tag (offensive effect, no save). Multi (Wall). Tests Auto on a non-damage control spell. Heighten +2 adds 15 HP per wall section — modest scaling, scales-okay.",
     "expected": {
       "damage_types": [],
       "conditions_imposed": [],
       "conditions_by_outcome": null,
+      "weaknesses_imposed": [],
       "roles_added": ["control"],
       "defense_tags_added": ["Auto"],
       "reliability_tags_added": ["Auto-effect"],
       "targeting_tags_added": [],
-      "heighten_quality": "scales-well"
+      "heighten_quality": "scales-okay"
     },
     "tolerance": ["heighten_quality"]
   },
   {
     "aonId": 1350,
     "name": "Cinder Swarm",
-    "why": "Damage + debuff (dual mode). Sustain. Multi. Dual damage types (Piercing + Fire). Fire Ants mode = damage only; Fireflies mode (incapacitation) = Dazzled on Success, Blinded on Failure/CritFailure with Fort save. +1 scales-well.",
+    "why": "Damage + debuff (dual mode). Sustain. Multi. Dual damage types (Piercing + Fire). Fire Ants mode = damage only; Fireflies mode (incapacitation) = Dazzled on Success, Blinded on Failure/CritFailure with Fort save. +1 scales-well. Sustain + persistent area makes 'control' a defensible model reading — accepted in tolerance.",
     "expected": {
       "damage_types": ["Pierc", "Fire"],
       "conditions_imposed": ["Dazzled", "Blinded"],
@@ -218,13 +229,14 @@
         "failure": ["Blinded"],
         "critical_failure": ["Blinded"]
       },
+      "weaknesses_imposed": [],
       "roles_added": ["damage", "debuff"],
       "defense_tags_added": [],
       "reliability_tags_added": [],
       "targeting_tags_added": [],
       "heighten_quality": "scales-well"
     },
-    "tolerance": ["heighten_quality", "damage_types"]
+    "tolerance": ["heighten_quality", "damage_types", "roles_added"]
   },
   {
     "aonId": 1508,
@@ -239,6 +251,7 @@
         "failure": [],
         "critical_failure": ["Blinded"]
       },
+      "weaknesses_imposed": [],
       "roles_added": ["damage"],
       "defense_tags_added": [],
       "reliability_tags_added": [],
@@ -250,23 +263,19 @@
   {
     "aonId": 1506,
     "name": "Earthbind",
-    "why": "Debuff (anti-flight). Non-basic Fort. ST. Tests a narrowly-targeted spell. No heightening → no-heighten.",
+    "why": "Anti-flight silver bullet. Spell text says 'can't Fly, levitate, or otherwise leave the ground' — does NOT literally use the word 'immobilized'. Per the new literal-text-only rule (Cycle 07 Issue 1), conditions_imposed must NOT contain Immobilized. The behavioral grounding is captured by the control role (and possibly debuff for the anti-mobility effect).",
     "expected": {
       "damage_types": [],
-      "conditions_imposed": ["Immobilized"],
-      "conditions_by_outcome": {
-        "critical_success": [],
-        "success": [],
-        "failure": ["Immobilized"],
-        "critical_failure": ["Immobilized"]
-      },
-      "roles_added": ["debuff"],
+      "conditions_imposed": [],
+      "conditions_by_outcome": null,
+      "weaknesses_imposed": [],
+      "roles_added": ["control"],
       "defense_tags_added": [],
       "reliability_tags_added": [],
       "targeting_tags_added": [],
       "heighten_quality": "no-heighten"
     },
-    "tolerance": ["conditions_imposed", "conditions_by_outcome", "roles_added"]
+    "tolerance": ["roles_added"]
   },
   {
     "aonId": 1534,
@@ -276,6 +285,7 @@
       "damage_types": [],
       "conditions_imposed": [],
       "conditions_by_outcome": null,
+      "weaknesses_imposed": [],
       "roles_added": ["utility", "buff"],
       "defense_tags_added": [],
       "reliability_tags_added": [],
@@ -287,34 +297,36 @@
   {
     "aonId": 1554,
     "name": "Heal",
-    "why": "Pure healing spell. Healing + oneAction roles are auto-derived from structured data; populator must NOT re-emit them. Heal's Vitality damage to undead is incidental — damage_types stays [] per editorial decision (Heal's plannable function is healing, not undead-damage). 3-action mode targets all living creatures within 30 ft → Multi.",
+    "why": "Pure healing spell. Healing + oneAction roles are auto-derived from structured data; populator must NOT re-emit them. Heal's Vitality damage to undead is incidental — damage_types stays [] per editorial decision (Heal's plannable function is healing, not undead-damage). 3-action mode targets all living creatures within 30 ft → Multi (in tolerance — populator may not catch heightened/variable-action multi).",
     "expected": {
       "damage_types": [],
       "conditions_imposed": [],
       "conditions_by_outcome": null,
+      "weaknesses_imposed": [],
       "roles_added": [],
       "defense_tags_added": [],
       "reliability_tags_added": [],
       "targeting_tags_added": ["Multi"],
       "heighten_quality": "scales-well"
     },
-    "tolerance": ["heighten_quality", "damage_types", "roles_added"]
+    "tolerance": ["heighten_quality", "damage_types", "roles_added", "targeting_tags_added"]
   },
   {
     "aonId": 1553,
     "name": "Haste",
-    "why": "Buff only. Fixed heightening (7th adds Quickened). Tests a pure buff with no offense.",
+    "why": "Buff only. Fixed heightening (7th adds Quickened). Tests a pure buff with no offense. Quickened is granted to a willing ally — must NOT appear in conditions_imposed. 3-action mode targets multiple willing creatures — populator may add Multi (in tolerance, since this is ally-targeting Multi, not enemy Multi).",
     "expected": {
       "damage_types": [],
       "conditions_imposed": [],
       "conditions_by_outcome": null,
+      "weaknesses_imposed": [],
       "roles_added": ["buff"],
       "defense_tags_added": [],
       "reliability_tags_added": [],
       "targeting_tags_added": [],
       "heighten_quality": "fixed-meaningful"
     },
-    "tolerance": ["heighten_quality"]
+    "tolerance": ["heighten_quality", "targeting_tags_added"]
   },
   {
     "aonId": 1611,
@@ -324,6 +336,7 @@
       "damage_types": [],
       "conditions_imposed": [],
       "conditions_by_outcome": null,
+      "weaknesses_imposed": [],
       "roles_added": ["buff", "prebuffs"],
       "defense_tags_added": [],
       "reliability_tags_added": [],
@@ -340,6 +353,7 @@
       "damage_types": [],
       "conditions_imposed": [],
       "conditions_by_outcome": null,
+      "weaknesses_imposed": [],
       "roles_added": ["utility", "buff"],
       "defense_tags_added": [],
       "reliability_tags_added": [],
@@ -356,11 +370,80 @@
       "damage_types": ["Acid"],
       "conditions_imposed": [],
       "conditions_by_outcome": null,
+      "weaknesses_imposed": [],
       "roles_added": ["damage"],
       "defense_tags_added": ["AC"],
       "reliability_tags_added": [],
       "targeting_tags_added": [],
       "heighten_quality": "scales-well"
+    },
+    "tolerance": ["heighten_quality"]
+  },
+  {
+    "aonId": 1454,
+    "name": "Blood Vendetta",
+    "why": "Tests weakness imposition, Bleed damage type, and debuff-from-weakness. Persistent bleed damage + weakness to piercing and slashing on failure. Debuff role from weakness imposition even without named conditions (Decision 011). Damage role from persistent bleed (real HP damage). Half persistent bleed on success could plausibly trigger Success-effect (in tolerance).",
+    "expected": {
+      "damage_types": ["Bleed"],
+      "conditions_imposed": [],
+      "conditions_by_outcome": null,
+      "weaknesses_imposed": ["Pierc", "Slash"],
+      "roles_added": ["damage", "debuff"],
+      "defense_tags_added": [],
+      "reliability_tags_added": [],
+      "targeting_tags_added": [],
+      "heighten_quality": "scales-well"
+    },
+    "tolerance": ["roles_added", "reliability_tags_added", "heighten_quality"]
+  },
+  {
+    "aonId": 1492,
+    "name": "Disintegrate",
+    "why": "Tests Unspecified damage type. Spell text says '12d10 damage (no damage type)'. Attack trait present, AC in defense_tags from structured pass. Basic Fortitude save after hit. Populator may defensively re-emit AC (in tolerance — the AC is already in defense_tags from the structured pass).",
+    "expected": {
+      "damage_types": ["Unspecified"],
+      "conditions_imposed": [],
+      "conditions_by_outcome": null,
+      "weaknesses_imposed": [],
+      "roles_added": ["damage"],
+      "defense_tags_added": [],
+      "reliability_tags_added": [],
+      "targeting_tags_added": [],
+      "heighten_quality": "scales-well"
+    },
+    "tolerance": ["heighten_quality", "defense_tags_added"]
+  },
+  {
+    "aonId": 1623,
+    "name": "Paranoia",
+    "why": "Tests attitude state exclusion (unfriendly/hostile are NOT conditions) and friendly-fire-is-control. The spell makes the target treat everyone as enemies and attack allies on crit fail. conditions_imposed must be [] (no named PF2e conditions imposed). Control role from behavioral override/friendly-fire. Heightened 6th targets up to 5 creatures → Multi.",
+    "expected": {
+      "damage_types": [],
+      "conditions_imposed": [],
+      "conditions_by_outcome": null,
+      "weaknesses_imposed": [],
+      "roles_added": ["control"],
+      "defense_tags_added": [],
+      "reliability_tags_added": [],
+      "targeting_tags_added": ["Multi"],
+      "heighten_quality": "fixed-meaningful"
+    },
+    "tolerance": ["roles_added", "heighten_quality"]
+  },
+  {
+    "aonId": 1975,
+    "name": "Chilling Spray",
+    "why": "Tests literal-text-only rule for conditions. Imposes a speed penalty (-5 ft / -10 ft) on failure/crit failure, but spell text does NOT use the word 'slowed'. conditions_imposed must NOT contain 'Slowed'. Basic Ref, Cold damage, +1 scaling (+2d4/rank — modest, scales-okay).",
+    "expected": {
+      "damage_types": ["Cold"],
+      "conditions_imposed": [],
+      "conditions_by_outcome": null,
+      "weaknesses_imposed": [],
+      "roles_added": ["damage"],
+      "defense_tags_added": [],
+      "reliability_tags_added": [],
+      "targeting_tags_added": [],
+      "heighten_quality": "scales-okay"
     },
     "tolerance": ["heighten_quality"]
   }

@@ -30,15 +30,16 @@ PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
 SPELL_JSON_PATH = os.path.join(PROJECT_ROOT, "source", "spell.json")
 SPELL_DATA_PATH = os.path.join(PROJECT_ROOT, "data", "spell-data.js")
 RESULTS_PATH = os.path.join(PROJECT_ROOT, "data", "populator-results.json")
+EDITORIAL_OVERRIDES_PATH = os.path.join(PROJECT_ROOT, "data", "editorial-overrides.json")
 GOLDEN_SET_PATH = os.path.join(SCRIPT_DIR, "golden-set.json")
 
-DEFAULT_MODEL = "google/gemini-2.0-flash-001"
+DEFAULT_MODEL = "anthropic/claude-haiku-4.5"
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 VALID_DAMAGE_TYPES = {
     "Fire", "Cold", "Elec", "Acid", "Force", "Sonic",
     "Void", "Vitality", "Spirit", "Mental", "Poison",
-    "Bludg", "Pierc", "Slash", "Varies",
+    "Bludg", "Pierc", "Slash", "Bleed", "Varies", "Unspecified",
 }
 
 VALID_ROLES = {
@@ -100,6 +101,7 @@ Return a JSON object with these fields:
   "damage_types": [],
   "conditions_imposed": [],
   "conditions_by_outcome": null,
+  "weaknesses_imposed": [],
   "roles_added": [],
   "defense_tags_added": [],
   "reliability_tags_added": [],
@@ -110,7 +112,7 @@ Return a JSON object with these fields:
 
 ## damage_types — array
 
-Valid values (16): Fire, Cold, Elec, Acid, Force, Sonic, Void, Vitality, Spirit, Mental, Poison, Bludg, Pierc, Slash, Varies
+Valid values (18): Fire, Cold, Elec, Acid, Force, Sonic, Void, Vitality, Spirit, Mental, Poison, Bludg, Pierc, Slash, Bleed, Varies, Unspecified
 
 ⚠️ Healing-trait spells: If the spell has the "Healing" trait (visible in the SPELL CONTEXT block above), the spell is editorially classified as healing. Even if the spell has a secondary undead-damage mode (e.g., Heal deals Vitality damage to undead), do NOT emit damage_types — the healing function dominates the spell's plannable purpose. damage_types = []. Same for defense_tags_added (no Auto), reliability_tags_added (no Auto-effect), roles_added (no damage role). Healing-trait spells produce empty offense analysis.
 
@@ -125,6 +127,8 @@ Rules (Decision 005):
 8. Use the abbreviations exactly: Elec (not Electricity), Bludg, Pierc, Slash.
 9. Excluded: Light, Darkness, Holy, Unholy, Untyped — these are qualifiers, not damage types.
 10. Spells with no damage to enemies → [].
+11. Bleed: tag "Bleed" when the spell deals persistent bleed damage. Bleed is mechanically distinct from Pierc — do not substitute one for the other. Example: Blood Vendetta deals persistent bleed → ["Bleed"].
+12. Unspecified: tag "Unspecified" when the spell deals damage but names no damage type. The text says "the target takes Xd10 damage" with no type word. Examples: Disintegrate ("12d10 damage (no damage type)"), Power Word Kill. Do NOT tag Unspecified if any named type is present.
 
 ## conditions_imposed — array of canonical PF2e remaster condition names
 
@@ -144,6 +148,25 @@ Rules (Decision 006):
 3. Include conditions from persistent/lingering effects (e.g., persistent damage that imposes Sickened — Sickened is the condition, NOT "Persistent Damage").
 4. ⚠️ Use CANONICAL PF2e remaster condition names ONLY. "Persistent Damage" is NOT a condition — it's a damage state. "Dying" is a condition but only tag it if the spell explicitly imposes the Dying condition (not just "the creature dies"). If a spell's text says "the creature dies," do NOT tag any condition for that effect — death is not a condition. Drop severity numbers ("Sickened 2" → "Sickened"). "Flat-footed" → "Off-Guard". The valid condition names are: Blinded, Clumsy, Concealed, Confused, Controlled, Dazzled, Deafened, Doomed, Drained, Dying, Encumbered, Enfeebled, Fascinated, Fatigued, Fleeing, Frightened, Grabbed, Hidden, Immobilized, Invisible, Off-Guard, Paralyzed, Petrified, Prone, Quickened, Restrained, Sickened, Slowed, Stunned, Stupefied, Unconscious, Undetected, Unnoticed, Wounded. Do not invent names not on this list.
 5. Spells with no adverse conditions imposed on enemies → [].
+6. ⚠️ Conditions must be LITERALLY NAMED in the spell text. Only tag a condition when the spell text uses the condition's actual name (e.g., "the target is slowed 1", "the creature is prone"). Do NOT infer conditions from mechanical effects that resemble a condition:
+   - A speed penalty is NOT Slowed (e.g., "-5-foot status penalty to Speeds" does NOT produce a Slowed tag)
+   - Difficult terrain is NOT Slowed
+   - Forced movement is NOT Prone
+   - "Can't move" (without the word "immobilized") is NOT Immobilized
+7. ⚠️ Only tag conditions imposed on the TARGET (enemies). Never tag caster-side penalties. Examples of caster-side effects to IGNORE: stunned on failed counteract, drained after casting, fatigued from overexertion. conditions_imposed tracks what happens to enemies only.
+8. ⚠️ Attitude states are NOT conditions for this tool. Friendly, Helpful, Indifferent, Unfriendly, and Hostile are NPC social attitudes (from the social encounter rules) — they are NOT mechanical combat conditions. **NEVER include "Unfriendly", "Hostile", "Friendly", "Helpful", or "Indifferent" in conditions_imposed or conditions_by_outcome under ANY circumstance.** They are not on the canonical condition list above. Canonical example — Paranoia (spell-1623): the spell says "the target becomes unfriendly to all creatures" and "believes everyone is a mortal enemy." conditions_imposed for Paranoia MUST be []. conditions_by_outcome MUST be null. The behavioral override is captured by the control role, not by a condition tag.
+9. ⚠️ Weakness, Resistance, and Immunity are NOT conditions. Never tag these in conditions_imposed. Weakness imposed on enemies goes in the separate `weaknesses_imposed` field. **Do NOT translate "weakness to X damage" into the Enfeebled condition or any other condition.** Weakness is a numeric vulnerability to a damage type; Enfeebled is a Strength-based check/melee-damage penalty. They are entirely different mechanics. Canonical example — Blood Vendetta: "the target has weakness 1 to piercing and slashing damage" → weaknesses_imposed=["Pierc","Slash"], conditions_imposed=[]. NEVER tag Enfeebled (or any other condition) for "weakness to X damage" text.
+
+## weaknesses_imposed — array of damage type strings
+
+Valid values: same set as damage_types (18 values listed above).
+
+If the spell causes the target to become weak to a damage type, list those damage types here. Most spells will have an empty array. ~10 spells impose weakness.
+
+Examples:
+- Blood Vendetta: "weakness 1 to piercing and slashing damage" → ["Pierc", "Slash"]
+- Void Warp: weakness to void → ["Void"]
+- Fireball: deals fire damage but does NOT impose weakness → []
 
 ## conditions_by_outcome — object or null
 
@@ -170,14 +193,14 @@ If your analysis suggests one of those four roles applies, simply do not include
 
 Definitions (Decision 011):
 - damage: spell deals meaningful HP damage to enemies as a primary or significant function. Includes instantaneous AoE damage spells (Fireball, Lightning Bolt, Eclipse Burst). The fact that damage covers an area does NOT make it control — it's still damage.
-- debuff: spell imposes adverse conditions on enemies as a primary/significant function. SAVE-OUTCOME THRESHOLD:
+- debuff: spell imposes adverse conditions on enemies OR imposes weakness as a primary/significant function. Weakness imposition qualifies for debuff even without condition imposition — weakness degrades enemy survivability. SAVE-OUTCOME THRESHOLD:
    * Auto-effect (no save): debuff = yes (always plannable).
    * Success: debuff = yes (~50%+ trigger rate).
    * Failure: debuff = yes IF significant function. Slow (Slowed on fail) = yes. Dehydrate (damage + Enfeebled on fail) = yes (also gets damage).
    * ⚠️ Critical Failure ONLY: debuff = NO. The condition is a "jackpot," not a plannable function. CANONICAL EXAMPLE: Eclipse Burst has Blinded on critical failure and NOTHING on failure or success. Its roles_added is exactly ["damage"] — NOT ["damage", "debuff"]. Same logic for any damage spell whose only condition is on critical failure.
    * EXCEPTION: Critical-fail-only with Incapacitation AND no other function = yes. Sleep is a debuff despite the crit-fail gate because the entire spell is the condition.
 - buff: spell targets allies and enhances capabilities (stat bonuses, new abilities, protective effects). Damage prevention/reduction = buff.
-- control: spell creates a PERSISTENT terrain effect, zone, or barrier with a duration (rounds/minutes/hours) that shapes the battlefield over time. The hallmark is duration + spatial constraint. Examples: Wall of Stone (persistent barrier — control only), Wall of Fire (persistent damage zone — control AND damage), difficult terrain hazards, zoning auras. INSTANTANEOUS AREA DAMAGE IS NOT CONTROL: Fireball, Lightning Bolt, Eclipse Burst, Cinder Swarm, Slow — none are control. They're damage and/or debuff. The "covers an area" fact alone does not make a spell control; only persistent spatial constraint does.
+- control: spell creates a PERSISTENT terrain effect, zone, or barrier with a duration (rounds/minutes/hours) that shapes the battlefield over time. The hallmark is duration + spatial constraint. Examples: Wall of Stone (persistent barrier — control only), Wall of Fire (persistent damage zone — control AND damage), difficult terrain hazards, zoning auras. ALSO: spells that force enemies to attack their allies or override target behavior to cause friendly fire (Paranoia, Confusion in attack-random-target mode) are control — they remove an enemy by turning them into a liability. INSTANTANEOUS AREA DAMAGE IS NOT CONTROL: Fireball, Lightning Bolt, Eclipse Burst, Cinder Swarm, Slow — none are control. They're damage and/or debuff. The "covers an area" fact alone does not make a spell control; only persistent spatial constraint or behavioral override does.
 - utility: spell solves out-of-combat problems — movement, scouting, environmental adaptation, information. Fly = utility + buff. Invisibility = utility + buff.
 - prebuffs: long-duration (≥10 min) self/ally buff cast before combat. Mystic Armor = buff + prebuffs.
 
@@ -190,8 +213,10 @@ The populator augments defense_tags with two possible values: "AC" and "Auto".
 The structured-data pass (Cycle 03) caught Fort/Ref/Will from the saving_throw field and AC from either saving_throw="AC" or the Attack trait. But Archives of Nethys's data has gaps — many spells describe a spell attack in their text without carrying the Attack trait (especially reaction spells, where the Attack trait is never applied). The populator closes those gaps by reading the description.
 
 Add "AC" if AND ONLY IF:
-1. The spell's existing defense_tags is empty OR does not already include "AC", AND
+1. The spell's existing defense_tags does NOT already include "AC" (look at the SPELL CONTEXT defense_tags value above — if "AC" is in that list, defense_tags_added MUST NOT include "AC"), AND
 2. The description text explicitly describes an attack roll. Phrases that count: "spell attack", "ranged spell attack", "melee spell attack", "make a spell attack roll", "attack roll against [the target's] AC". A spell that merely *deals damage* without rolling to hit does NOT get AC — only spells where the caster makes an attack roll.
+
+Canonical re-emit example: Disintegrate has the Attack trait, so the structured pass already produced defense_tags=["AC","Fort"]. The populator MUST NOT emit "AC" again. defense_tags_added=[].
 
 Add "Auto" if AND ONLY IF:
 1. The spell's existing defense_tags is empty AND you did NOT add "AC" above, AND
@@ -240,16 +265,24 @@ Look at the SPELL CONTEXT block above: `targeting_tags: [...]`. Whatever values 
 
 You may add a value ONLY when text analysis reveals a mode the structured pass missed:
 - "ST" if existing targeting_tags lacks ST AND the spell text describes targeting a single creature/object in a way the structured rules didn't catch (rare).
-- "Multi" if existing targeting_tags lacks Multi AND the spell text shows multi-target mode that wasn't caught (e.g., "up to 5 creatures" wording, heightened versions that target multiple).
+- "Multi" if existing targeting_tags lacks Multi AND the spell text shows multi-target mode that wasn't caught.
 
-For 95%+ of spells, targeting_tags_added = []. The structured pass is good. If existing targeting_tags = ["Multi"], your output is []. If existing targeting_tags = ["ST"], your output is []. If existing targeting_tags = ["ST", "Multi"], your output is []. Only emit when augmentation is genuinely needed.
+⚠️ DO add "Multi" to targeting_tags_added (when not already in existing targeting_tags) for these patterns:
+- Variable-action spells where a higher-action mode targets additional creatures. Example: Force Barrage's 2-action mode hits up to 3 creatures with 3 shards; 3-action mode hits up to 4. Multi belongs.
+- Variable-action spells where the 3-action mode is an emanation/area on top of a single-target base. Example: Heal's 3-action mode is "all living creatures within 30 feet" — Multi belongs.
+- Heightened versions that gain multi-target language. Example: Fear at heightened 3rd targets up to 5 creatures — Multi belongs.
+- "Up to N creatures" wording in target field that wasn't structurally caught.
+
+For 80%+ of spells, targeting_tags_added = []. The structured pass is good. If existing targeting_tags already contains the value, your output omits it. Only emit when augmentation is genuinely needed.
 
 ## heighten_quality — string enum or null
 
 Valid values: scales-well, scales-okay, fixed-meaningful, fixed-minor, no-heighten, scaling-irrelevant
 
+⚠️ heighten_quality is REQUIRED for every spell. Never return null. If you are unsure, prefer "scales-okay" or "fixed-minor". The only spells with null heighten_quality are ones not yet analyzed — and you ARE analyzing this one.
+
 Rules (Decision 014):
-- heighten_pattern == "none" → "no-heighten" (always).
+- ⚠️ heighten_pattern == "none" → MUST output "no-heighten". This is deterministic. Look at the SPELL CONTEXT block: if heighten_pattern is "none", heighten_quality is "no-heighten" — period. Do not output null. Do not output anything else.
 - Pre-buff or silver-bullet style spells where rank doesn't gate the value → "scaling-irrelevant" (Mystic Armor, Revealing Light).
 - Plus-pattern with meaningful per-rank improvement that stays competitive at higher ranks → "scales-well" (Fireball +2d6/rank, Dehydrate +2d6 persistent).
 - Plus-pattern but outclassed at higher ranks (or poor scaling magnitude) → "scales-okay" (Floating Flame +1d6/rank).
@@ -303,6 +336,38 @@ def save_results(results):
 def load_golden_set():
     with open(GOLDEN_SET_PATH, "r", encoding="utf-8") as f:
         return json.load(f)
+
+
+def load_editorial_overrides():
+    """Load editorial overrides — manual fixes that apply during --merge.
+
+    Each entry's `overrides` dict directly replaces fields on the merged spell-data
+    spell object (NOT populator output — the values are spell-data field names).
+    Applied AFTER populator merge but BEFORE consistency rules, so the rules can
+    re-derive role consistency from edited values.
+
+    File format:
+    [
+      {
+        "aonId": 1436,
+        "name": "Acid Grip",
+        "reason": "Why this override exists",
+        "overrides": {
+          "conditions_imposed": [],
+          "conditions_by_outcome": null,
+          ...
+        }
+      }
+    ]
+
+    Returns a dict keyed by aonId for fast lookup. Returns {} if the file does
+    not exist (overrides are optional).
+    """
+    if not os.path.exists(EDITORIAL_OVERRIDES_PATH):
+        return {}
+    with open(EDITORIAL_OVERRIDES_PATH, "r", encoding="utf-8") as f:
+        entries = json.load(f)
+    return {e["aonId"]: e for e in entries}
 
 
 # ---------------------------------------------------------- LLM call -----
@@ -366,6 +431,7 @@ def parse_and_validate(content):
 
     required = {
         "damage_types", "conditions_imposed", "conditions_by_outcome",
+        "weaknesses_imposed",
         "roles_added", "defense_tags_added", "reliability_tags_added",
         "targeting_tags_added", "heighten_quality",
     }
@@ -378,6 +444,12 @@ def parse_and_validate(content):
     for v in result["damage_types"]:
         if v not in VALID_DAMAGE_TYPES:
             return None, "invalid damage_type: %r" % v
+
+    if not isinstance(result.get("weaknesses_imposed", []), list):
+        return None, "weaknesses_imposed not list"
+    for v in result.get("weaknesses_imposed", []):
+        if v not in VALID_DAMAGE_TYPES:
+            return None, "invalid weaknesses_imposed type: %r" % v
 
     if not isinstance(result["conditions_imposed"], list):
         return None, "conditions_imposed not list"
@@ -546,6 +618,19 @@ def _apply_consistency_rules(spell):
             spell["roles"] = sorted(set(spell.get("roles", []) + ["debuff"]))
             fixes.append("added debuff role (conditions at success/failure)")
 
+    # Rule: Multi requires offensive output (damage_types or conditions_imposed non-empty).
+    # Area_type alone is insufficient — pure zone-control spells are battlefield reshaping,
+    # not "mob-fight options." Decision 004, Cycle 07.
+    if "Multi" in spell.get("targeting_tags", []):
+        if not spell.get("damage_types") and not spell.get("conditions_imposed"):
+            spell["targeting_tags"] = [t for t in spell["targeting_tags"] if t != "Multi"]
+            fixes.append("stripped Multi (no offensive output)")
+
+    # Rule: weaknesses_imposed non-empty implies debuff role. Decision 011.
+    if spell.get("weaknesses_imposed") and "debuff" not in spell.get("roles", []):
+        spell["roles"] = sorted(set(spell.get("roles", []) + ["debuff"]))
+        fixes.append("added debuff role (weaknesses_imposed non-empty)")
+
     # Rule: every spell must have at least one role. If empty, default to utility.
     if not spell.get("roles"):
         spell["roles"] = ["utility"]
@@ -558,6 +643,9 @@ def merge_into_spell_data():
     print("Loading spell-data.js and populator-results.json...")
     spell_data = load_spell_data()
     results = load_results()
+    overrides = load_editorial_overrides()
+    if overrides:
+        print("  loaded %d editorial overrides from data/editorial-overrides.json" % len(overrides))
     if not results:
         print("  populator-results.json is empty or missing — nothing to merge")
         return
@@ -585,6 +673,7 @@ def merge_into_spell_data():
         spell["damage_types"] = list(populated.get("damage_types", []))
         spell["conditions_imposed"] = list(populated.get("conditions_imposed", []))
         spell["conditions_by_outcome"] = populated.get("conditions_by_outcome", None)
+        spell["weaknesses_imposed"] = list(populated.get("weaknesses_imposed", []))
         spell["heighten_quality"] = populated.get("heighten_quality", None)
 
         # Augmented (union) fields.
@@ -598,9 +687,26 @@ def merge_into_spell_data():
             spell["damage_types"] = []
             spell["conditions_imposed"] = []
             spell["conditions_by_outcome"] = None
+            spell["weaknesses_imposed"] = []
             spell["reliability_tags"] = [t for t in spell["reliability_tags"] if t == "Auto-effect"]
 
         merged_count += 1
+
+    # Apply editorial overrides BEFORE consistency rules. Manual fixes take precedence
+    # over the populator's output but still get fed through the consistency pipeline so
+    # role/role-completeness invariants are re-derived from the edited values.
+    override_count = 0
+    by_aon = {s["aonId"]: s for s in spell_data["spells"]}
+    for aon_id, entry in overrides.items():
+        spell = by_aon.get(aon_id)
+        if spell is None:
+            print("  WARN: editorial override aonId=%s not found in spell-data — skipping" % aon_id)
+            continue
+        for field, value in entry.get("overrides", {}).items():
+            spell[field] = value
+        override_count += 1
+    if override_count:
+        print("  applied %d editorial overrides" % override_count)
 
     # Apply consistency rules across ALL spells (including skipped ones with no populator data).
     cleanup_count = 0
@@ -614,10 +720,11 @@ def merge_into_spell_data():
         # Re-apply offense gate: consistency rules may have stripped Auto, leaving
         # defense_tags empty. In that case, offense fields must be cleared per Decision 016.
         if not spell.get("defense_tags"):
-            if spell.get("damage_types") or spell.get("conditions_imposed") or spell.get("conditions_by_outcome"):
+            if spell.get("damage_types") or spell.get("conditions_imposed") or spell.get("conditions_by_outcome") or spell.get("weaknesses_imposed"):
                 spell["damage_types"] = []
                 spell["conditions_imposed"] = []
                 spell["conditions_by_outcome"] = None
+                spell["weaknesses_imposed"] = []
                 spell["reliability_tags"] = [t for t in spell.get("reliability_tags", []) if t == "Auto-effect"]
                 fix_counter["re-applied offense gate after Auto strip"] += 1
 
