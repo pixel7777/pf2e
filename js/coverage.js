@@ -87,14 +87,26 @@
     'Healing':       'Restores ally HP. "Do I have any way to keep allies alive at this rank?" Arcane casters will never fill this — that\'s a known tradition limitation, not a gap to fix.'
   };
 
-  // Section / group info-icon tooltips — verbatim from Decision 010.
+  // Section / group / subgroup info-icon tooltips — verbatim from Decision 010.
+  // Each entry can have a `note` (italic guidance/inline tip rendered below main body).
   var INFO_TOOLTIPS = {
-    'section-offense':   'After picking spells, scan these areas. Each tradition page tags every spell and highlights gaps for every character level. Gaps = swap candidates.',
-    'section-action':    'Action economy tracking for ALL spells — not just offensive ones. A defensive reaction is just as much an action efficiency concern as an offensive 1-action spell. The standard caster turn is a 2-action spell + a 1-action something. The +1 is what separates a good caster from an okay one.',
-    'section-special':   'These track whether key non-offensive concerns are present in your spell list. Intended to help you track if your spell list has any of these frequently-useful elements.',
-    'group-defense':     'Only offensive spells (damage and debuff) are evaluated in this section. Which enemy defenses can you target? Diversify so no single strong defense shuts you down.',
-    'group-variety':     'Are you too one-dimensional? Mix your damage types, debuff conditions, and targeting modes so resistances and immunities don\'t shut you down.',
-    'group-reliability': 'Will you ever have turns where you do literally nothing? Mix guaranteed-output options with save-based spells for consistent performance.'
+    'section-offense':   { body: 'After picking spells, scan these areas. Each tradition page tags every spell and highlights gaps for every character level. Gaps = swap candidates.' },
+    'section-action':    { body: 'Action economy tracking for ALL spells — not just offensive ones. A defensive reaction is just as much an action efficiency concern as an offensive 1-action spell. The standard caster turn is a 2-action spell + a 1-action something. The +1 is what separates a good caster from an okay one.',
+                           note: 'Very class/subclass dependent. You may use non-MAP skills (Recall Knowledge, Demoralize, Bon Mot) instead of 1-action spells.' },
+    'section-special':   { body: 'These track whether key non-offensive concerns are present in your spell list. Intended to help you track if your spell list has any of these frequently-useful elements.' },
+    'group-defense':     { body: 'Only offensive spells (damage and debuff) are evaluated in this section. Which enemy defenses can you target? Diversify so no single strong defense shuts you down.',
+                           note: 'Aim to cover at least 3 of 4 defenses in your top-tier slots. Prioritize avoiding the target\'s highest defense over chasing their lowest.' },
+    'group-variety':     { body: 'Are you too one-dimensional? Mix your damage types, debuff conditions, and targeting modes so resistances and immunities don\'t shut you down.',
+                           note: 'Don\'t just target different saves with the same type of effect. Mix your outcomes — damage types, conditions imposed, and single-target vs. multi-target options all serve different tactical needs.' },
+    'group-reliability': { body: 'Will you ever have turns where you do literally nothing? Mix guaranteed-output options with save-based spells for consistent performance.',
+                           note: 'Your list should never have turns where you might do literally nothing. Mix auto-effects with save-based options for consistent output.' },
+    'sub-targeting':     { body: 'Can you handle both boss fights and mob fights?',
+                           note: 'Spells tagged both ST and Multi are premium picks for prepared casters — one slot covers both situations.' },
+    'sub-damage':        { body: 'Diversity guards against resistance and immunity. Aim for 3-4 types across your top-tier slots.',
+                           note: 'Void + Force covers nearly everything: void hits all living creatures, force covers constructs and undead.' },
+    'sub-conditions':    { body: 'Variety over repetition. Different conditions answer different tactical problems. The 11 premier conditions (above the divider) are the most impactful combat debuffs; the 5 standard conditions are also strategically valuable.' },
+    'sub-weakness':      { body: 'A small number of spells degrade enemy survivability by imposing damage type weaknesses. This tracks whether you have any — and shows synergy with your damage type coverage.',
+                           note: '★ markers on damage type tags mean an assigned spell imposes weakness to that type. A ★ on Fire + a lit Fire tag = you can exploit the weakness you\'re creating.' }
   };
 
   // Damage-type data values that can also appear in weaknesses_imposed.
@@ -166,12 +178,22 @@
     return tooltipEl;
   }
 
-  function showTooltip(targetEl, text) {
-    if (!text) return;
+  function escapeHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function showTooltip(targetEl, content) {
+    if (!content) return;
+    var body = (typeof content === 'string') ? content : content.body;
+    var note = (typeof content === 'string') ? null : content.note;
+    if (!body && !note) return;
     var el = ensureTooltip();
     if (tooltipTimer) clearTimeout(tooltipTimer);
     tooltipTimer = setTimeout(function() {
-      el.textContent = text;
+      var html = '';
+      if (body) html += '<div class="cov-tip-body">' + escapeHtml(body) + '</div>';
+      if (note) html += '<div class="cov-tip-note">' + escapeHtml(note) + '</div>';
+      el.innerHTML = html;
       el.style.display = 'block';
       el.style.visibility = 'hidden';
       el.style.left = '0px';
@@ -199,6 +221,15 @@
     if (tooltipEl) tooltipEl.style.display = 'none';
   }
 
+  // Italic addenda for specific tag tooltips (Decision 010 inline tips).
+  var TAG_NOTES = {
+    'ST':                'Spells tagged both ST and Multi are premium picks for prepared casters — one slot covers both situations.',
+    'Multi':             'Spells tagged both ST and Multi are premium picks for prepared casters — one slot covers both situations.',
+    'Void':              'Void + Force covers nearly everything: void hits all living creatures, force covers constructs and undead.',
+    'Force':             'Void + Force covers nearly everything: void hits all living creatures, force covers constructs and undead.',
+    'Imposes Weakness':  '★ markers on damage type tags mean an assigned spell imposes weakness to that type. A ★ on Fire + a lit Fire tag = you can exploit the weakness you\'re creating.'
+  };
+
   function bindTooltips() {
     var sidebar = document.querySelector('.sidebar');
     if (!sidebar) return;
@@ -206,7 +237,9 @@
       var ctag = e.target.closest('.ctag');
       if (ctag && sidebar.contains(ctag)) {
         var tag = ctag.dataset.tag;
-        showTooltip(ctag, TAG_TOOLTIPS[tag] || '');
+        var body = TAG_TOOLTIPS[tag] || '';
+        var note = TAG_NOTES[tag];
+        showTooltip(ctag, note ? { body: body, note: note } : body);
         return;
       }
       var info = e.target.closest('.cov-info');

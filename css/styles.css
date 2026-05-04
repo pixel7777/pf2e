@@ -201,11 +201,15 @@ body {
 
 .cov-subgroup-label {
   font-family: 'Inter', sans-serif;
-  font-size: 0.5rem;
+  font-size: 0.55rem;
   font-weight: 600;
-  color: rgba(174,168,186,0.65);
+  color: rgba(174,168,186,0.7);
   letter-spacing: 0.03em;
   margin-bottom: 0.15rem;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 /* Info icons */
@@ -221,24 +225,16 @@ body {
   color: var(--gold-light);
 }
 
-/* Guidance blurbs — always visible italic text */
-.cov-guidance {
-  font-family: 'Crimson Text', serif;
-  font-size: 0.56rem;
+/* Italic note inside tooltip (former persistent guidance/inline-tip text) */
+.cov-tip-body { }
+.cov-tip-note {
+  margin-top: 0.4rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid rgba(212,168,83,0.2);
   font-style: italic;
-  color: rgba(174,168,186,0.55);
+  color: var(--gold-light);
+  font-size: 0.68rem;
   line-height: 1.35;
-  margin-bottom: 0.3rem;
-}
-
-/* Inline tips — same style as guidance */
-.cov-inline-tip {
-  font-family: 'Crimson Text', serif;
-  font-size: 0.56rem;
-  font-style: italic;
-  color: rgba(174,168,186,0.55);
-  line-height: 1.35;
-  margin-top: 0.2rem;
 }
 
 /* Premier / Standard separator */
