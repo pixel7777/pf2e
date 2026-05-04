@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PF2e Spell Planner — Prepared Caster Edition</title>
-<link rel="stylesheet" href="css/styles.css?v=39">
+<link rel="stylesheet" href="css/styles.css?v=40">
 </head>
 <body>
 
@@ -43,7 +43,7 @@
       <div class="cov-section-body">
 
         <!-- Group: Defense Coverage -->
-        <div class="cov-group">
+        <div class="cov-group" data-field="defense_tags">
           <div class="cov-group-header">
             <span class="cov-group-label">Defense Coverage</span>
             <span class="cov-info" data-info="group-defense">&#9432;</span>
@@ -65,7 +65,7 @@
           </div>
 
           <!-- Subgroup: Targeting -->
-          <div class="cov-subgroup">
+          <div class="cov-subgroup" data-field="targeting_tags">
             <div class="cov-subgroup-label">
               <span>Targeting</span>
               <span class="cov-info" data-info="sub-targeting">&#9432;</span>
@@ -77,7 +77,7 @@
           </div>
 
           <!-- Subgroup: Damage Types -->
-          <div class="cov-subgroup">
+          <div class="cov-subgroup" data-field="damage_types">
             <div class="cov-subgroup-label">
               <span>Damage Types</span>
               <span class="cov-info" data-info="sub-damage">&#9432;</span>
@@ -104,7 +104,7 @@
           </div>
 
           <!-- Subgroup: Conditions Imposed -->
-          <div class="cov-subgroup">
+          <div class="cov-subgroup" data-field="conditions_imposed">
             <div class="cov-subgroup-label">
               <span>Conditions Imposed</span>
               <span class="cov-info" data-info="sub-conditions">&#9432;</span>
@@ -132,7 +132,7 @@
             </div>
           </div>
 
-          <!-- Subgroup: Weaknesses Imposed -->
+          <!-- Subgroup: Weaknesses Imposed (not filterable this cycle) -->
           <div class="cov-subgroup">
             <div class="cov-subgroup-label">
               <span>Weaknesses Imposed</span>
@@ -145,7 +145,7 @@
         </div>
 
         <!-- Group: Reliability -->
-        <div class="cov-group">
+        <div class="cov-group" data-field="reliability_tags">
           <div class="cov-group-header">
             <span class="cov-group-label">Reliability</span>
             <span class="cov-info" data-info="group-reliability">&#9432;</span>
@@ -166,7 +166,7 @@
         <span class="cov-section-label">Action Efficiency</span>
         <span class="cov-info" data-info="section-action">&#9432;</span>
       </div>
-      <div class="cov-section-body">
+      <div class="cov-section-body" data-field="action_tags">
         <div class="coverage-tags">
           <span class="ctag tag-action" data-tag="1-action">1-action</span>
           <span class="ctag tag-action" data-tag="Reaction">Reaction</span>
@@ -183,7 +183,7 @@
         <span class="cov-section-label">Special Coverage</span>
         <span class="cov-info" data-info="section-special">&#9432;</span>
       </div>
-      <div class="cov-section-body">
+      <div class="cov-section-body" data-field="special_tags">
         <div class="coverage-tags">
           <span class="ctag tag-special" data-tag="Coverage">Coverage</span>
           <span class="ctag tag-special" data-tag="Multimodal">Multimodal</span>
@@ -192,6 +192,19 @@
           <span class="ctag tag-special" data-tag="Healing">Healing</span>
         </div>
       </div>
+    </div>
+
+    <!-- ═══ FILTER CONTROLS CLUSTER ═══ -->
+    <div class="filter-controls">
+      <div class="filter-controls-label">Filter Options</div>
+      <div class="rarity-toggles" id="rarityToggles">
+        <button class="rarity-btn active" data-rarity="Common" onclick="Coverage.toggleRarity('Common',this)">Common</button>
+        <button class="rarity-btn active" data-rarity="Uncommon" onclick="Coverage.toggleRarity('Uncommon',this)">Uncommon</button>
+        <button class="rarity-btn" data-rarity="Rare" onclick="Coverage.toggleRarity('Rare',this)">Rare</button>
+        <button class="rarity-btn" data-rarity="Unique" onclick="Coverage.toggleRarity('Unique',this)">Unique</button>
+      </div>
+      <button class="filter-toggle-btn" id="legacyToggle" onclick="Coverage.toggleLegacy()">Show Legacy: OFF</button>
+      <button class="filter-toggle-btn" id="filterModeToggle" onclick="Coverage.toggleFilterMode()">Filter Mode: OFF</button>
     </div>
 
   </aside>
@@ -828,11 +841,11 @@
 <script src="data/spell-data.js"></script>
 
 <!-- App modules -->
-<script src="js/app.js?v=38"></script>
-<script src="js/planner.js?v=38"></script>
-<script src="js/browser.js?v=38"></script>
-<script src="js/coverage.js?v=38"></script>
-<script src="js/export.js?v=38"></script>
+<script src="js/app.js?v=40"></script>
+<script src="js/planner.js?v=40"></script>
+<script src="js/browser.js?v=40"></script>
+<script src="js/coverage.js?v=40"></script>
+<script src="js/export.js?v=40"></script>
 
 </body>
 </html>

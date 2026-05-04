@@ -110,6 +110,9 @@
         Planner.initTradition(page);
       }
 
+      // Reset sort on tradition switch
+      if (window.Browser && Browser.resetSort) Browser.resetSort();
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
 
