@@ -253,21 +253,15 @@
           html += '<tr class="' + selClass + '" onclick="Planner.selectSlotUI(\'' + tradition + '\',' + level + ',' + r + ',' + idx + ')">';
           if (spell) {
             html += '<td class="slot-spell-name">' + spell.name;
-            if (spell.heightenedFrom && spell.heightenedFrom > 0) {
-              html += ' <span class="heightened-badge">H⬆' + r + '</span>';
+            if (spell.aonId) {
+              html += '<a href="' + App.aonUrl(spell.aonId) + '" target="_blank" class="aon-link" title="Open on Archives of Nethys" onclick="event.stopPropagation()">↗</a>';
             }
             html += '</td>';
-            html += '<td><div class="slot-tags">';
-            var tags = spell.tags || [];
-            for (var t = 0; t < Math.min(tags.length, 4); t++) {
-              var groupClass = Coverage.getGroupClass(tags[t]);
-              html += '<span class="ctag lit ' + groupClass + '" data-tag="' + tags[t] + '">' + tags[t] + '</span>';
-            }
-            html += '</div></td>';
+            html += '<td class="slot-action">' + App.formatActions(spell.action_tags) + '</td>';
+            html += '<td>' + App.renderTags(spell) + '</td>';
             html += '<td><button class="slot-clear-btn" onclick="Planner.clearSlot(\'' + tradition + '\',' + level + ',' + r + ',' + idx + ',event)">✕</button></td>';
           } else {
-            html += '<td class="slot-empty">Empty slot — click to browse spells</td>';
-            html += '<td></td>';
+            html += '<td colspan="3" class="slot-empty">Empty slot — click to browse spells</td>';
             html += '<td><button class="slot-clear-btn" onclick="Planner.clearSlot(\'' + tradition + '\',' + level + ',' + r + ',' + idx + ',event)">✕</button></td>';
           }
           html += '</tr>';

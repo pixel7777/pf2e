@@ -578,6 +578,11 @@ body {
   color: var(--text-bright);
 }
 
+.slot-action {
+  white-space: nowrap;
+  color: var(--text-dim);
+}
+
 .slot-empty {
   color: var(--text-dim);
   font-style: italic;

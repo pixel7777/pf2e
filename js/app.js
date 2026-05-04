@@ -100,6 +100,76 @@
 
     aonUrl: function(aonId) {
       return 'https://2e.aonprd.com/Spells.aspx?ID=' + aonId;
+    },
+
+    formatActions: function(actionTags) {
+      if (!actionTags || actionTags.length === 0) return '◆◆';
+
+      var hasSustain = actionTags.indexOf('Sustain-action') !== -1;
+      var costs = [];
+
+      if (actionTags.indexOf('1-action') !== -1) costs.push('◆');
+      if (actionTags.indexOf('3-action') !== -1) costs.push('◆◆◆');
+      if (actionTags.indexOf('Reaction') !== -1) costs.push('◈');
+
+      if (costs.length === 0) costs.push('◆◆');
+
+      var display = costs.join(' / ');
+      if (hasSustain) display += ' (Sus)';
+      return display;
+    },
+
+    renderTags: function(spell) {
+      var pills = [];
+
+      if (spell.defense_tags) {
+        for (var i = 0; i < spell.defense_tags.length; i++) {
+          pills.push({ text: spell.defense_tags[i], cls: 'tag-defense' });
+        }
+      }
+      if (spell.targeting_tags) {
+        for (var i = 0; i < spell.targeting_tags.length; i++) {
+          pills.push({ text: spell.targeting_tags[i], cls: 'tag-targeting' });
+        }
+      }
+      if (spell.basic_save) {
+        pills.push({ text: 'Basic', cls: 'tag-defense' });
+      }
+      if (spell.damage_types) {
+        for (var i = 0; i < spell.damage_types.length; i++) {
+          pills.push({ text: spell.damage_types[i], cls: 'tag-damage' });
+        }
+      }
+      if (spell.conditions_imposed) {
+        for (var i = 0; i < spell.conditions_imposed.length; i++) {
+          pills.push({ text: spell.conditions_imposed[i], cls: 'tag-condition' });
+        }
+      }
+      if (spell.weaknesses_imposed) {
+        for (var i = 0; i < spell.weaknesses_imposed.length; i++) {
+          pills.push({ text: 'W:' + spell.weaknesses_imposed[i], cls: 'tag-weakness' });
+        }
+      }
+      if (spell.reliability_tags) {
+        for (var i = 0; i < spell.reliability_tags.length; i++) {
+          pills.push({ text: spell.reliability_tags[i], cls: 'tag-reliability' });
+        }
+      }
+      if (spell.st_incap) {
+        pills.push({ text: 'ST-Incap ⚠', cls: 'danger' });
+      }
+      if (spell.special_tags) {
+        for (var i = 0; i < spell.special_tags.length; i++) {
+          pills.push({ text: spell.special_tags[i], cls: 'tag-special' });
+        }
+      }
+
+      var html = '<div class="slot-tags">';
+      for (var i = 0; i < pills.length; i++) {
+        html += '<span class="ctag ' + pills[i].cls + '">' + pills[i].text + '</span>';
+      }
+      html += '</div>';
+      return html;
     }
   };
 
