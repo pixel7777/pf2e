@@ -29,7 +29,7 @@
 
   --radius: 8px;
   --radius-lg: 12px;
-  --sidebar-width: 220px;
+  --sidebar-width: 280px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -37,7 +37,6 @@
 body {
   background: var(--bg-page) url('../assets/parchment.jpg') center/cover;
   background-blend-mode: multiply;
-  background-attachment: fixed;
   color: var(--text-primary);
   font-family: 'Crimson Text', Georgia, serif;
   font-size: 16px;
@@ -125,12 +124,31 @@ body {
   top: 80px;
   height: calc(100vh - 80px);
   overflow-y: auto;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.10);
 }
+
+.sidebar-resize-handle {
+  position: absolute;
+  top: 0;
+  right: -3px;
+  width: 6px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 50;
+  background: transparent;
+  transition: background 0.15s;
+}
+
+.sidebar-resize-handle:hover,
+.sidebar-resize-handle.dragging {
+  background: rgba(61, 46, 90, 0.15);
+}
+
+body.resizing-sidebar { cursor: col-resize; user-select: none; }
 
 .sidebar-title {
   font-family: 'Cinzel', serif;
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--accent-header);
   letter-spacing: 0.08em;
@@ -158,9 +176,9 @@ body {
 }
 
 .cov-section-label {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.68rem;
-  font-weight: 700;
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -200,7 +218,7 @@ body {
 
 .cov-group-label {
   font-family: 'Inter', sans-serif;
-  font-size: 0.62rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--text-secondary);
   letter-spacing: 0.04em;
@@ -213,8 +231,8 @@ body {
 
 .cov-subgroup-label {
   font-family: 'Inter', sans-serif;
-  font-size: 0.6rem;
-  font-weight: 600;
+  font-size: 0.7rem;
+  font-weight: 500;
   color: var(--text-tertiary);
   letter-spacing: 0.03em;
   margin-bottom: 0.15rem;
@@ -271,47 +289,47 @@ body {
   position: relative;
 }
 
-/* ── Tag Color Palette — Decision 017 Property Pills ── */
+/* ── Tag Color Palette — Decision 017 Property Pills (revised 2026-05-04) ── */
 :root {
   /* Defense (purple) */
   --tag-defense: #5a3d9e;
-  --tag-defense-bg: #eeebf7;
-  --tag-defense-border: #b8aad8;
+  --tag-defense-bg: #e2daf0;
+  --tag-defense-border: #9a88c8;
 
   /* Targeting (teal) */
   --tag-targeting: #1a6b63;
-  --tag-targeting-bg: #e0f0ef;
-  --tag-targeting-border: #7ec4bc;
+  --tag-targeting-bg: #d0e8e5;
+  --tag-targeting-border: #5db3a8;
 
   /* Damage types (red) */
   --tag-damage: #a32d2d;
-  --tag-damage-bg: #fde8e8;
-  --tag-damage-border: #e8a0a0;
+  --tag-damage-bg: #f8d4d4;
+  --tag-damage-border: #d88080;
 
   /* Conditions imposed (amber/orange) */
   --tag-condition: #8a5a15;
-  --tag-condition-bg: #fef3e2;
-  --tag-condition-border: #e8c47a;
+  --tag-condition-bg: #fce8c8;
+  --tag-condition-border: #d8a850;
 
   /* Reliability (blue) */
   --tag-reliability: #2d5a8a;
-  --tag-reliability-bg: #e8eff7;
-  --tag-reliability-border: #8ab4d8;
+  --tag-reliability-bg: #d8e5f2;
+  --tag-reliability-border: #6a9cc8;
 
-  /* Action Efficiency — sidebar only (purple) */
+  /* Action Efficiency — sidebar only (purple, ~2 steps boosted) */
   --tag-action: #5c4a82;
-  --tag-action-bg: #f3eef9;
-  --tag-action-border: #b8aad8;
+  --tag-action-bg: #e6dcf2;
+  --tag-action-border: #9a88c8;
 
-  /* Special Coverage — sidebar only (green) */
+  /* Special Coverage — sidebar only (green, ~2 steps boosted) */
   --tag-special: #1a7a42;
-  --tag-special-bg: #eef7f2;
-  --tag-special-border: #7ec4bc;
+  --tag-special-bg: #d8eee0;
+  --tag-special-border: #5db3a8;
 
   /* Weakness (cyan) */
   --tag-weakness: #147a6b;
-  --tag-weakness-bg: #e0f5f3;
-  --tag-weakness-border: #7ecec0;
+  --tag-weakness-bg: #d0ede9;
+  --tag-weakness-border: #5dbfae;
 }
 
 /* Ghosted-but-hued: unlit sidebar tags retain group color at low intensity */
@@ -368,7 +386,7 @@ body {
   border: 1px solid var(--border-panel);
   color: var(--text-secondary);
   transition: all 0.2s;
-  opacity: 0.45;
+  opacity: 0.55;
   cursor: help;
 }
 
@@ -456,7 +474,7 @@ body {
 .ctag.lit.danger,
 .ctag.danger.lit {
   color: #a32d2d;
-  background: #fde8e8;
+  background: #f8d4d4;
   border-color: #c94444;
   font-weight: 600;
 }
@@ -471,13 +489,13 @@ body {
   opacity: 1;
 }
 
-.ctag.role-damage { color: #a32d2d; border-color: #c94444; }
-.ctag.role-debuff { color: #b85c14; border-color: #d4792a; }
-.ctag.role-buff { color: #1a7a42; border-color: #2ea85c; }
-.ctag.role-healing { color: #1a7a42; border-color: #2ea85c; }
-.ctag.role-control { color: #2d5a8a; border-color: #4a80b8; }
-.ctag.role-utility { color: #2d5a8a; border-color: #4a80b8; }
-.ctag.role-silverbullet { color: #6b6b6b; border-color: #999999; }
+.ctag.role-damage { color: #a32d2d; border-color: #b83a3a; }
+.ctag.role-debuff { color: #b85c14; border-color: #c46a20; }
+.ctag.role-buff { color: #1a7a42; border-color: #28964e; }
+.ctag.role-healing { color: #1a7a42; border-color: #28964e; }
+.ctag.role-control { color: #2d5a8a; border-color: #3d72a8; }
+.ctag.role-utility { color: #2d5a8a; border-color: #3d72a8; }
+.ctag.role-silverbullet { color: #5a5a5a; border-color: #888888; }
 
 /* ── MAIN CONTENT ── */
 .main-content {
@@ -489,6 +507,16 @@ body {
 /* ── TRADITION PAGE ── */
 .tradition-page { display: none; }
 .tradition-page.active { display: block; }
+
+/* Tradition pages (except Overview) get a card background so content
+   doesn't float on raw parchment texture. */
+.tradition-page:not(#page-overview).active {
+  background: var(--bg-card);
+  border: 1px solid var(--border-panel);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.10);
+  padding: 1.2rem 1.4rem;
+}
 
 /* ── EXPORT BUTTONS ── */
 .export-bar {
@@ -578,7 +606,7 @@ body {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-panel);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.10);
 }
 
 .overview-hero h1 {
@@ -621,7 +649,7 @@ body {
   color: var(--accent-header);
   margin: 0.5rem 0 1rem;
   font-size: 0.98rem;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.10);
 }
 
 .defense-note {
@@ -671,7 +699,7 @@ body {
   border-radius: var(--radius);
   border: 1px solid var(--border-panel);
   margin: 0.5rem 0 1rem;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.10);
 }
 
 .data-table {
@@ -709,11 +737,10 @@ body {
 .rank-rows { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.2rem; }
 
 .rank-row {
-  background: var(--bg-card);
-  border: 1px solid var(--border-panel);
+  background: var(--bg-inset);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius);
   padding: 0.55rem 0.8rem;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
 
 .rank-row-header {
@@ -825,12 +852,11 @@ body {
 
 /* ── SPELL BROWSER ── */
 .spell-browser {
-  background: var(--bg-card);
-  border: 1px solid var(--border-panel);
+  background: var(--bg-inset);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius);
   padding: 0.8rem;
   margin-top: 1rem;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
 
 .spell-browser.browser-hidden { display: none; }
@@ -1069,7 +1095,7 @@ body {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-panel);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.10);
 }
 
 .hero h1 {
@@ -1096,7 +1122,7 @@ body {
   padding: 0.9rem 1rem;
   border: 1px solid;
   background: var(--bg-card);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.10);
 }
 
 .tier-card.top { border-color: rgba(61,46,90,0.3); }
@@ -1137,7 +1163,7 @@ body {
   margin: 1rem 0;
   border-radius: var(--radius);
   border: 1px solid var(--border-panel);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.10);
 }
 
 .tier-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
@@ -1174,7 +1200,7 @@ body {
   overflow: hidden;
   margin: 1rem 0;
   font-size: 0.85rem;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.10);
 }
 
 .wgiet-grid .wg-header {
@@ -1269,7 +1295,7 @@ body {
   border: 1px solid var(--border-panel);
   border-radius: var(--radius);
   padding: 0.9rem 1rem;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.10);
 }
 
 .checklist-card h4 {
@@ -1364,18 +1390,21 @@ body {
 }
 
 /* ── FRAMED PANELS — Corner Ornaments ── */
-.framed {
-  position: relative;
-  padding: 12px;
-}
+.framed { position: relative; }
 
 .framed .corner-ornament {
   position: absolute;
   width: 40px;
   height: 40px;
   pointer-events: none;
-  opacity: 0.7;
+  opacity: 0.85;
+  z-index: 2;
 }
+
+/* Smaller ornaments on compact panels so they don't dominate */
+.tier-card .corner-ornament,
+.data-table-wrap .corner-ornament,
+.tier-table-wrap .corner-ornament { width: 28px; height: 28px; }
 
 .framed .corner-tl { top: 0; left: 0; }
 .framed .corner-tr { top: 0; right: 0; transform: scaleX(-1); }

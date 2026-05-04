@@ -11,7 +11,66 @@
       this.bindTabs();
       this.switchTab('overview');
       this.initTagTooltips();
+      this.markFramedPanels();
       this.injectCornerOrnaments();
+      this.initSidebarResize();
+    },
+
+    markFramedPanels: function() {
+      // Major panels that should have corner ornaments per Decision 017
+      var selectors = [
+        '.hero',
+        '.overview-hero',
+        '.tier-card',
+        '.tier-table-wrap',
+        '.data-table-wrap',
+        '#page-arcane',
+        '#page-divine',
+        '#page-occult',
+        '#page-primal'
+      ];
+      for (var s = 0; s < selectors.length; s++) {
+        var els = document.querySelectorAll(selectors[s]);
+        for (var i = 0; i < els.length; i++) {
+          els[i].classList.add('framed');
+        }
+      }
+    },
+
+    initSidebarResize: function() {
+      var sidebar = document.querySelector('.sidebar');
+      if (!sidebar) return;
+      var handle = document.createElement('div');
+      handle.className = 'sidebar-resize-handle';
+      sidebar.appendChild(handle);
+
+      var dragging = false;
+      var startX = 0;
+      var startWidth = 0;
+
+      handle.addEventListener('mousedown', function(e) {
+        dragging = true;
+        startX = e.clientX;
+        startWidth = sidebar.getBoundingClientRect().width;
+        handle.classList.add('dragging');
+        document.body.classList.add('resizing-sidebar');
+        e.preventDefault();
+      });
+
+      document.addEventListener('mousemove', function(e) {
+        if (!dragging) return;
+        var newWidth = startWidth + (e.clientX - startX);
+        if (newWidth < 220) newWidth = 220;
+        if (newWidth > 400) newWidth = 400;
+        document.documentElement.style.setProperty('--sidebar-width', newWidth + 'px');
+      });
+
+      document.addEventListener('mouseup', function() {
+        if (!dragging) return;
+        dragging = false;
+        handle.classList.remove('dragging');
+        document.body.classList.remove('resizing-sidebar');
+      });
     },
 
     bindTabs: function() {
