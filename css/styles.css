@@ -1176,7 +1176,7 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
 
 /* ── BROWSER ADVICE ── */
 .browser-advice {
-  font-size: 14px;
+  font-size: 0.92rem;
   color: var(--text-secondary);
   margin-bottom: 0.6rem;
   padding: 0.4rem 0.6rem;
