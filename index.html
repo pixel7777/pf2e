@@ -4,15 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PF2e Spell Planner — Prepared Caster Edition</title>
-<link rel="stylesheet" href="css/styles.css?v=13">
+<link rel="stylesheet" href="css/styles.css?v=24">
 </head>
 <body>
 
 <!-- ═══════ HEADER + NAV ═══════ -->
 <header class="site-header">
-  <div class="site-title">
-    PF2e Spell Planner
-    <small>Prepared Caster Edition &middot; Based on Mathfinder</small>
+  <div class="site-header-inner">
+    <span class="brand-pf2e">PF2E</span>
+    <div class="brand-stack">
+      <span class="brand-spell-planner">Spell Planner</span>
+      <span class="brand-tagline">Prepared Caster Edition</span>
+    </div>
+    <div class="site-mark" aria-hidden="true">🪄</div>
   </div>
   <nav class="tab-bar">
     <button class="tab-btn active" data-page="overview">Overview</button>
@@ -207,6 +211,7 @@
         </div>
 
         <!-- TIER MAP -->
+        <section class="overview-section">
         <h2 class="section-label">The Tier Map</h2>
         <p class="section-intro">Think in tiers relative to your max rank, not absolute spell ranks. Your top-tier slots carry your combat effectiveness; your low-tier slots solve niche problems.</p>
 
@@ -257,8 +262,10 @@
             </tbody>
           </table>
         </div>
+        </section>
 
         <!-- WHAT GOES IN EACH TIER -->
+        <section class="overview-section">
         <h2 class="section-label">What Goes in Each Tier</h2>
         <p class="section-intro">Each tier serves a different purpose depending on your role. This is the same across all traditions — only the specific spells change.</p>
 
@@ -287,8 +294,10 @@
         <div class="callout">
           <strong>Mix and match roles.</strong> You don't have to commit fully to one role. A top-tier damage dealer with debuff riders and low-tier pre-buffs is a perfectly valid — and common — build.
         </div>
+        </section>
 
         <!-- DECISION FLOW -->
+        <section class="overview-section">
         <h2 class="section-label">Condensed Decision Flow</h2>
         <p class="section-intro">Work through these five steps when building your prepared list. Top to bottom, every time you level up or re-prepare.</p>
 
@@ -329,8 +338,10 @@
             </div>
           </div>
         </div>
+        </section>
 
         <!-- COVERAGE CHECKLISTS -->
+        <section class="overview-section">
         <h2 class="section-label">Coverage Checklists</h2>
         <p class="section-intro">After picking spells, scan these four areas. Each tradition page tags every spell and will help you evaluate coverage. Gaps = swap candidates.</p>
 
@@ -378,8 +389,10 @@
             <p class="cl-advice">Very class/subclass dependent. You may use non-MAP skills (Recall Knowledge, Demoralize, Bon Mot) instead of 1-action spells.</p>
           </div>
         </div>
+        </section>
 
         <!-- CAMPAIGN GOTCHAS -->
+        <section class="overview-section">
         <h2 class="section-label">Campaign-Specific Gotchas</h2>
         <p class="section-intro">Check these before finalizing your list. Your GM's encounter tendencies can invalidate otherwise-great spell choices.</p>
 
@@ -409,8 +422,10 @@
             <p class="gotcha-a">Invest in sustain spells, staves, and cantrip fallbacks. Sustained spells stretch slots across more encounters.</p>
           </div>
         </div>
+        </section>
 
         <!-- ITEMS REMINDER -->
+        <section class="overview-section">
         <h2 class="section-label">Items Reminder</h2>
         <p class="section-intro">Your spell list isn't your only toolkit. Budget gold for these — they cover the gaps your preparations can't.</p>
 
@@ -437,6 +452,7 @@
             </div>
           </div>
         </div>
+        </section>
 
         <div class="source-footer">
           Source: Mathfinder video series (21 videos), synthesized through the Spell Selection Field Guide.<br>
@@ -805,11 +821,11 @@
 <script src="data/spell-data.js"></script>
 
 <!-- App modules -->
-<script src="js/app.js?v=13"></script>
-<script src="js/planner.js?v=13"></script>
-<script src="js/browser.js?v=13"></script>
-<script src="js/coverage.js?v=13"></script>
-<script src="js/export.js?v=13"></script>
+<script src="js/app.js?v=24"></script>
+<script src="js/planner.js?v=24"></script>
+<script src="js/browser.js?v=24"></script>
+<script src="js/coverage.js?v=24"></script>
+<script src="js/export.js?v=24"></script>
 
 </body>
 </html>

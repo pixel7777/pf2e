@@ -57,33 +57,71 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
+  padding: 0 2.5rem;
 }
 
-.site-title {
+.site-header-inner {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 0.7rem;
+  padding: 0.85rem 0 0.4rem;
+}
+
+.brand-pf2e {
   font-family: 'Cinzel', serif;
-  font-size: 1.35rem;
+  font-size: 3.4rem;
   font-weight: 700;
   color: #ffffff;
-  text-align: center;
-  padding: 0.6rem 1rem 0;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  align-self: center;
 }
 
-.site-title small {
-  display: block;
+.brand-stack {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  /* Match the cap-height-ish span of PF2E (~3.4rem * 0.72) */
+  min-height: 2.6rem;
+  padding: 0.15rem 0;
+}
+
+.brand-spell-planner {
+  font-family: 'Cinzel', serif;
+  font-size: 1.7rem;
+  font-weight: 500;
+  color: #ffffff;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.brand-tagline {
   font-family: 'Crimson Text', serif;
-  font-size: 0.72rem;
-  color: rgba(255,255,255,0.6);
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  margin-top: -2px;
+  font-size: 0.88rem;
+  font-style: italic;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.site-mark {
+  font-size: 2.8rem;
+  line-height: 1;
+  align-self: center;
+  margin-left: 0.4rem;
+  filter: drop-shadow(0 0 12px rgba(180, 150, 230, 0.85))
+          drop-shadow(0 0 4px rgba(220, 200, 255, 0.6));
+  user-select: none;
 }
 
 .tab-bar {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 0;
-  padding: 0.4rem 1rem 0;
+  padding: 0 0 0;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -121,8 +159,9 @@ body {
   border-right: 1px solid var(--border-panel);
   padding: 1rem 0.75rem;
   position: sticky;
-  top: 80px;
-  height: calc(100vh - 80px);
+  top: 0;
+  align-self: flex-start;
+  max-height: calc(100vh - 80px);
   overflow-y: auto;
   box-shadow: 0 2px 6px rgba(0,0,0,0.10);
 }
@@ -243,17 +282,56 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
 }
 
 .cov-info {
-  font-size: 0.6rem;
-  color: var(--text-tertiary);
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid var(--accent-nav-active);
+  color: transparent;
+  font-size: 0;
   cursor: help;
-  transition: color 0.15s;
-  line-height: 1;
-  opacity: 0.6;
+  transition: border-color 0.15s, background 0.15s;
+  vertical-align: middle;
+  position: relative;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+/* The dot of the "i" */
+.cov-info::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 2px;
+  background: var(--accent-nav-active);
+  border-radius: 50%;
+}
+
+/* The vertical bar of the "i" */
+.cov-info::after {
+  content: '';
+  position: absolute;
+  top: 5.5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 5px;
+  background: var(--accent-nav-active);
+  border-radius: 1px;
 }
 
 .cov-info:hover {
-  color: var(--accent-header);
-  opacity: 1;
+  border-color: var(--accent-header);
+  background: var(--bg-inset);
+}
+
+.cov-info:hover::before,
+.cov-info:hover::after {
+  background: var(--accent-header);
 }
 
 .cov-tip-body { }
@@ -501,7 +579,7 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
 .main-content {
   flex: 1;
   min-width: 0;
-  padding: 1.2rem 1.4rem 3rem;
+  padding: 0 1.4rem 3rem;
 }
 
 /* ── TRADITION PAGE ── */
@@ -519,11 +597,16 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
 }
 
 /* ── EXPORT BUTTONS ── */
+/* Positioned at top-right of the tradition card so the class selector
+   can sit on the same row, reclaiming vertical space. */
 .export-bar {
   display: flex;
   gap: 0.6rem;
-  margin-bottom: 1.2rem;
   justify-content: flex-end;
+  position: absolute;
+  top: 1.2rem;
+  right: 1.4rem;
+  z-index: 3;
 }
 
 .export-btn {
@@ -597,6 +680,42 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
 .level-tab:hover { border-color: var(--accent-nav-active); color: var(--accent-nav-active); }
 .level-tab.active { background: rgba(61,46,90,0.08); border-color: var(--accent-header); color: var(--accent-header); }
 .level-tab.has-data { border-color: var(--accent-nav-active); color: var(--text-primary); }
+
+/* ── OVERVIEW SECTIONS — outer frame containing heading + content ── */
+.overview-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-panel);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.10);
+  padding: 1.2rem 1.4rem;
+  margin: 1.5rem 0;
+}
+
+.overview-section .section-label {
+  margin-top: 0;
+}
+
+/* Inside an overview-section, sub-cards visually nest by sharing the
+   same base background. Tier cards, checklist cards, gotchas, item rows,
+   and table wraps shift to a slightly distinct inset/elevation. */
+.overview-section .tier-card,
+.overview-section .checklist-card,
+.overview-section .gotcha,
+.overview-section .item-row,
+.overview-section .flow-content {
+  background: var(--bg-inset);
+  box-shadow: none;
+}
+
+.overview-section .tier-table-wrap,
+.overview-section .data-table-wrap,
+.overview-section .wgiet-grid {
+  box-shadow: none;
+}
+
+.overview-section .callout {
+  background: var(--bg-inset);
+}
 
 /* ── OVERVIEW SECTIONS ── */
 .overview-hero {
@@ -1107,7 +1226,7 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
   letter-spacing: 0.05em;
 }
 
-.hero p { color: var(--text-secondary); font-size: 1rem; max-width: 600px; margin: 0 auto; }
+.hero p { color: var(--text-primary); font-size: 1.2rem; font-weight: 500; line-height: 1.45; max-width: 720px; margin: 0 auto; }
 
 /* Tier map grid */
 .tier-map-grid {

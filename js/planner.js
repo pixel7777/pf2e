@@ -150,8 +150,7 @@
       panel.dataset.built = 'true';
 
       var maxRank = Math.ceil(level / 2);
-      var html = '<h2 style="font-family:\'Cinzel\',serif;font-size:1.1rem;color:var(--gold-light);margin-bottom:1rem;">Level ' + level + ' — Max Rank ' + maxRank + '</h2>';
-      html += '<div class="rank-rows" id="rank-rows-' + tradition + '-' + level + '">';
+      var html = '<div class="rank-rows" id="rank-rows-' + tradition + '-' + level + '">';
 
       for (var r = maxRank; r >= 1; r--) {
         var tier = App.getTier(level, r);
