@@ -177,6 +177,8 @@
       html += '<div class="spell-table-wrap" id="spellTable-' + tradition + '"></div>';
 
       browser.innerHTML = html;
+      delete browser.dataset.ornamented;
+      App.injectCornerOrnaments();
 
       var tableWrap = document.getElementById('spellTable-' + tradition);
       tableWrap.addEventListener('click', function(e) {

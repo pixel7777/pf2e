@@ -11,6 +11,7 @@
       this.bindTabs();
       this.switchTab('overview');
       this.initTagTooltips();
+      this.injectCornerOrnaments();
     },
 
     bindTabs: function() {
@@ -127,6 +128,21 @@
     renderTags: function(spell) {
       var pills = [];
 
+      // Role pills first (hollow, white fill) — fixed display order
+      var roleOrder = ['damage', 'debuff', 'buff', 'control', 'healing', 'utility', 'silverBullets'];
+      var roleLabels = { damage: 'Damage', debuff: 'Debuff', buff: 'Buff', control: 'Control', healing: 'Healing', utility: 'Utility', silverBullets: 'Silver Bullet' };
+      var roleCls = { damage: 'role-damage', debuff: 'role-debuff', buff: 'role-buff', control: 'role-control', healing: 'role-healing', utility: 'role-utility', silverBullets: 'role-silverbullet' };
+
+      if (spell.roles) {
+        for (var r = 0; r < roleOrder.length; r++) {
+          var role = roleOrder[r];
+          if (spell.roles.indexOf(role) !== -1) {
+            pills.push({ text: roleLabels[role], cls: 'role-pill ' + roleCls[role] });
+          }
+        }
+      }
+
+      // Property pills (filled, tinted) — defense → targeting → damage → conditions → weakness → reliability
       if (spell.defense_tags) {
         for (var i = 0; i < spell.defense_tags.length; i++) {
           pills.push({ text: spell.defense_tags[i], cls: 'tag-defense' });
@@ -161,13 +177,9 @@
         }
       }
       if (spell.st_incap) {
-        pills.push({ text: 'ST-Incap ⚠', cls: 'danger' });
+        pills.push({ text: '⚠️ ST-Incap', cls: 'danger' });
       }
-      if (spell.special_tags) {
-        for (var i = 0; i < spell.special_tags.length; i++) {
-          pills.push({ text: spell.special_tags[i], cls: 'tag-special' });
-        }
-      }
+      // action_tags and special_tags are NOT rendered as pills in the spell browser
 
       var html = '<div class="slot-tags">';
       for (var i = 0; i < pills.length; i++) {
@@ -175,6 +187,22 @@
       }
       html += '</div>';
       return html;
+    },
+
+    injectCornerOrnaments: function() {
+      var framed = document.querySelectorAll('.framed');
+      for (var i = 0; i < framed.length; i++) {
+        if (framed[i].dataset.ornamented) continue;
+        framed[i].dataset.ornamented = 'true';
+        var corners = ['corner-tl', 'corner-tr', 'corner-bl', 'corner-br'];
+        for (var c = 0; c < corners.length; c++) {
+          var img = document.createElement('img');
+          img.src = 'assets/corner-ornament.svg';
+          img.className = 'corner-ornament ' + corners[c];
+          img.alt = '';
+          framed[i].appendChild(img);
+        }
+      }
     }
   };
 

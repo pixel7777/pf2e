@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="50" height="50">
+  <!-- Hybrid A+B corner ornament: dot terminals + inner tick -->
+  <!-- Position at top-left. Rotate via CSS transform for other corners: -->
+  <!-- TR: scaleX(-1)  BL: scaleY(-1)  BR: scale(-1,-1) -->
+  <path d="M2 48 L2 8 Q2 2 8 2 L48 2" fill="none" stroke="#c4b5a0" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="48" cy="2" r="2" fill="#c4b5a0"/>
+  <circle cx="2" cy="48" r="2" fill="#c4b5a0"/>
+  <path d="M5.5 5.5 L13 5.5" fill="none" stroke="#c4b5a0" stroke-width="0.8" stroke-linecap="round"/>
+  <path d="M5.5 5.5 L5.5 13" fill="none" stroke="#c4b5a0" stroke-width="0.8" stroke-linecap="round"/>
+</svg>
