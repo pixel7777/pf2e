@@ -29,85 +29,162 @@
   <aside class="sidebar" style="display:none;">
     <div class="sidebar-title">Coverage Tracker</div>
 
-    <div class="sidebar-group">
-      <div class="sidebar-group-label">Defense</div>
-      <div class="coverage-tags">
-        <span class="ctag tag-defense" data-tag="AC">AC</span>
-        <span class="ctag tag-defense" data-tag="Fort">Fort</span>
-        <span class="ctag tag-defense" data-tag="Ref">Ref</span>
-        <span class="ctag tag-defense" data-tag="Will">Will</span>
-        <span class="ctag tag-defense" data-tag="Auto">Auto</span>
+    <!-- ═══ SECTION 1: OFFENSE EVALUATION ═══ -->
+    <div class="cov-section" data-section="offense">
+      <div class="cov-section-header">
+        <span class="cov-chevron">&#9662;</span>
+        <span class="cov-section-label">Offense Evaluation</span>
+        <span class="cov-info" data-info="section-offense">&#9432;</span>
+      </div>
+      <div class="cov-section-body">
+
+        <!-- Group: Defense Coverage -->
+        <div class="cov-group">
+          <div class="cov-group-header">
+            <span class="cov-group-label">Defense Coverage</span>
+            <span class="cov-info" data-info="group-defense">&#9432;</span>
+          </div>
+          <div class="cov-guidance">Aim to cover at least 3 of 4 defenses in your top-tier slots. Prioritize avoiding the target's highest defense over chasing their lowest.</div>
+          <div class="coverage-tags">
+            <span class="ctag tag-defense" data-tag="AC">AC</span>
+            <span class="ctag tag-defense" data-tag="Fort">Fort</span>
+            <span class="ctag tag-defense" data-tag="Ref">Ref</span>
+            <span class="ctag tag-defense" data-tag="Will">Will</span>
+            <span class="ctag tag-defense" data-tag="Auto">Auto</span>
+          </div>
+        </div>
+
+        <!-- Group: Effect Variety -->
+        <div class="cov-group">
+          <div class="cov-group-header">
+            <span class="cov-group-label">Effect Variety</span>
+            <span class="cov-info" data-info="group-variety">&#9432;</span>
+          </div>
+          <div class="cov-guidance">Don't just target different saves with the same type of effect. Mix your outcomes — damage types, conditions imposed, and single-target vs. multi-target options all serve different tactical needs.</div>
+
+          <!-- Subgroup: Targeting -->
+          <div class="cov-subgroup">
+            <div class="cov-subgroup-label">Targeting</div>
+            <div class="coverage-tags">
+              <span class="ctag tag-targeting" data-tag="ST">ST</span>
+              <span class="ctag tag-targeting" data-tag="Multi">Multi</span>
+            </div>
+            <div class="cov-inline-tip">Spells tagged both ST and Multi are premium picks for prepared casters — one slot covers both situations.</div>
+          </div>
+
+          <!-- Subgroup: Damage Types -->
+          <div class="cov-subgroup">
+            <div class="cov-subgroup-label">Damage Types</div>
+            <div class="coverage-tags">
+              <span class="ctag tag-damage" data-tag="Acid">Acid</span>
+              <span class="ctag tag-damage" data-tag="Cold">Cold</span>
+              <span class="ctag tag-damage" data-tag="Elec">Elec</span>
+              <span class="ctag tag-damage" data-tag="Fire">Fire</span>
+              <span class="ctag tag-damage" data-tag="Force">Force</span>
+              <span class="ctag tag-damage" data-tag="Mental">Mental</span>
+              <span class="ctag tag-damage" data-tag="Poison">Poison</span>
+              <span class="ctag tag-damage" data-tag="Sonic">Sonic</span>
+              <span class="ctag tag-damage" data-tag="Spirit">Spirit</span>
+              <span class="ctag tag-damage" data-tag="Vitality">Vitality</span>
+              <span class="ctag tag-damage" data-tag="Void">Void</span>
+              <span class="ctag tag-damage" data-tag="Bludg">Bludg</span>
+              <span class="ctag tag-damage" data-tag="Pierc">Pierc</span>
+              <span class="ctag tag-damage" data-tag="Slash">Slash</span>
+              <span class="ctag tag-damage" data-tag="Bleed">Bleed</span>
+              <span class="ctag tag-damage" data-tag="Varies">Varies</span>
+              <span class="ctag tag-damage" data-tag="Unspecified">Unspec</span>
+            </div>
+            <div class="cov-inline-tip">Void + Force covers nearly everything: void hits all living creatures, force covers constructs and undead.</div>
+          </div>
+
+          <!-- Subgroup: Conditions Imposed -->
+          <div class="cov-subgroup">
+            <div class="cov-subgroup-label">Conditions Imposed</div>
+            <div class="coverage-tags cov-conditions-premier">
+              <span class="ctag tag-condition" data-tag="Blinded">Blinded</span>
+              <span class="ctag tag-condition" data-tag="Dazzled">Dazzled</span>
+              <span class="ctag tag-condition" data-tag="Frightened">Frightened</span>
+              <span class="ctag tag-condition" data-tag="Off-Guard">Off-Guard</span>
+              <span class="ctag tag-condition" data-tag="Paralyzed">Paralyzed</span>
+              <span class="ctag tag-condition" data-tag="Prone">Prone</span>
+              <span class="ctag tag-condition" data-tag="Restrained">Restrained</span>
+              <span class="ctag tag-condition" data-tag="Sickened">Sickened</span>
+              <span class="ctag tag-condition" data-tag="Slowed">Slowed</span>
+              <span class="ctag tag-condition" data-tag="Stunned">Stunned</span>
+              <span class="ctag tag-condition" data-tag="Unconscious">Unconscious</span>
+            </div>
+            <hr class="cov-condition-separator">
+            <div class="coverage-tags cov-conditions-standard">
+              <span class="ctag tag-condition" data-tag="Clumsy">Clumsy</span>
+              <span class="ctag tag-condition" data-tag="Enfeebled">Enfeebled</span>
+              <span class="ctag tag-condition" data-tag="Confused">Confused</span>
+              <span class="ctag tag-condition" data-tag="Stupefied">Stupefied</span>
+              <span class="ctag tag-condition" data-tag="Immobilized">Immobilized</span>
+            </div>
+          </div>
+
+          <!-- Subgroup: Weaknesses Imposed -->
+          <div class="cov-subgroup">
+            <div class="cov-subgroup-label">Weaknesses Imposed</div>
+            <div class="coverage-tags">
+              <span class="ctag tag-weakness" data-tag="Imposes Weakness">Imposes Weakness</span>
+            </div>
+            <div class="cov-inline-tip">&#9733; markers on damage type tags mean an assigned spell imposes weakness to that type. A &#9733; on Fire + a lit Fire tag = you can exploit the weakness you're creating.</div>
+          </div>
+        </div>
+
+        <!-- Group: Reliability -->
+        <div class="cov-group">
+          <div class="cov-group-header">
+            <span class="cov-group-label">Reliability</span>
+            <span class="cov-info" data-info="group-reliability">&#9432;</span>
+          </div>
+          <div class="cov-guidance">Your list should never have turns where you might do literally nothing. Mix auto-effects with save-based options for consistent output.</div>
+          <div class="coverage-tags">
+            <span class="ctag tag-reliability" data-tag="Auto-effect">Auto-effect</span>
+            <span class="ctag tag-reliability" data-tag="Success-effect">Success-effect</span>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <div class="sidebar-group">
-      <div class="sidebar-group-label">Targeting</div>
-      <div class="coverage-tags">
-        <span class="ctag tag-targeting" data-tag="ST">ST</span>
-        <span class="ctag tag-targeting" data-tag="AoE">AoE</span>
+    <!-- ═══ SECTION 2: ACTION EFFICIENCY ═══ -->
+    <div class="cov-section" data-section="action">
+      <div class="cov-section-header">
+        <span class="cov-chevron">&#9662;</span>
+        <span class="cov-section-label">Action Efficiency</span>
+        <span class="cov-info" data-info="section-action">&#9432;</span>
+      </div>
+      <div class="cov-section-body">
+        <div class="cov-guidance">Very class/subclass dependent. You may use non-MAP skills (Recall Knowledge, Demoralize, Bon Mot) instead of 1-action spells.</div>
+        <div class="coverage-tags">
+          <span class="ctag tag-action" data-tag="1-action">1-action</span>
+          <span class="ctag tag-action" data-tag="Reaction">Reaction</span>
+          <span class="ctag tag-action" data-tag="Sustain-action">Sustain</span>
+          <span class="ctag tag-action" data-tag="3-action">3-action</span>
+        </div>
       </div>
     </div>
 
-    <div class="sidebar-group">
-      <div class="sidebar-group-label">Damage Types</div>
-      <div class="coverage-tags">
-        <span class="ctag tag-damage" data-tag="Fire">Fire</span>
-        <span class="ctag tag-damage" data-tag="Cold">Cold</span>
-        <span class="ctag tag-damage" data-tag="Elec">Elec</span>
-        <span class="ctag tag-damage" data-tag="Force">Force</span>
-        <span class="ctag tag-damage" data-tag="Mental">Mental</span>
-        <span class="ctag tag-damage" data-tag="Acid">Acid</span>
-        <span class="ctag tag-damage" data-tag="Void">Void</span>
-        <span class="ctag tag-damage" data-tag="Bludg">Bludg</span>
-        <span class="ctag tag-damage" data-tag="Pierc">Pierc</span>
-        <span class="ctag tag-damage" data-tag="Varies">Varies</span>
-        <span class="ctag tag-damage" data-tag="Untyped">Untyped</span>
+    <!-- ═══ SECTION 3: SPECIAL COVERAGE ═══ -->
+    <div class="cov-section" data-section="special">
+      <div class="cov-section-header">
+        <span class="cov-chevron">&#9662;</span>
+        <span class="cov-section-label">Special Coverage</span>
+        <span class="cov-info" data-info="section-special">&#9432;</span>
+      </div>
+      <div class="cov-section-body">
+        <div class="coverage-tags">
+          <span class="ctag tag-special" data-tag="Coverage">Coverage</span>
+          <span class="ctag tag-special" data-tag="Multimodal">Multimodal</span>
+          <span class="ctag tag-special" data-tag="Silver Bullet">Silver Bullet</span>
+          <span class="ctag tag-special" data-tag="Pre-buff">Pre-buff</span>
+          <span class="ctag tag-special" data-tag="Healing">Healing</span>
+        </div>
       </div>
     </div>
 
-    <div class="sidebar-group">
-      <div class="sidebar-group-label">Conditions</div>
-      <div class="coverage-tags">
-        <span class="ctag tag-condition" data-tag="Frightened">Frightened</span>
-        <span class="ctag tag-condition" data-tag="Slowed">Slowed</span>
-        <span class="ctag tag-condition" data-tag="Dazzled">Dazzled</span>
-        <span class="ctag tag-condition" data-tag="Blinded">Blinded</span>
-        <span class="ctag tag-condition" data-tag="Prone">Prone</span>
-        <span class="ctag tag-condition" data-tag="Stunned">Stunned</span>
-        <span class="ctag tag-condition" data-tag="Confused">Confused</span>
-        <span class="ctag tag-condition" data-tag="Stupefied">Stupefied</span>
-        <span class="ctag tag-condition" data-tag="Clumsy">Clumsy</span>
-      </div>
-    </div>
-
-    <div class="sidebar-group">
-      <div class="sidebar-group-label">Reliability</div>
-      <div class="coverage-tags">
-        <span class="ctag tag-reliability" data-tag="Auto-effect">Auto-effect</span>
-        <span class="ctag tag-reliability" data-tag="Success-effect">Success-effect</span>
-        <span class="ctag tag-reliability danger" data-tag="Incap">Incap &#9888;</span>
-      </div>
-    </div>
-
-    <div class="sidebar-group">
-      <div class="sidebar-group-label">Action Economy</div>
-      <div class="coverage-tags">
-        <span class="ctag tag-action" data-tag="1-action">1-action</span>
-        <span class="ctag tag-action" data-tag="Reaction">Reaction</span>
-        <span class="ctag tag-action" data-tag="Sustain-action">Sustain</span>
-        <span class="ctag tag-action" data-tag="3-action">3-action</span>
-      </div>
-    </div>
-
-    <div class="sidebar-group">
-      <div class="sidebar-group-label">Special</div>
-      <div class="coverage-tags">
-        <span class="ctag tag-special" data-tag="Coverage">Coverage</span>
-        <span class="ctag tag-special" data-tag="Multimodal">Multimodal</span>
-        <span class="ctag tag-special" data-tag="Silver Bullet">Silver Bullet</span>
-        <span class="ctag tag-special" data-tag="Pre-buff">Pre-buff</span>
-      </div>
-    </div>
   </aside>
 
   <!-- ── MAIN CONTENT ── -->

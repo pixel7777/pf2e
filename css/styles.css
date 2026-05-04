@@ -125,16 +125,185 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
-.sidebar-group { margin-bottom: 0.9rem; }
+/* ── Coverage Hierarchy ── */
 
-.sidebar-group-label {
+/* Level 1 — Top-level sections */
+.cov-section {
+  margin-bottom: 0.6rem;
+}
+
+.cov-section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  border-left: 2px solid var(--gold-dim);
+  padding-left: 0.4rem;
+  user-select: none;
+}
+
+.cov-section-label {
   font-family: 'Inter', sans-serif;
-  font-size: 0.68rem;
-  font-weight: 600;
+  font-size: 0.62rem;
+  font-weight: 700;
   color: var(--text-dim);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
+}
+
+.cov-chevron {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  transition: transform 0.2s;
+  line-height: 1;
+}
+
+.cov-section.collapsed .cov-chevron {
+  transform: rotate(-90deg);
+}
+
+.cov-section.collapsed .cov-section-body {
+  display: none;
+}
+
+.cov-section-body {
+  padding-left: 0.3rem;
+  padding-top: 0.3rem;
+}
+
+/* Level 2 — Groups */
+.cov-group {
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.cov-group-header {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 0.15rem;
+}
+
+.cov-group-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.56rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+}
+
+/* Level 3 — Subgroups */
+.cov-subgroup {
+  margin-top: 0.35rem;
   margin-bottom: 0.3rem;
+}
+
+.cov-subgroup-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.5rem;
+  font-weight: 600;
+  color: rgba(174,168,186,0.65);
+  letter-spacing: 0.03em;
+  margin-bottom: 0.15rem;
+}
+
+/* Info icons */
+.cov-info {
+  font-size: 0.6rem;
+  color: rgba(174,168,186,0.4);
+  cursor: help;
+  transition: color 0.15s;
+  line-height: 1;
+}
+
+.cov-info:hover {
+  color: var(--gold-light);
+}
+
+/* Guidance blurbs — always visible italic text */
+.cov-guidance {
+  font-family: 'Crimson Text', serif;
+  font-size: 0.56rem;
+  font-style: italic;
+  color: rgba(174,168,186,0.55);
+  line-height: 1.35;
+  margin-bottom: 0.3rem;
+}
+
+/* Inline tips — same style as guidance */
+.cov-inline-tip {
+  font-family: 'Crimson Text', serif;
+  font-size: 0.56rem;
+  font-style: italic;
+  color: rgba(174,168,186,0.55);
+  line-height: 1.35;
+  margin-top: 0.2rem;
+}
+
+/* Premier / Standard separator */
+.cov-condition-separator {
+  border: none;
+  border-top: 1px solid rgba(139,108,196,0.25);
+  margin: 0.25rem 0;
+}
+
+/* Weakness star overlay on damage type tags */
+.ctag.has-weakness::after {
+  content: '\2605';
+  position: absolute;
+  top: -4px;
+  right: -3px;
+  font-size: 0.5rem;
+  color: var(--tag-weakness);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.ctag.has-weakness {
+  position: relative;
+}
+
+/* Ghosted-but-hued: unlit sidebar tags retain group color at low intensity */
+.sidebar .ctag.tag-defense {
+  color: var(--tag-defense);
+  background: var(--tag-defense-bg);
+  border-color: var(--tag-defense-border);
+}
+.sidebar .ctag.tag-targeting {
+  color: var(--tag-targeting);
+  background: var(--tag-targeting-bg);
+  border-color: var(--tag-targeting-border);
+}
+.sidebar .ctag.tag-damage {
+  color: var(--tag-damage);
+  background: var(--tag-damage-bg);
+  border-color: var(--tag-damage-border);
+}
+.sidebar .ctag.tag-condition {
+  color: var(--tag-condition);
+  background: var(--tag-condition-bg);
+  border-color: var(--tag-condition-border);
+}
+.sidebar .ctag.tag-reliability {
+  color: var(--tag-reliability);
+  background: var(--tag-reliability-bg);
+  border-color: var(--tag-reliability-border);
+}
+.sidebar .ctag.tag-action {
+  color: var(--tag-action);
+  background: var(--tag-action-bg);
+  border-color: var(--tag-action-border);
+}
+.sidebar .ctag.tag-special {
+  color: var(--tag-special);
+  background: var(--tag-special-bg);
+  border-color: var(--tag-special-border);
+}
+.sidebar .ctag.tag-weakness {
+  color: var(--tag-weakness);
+  background: var(--tag-weakness-bg);
+  border-color: var(--tag-weakness-border);
 }
 
 .coverage-tags { display: flex; flex-wrap: wrap; gap: 0.25rem; }
@@ -813,6 +982,24 @@ body {
   max-width: 280px;
   pointer-events: none;
   box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+/* Coverage sidebar hover tooltip */
+.cov-tooltip {
+  position: fixed;
+  background: #14111d;
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--radius);
+  padding: 0.45rem 0.65rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-bright);
+  line-height: 1.4;
+  z-index: 1100;
+  max-width: 250px;
+  pointer-events: none;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.55);
 }
 
 /* ── TOAST ── */

@@ -61,6 +61,11 @@
 
       document.addEventListener('click', function(e) {
         var el = e.target.closest('.ctag');
+        // Sidebar tags use hover tooltips from coverage.js — skip click handler.
+        if (el && el.closest('.sidebar')) {
+          tooltipEl.style.display = 'none';
+          return;
+        }
         if (el) {
           var tag = el.dataset.tag;
           var tagDefs = (window.SPELL_DATA && window.SPELL_DATA.tagDefs) || {};
