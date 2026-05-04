@@ -44,8 +44,10 @@
     loadPlan: function(planData, classData) {
       var traditions = ['arcane', 'divine', 'occult', 'primal'];
 
-      // Step 1: Clear selection and hide browser
+      // Step 1: Clear selection and hide browser. Capture active view
+      // BEFORE state reset (ensureState resets currentLevel to 0).
       var activeTradition = App.currentTradition ? App.currentTradition() : null;
+      var activeLevel = activeTradition ? (currentLevel[activeTradition] || 0) : 0;
       selectedSlot = null;
       if (activeTradition) {
         var browser = document.getElementById('browser-' + activeTradition);
@@ -107,8 +109,8 @@
       }
 
       // Step 7: Re-render current view
-      if (activeTradition && currentLevel[activeTradition] > 0) {
-        this.selectLevel(activeTradition, currentLevel[activeTradition]);
+      if (activeTradition && activeLevel > 0) {
+        this.selectLevel(activeTradition, activeLevel);
       }
     },
 
