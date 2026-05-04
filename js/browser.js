@@ -212,7 +212,9 @@
 
   // ── Rarity/legacy filter check ──
   function passesRarityLegacy(spell) {
-    if (!window.SpellFilters.rarity[spell.rarity]) return false;
+    var r = spell.rarity || 'common';
+    var rCap = r.charAt(0).toUpperCase() + r.slice(1).toLowerCase();
+    if (!window.SpellFilters.rarity[rCap]) return false;
     if (spell.era === 'legacy_core' && !window.SpellFilters.showLegacy) return false;
     return true;
   }
