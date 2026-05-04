@@ -462,8 +462,11 @@
     <!-- ═══════════════════════════════════════════════════ -->
     <div class="tradition-page" id="page-arcane">
       <div class="export-bar">
-        <button class="export-btn" onclick="Export.copyToClipboard('arcane')">Copy to Clipboard</button>
-        <button class="export-btn" onclick="Export.downloadMd('arcane')">Download .md</button>
+        <button class="export-btn" onclick="Export.copyToClipboard()">📋 Copy Plan</button><span class="info-bubble" title="Copies a readable summary of your spell selections across all traditions to the clipboard. Paste into Discord, a doc, or wherever you like.">ⓘ</span>
+        <button class="export-btn" onclick="Export.downloadMd()">📄 Download .md</button><span class="info-bubble" title="Downloads your spell plan as a readable Markdown file. Good for sharing or printing — but this format can't be loaded back in.">ⓘ</span>
+        <button class="export-btn" onclick="Export.savePlan()">💾 Save Plan</button><span class="info-bubble" title="Saves your full plan (all traditions, all class selections, all spell assignments) as a .json file. You can load this file later to pick up where you left off.">ⓘ</span>
+        <button class="export-btn" onclick="Export.loadPlan()">📂 Load Plan</button><span class="info-bubble" title="Load a previously saved .json plan file. This will replace your current selections across all traditions.">ⓘ</span>
+        <input type="file" id="loadPlanInput" accept=".json" style="display:none" onchange="Export.handleLoadFile(this)">
       </div>
 
       <div class="class-selector">
@@ -545,8 +548,11 @@
     <!-- ═══════════════════════════════════════════════════ -->
     <div class="tradition-page" id="page-divine">
       <div class="export-bar">
-        <button class="export-btn" onclick="Export.copyToClipboard('divine')">Copy to Clipboard</button>
-        <button class="export-btn" onclick="Export.downloadMd('divine')">Download .md</button>
+        <button class="export-btn" onclick="Export.copyToClipboard()">📋 Copy Plan</button><span class="info-bubble" title="Copies a readable summary of your spell selections across all traditions to the clipboard. Paste into Discord, a doc, or wherever you like.">ⓘ</span>
+        <button class="export-btn" onclick="Export.downloadMd()">📄 Download .md</button><span class="info-bubble" title="Downloads your spell plan as a readable Markdown file. Good for sharing or printing — but this format can't be loaded back in.">ⓘ</span>
+        <button class="export-btn" onclick="Export.savePlan()">💾 Save Plan</button><span class="info-bubble" title="Saves your full plan (all traditions, all class selections, all spell assignments) as a .json file. You can load this file later to pick up where you left off.">ⓘ</span>
+        <button class="export-btn" onclick="Export.loadPlan()">📂 Load Plan</button><span class="info-bubble" title="Load a previously saved .json plan file. This will replace your current selections across all traditions.">ⓘ</span>
+        <input type="file" accept=".json" style="display:none" onchange="Export.handleLoadFile(this)">
       </div>
 
       <div class="class-selector">
@@ -636,8 +642,11 @@
     <!-- ═══════════════════════════════════════════════════ -->
     <div class="tradition-page" id="page-occult">
       <div class="export-bar">
-        <button class="export-btn" onclick="Export.copyToClipboard('occult')">Copy to Clipboard</button>
-        <button class="export-btn" onclick="Export.downloadMd('occult')">Download .md</button>
+        <button class="export-btn" onclick="Export.copyToClipboard()">📋 Copy Plan</button><span class="info-bubble" title="Copies a readable summary of your spell selections across all traditions to the clipboard. Paste into Discord, a doc, or wherever you like.">ⓘ</span>
+        <button class="export-btn" onclick="Export.downloadMd()">📄 Download .md</button><span class="info-bubble" title="Downloads your spell plan as a readable Markdown file. Good for sharing or printing — but this format can't be loaded back in.">ⓘ</span>
+        <button class="export-btn" onclick="Export.savePlan()">💾 Save Plan</button><span class="info-bubble" title="Saves your full plan (all traditions, all class selections, all spell assignments) as a .json file. You can load this file later to pick up where you left off.">ⓘ</span>
+        <button class="export-btn" onclick="Export.loadPlan()">📂 Load Plan</button><span class="info-bubble" title="Load a previously saved .json plan file. This will replace your current selections across all traditions.">ⓘ</span>
+        <input type="file" accept=".json" style="display:none" onchange="Export.handleLoadFile(this)">
       </div>
 
       <div class="class-selector">
@@ -721,8 +730,11 @@
     <!-- ═══════════════════════════════════════════════════ -->
     <div class="tradition-page" id="page-primal">
       <div class="export-bar">
-        <button class="export-btn" onclick="Export.copyToClipboard('primal')">Copy to Clipboard</button>
-        <button class="export-btn" onclick="Export.downloadMd('primal')">Download .md</button>
+        <button class="export-btn" onclick="Export.copyToClipboard()">📋 Copy Plan</button><span class="info-bubble" title="Copies a readable summary of your spell selections across all traditions to the clipboard. Paste into Discord, a doc, or wherever you like.">ⓘ</span>
+        <button class="export-btn" onclick="Export.downloadMd()">📄 Download .md</button><span class="info-bubble" title="Downloads your spell plan as a readable Markdown file. Good for sharing or printing — but this format can't be loaded back in.">ⓘ</span>
+        <button class="export-btn" onclick="Export.savePlan()">💾 Save Plan</button><span class="info-bubble" title="Saves your full plan (all traditions, all class selections, all spell assignments) as a .json file. You can load this file later to pick up where you left off.">ⓘ</span>
+        <button class="export-btn" onclick="Export.loadPlan()">📂 Load Plan</button><span class="info-bubble" title="Load a previously saved .json plan file. This will replace your current selections across all traditions.">ⓘ</span>
+        <input type="file" accept=".json" style="display:none" onchange="Export.handleLoadFile(this)">
       </div>
 
       <div class="class-selector">

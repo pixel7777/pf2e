@@ -32,6 +32,85 @@
     getState: function() { return planState; },
     getSelectedSlot: function() { return selectedSlot; },
     getCurrentLevel: function(tradition) { return currentLevel[tradition] || 0; },
+    getClasses: function() {
+      return {
+        arcane: currentClass.arcane || null,
+        divine: currentClass.divine || null,
+        occult: currentClass.occult || null,
+        primal: currentClass.primal || null
+      };
+    },
+
+    loadPlan: function(planData, classData) {
+      var traditions = ['arcane', 'divine', 'occult', 'primal'];
+
+      // Step 1: Clear selection and hide browser
+      var activeTradition = App.currentTradition ? App.currentTradition() : null;
+      selectedSlot = null;
+      if (activeTradition) {
+        var browser = document.getElementById('browser-' + activeTradition);
+        if (browser) browser.classList.add('browser-hidden');
+      }
+
+      // Step 2: Reset planState for all traditions
+      for (var i = 0; i < traditions.length; i++) {
+        var t = traditions[i];
+        planState[t] = null;
+        ensureState(t);
+      }
+
+      // Step 3: Write loaded spell arrays into planState
+      if (planData) {
+        for (var i = 0; i < traditions.length; i++) {
+          var t = traditions[i];
+          if (!planData[t]) continue;
+          for (var lv = 1; lv <= 20; lv++) {
+            if (!planData[t][lv]) continue;
+            for (var rank in planData[t][lv]) {
+              var r = parseInt(rank);
+              if (!planState[t][lv][r]) planState[t][lv][r] = [];
+              var slots = planData[t][lv][rank];
+              for (var s = 0; s < slots.length; s++) {
+                planState[t][lv][r][s] = slots[s];
+              }
+            }
+          }
+        }
+      }
+
+      // Step 4: Set currentClass from classData
+      if (classData) {
+        for (var i = 0; i < traditions.length; i++) {
+          var t = traditions[i];
+          currentClass[t] = classData[t] || null;
+        }
+      }
+
+      // Step 5: Init traditions that have data + set class selector
+      for (var i = 0; i < traditions.length; i++) {
+        var t = traditions[i];
+        var tabBar = document.getElementById('levelTabBar-' + t);
+        if (tabBar && tabBar.children.length <= 1) {
+          this.initTradition(t);
+        }
+        var classSelect = document.getElementById('classSelect-' + t);
+        if (classSelect && currentClass[t]) {
+          classSelect.value = currentClass[t];
+        } else if (classSelect) {
+          classSelect.value = '';
+        }
+      }
+
+      // Step 6: Update level tab indicators
+      for (var i = 0; i < traditions.length; i++) {
+        this.updateLevelTabIndicators(traditions[i]);
+      }
+
+      // Step 7: Re-render current view
+      if (activeTradition && currentLevel[activeTradition] > 0) {
+        this.selectLevel(activeTradition, currentLevel[activeTradition]);
+      }
+    },
 
     initTradition: function(tradition) {
       ensureState(tradition);

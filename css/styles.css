@@ -607,7 +607,9 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
    can sit on the same row, reclaiming vertical space. */
 .export-bar {
   display: flex;
-  gap: 0.6rem;
+  gap: 0.3rem;
+  align-items: center;
+  flex-wrap: wrap;
   justify-content: flex-end;
   position: absolute;
   top: 1.2rem;
@@ -632,6 +634,20 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
 .export-btn:hover {
   background: var(--bg-inset);
   border-color: var(--accent-header);
+}
+
+.info-bubble {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  cursor: help;
+  position: relative;
+  margin-left: -0.2rem;
+  margin-right: 0.2rem;
 }
 
 /* ── CLASS SELECTOR ── */
