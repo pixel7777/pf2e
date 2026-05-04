@@ -158,9 +158,9 @@
     },
 
     tierLabel: function(tier) {
-      if (tier === 'top') return '◆ Top';
-      if (tier === 'mid') return '◇ Mid';
-      return '○ Low';
+      if (tier === 'top') return '<span class="tier-sym">◆</span> Top';
+      if (tier === 'mid') return '<span class="tier-sym">◇</span> Mid';
+      return '<span class="tier-sym">◯</span> Low';
     },
 
     aonUrl: function(aonId) {
