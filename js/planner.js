@@ -143,9 +143,65 @@
           }
         }
         classSelect.onchange = function() {
-          currentClass[tradition] = this.value || null;
+          var previousValue = currentClass[tradition];
+          var newValue = this.value || null;
+
+          var hasSpells = false;
+          for (var lv = 1; lv <= 20; lv++) {
+            if (!planState[tradition][lv]) continue;
+            for (var r in planState[tradition][lv]) {
+              for (var s = 0; s < planState[tradition][lv][r].length; s++) {
+                if (planState[tradition][lv][r][s]) { hasSpells = true; break; }
+              }
+              if (hasSpells) break;
+            }
+            if (hasSpells) break;
+          }
+
+          if (hasSpells) {
+            var tradLabel = tradition.charAt(0).toUpperCase() + tradition.slice(1);
+            if (!window.confirm('Changing class will clear all spell selections for ' + tradLabel + '. This affects all 20 levels. Continue?')) {
+              classSelect.value = previousValue || '';
+              return;
+            }
+            for (var lv = 1; lv <= 20; lv++) {
+              if (!planState[tradition][lv]) continue;
+              for (var r in planState[tradition][lv]) {
+                for (var s = 0; s < planState[tradition][lv][r].length; s++) {
+                  planState[tradition][lv][r][s] = null;
+                }
+              }
+            }
+            if (!newValue) {
+              for (var lv = 1; lv <= 20; lv++) {
+                if (!planState[tradition][lv]) continue;
+                for (var r in planState[tradition][lv]) {
+                  planState[tradition][lv][r] = [];
+                }
+              }
+            }
+          }
+
+          currentClass[tradition] = newValue;
+
+          selectedSlot = null;
+          var browser = document.getElementById('browser-' + tradition);
+          if (browser) browser.classList.add('browser-hidden');
+
           var lv = currentLevel[tradition];
-          if (lv > 0) Planner.selectLevel(tradition, lv);
+          if (lv > 0) {
+            Planner.rebuildSlotsForClass(tradition, lv);
+            Planner.renderSlots(tradition, lv);
+            Coverage.update(tradition, lv);
+            Planner.updateLevelTabIndicators(tradition);
+          } else {
+            Planner.updateLevelTabIndicators(tradition);
+          }
+
+          var className = newValue && window.CLASS_DATA[newValue] ? window.CLASS_DATA[newValue].name : 'Manual';
+          var msg = 'Changed to ' + className;
+          if (hasSpells) msg += ' — cleared all spell selections';
+          App.toast(msg);
         };
       }
 
@@ -231,7 +287,14 @@
       panel.dataset.built = 'true';
 
       var maxRank = Math.ceil(level / 2);
-      var html = '<div class="rank-rows" id="rank-rows-' + tradition + '-' + level + '">';
+      var disabledAttr = level === 1 ? ' disabled title="No previous level."' : '';
+      var disabledStyle = level === 1 ? ' style="opacity:0.4"' : '';
+      var html = '<div class="level-actions">';
+      html += '<button class="level-action-btn"' + disabledAttr + disabledStyle + ' onclick="Planner.copyPrevious(\'' + tradition + '\',' + level + ')">⬆ Copy Previous</button>';
+      html += '<button class="level-action-btn" onclick="Planner.clearAllSpells(\'' + tradition + '\',' + level + ')">⊘ Clear All</button>';
+      html += '<button class="level-action-btn" onclick="Planner.deleteAllSlots(\'' + tradition + '\',' + level + ')">🗑 Delete All</button>';
+      html += '</div>';
+      html += '<div class="rank-rows" id="rank-rows-' + tradition + '-' + level + '">';
 
       for (var r = maxRank; r >= 1; r--) {
         var tier = App.getTier(level, r);
@@ -285,7 +348,15 @@
       Browser.show(tradition, level, rank);
     },
 
-    clearSlot: function(tradition, level, rank, slotIndex, e) {
+    clearSpell: function(tradition, level, rank, slotIndex, e) {
+      if (e) e.stopPropagation();
+      planState[tradition][level][rank][slotIndex] = null;
+      this.renderSlots(tradition, level);
+      Coverage.update(tradition, level);
+      this.updateLevelTabIndicators(tradition);
+    },
+
+    deleteSlot: function(tradition, level, rank, slotIndex, e) {
       if (e) e.stopPropagation();
       if (selectedSlot && selectedSlot.tradition === tradition && selectedSlot.level === level && selectedSlot.rank === rank) {
         if (selectedSlot.slotIndex === slotIndex) {
@@ -302,6 +373,123 @@
       this.renderSlots(tradition, level);
       Coverage.update(tradition, level);
       this.updateLevelTabIndicators(tradition);
+    },
+
+    clearAllSpells: function(tradition, level) {
+      var state = planState[tradition][level];
+      var hasSpell = false;
+      for (var r in state) {
+        for (var s = 0; s < state[r].length; s++) {
+          if (state[r][s]) { hasSpell = true; break; }
+        }
+        if (hasSpell) break;
+      }
+      if (!hasSpell) { App.toast('No spells to clear'); return; }
+      for (var r in state) {
+        for (var s = 0; s < state[r].length; s++) {
+          state[r][s] = null;
+        }
+      }
+      selectedSlot = null;
+      var browser = document.getElementById('browser-' + tradition);
+      if (browser) browser.classList.add('browser-hidden');
+      this.renderSlots(tradition, level);
+      Coverage.update(tradition, level);
+      this.updateLevelTabIndicators(tradition);
+    },
+
+    deleteAllSlots: function(tradition, level) {
+      var state = planState[tradition][level];
+      var hasSlots = false;
+      for (var r in state) {
+        if (state[r].length > 0) { hasSlots = true; break; }
+      }
+      if (!hasSlots) { App.toast('No slots to delete'); return; }
+      if (!window.confirm('Delete all slots at Level ' + level + '? This removes all slots and any assigned spells.')) return;
+      for (var r in state) {
+        state[r] = [];
+      }
+      selectedSlot = null;
+      var browser = document.getElementById('browser-' + tradition);
+      if (browser) browser.classList.add('browser-hidden');
+      this.renderSlots(tradition, level);
+      Coverage.update(tradition, level);
+      this.updateLevelTabIndicators(tradition);
+    },
+
+    copyPrevious: function(tradition, level) {
+      if (level <= 1) { App.toast('No previous level to copy from'); return; }
+      var prevLevel = level - 1;
+      var prevState = planState[tradition][prevLevel];
+      var curState = planState[tradition][level];
+      if (!prevState) { App.toast('Previous level has no spells to copy'); return; }
+
+      var hasSpells = false;
+      for (var r in prevState) {
+        for (var s = 0; s < prevState[r].length; s++) {
+          if (prevState[r][s]) { hasSpells = true; break; }
+        }
+        if (hasSpells) break;
+      }
+      if (!hasSpells) { App.toast('Previous level has no spells to copy'); return; }
+
+      var prevMaxRank = Math.ceil(prevLevel / 2);
+      var curMaxRank = Math.ceil(level / 2);
+      var minMaxRank = Math.min(prevMaxRank, curMaxRank);
+
+      var overwriteCount = 0;
+      for (var r = 1; r <= minMaxRank; r++) {
+        if (!prevState[r]) continue;
+        for (var i = 0; i < prevState[r].length; i++) {
+          if (prevState[r][i] && curState[r] && i < curState[r].length && curState[r][i]) {
+            overwriteCount++;
+          }
+        }
+      }
+
+      if (overwriteCount > 0) {
+        if (!window.confirm('Copy will overwrite ' + overwriteCount + ' spell(s) at this level. Continue?')) return;
+      }
+
+      var copiedCount = 0;
+      for (var r = 1; r <= minMaxRank; r++) {
+        if (!prevState[r]) continue;
+        if (!curState[r]) curState[r] = [];
+        for (var i = 0; i < prevState[r].length; i++) {
+          if (prevState[r][i]) {
+            while (curState[r].length < i + 1) {
+              curState[r].push(null);
+            }
+            curState[r][i] = JSON.parse(JSON.stringify(prevState[r][i]));
+            copiedCount++;
+          }
+        }
+      }
+
+      this.renderSlots(tradition, level);
+      Coverage.update(tradition, level);
+      this.updateLevelTabIndicators(tradition);
+      App.toast('Copied ' + copiedCount + ' spell(s) from Level ' + prevLevel);
+    },
+
+    rebuildSlotsForClass: function(tradition, level) {
+      var cls = currentClass[tradition];
+      if (!cls || !window.CLASS_DATA || !window.CLASS_DATA[cls]) return;
+      var classSlots = window.CLASS_DATA[cls].slots[level];
+      if (!classSlots) return;
+      var state = planState[tradition][level];
+      var maxRank = Math.ceil(level / 2);
+      for (var r = 1; r <= maxRank; r++) {
+        var target = classSlots[r] || 0;
+        if (!state[r]) state[r] = [];
+        if (target === 0) {
+          state[r] = [];
+        } else if (state[r].length < target) {
+          while (state[r].length < target) state[r].push(null);
+        } else if (state[r].length > target) {
+          state[r].length = target;
+        }
+      }
     },
 
     assignSpell: function(tradition, spellObj) {
@@ -339,10 +527,15 @@
             html += '</td>';
             html += '<td class="slot-action">' + App.formatActions(spell.action_tags) + '</td>';
             html += '<td>' + App.renderTags(spell) + '</td>';
-            html += '<td><button class="slot-clear-btn" onclick="Planner.clearSlot(\'' + tradition + '\',' + level + ',' + r + ',' + idx + ',event)">✕</button></td>';
+            html += '<td class="slot-actions">';
+            html += '<button class="slot-clear-btn" onclick="Planner.clearSpell(\'' + tradition + '\',' + level + ',' + r + ',' + idx + ',event)" title="Clear spell (keep slot)">⊘</button>';
+            html += '<button class="slot-delete-btn" onclick="Planner.deleteSlot(\'' + tradition + '\',' + level + ',' + r + ',' + idx + ',event)" title="Delete slot">🗑</button>';
+            html += '</td>';
           } else {
             html += '<td colspan="3" class="slot-empty">Empty slot — click to browse spells</td>';
-            html += '<td><button class="slot-clear-btn" onclick="Planner.clearSlot(\'' + tradition + '\',' + level + ',' + r + ',' + idx + ',event)">✕</button></td>';
+            html += '<td class="slot-actions">';
+            html += '<button class="slot-delete-btn" onclick="Planner.deleteSlot(\'' + tradition + '\',' + level + ',' + r + ',' + idx + ',event)" title="Delete slot">🗑</button>';
+            html += '</td>';
           }
           html += '</tr>';
         }

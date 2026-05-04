@@ -30,7 +30,7 @@ window.CLASS_DATA = {
     notes: "School specialization grants +1 slot at your top rank (Curriculum spells only)"
   },
   cleric: {
-    name: "Cleric (Cloistered)",
+    name: "Cleric",
     tradition: "divine",
     slots: {
       1:  {1:2},
@@ -54,7 +54,7 @@ window.CLASS_DATA = {
       19: {1:3, 2:3, 3:3, 4:3, 5:3, 6:3, 7:3, 8:3, 9:3, 10:1},
       20: {1:3, 2:3, 3:3, 4:3, 5:3, 6:3, 7:3, 8:3, 9:3, 10:1}
     },
-    notes: "Healing Font grants extra Heal spells (Cha mod per day). Warpriest has fewer slots but better martial."
+    notes: "Doctrine affects proficiency and bonus spells, not slot count. Healing Font grants extra Heal spells (Cha mod per day)."
   },
   druid: {
     name: "Druid",
