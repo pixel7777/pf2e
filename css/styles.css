@@ -973,7 +973,7 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
 .slot-table td:nth-child(1) { width: 14rem; flex: 0 0 14rem; }
 .slot-table td:nth-child(2) { width: 5rem; flex: 0 0 5rem; text-align: left; }
 .slot-table td:nth-child(3) { flex: 0 1 auto; min-width: 0; }
-.slot-table td:nth-child(4) { width: 4.5rem; flex: 0 0 4.5rem; text-align: right; margin-left: auto; }
+.slot-table td.slot-actions { width: 4.5rem; flex: 0 0 4.5rem; text-align: right; margin-left: auto; }
 
 /* Empty-slot row uses colspan=3 — make that single cell span name+action+tags */
 .slot-table td.slot-empty {
@@ -1014,8 +1014,9 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
 
 .slot-clear-btn {
   font-family: 'Inter', sans-serif;
-  font-size: 0.65rem;
-  padding: 0.1rem 0.35rem;
+  font-size: 0.95rem;
+  line-height: 1;
+  padding: 0.2rem 0.4rem;
   border-radius: 3px;
   cursor: pointer;
   border: 1px solid #e8a0a0;
@@ -1028,8 +1029,9 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
 
 .slot-delete-btn {
   font-family: 'Inter', sans-serif;
-  font-size: 0.65rem;
-  padding: 0.1rem 0.35rem;
+  font-size: 0.95rem;
+  line-height: 1;
+  padding: 0.2rem 0.4rem;
   border-radius: 3px;
   cursor: pointer;
   border: 1px solid var(--border-panel);
