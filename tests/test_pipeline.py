@@ -873,6 +873,23 @@ def test_merge_output(spells):
             if not entry.get("spell") or not entry.get("aon_id"):
                 errors.append(f"{spell['name']}: replaces entry missing spell or aon_id")
 
+    # Bidirectional consistency: if A has B in replaced_by, B must have A in replaces
+    by_aon = {s["aonId"]: s for s in spells}
+    for spell in spells:
+        for entry in spell.get("replaced_by", []):
+            b_id = entry.get("aon_id")
+            if b_id and b_id in by_aon:
+                b_replaces_ids = {e["aon_id"] for e in by_aon[b_id].get("replaces", [])}
+                if spell["aonId"] not in b_replaces_ids:
+                    errors.append(f"{spell['name']} (aonId {spell['aonId']}): has replaced_by->{b_id} "
+                                  f"but {by_aon[b_id]['name']} lacks matching replaces entry")
+
+    # Spells without chain data must have empty arrays
+    for spell in spells:
+        if spell["aonId"] not in actual_chain_aon_ids:
+            if spell.get("replaced_by") or spell.get("replaces"):
+                errors.append(f"{spell['name']}: not in chain registry but has non-empty chain arrays")
+
     if errors:
         print(f"FAIL: merge output — {len(errors)} error(s):")
         for e in errors[:10]:
