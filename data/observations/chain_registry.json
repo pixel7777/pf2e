@@ -1,0 +1,240 @@
+{
+  "version": "1.0.0",
+  "generated": "2026-05-05",
+  "chain_count": 7,
+  "pair_count": 7,
+  "chains": {
+    "sustained_damage": {
+      "function": "Sustained single-target fire damage",
+      "traditions": [
+        "arcane",
+        "primal"
+      ],
+      "source": "How to Blast GOOD in Pathfinder 2e.md",
+      "progression": [
+        {
+          "spell": "Floating Flame",
+          "aon_id": 1533,
+          "from_rank": 2,
+          "to_rank": 4
+        },
+        {
+          "spell": "Cinder Swarm",
+          "aon_id": 1350,
+          "from_rank": 4,
+          "to_rank": null
+        }
+      ]
+    },
+    "action_denial": {
+      "function": "Action denial via Slowed condition",
+      "traditions": [
+        "arcane",
+        "occult"
+      ],
+      "source": "Spell Selection Basics.md",
+      "progression": [
+        {
+          "spell": "Agitate",
+          "aon_id": 2341,
+          "from_rank": 1,
+          "to_rank": 3
+        },
+        {
+          "spell": "Slow",
+          "aon_id": 1677,
+          "from_rank": 3,
+          "to_rank": null
+        }
+      ]
+    },
+    "status_bonus_buff": {
+      "function": "Status bonus to attacks/saves/skills",
+      "traditions": [
+        "divine",
+        "occult"
+      ],
+      "source": "Spell Selection Basics.md",
+      "progression": [
+        {
+          "spell": "Bless",
+          "aon_id": 1451,
+          "from_rank": 1,
+          "to_rank": 3
+        },
+        {
+          "spell": "Heroism",
+          "aon_id": 1555,
+          "from_rank": 3,
+          "to_rank": null
+        }
+      ]
+    },
+    "teleportation": {
+      "function": "Teleportation / movement utility",
+      "traditions": [
+        "arcane",
+        "occult"
+      ],
+      "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+      "progression": [
+        {
+          "spell": "Translocate",
+          "aon_id": 1724,
+          "from_rank": 4,
+          "to_rank": 6
+        },
+        {
+          "spell": "Teleport",
+          "aon_id": 1720,
+          "from_rank": 6,
+          "to_rank": null
+        }
+      ]
+    },
+    "aoe_blast_arcane": {
+      "function": "AoE burst damage (Arcane path)",
+      "traditions": [
+        "arcane"
+      ],
+      "source": "Elemental Sorcerer Blaster Guide.md",
+      "progression": [
+        {
+          "spell": "Fireball",
+          "aon_id": 1530,
+          "from_rank": 3,
+          "to_rank": 7
+        },
+        {
+          "spell": "Eclipse Burst",
+          "aon_id": 1508,
+          "from_rank": 7,
+          "to_rank": null
+        }
+      ]
+    },
+    "aoe_blast_primal": {
+      "function": "AoE burst damage (Primal path)",
+      "traditions": [
+        "primal"
+      ],
+      "source": "Elemental Sorcerer Blaster Guide.md",
+      "progression": [
+        {
+          "spell": "Cave Fangs",
+          "aon_id": 1329,
+          "from_rank": 3,
+          "to_rank": 5
+        },
+        {
+          "spell": "Howling Blizzard",
+          "aon_id": 1559,
+          "from_rank": 5,
+          "to_rank": 7
+        },
+        {
+          "spell": "Eclipse Burst",
+          "aon_id": 1508,
+          "from_rank": 7,
+          "to_rank": null
+        }
+      ]
+    },
+    "frightened_debuff": {
+      "function": "Frightened condition delivery",
+      "traditions": [
+        "arcane",
+        "divine",
+        "occult",
+        "primal"
+      ],
+      "source": "Spell Selection Basics.md",
+      "progression": [
+        {
+          "spell": "Fear",
+          "aon_id": 1524,
+          "from_rank": 1,
+          "to_rank": 3
+        },
+        {
+          "spell": "Agonizing Despair",
+          "aon_id": 665,
+          "from_rank": 3,
+          "to_rank": null
+        }
+      ]
+    }
+  },
+  "standalone_pairs": [
+    {
+      "spell_a": "Acid Arrow",
+      "spell_a_aon_id": 2,
+      "spell_b": "Acid Grip",
+      "spell_b_aon_id": 1436,
+      "relationship": "replaces",
+      "at_rank": 2,
+      "source": "Acid Grip is UNDERRATED.md",
+      "reason": "Acid Grip replaced Acid Arrow in the remaster. Different utility (force movement vs sustained acid damage)."
+    },
+    {
+      "spell_a": "Dream Message",
+      "spell_a_aon_id": 1503,
+      "spell_b": "Sending",
+      "spell_b_aon_id": 1665,
+      "relationship": "upgrades_to",
+      "at_rank": 5,
+      "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+      "reason": "Sending is a direct upgrade to Dream Message at rank 5 -- instant communication vs overnight delay."
+    },
+    {
+      "spell_a": "Clairvoyance",
+      "spell_a_aon_id": 1466,
+      "spell_b": "Scouting Eye",
+      "spell_b_aon_id": 1661,
+      "relationship": "outclassed_by",
+      "at_rank": 5,
+      "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+      "reason": "Scouting Eye provides mobile scrying vs Clairvoyance's fixed point."
+    },
+    {
+      "spell_a": "Vision of Death",
+      "spell_a_aon_id": 1742,
+      "spell_b": "Missed Cue",
+      "spell_b_aon_id": 2449,
+      "relationship": "upgrades_to",
+      "at_rank": 6,
+      "source": "How to Blast GOOD in Pathfinder 2e.md",
+      "reason": "Missed Cue is a higher-rank Will-targeting blast upgrade."
+    },
+    {
+      "spell_a": "Revealing Light",
+      "spell_a_aon_id": 1653,
+      "spell_b": "Ignite Fireworks",
+      "spell_b_aon_id": 928,
+      "relationship": "competes_with",
+      "at_rank": null,
+      "source": "Mathfinders Blaster Caster RUBRIC.md",
+      "reason": "Competing rank 2 options for Dazzled delivery -- different damage types and AoE shapes."
+    },
+    {
+      "spell_a": "Thunderstrike",
+      "spell_a_aon_id": 1721,
+      "spell_b": "Horizon Thunder Sphere",
+      "spell_b_aon_id": 927,
+      "relationship": "competes_with",
+      "at_rank": null,
+      "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
+      "reason": "Both rank 1 electricity spells. HTS outclasses Thunderstrike on raw damage but requires attack roll vs save."
+    },
+    {
+      "spell_a": "Slow",
+      "spell_a_aon_id": 1677,
+      "spell_b": "Containment",
+      "spell_b_aon_id": 1981,
+      "relationship": "outclassed_by",
+      "at_rank": 4,
+      "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+      "reason": "Containment is better than Slow in multi-target contexts, but both are kept for defense variety (Fort vs Ref)."
+    }
+  ]
+}
