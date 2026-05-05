@@ -1194,11 +1194,6 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
 }
 .aon-link:hover { opacity: 1; color: var(--accent-header); }
 
-.curated-star {
-  color: var(--accent-header);
-  margin-right: 0.2rem;
-}
-
 .spell-notes {
   font-size: 0.75rem;
   color: var(--text-tertiary);

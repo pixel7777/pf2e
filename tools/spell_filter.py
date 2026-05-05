@@ -102,7 +102,7 @@ def apply_rename_filter(rank_spells, rename_map):
 def dedupe_by_era(rank_spells):
     by_name = defaultdict(list)
     for s in rank_spells:
-        by_name[normalize_name(s.get("name", ""))].append(s)
+        by_name[normalize_name(s.get("name", "")).lower()].append(s)
 
     era_priority = {"remaster_core": 2, "legacy_core": 1, "other": 0}
 
