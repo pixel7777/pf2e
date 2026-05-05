@@ -282,6 +282,9 @@
     if (!f.sortColumn || !f.sortDirection) {
       results.sort(function(a, b) {
         if (b.native_rank !== a.native_rank) return b.native_rank - a.native_rank;
+        var aStarred = a.mathfinder_reviewed ? 1 : 0;
+        var bStarred = b.mathfinder_reviewed ? 1 : 0;
+        if (aStarred !== bStarred) return bStarred - aStarred;
         return a.name.localeCompare(b.name);
       });
       return results;
@@ -436,15 +439,29 @@
   function renderSpellRow(spell, idx, opts) {
     opts = opts || {};
     var isLegacy = spell.era === 'legacy_core';
-    var legacyCls = isLegacy ? ' legacy-row' : '';
-    var html = '<tr data-spell-idx="' + idx + '" style="cursor:pointer;"' + ' class="' + legacyCls + '">';
+    var rowCls = isLegacy ? ' legacy-row' : '';
+    if (spell.mathfinder_reviewed) rowCls += ' mathfinder-row';
+    var html = '<tr data-spell-idx="' + idx + '" style="cursor:pointer;" class="' + rowCls + '">';
 
-    // Spell name
+    // Spell name with star/spacer
     html += '<td>';
+    if (spell.mathfinder_reviewed) {
+      html += '<span class="mathfinder-star" title="Mathfinder reviewed — click for details">★</span>';
+    } else {
+      html += '<span class="mathfinder-spacer"></span>';
+    }
     html += '<span class="spell-name-link">' + spell.name + '</span>';
     if (isLegacy) html += '<span class="legacy-badge">Legacy</span>';
     if (spell.aonId) {
       html += '<a href="' + App.aonUrl(spell.aonId) + '" target="_blank" class="aon-link" title="Open on Archives of Nethys">↗</a>';
+    }
+    // Chain badges
+    if (spell.replaces && spell.replaces.length > 0) {
+      var rep = spell.replaces[0];
+      html += '<span class="chain-badge chain-replaces">↑ Replaces ' + rep.spell + '</span>';
+    } else if (spell.replaced_by && spell.replaced_by.length > 0) {
+      var rb = spell.replaced_by[0];
+      html += '<span class="chain-badge chain-replaced-by">↓ See ' + rb.spell + ' at rank ' + rb.at_rank + '</span>';
     }
     if (opts.warnings) {
       for (var w = 0; w < opts.warnings.length; w++) {
@@ -462,8 +479,21 @@
     // Tags
     html += '<td>' + renderTags(spell) + '</td>';
 
-    // Notes
-    html += '<td class="spell-notes"></td>';
+    // Notes — video link for spells with direct Mathfinder source
+    html += '<td class="spell-notes">';
+    var directSrc = null;
+    if (spell.mathfinder_sources) {
+      for (var s = 0; s < spell.mathfinder_sources.length; s++) {
+        if (spell.mathfinder_sources[s].source_type === 'direct') {
+          directSrc = spell.mathfinder_sources[s];
+          break;
+        }
+      }
+    }
+    if (directSrc) {
+      html += '<a href="' + directSrc.url + '" target="_blank" rel="noopener" class="mathfinder-video-link">▶ ' + directSrc.name + '</a>';
+    }
+    html += '</td>';
 
     html += '</tr>';
     return html;
@@ -596,6 +626,10 @@
   }
 
   window.Browser = {
+    _getRenderedSpells: function(tradition) {
+      return renderedSpells[tradition] || null;
+    },
+
     show: function(tradition, level, rank) {
       var browser = document.getElementById('browser-' + tradition);
       if (!browser) return;
@@ -668,6 +702,8 @@
       var tableWrap = document.getElementById('spellTable-' + tradition);
       tableWrap.addEventListener('click', function(e) {
         if (e.target.closest('.aon-link')) return;
+        if (e.target.closest('.mathfinder-star')) return;
+        if (e.target.closest('.mathfinder-video-link')) return;
 
         // Sort header click
         var header = e.target.closest('.sortable-header');

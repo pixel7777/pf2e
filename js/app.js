@@ -15,6 +15,7 @@
       this.markFramedPanels();
       this.injectCornerOrnaments();
       this.initSidebarResize();
+      this.initPopover();
     },
 
     markFramedPanels: function() {
@@ -327,6 +328,89 @@
           framed[i].appendChild(img);
         }
       }
+    },
+
+    initPopover: function() {
+      var popover = document.createElement('div');
+      popover.id = 'curation-popover';
+      document.body.appendChild(popover);
+
+      document.addEventListener('click', function(e) {
+        var star = e.target.closest('.mathfinder-star');
+        if (star) {
+          var row = star.closest('tr[data-spell-idx]');
+          if (!row) return;
+          var idx = parseInt(row.dataset.spellIdx, 10);
+          var tableWrap = star.closest('[id^="spellTable-"]');
+          if (!tableWrap) return;
+          var tradition = tableWrap.id.replace('spellTable-', '');
+          var list = window.Browser && window.Browser._getRenderedSpells ? window.Browser._getRenderedSpells(tradition) : null;
+          if (!list || !list[idx]) return;
+          App.showPopover(star, list[idx]);
+          return;
+        }
+        if (!e.target.closest('#curation-popover')) {
+          App.hidePopover();
+        }
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') App.hidePopover();
+      });
+    },
+
+    showPopover: function(starEl, spell) {
+      var popover = document.getElementById('curation-popover');
+      if (!popover) return;
+
+      var title = '<div class="popover-title">' + spell.name + '</div>';
+      var summary = '<div class="popover-summary">' + (spell.mathfinder_summary || '') + '</div>';
+
+      var sourcesHtml = '<div class="popover-sources">';
+      var directSources = [];
+      if (spell.mathfinder_sources) {
+        for (var i = 0; i < spell.mathfinder_sources.length; i++) {
+          if (spell.mathfinder_sources[i].source_type === 'direct') {
+            directSources.push(spell.mathfinder_sources[i]);
+          }
+        }
+      }
+      if (directSources.length > 0) {
+        sourcesHtml += 'From ' + directSources.length + ' video' + (directSources.length > 1 ? 's' : '') + ': ';
+        var links = [];
+        for (var j = 0; j < directSources.length; j++) {
+          links.push('<a href="' + directSources[j].url + '" target="_blank" rel="noopener">' + directSources[j].name + '</a>');
+        }
+        sourcesHtml += links.join(', ');
+      } else {
+        sourcesHtml += 'Based on category-level analysis';
+      }
+      sourcesHtml += '</div>';
+
+      popover.innerHTML = title + summary + sourcesHtml;
+      popover.style.display = 'block';
+
+      var rect = starEl.getBoundingClientRect();
+      var left = rect.left + window.scrollX;
+      var top = rect.bottom + window.scrollY + 4;
+
+      if (left + 320 > window.innerWidth) {
+        left = window.innerWidth - 320 - 8;
+      }
+
+      popover.style.left = left + 'px';
+      popover.style.top = top + 'px';
+
+      var popRect = popover.getBoundingClientRect();
+      if (popRect.bottom > window.innerHeight) {
+        top = rect.top + window.scrollY - popover.offsetHeight - 4;
+        popover.style.top = top + 'px';
+      }
+    },
+
+    hidePopover: function() {
+      var popover = document.getElementById('curation-popover');
+      if (popover) popover.style.display = 'none';
     }
   };
 

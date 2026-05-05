@@ -520,7 +520,11 @@
 
           html += '<tr class="' + selClass + '" onclick="Planner.selectSlotUI(\'' + tradition + '\',' + level + ',' + r + ',' + idx + ')">';
           if (spell) {
-            html += '<td class="slot-spell-name">' + spell.name;
+            html += '<td class="slot-spell-name">';
+            if (spell.mathfinder_reviewed) {
+              html += '<span class="mathfinder-star" style="cursor:default;" title="Mathfinder reviewed">★</span>';
+            }
+            html += spell.name;
             if (spell.aonId) {
               html += '<a href="' + App.aonUrl(spell.aonId) + '" target="_blank" class="aon-link" title="Open on Archives of Nethys" onclick="event.stopPropagation()">↗</a>';
             }

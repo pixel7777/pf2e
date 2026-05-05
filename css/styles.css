@@ -1244,7 +1244,8 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
   font-size: 0.75rem;
   color: var(--text-tertiary);
   font-style: italic;
-  max-width: 300px;
+  width: 140px;
+  max-width: 140px;
 }
 
 .heightened-badge {
@@ -1937,4 +1938,92 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
   .gotcha-grid { grid-template-columns: 1fr; }
   .wgiet-grid { overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 0; }
   .hero h1, .overview-hero h1 { font-size: 1.4rem; }
+}
+
+/* ── Cycle 21: Curation Layer Display ── */
+
+.mathfinder-star {
+  color: #b8860b;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-block;
+  width: 18px;
+  text-align: center;
+}
+.mathfinder-spacer {
+  display: inline-block;
+  width: 18px;
+}
+
+.mathfinder-row {
+  background: rgba(184, 134, 11, 0.06);
+}
+.mathfinder-row td:first-child {
+  border-left: 3px solid #b8860b;
+}
+
+#curation-popover {
+  position: absolute;
+  z-index: 1000;
+  max-width: 320px;
+  padding: 12px;
+  background: var(--bg-card);
+  border: 1px solid #b8860b;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.5;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  display: none;
+}
+#curation-popover .popover-title {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+#curation-popover .popover-summary {
+  color: var(--text-secondary);
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+#curation-popover .popover-sources {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 6px;
+  color: var(--text-tertiary);
+  font-size: 11px;
+}
+#curation-popover .popover-sources a {
+  color: var(--accent-nav-active);
+  text-decoration: none;
+}
+#curation-popover .popover-sources a:hover {
+  text-decoration: underline;
+}
+
+.mathfinder-video-link {
+  font-size: 11px;
+  color: var(--accent-nav-active);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 130px;
+}
+.mathfinder-video-link:hover {
+  text-decoration: underline;
+}
+
+.chain-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-style: italic;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.chain-replaces {
+  color: #0F6E56;
+}
+.chain-replaced-by {
+  color: #993C1D;
 }
