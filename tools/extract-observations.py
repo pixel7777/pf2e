@@ -87,6 +87,62 @@ DOCUMENT CONTENT:
 VALID_RELATIONSHIPS = {"replaces", "upgrades_to", "outclassed_by", "competes_with"}
 VALID_APPLIES_TO_KEYS = {"tag", "role", "trait", "property", "custom"}
 
+# Manual aliases for transcription-style differences between the Mathfinder
+# distillation files and spell-data.js. These are names where Heidi has
+# confirmed the mapping; do not add speculative entries here.
+MANUAL_ALIASES = {
+    # Past-tense / present-tense remaster naming
+    "awakened entropy": "Awaken Entropy",
+    # Gerund / infinitive remaster naming
+    "water walking": "Water Walk",
+    # Heightened-version observations attach to the base spell
+    "greater invisibility": "Invisibility",
+    "heightened invisibility": "Invisibility",
+    # Possessive vs. non-possessive form (structural normalization can't bridge
+    # the dropped "s" — "Dragon's" → "Dragons" vs "Dragon")
+    "brine dragon's bile": "Brine Dragon Bile",
+    # Compound-word vs. spaced form (per Heidi 2026-05-05)
+    "beheading buzzsaw": "Beheading Buzz Saw",
+    # Distillation transcription errors of YouTube audio (per Heidi 2026-05-05)
+    "shore strike": "Sure Strike",
+    "corrosive mist": "Corrosive Muck",
+    "aeros salvo": "Arrow Salvo",
+    "mist curl": "Missed Cue",
+    "infused vitality": "Infuse Vitality",
+    "brine bolt": "Briny Bolt",
+}
+
+# Curated list of names the LLM has extracted as "spells" but which are actually
+# feats, class features, magic items, spell categories, or focus-spell modifiers
+# not represented in spell-data.js. Stored lowercase for case-insensitive lookup.
+# Maintained by Heidi after manual triage — additions here mean "this is a known
+# non-spell; classify it explicitly so future runs do not re-litigate it."
+KNOWN_NON_SPELLS = {
+    # Feats
+    "foretell harm": "feat",
+    "whispers of weakness": "feat",
+    "lean steps": "feat",
+    # Class features / reactions / stances
+    "champion's reaction": "class_feature",
+    "channeler stance": "class_feature",
+    "stray mind": "class_feature",
+    "sinblade spell": "class_feature",
+    "dancing invocation": "class_feature",
+    # Spell categories (the model misidentified group references as spell names)
+    "summon spells": "category",
+    "polymorph spells": "category",
+    "elemental spells": "category",
+    # Psychic Amped cantrips — base spell exists as a cantrip, not a rank spell
+    "amped frostbite": "amped_cantrip",
+    "amped ignition": "amped_cantrip",
+    "amped shield": "amped_cantrip",
+    # Witch hexes / focus spells (mistranscribed or genuinely focus)
+    "silence in snow": "focus_spell",
+    "forcebolt": "focus_spell",
+    # Mythic / not in current dataset
+    "diem of divine radiance": "mythic_or_unknown",
+}
+
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -144,18 +200,31 @@ def load_source_spell_json(path):
 
 
 def build_name_index(spells):
-    """Build a case-insensitive, apostrophe-normalized name → spell lookup."""
-    index = {}
+    """Build name lookup indexes for resolution.
+
+    Returns (apostrophe_index, structural_index):
+    - apostrophe_index: lowercase + straight apostrophes (preserves spaces)
+    - structural_index: lowercase + only alphanumeric chars (strips spaces, apostrophes,
+      hyphens) — catches "Thunder Strike" vs "Thunderstrike" and "Brine Dragon's Bile"
+      vs "Brine Dragon Bile" without resorting to fuzzy matching.
+    """
+    apostrophe_index = {}
+    structural_index = {}
     for spell in spells:
-        name = spell["name"]
-        norm = normalize_name(name)
-        index[norm] = spell
-    return index
+        apostrophe_index[normalize_name(spell["name"])] = spell
+        structural_index[structural_normalize(spell["name"])] = spell
+    return apostrophe_index, structural_index
 
 
 def normalize_name(name):
     """Normalize for matching: lowercase + straight apostrophes."""
     return name.lower().replace("‘", "'").replace("’", "'").replace("′", "'")
+
+
+def structural_normalize(name):
+    """Stricter: lowercase + strip everything except a-z and 0-9."""
+    n = normalize_name(name)
+    return "".join(c for c in n if c.isalnum())
 
 
 def build_source_spell_index(source_spells):
@@ -167,18 +236,51 @@ def build_source_spell_index(source_spells):
     return index
 
 
-def resolve_spell_name(spell_name, name_index):
-    """Resolve a spell name to (aon_id, canonical_name) or (None, None)."""
+def resolve_spell_name(spell_name, name_indexes):
+    """Resolve a spell name to (aon_id, canonical_name) or (None, None).
+
+    Resolution order (per Decision 013 and the Cycle 19 spec):
+    1. Exact match (case + apostrophe normalized).
+    2. Manual alias map (transcription-style differences confirmed by Heidi).
+    3. Structural match (strip spaces/apostrophes/hyphens) — catches
+       "Thunder Strike" vs "Thunderstrike" and similar without fuzzy matching.
+    """
+    apostrophe_index, structural_index = name_indexes
+
     norm = normalize_name(spell_name)
-    if norm in name_index:
-        sp = name_index[norm]
+    if norm in apostrophe_index:
+        sp = apostrophe_index[norm]
         return sp["aonId"], sp["name"]
+
+    if norm in MANUAL_ALIASES:
+        target = normalize_name(MANUAL_ALIASES[norm])
+        if target in apostrophe_index:
+            sp = apostrophe_index[target]
+            return sp["aonId"], sp["name"]
+
+    struct = structural_normalize(spell_name)
+    if struct and struct in structural_index:
+        sp = structural_index[struct]
+        return sp["aonId"], sp["name"]
+
     return None, None
 
 
 def classify_failure(spell_name, source_spell_index):
-    """Classify why a spell name failed resolution."""
+    """Classify why a spell name failed resolution.
+
+    Resolution order:
+    1. Curated KNOWN_NON_SPELLS list (Heidi-maintained, definitive).
+    2. source/spell.json lookup → cantrip / focus_spell.
+    3. Hardcoded legacy rename list.
+    4. Default: no_match.
+    """
     norm = normalize_name(spell_name)
+
+    # Curated non-spell list takes priority (definitive)
+    if norm in KNOWN_NON_SPELLS:
+        return KNOWN_NON_SPELLS[norm]
+
     if norm in source_spell_index:
         entry = source_spell_index[norm]
         spell_type = entry.get("spell_type", "")
@@ -350,7 +452,7 @@ def call_llm(api_key, model, filename, file_content):
         return None, f"Malformed JSON after retry: {e}"
 
 
-def process_file(api_key, model, filename, file_content, name_index, source_spell_index):
+def process_file(api_key, model, filename, file_content, name_indexes, source_spell_index):
     """Process a single distillation file. Returns (result_dict, error_string)."""
     data, error = call_llm(api_key, model, filename, file_content)
     if error:
@@ -365,7 +467,7 @@ def process_file(api_key, model, filename, file_content, name_index, source_spel
     unresolved_obs = []
     for obs in data.get("spell_observations", []):
         spell_name = obs["spell_name"]
-        aon_id, canonical_name = resolve_spell_name(spell_name, name_index)
+        aon_id, canonical_name = resolve_spell_name(spell_name, name_indexes)
         if aon_id is not None:
             resolved_obs.append({
                 "aon_id": aon_id,
@@ -388,8 +490,8 @@ def process_file(api_key, model, filename, file_content, name_index, source_spel
     # Resolve chain signal spell names
     chain_signals = []
     for chain in data.get("chain_signals", []):
-        a_id, _ = resolve_spell_name(chain["spell_a"], name_index)
-        b_id, _ = resolve_spell_name(chain["spell_b"], name_index)
+        a_id, _ = resolve_spell_name(chain["spell_a"], name_indexes)
+        b_id, _ = resolve_spell_name(chain["spell_b"], name_indexes)
         chain_signals.append({
             "spell_a": chain["spell_a"],
             "spell_b": chain["spell_b"],
@@ -545,7 +647,7 @@ def main():
         sys.exit(1)
 
     spells = load_spell_data(args.spell_data)
-    name_index = build_name_index(spells)
+    name_indexes = build_name_index(spells)
     print(f"Loaded {len(spells)} spells from {args.spell_data}")
 
     # Load source/spell.json for failure classification
@@ -601,7 +703,7 @@ def main():
 
         result, error = process_file(
             api_key, args.model, filename, content,
-            name_index, source_spell_index
+            name_indexes, source_spell_index
         )
 
         elapsed = time.time() - start

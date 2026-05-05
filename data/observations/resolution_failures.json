@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "generated": "2026-05-05",
-  "count": 93,
+  "count": 68,
   "failures": [
     {
       "spell_name": "Bullhorn",
@@ -28,46 +28,10 @@
       "reason": "cantrip"
     },
     {
-      "spell_name": "Carry All",
-      "source": "Are Utility Spells BAD in Pathfinder 2e.md",
-      "observation": "Just lets you carry more stuff.",
-      "reason": "no_match"
-    },
-    {
-      "spell_name": "Water Walking",
-      "source": "Are Utility Spells BAD in Pathfinder 2e.md",
-      "observation": "Just works. Does exactly what it says.",
-      "reason": "no_match"
-    },
-    {
-      "spell_name": "Infused Vitality",
-      "source": "Are You Preparing Your Spells Wrong.md",
-      "observation": "Silver bullet for Undead encounters.",
-      "reason": "no_match"
-    },
-    {
-      "spell_name": "Corrosive Mist",
-      "source": "Are You Preparing Your Spells Wrong.md",
-      "observation": "Lingering area with both damage and crowd control.",
-      "reason": "no_match"
-    },
-    {
-      "spell_name": "Heightened Invisibility",
-      "source": "Are You Preparing Your Spells Wrong.md",
-      "observation": "Buff with duration.",
-      "reason": "no_match"
-    },
-    {
       "spell_name": "Live Wire",
       "source": "Are You Preparing Your Spells Wrong.md",
       "observation": "Pairs with Sure Strike for staff thesis wizard damage routine.",
       "reason": "cantrip"
-    },
-    {
-      "spell_name": "Thunder Strike",
-      "source": "Cinder Swarm is Underrated.md",
-      "observation": "Good front-loaded spike damage. Wins on turn one but loses in sustained DPR over 3+ turns compared to Cinder Swarm + focus spell turns.",
-      "reason": "no_match"
     },
     {
       "spell_name": "Elemental Toss",
@@ -106,18 +70,6 @@
       "reason": "focus_spell"
     },
     {
-      "spell_name": "Thunder Strike",
-      "source": "Elemental Sorcerer Blaster Guide.md",
-      "observation": "Amazing signature spell — best single-target blast for a huge portion of the level range, boosted by bloodline and Sorcerer's Potency. Mainly used to beat down dangerous bosses.",
-      "reason": "no_match"
-    },
-    {
-      "spell_name": "Brine Dragon's Bile",
-      "source": "Elemental Sorcerer Blaster Guide.md",
-      "observation": "Offensive reaction — efficient way to make second-rank slots deal damage between your main blasts. Alternative to Acid Grip for second-rank signature.",
-      "reason": "no_match"
-    },
-    {
       "spell_name": "Elemental Toss",
       "source": "Elemental Sorcerer Blaster Guide.md",
       "observation": "Core focus spell. Spammable from level 5+ with 3 focus points and recovery options. One action, pairs with any two-action spell.",
@@ -127,7 +79,7 @@
       "spell_name": "Amped Frostbite",
       "source": "Elemental Sorcerer Blaster Guide.md",
       "observation": "Powerful damaging cantrip from Psychic Dedication — saving throw (no MAP), gives temp HP on damage, long range. Good alternative to Elemental Toss on some turns.",
-      "reason": "no_match"
+      "reason": "amped_cantrip"
     },
     {
       "spell_name": "Electric Arc",
@@ -163,19 +115,13 @@
       "spell_name": "Champion's Reaction",
       "source": "Hidebound is UNDERRATED.md",
       "observation": "The benchmark for damage mitigation reactions. Stronger in single-strike scenarios and against multi-type damage, also works against non-strike damage like AoEs.",
-      "reason": "no_match"
+      "reason": "class_feature"
     },
     {
       "spell_name": "Glacial Heart",
       "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
       "observation": "Genuinely might be a candidate for one of the strongest focus spells in the game. Deals good cold damage and inflicts slowed.",
       "reason": "focus_spell"
-    },
-    {
-      "spell_name": "Brine Bolt",
-      "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
-      "observation": "Great damage and a great debuff. 10d6 damage and blinded. At Mythic proficiency you're +6 ahead of expectations, which more than overcomes potency/proficiency lag.",
-      "reason": "no_match"
     },
     {
       "spell_name": "Cackle",
@@ -208,42 +154,6 @@
       "reason": "cantrip"
     },
     {
-      "spell_name": "Thunder Strike",
-      "source": "How to Blast GOOD in Pathfinder 2e.md",
-      "observation": "Good single-target damage but almost never better than Fireball in multi-target situations. Only preferable if you have high confidence the enemy is at an HP threshold where the extra ~6 average damage matters for a kill confirm.",
-      "reason": "no_match"
-    },
-    {
-      "spell_name": "Beheading Buzzsaw",
-      "source": "How to Blast GOOD in Pathfinder 2e.md",
-      "observation": "Penalized in both damage and rider reliability, BUT the rider is instant death on crit fail + failed follow-up save. Reserve for exceptionally large target counts.",
-      "reason": "no_match"
-    },
-    {
-      "spell_name": "Awakened Entropy",
-      "source": "How to Blast GOOD in Pathfinder 2e.md",
-      "observation": "Zoning spell. Large area denial. Same coordination principles as other zoning spells.",
-      "reason": "no_match"
-    },
-    {
-      "spell_name": "Mist Curl",
-      "source": "How to Blast GOOD in Pathfinder 2e.md",
-      "observation": "Upgraded Vision of Death at higher levels. Action-denying rider makes it amazing against bosses.",
-      "reason": "no_match"
-    },
-    {
-      "spell_name": "Aeros Salvo",
-      "source": "How to Blast GOOD in Pathfinder 2e.md",
-      "observation": "Its rider effect sucks.",
-      "reason": "no_match"
-    },
-    {
-      "spell_name": "Shore Strike",
-      "source": "How to Blast GOOD in Pathfinder 2e.md",
-      "observation": "Useful for kill confirms because it benefits from fortune effects (Sure Strike, hero points) and ally-granted bonuses to attack/penalties to AC.",
-      "reason": "no_match"
-    },
-    {
       "spell_name": "Electric Arc",
       "source": "How to Look at Spells on Archives of Nethys.md",
       "observation": "Recommended reflex cantrip pick.",
@@ -274,16 +184,10 @@
       "reason": "focus_spell"
     },
     {
-      "spell_name": "Brine Dragon's Bile",
-      "source": "Mathfinders Blaster Caster RUBRIC.md",
-      "observation": "Incredible reaction-based offense; adds damage on anyone else's turn when slashing/piercing happens in your party.",
-      "reason": "no_match"
-    },
-    {
       "spell_name": "Silence in Snow",
       "source": "Mathfinders Blaster Caster RUBRIC.md",
       "observation": "Premium one-action focus cantrip — poke for damage with one action, blast with two, zero MAP worries.",
-      "reason": "no_match"
+      "reason": "focus_spell"
     },
     {
       "spell_name": "Evil Eye",
@@ -292,16 +196,10 @@
       "reason": "cantrip"
     },
     {
-      "spell_name": "Thunder Strike",
-      "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
-      "observation": "Good single-target boss spell -- good success effect. Less optimal in multi-target context compared to attack roll alternatives like Horizon Thunder Sphere.",
-      "reason": "no_match"
-    },
-    {
       "spell_name": "Lean Steps",
       "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
       "observation": "Good single-target boss spell -- good success effect.",
-      "reason": "no_match"
+      "reason": "feat"
     },
     {
       "spell_name": "Needle Darts",
@@ -312,32 +210,20 @@
     {
       "spell_name": "Diem of Divine Radiance",
       "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
-      "observation": "Mythic spell. Attacks at much higher proficiency than enemy AC accounts for, more than offsetting the item bonus gap. Can be repeated like Camel Spit/Biting Words but without a fixed limit. Extreme example of attack roll math in casters' favor.",
-      "reason": "no_match"
-    },
-    {
-      "spell_name": "Shadow Signet",
-      "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
-      "observation": "Explicitly called 'overrated.' It is a nice-to-have, not a gold tax or math band-aid. Does NOT work with Psychic amps, Reach Spell, or Sorcerer spell shapes that target two creatures.",
-      "reason": "no_match"
-    },
-    {
-      "spell_name": "Greater Invisibility",
-      "source": "Spell Selection Basics.md",
-      "observation": "Dual-use: protect a friend OR give rogue off-guard access.",
-      "reason": "no_match"
+      "observation": "Mythic spell. Attacks at much higher proficiency than enemy AC accounts for, more than offsetting the item bonus gap. Can be repeated like Camel Spit/Biting Words but without a fixed limit.",
+      "reason": "mythic_or_unknown"
     },
     {
       "spell_name": "Amped Frostbite",
       "source": "Who are the BEST Blasters in Pathfinder 2e.md",
       "observation": "Good — lets Psychic target Fortitude, has a good rider effect.",
-      "reason": "no_match"
+      "reason": "amped_cantrip"
     },
     {
       "spell_name": "Amped Ignition",
       "source": "Who are the BEST Blasters in Pathfinder 2e.md",
       "observation": "Good — lets Psychic target AC.",
-      "reason": "no_match"
+      "reason": "amped_cantrip"
     },
     {
       "spell_name": "Live Wire",
@@ -346,22 +232,10 @@
       "reason": "cantrip"
     },
     {
-      "spell_name": "Thunder Strike",
-      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
-      "observation": "Signature spell candidate for rank 1 (elemental sorcerer).",
-      "reason": "no_match"
-    },
-    {
       "spell_name": "Elemental Toss",
       "source": "Who are the BEST Blasters in Pathfinder 2e.md",
       "observation": "Excellent one-action option for elemental sorcerers — enables defense overloading turns; triggers Blood Magic and Explosion of Power.",
       "reason": "focus_spell"
-    },
-    {
-      "spell_name": "Brine Dragon's Bile",
-      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
-      "observation": "Excellent offensive reaction for low-rank slots; key defense overloading tool; spontaneous casters use it better than prepared casters.",
-      "reason": "no_match"
     },
     {
       "spell_name": "Divine Lance",
@@ -379,7 +253,7 @@
       "spell_name": "Foretell Harm",
       "source": "Who are the BEST Blasters in Pathfinder 2e.md",
       "observation": "Good free damage rider for Flames Oracle.",
-      "reason": "no_match"
+      "reason": "feat"
     },
     {
       "spell_name": "Debilitating Dichotomy",
@@ -391,13 +265,7 @@
       "spell_name": "Whispers of Weakness",
       "source": "Who are the BEST Blasters in Pathfinder 2e.md",
       "observation": "Good cursebound option that doesn't impact resource pool.",
-      "reason": "no_match"
-    },
-    {
-      "spell_name": "Blood Spray Curse",
-      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
-      "observation": "One of divine's few low-rank options.",
-      "reason": "no_match"
+      "reason": "feat"
     },
     {
       "spell_name": "Crushing Ground",
@@ -457,19 +325,19 @@
       "spell_name": "Dancing Invocation",
       "source": "Who are the BEST Blasters in Pathfinder 2e.md",
       "observation": "Excellent — sustain spells as free action while moving (step or leap); huge action compression.",
-      "reason": "no_match"
+      "reason": "class_feature"
     },
     {
       "spell_name": "Channeler Stance",
       "source": "Who are the BEST Blasters in Pathfinder 2e.md",
       "observation": "Upgrades Earth's Bile damage.",
-      "reason": "no_match"
+      "reason": "class_feature"
     },
     {
       "spell_name": "Forcebolt",
       "source": "Who are the BEST Blasters in Pathfinder 2e.md",
       "observation": "Better than Elemental Toss for defense overloading because it auto-damages (no roll needed).",
-      "reason": "no_match"
+      "reason": "focus_spell"
     },
     {
       "spell_name": "Vengeful Glare",
@@ -487,31 +355,19 @@
       "spell_name": "Sinblade Spell",
       "source": "Who are the BEST Blasters in Pathfinder 2e.md",
       "observation": "Additional potency option for Wrath Runelord.",
-      "reason": "no_match"
+      "reason": "class_feature"
     },
     {
       "spell_name": "Stray Mind",
       "source": "Who are the BEST Blasters in Pathfinder 2e.md",
       "observation": "Gives Psychic a fourth focus point once per hour; helps sustainability.",
-      "reason": "no_match"
+      "reason": "class_feature"
     },
     {
       "spell_name": "Amped Shield",
       "source": "Who are the BEST Blasters in Pathfinder 2e.md",
       "observation": "Mentioned as a Parallel Breakthrough option for Psychics wanting non-blast utility.",
-      "reason": "no_match"
-    },
-    {
-      "spell_name": "Thunder Strike",
-      "source": "Witch and Wizard Blaster Build Guides.md",
-      "observation": "One-shot blast staple, good in top ranks.",
-      "reason": "no_match"
-    },
-    {
-      "spell_name": "Brine Dragon's Bile",
-      "source": "Witch and Wizard Blaster Build Guides.md",
-      "observation": "Great offensive reaction in low-rank slots.",
-      "reason": "no_match"
+      "reason": "amped_cantrip"
     },
     {
       "spell_name": "Elemental Betrayal",
@@ -538,12 +394,6 @@
       "reason": "focus_spell"
     },
     {
-      "spell_name": "Shore Strike",
-      "source": "Witch and Wizard Blaster Build Guides.md",
-      "observation": "Arcane staple, huge reliability boost — avoids saves entirely.",
-      "reason": "no_match"
-    },
-    {
       "spell_name": "Vengeful Glare",
       "source": "Witch and Wizard Blaster Build Guides.md",
       "observation": "Runelord Wrath focus spell — 1 action, can deal fire OR cold damage. Fire preferred (benefits from Burn It) but cold as backup against fire-resistant enemies. Not an attack roll, so combos well with Amped Ignition.",
@@ -553,7 +403,7 @@
       "spell_name": "Amped Ignition",
       "source": "Witch and Wizard Blaster Build Guides.md",
       "observation": "Preferred cantrip for Wrath Wizard via Psychic Dedication — no MAP after Vengeful Glare (since it's not an attack roll), splash damage multiplies Burn It value, works well as 2-action option while sustaining a spell.",
-      "reason": "no_match"
+      "reason": "amped_cantrip"
     },
     {
       "spell_name": "Frostbite",

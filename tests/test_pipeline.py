@@ -579,7 +579,11 @@ def test_resolution_failures_schema():
     with open(RESOLUTION_FAILURES_PATH, encoding="utf-8") as f:
         data = json.load(f)
 
-    valid_reasons = {"no_match", "cantrip", "focus_spell", "legacy_rename"}
+    valid_reasons = {
+        "no_match", "cantrip", "focus_spell", "legacy_rename",
+        # Curated non-spell classifications (KNOWN_NON_SPELLS in extract-observations.py)
+        "feat", "class_feature", "category", "amped_cantrip", "mythic_or_unknown",
+    }
     errors = []
     for entry in data.get("failures", []):
         if not entry.get("spell_name"):

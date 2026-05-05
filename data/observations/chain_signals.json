@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "generated": "2026-05-05",
-  "count": 16,
+  "count": 19,
   "signals": [
     {
       "spell_a": "Acid Arrow",
@@ -100,11 +100,35 @@
       "source": "How to Blast GOOD in Pathfinder 2e.md"
     },
     {
+      "spell_a": "Vision of Death",
+      "spell_b": "Missed Cue",
+      "spell_a_aon_id": 1742,
+      "spell_b_aon_id": 2449,
+      "relationship": "upgrades_to",
+      "source": "How to Blast GOOD in Pathfinder 2e.md"
+    },
+    {
+      "spell_a": "Revealing Light",
+      "spell_b": "Ignite Fireworks",
+      "spell_a_aon_id": 1653,
+      "spell_b_aon_id": 928,
+      "relationship": "competes_with",
+      "source": "Mathfinders Blaster Caster RUBRIC.md"
+    },
+    {
       "spell_a": "Thunder Strike",
       "spell_b": "Horizon Thunder Sphere",
-      "spell_a_aon_id": null,
+      "spell_a_aon_id": 1721,
       "spell_b_aon_id": 927,
       "relationship": "competes_with",
+      "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md"
+    },
+    {
+      "spell_a": "Slow",
+      "spell_b": "Containment",
+      "spell_a_aon_id": 1677,
+      "spell_b_aon_id": 1981,
+      "relationship": "outclassed_by",
       "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md"
     },
     {
