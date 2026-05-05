@@ -292,3 +292,156 @@ test.describe('B9: Search Tab Loads', () => {
     expect(hasFireball).toBe(true);
   });
 });
+
+// ── Cycle 21: Curation Layer Display ──
+
+test.describe('C21-1: Star presence', () => {
+  test('reviewed spell has gold star, unreviewed spell has spacer', async ({ page }) => {
+    await setupArcaneWithSpells(page);
+
+    const result = await page.evaluate(() => {
+      const rows = document.querySelectorAll('#spellTable-arcane tr[data-spell-idx]');
+      let hasStar = false;
+      let hasSpacer = false;
+      for (const row of rows) {
+        if (row.querySelector('.mathfinder-star')) hasStar = true;
+        if (row.querySelector('.mathfinder-spacer')) hasSpacer = true;
+        if (hasStar && hasSpacer) break;
+      }
+      return { hasStar, hasSpacer };
+    });
+    expect(result.hasStar).toBe(true);
+    expect(result.hasSpacer).toBe(true);
+  });
+});
+
+test.describe('C21-2: Star in planner', () => {
+  test('assigning a reviewed spell shows star in slot row', async ({ page }) => {
+    await setupArcaneWithSpells(page);
+
+    const slotStar = await page.evaluate(() => {
+      const list = window.Browser._getRenderedSpells('arcane');
+      const reviewed = list.find(s => s.mathfinder_reviewed);
+      if (!reviewed) return false;
+      window.Browser.assignSpell('arcane', reviewed);
+      return !!document.querySelector('.slot-table .mathfinder-star');
+    });
+    expect(slotStar).toBe(true);
+  });
+});
+
+test.describe('C21-3: Popover content', () => {
+  test('clicking star opens popover with summary text', async ({ page }) => {
+    await setupArcaneWithSpells(page);
+
+    const result = await page.evaluate(() => {
+      const star = document.querySelector('#spellTable-arcane .mathfinder-star');
+      if (!star) return { visible: false, hasTitle: false, hasSummary: false };
+      star.click();
+      const p = document.getElementById('curation-popover');
+      return {
+        visible: p.style.display === 'block',
+        hasTitle: !!p.querySelector('.popover-title'),
+        hasSummary: p.querySelector('.popover-summary') ? p.querySelector('.popover-summary').textContent.length > 10 : false
+      };
+    });
+    expect(result.visible).toBe(true);
+    expect(result.hasTitle).toBe(true);
+    expect(result.hasSummary).toBe(true);
+  });
+});
+
+test.describe('C21-4: Popover dismissal', () => {
+  test('clicking body closes popover', async ({ page }) => {
+    await setupArcaneWithSpells(page);
+
+    const result = await page.evaluate(() => {
+      const star = document.querySelector('#spellTable-arcane .mathfinder-star');
+      if (!star) return { afterOpen: 'none', afterClose: 'none' };
+      star.click();
+      const p = document.getElementById('curation-popover');
+      const afterOpen = p.style.display;
+      document.body.click();
+      return { afterOpen, afterClose: p.style.display };
+    });
+    expect(result.afterOpen).toBe('block');
+    expect(result.afterClose).toBe('none');
+  });
+});
+
+test.describe('C21-5: Default sort with star priority', () => {
+  test('starred spells appear before unstarred at same rank', async ({ page }) => {
+    await setupArcaneWithSpells(page);
+
+    const sorted = await page.evaluate(() => {
+      window.SpellFilters.sortColumn = null;
+      window.SpellFilters.sortDirection = null;
+      const rows = document.querySelectorAll('#spellTable-arcane tr[data-spell-idx]');
+      const sameRank = [];
+      let targetRank = null;
+      for (const row of rows) {
+        const rank = row.children[1].textContent;
+        if (!targetRank) targetRank = rank;
+        if (rank !== targetRank) break;
+        sameRank.push({ starred: !!row.querySelector('.mathfinder-star') });
+      }
+      if (sameRank.length < 2) return true;
+      let seenUnstarred = false;
+      for (const s of sameRank) {
+        if (!s.starred) seenUnstarred = true;
+        if (s.starred && seenUnstarred) return false;
+      }
+      return true;
+    });
+    expect(sorted).toBe(true);
+  });
+});
+
+test.describe('C21-6: Column sort ignores star', () => {
+  test('clicking Name header sorts alphabetically regardless of star', async ({ page }) => {
+    await setupArcaneWithSpells(page);
+
+    const alphabetical = await page.evaluate(() => {
+      const header = document.querySelector('#spellTable-arcane .sortable-header[data-sort-col="name"]');
+      if (header) header.click();
+      const rows = document.querySelectorAll('#spellTable-arcane tr[data-spell-idx]');
+      const names = [];
+      for (let i = 0; i < Math.min(10, rows.length); i++) {
+        names.push(rows[i].querySelector('.spell-name-link').textContent);
+      }
+      for (let i = 1; i < names.length; i++) {
+        if (names[i].localeCompare(names[i-1]) < 0) return false;
+      }
+      return true;
+    });
+    expect(alphabetical).toBe(true);
+  });
+});
+
+test.describe('C21-7: Notes column link', () => {
+  test('reviewed spell with direct source has video link in Notes', async ({ page }) => {
+    await setupArcaneWithSpells(page);
+
+    const hasLink = await page.evaluate(() => {
+      const links = document.querySelectorAll('#spellTable-arcane .mathfinder-video-link');
+      if (links.length === 0) return false;
+      const link = links[0];
+      return link.tagName === 'A' && link.href.includes('youtube.com');
+    });
+    expect(hasLink).toBe(true);
+  });
+});
+
+test.describe('C21-8: Chain badge', () => {
+  test('spell with replacement chain data shows chain badge', async ({ page }) => {
+    await setupArcaneWithSpells(page);
+
+    const badge = await page.evaluate(() => {
+      const badges = document.querySelectorAll('#spellTable-arcane .chain-badge');
+      if (badges.length === 0) return { exists: false, text: '' };
+      return { exists: true, text: badges[0].textContent };
+    });
+    expect(badge.exists).toBe(true);
+    expect(badge.text).toMatch(/[↑↓]/);
+  });
+});
