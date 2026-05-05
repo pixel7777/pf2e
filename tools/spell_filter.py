@@ -12,6 +12,11 @@ import json
 import os
 from collections import defaultdict
 
+
+def normalize_name(name):
+    """Normalize apostrophe variants for comparison. Does NOT change display name."""
+    return name.replace("‘", "'").replace("’", "'").replace("`", "'")
+
 LEGACY_SOURCES = {
     "Core Rulebook",
     "Advanced Player's Guide",
@@ -48,7 +53,7 @@ def load_rename_map(legacy_renames_path):
         for field in ("old_name", "new_name", "status"):
             if field not in entry:
                 raise ValueError("legacy-renames.json entry missing field %r: %r" % (field, entry))
-        key = entry["old_name"].lower()
+        key = normalize_name(entry["old_name"]).lower()
         if key in seen:
             raise ValueError("legacy-renames.json: duplicate old_name %r" % entry["old_name"])
         seen.add(key)
@@ -57,7 +62,7 @@ def load_rename_map(legacy_renames_path):
 
 
 def apply_rename_filter(rank_spells, rename_map):
-    names_present_lower = {s.get("name", "").lower() for s in rank_spells}
+    names_present_lower = {normalize_name(s.get("name", "")).lower() for s in rank_spells}
 
     kept = []
     dropped = []
@@ -65,7 +70,7 @@ def apply_rename_filter(rank_spells, rename_map):
     matched_old_names = set()
 
     for spell in rank_spells:
-        name_lower = spell.get("name", "").lower()
+        name_lower = normalize_name(spell.get("name", "")).lower()
         entry = rename_map.get(name_lower)
         if entry is None:
             kept.append(spell)
@@ -74,7 +79,7 @@ def apply_rename_filter(rank_spells, rename_map):
             kept.append(spell)
             matched_old_names.add(name_lower)
             continue
-        if entry["new_name"].lower() not in names_present_lower:
+        if normalize_name(entry["new_name"]).lower() not in names_present_lower:
             warnings.append(
                 "rename target missing for %r -> %r (%s); keeping legacy entry %s" % (
                     entry["old_name"], entry["new_name"], entry["status"], spell.get("id", "?"),
@@ -97,7 +102,7 @@ def apply_rename_filter(rank_spells, rename_map):
 def dedupe_by_era(rank_spells):
     by_name = defaultdict(list)
     for s in rank_spells:
-        by_name[s.get("name", "")].append(s)
+        by_name[normalize_name(s.get("name", ""))].append(s)
 
     era_priority = {"remaster_core": 2, "legacy_core": 1, "other": 0}
 

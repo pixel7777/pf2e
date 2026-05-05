@@ -18,8 +18,17 @@ import json
 import os
 import re
 import sys
-from collections import Counter, defaultdict
+from collections import Counter
 from datetime import datetime, timezone
+
+from spell_filter import (
+    era,
+    normalize_name,
+    load_rename_map,
+    apply_rename_filter,
+    dedupe_by_era,
+    filter_rank_spells,
+)
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
@@ -28,146 +37,6 @@ OUTPUT_JS = os.path.join(PROJECT_ROOT, "data", "spell-data.js")
 LEGACY_RENAMES_JSON = os.path.join(PROJECT_ROOT, "data", "legacy-renames.json")
 
 VERSION = "0.3.0"
-
-# Era classification by primary_source. Adventure paths and Lost Omens books
-# fall into "other" — they are not deduped against core entries.
-LEGACY_SOURCES = {
-    "Core Rulebook",
-    "Advanced Player's Guide",
-    "Secrets of Magic",
-    "Dark Archive",
-    "Book of the Dead",
-    "Guns & Gears",
-    "Gods & Magic",
-}
-REMASTER_SOURCES = {
-    "Player Core", "Player Core 2", "GM Core", "Monster Core",
-    "Howl of the Wild", "War of Immortals",
-    "Divine Mysteries", "Dark Archives (Remastered)",
-    "Rage of Elements",
-}
-
-
-def era(spell):
-    ps = spell.get("primary_source", "") or ""
-    if ps in REMASTER_SOURCES:
-        return "remaster_core"
-    if ps in LEGACY_SOURCES:
-        return "legacy_core"
-    return "other"
-
-
-def load_rename_map():
-    """Load data/legacy-renames.json. Returns a dict keyed by lowercased old_name,
-    plus the raw entry list for logging.
-    """
-    with open(LEGACY_RENAMES_JSON, "r", encoding="utf-8") as f:
-        entries = json.load(f)
-
-    seen = set()
-    by_old_lower = {}
-    for entry in entries:
-        for field in ("old_name", "new_name", "status"):
-            if field not in entry:
-                raise ValueError("legacy-renames.json entry missing field %r: %r" % (field, entry))
-        key = entry["old_name"].lower()
-        if key in seen:
-            raise ValueError("legacy-renames.json: duplicate old_name %r" % entry["old_name"])
-        seen.add(key)
-        by_old_lower[key] = entry
-    return by_old_lower, entries
-
-
-def apply_rename_filter(rank_spells, rename_map):
-    """Drop legacy_core entries whose names appear in the rename map, but only
-    if a spell with the corresponding new_name actually exists in the dataset.
-
-    Returns (kept_spells, dropped, warnings, unmatched).
-      dropped: list of (old_name, new_name, status, dropped_id) tuples
-      warnings: list of strings (new_name missing — kept the entry)
-      unmatched: list of old_names that didn't match any spell at all
-                 (expected for cantrips/focus spells/rituals not in rank set)
-    """
-    names_present_lower = {s.get("name", "").lower() for s in rank_spells}
-
-    kept = []
-    dropped = []
-    warnings = []
-    matched_old_names = set()
-
-    for spell in rank_spells:
-        name_lower = spell.get("name", "").lower()
-        entry = rename_map.get(name_lower)
-        if entry is None:
-            kept.append(spell)
-            continue
-        # Name matched — but only act on legacy_core entries.
-        if era(spell) != "legacy_core":
-            kept.append(spell)
-            matched_old_names.add(name_lower)
-            continue
-        # Verify the new_name exists before dropping.
-        if entry["new_name"].lower() not in names_present_lower:
-            warnings.append(
-                "rename target missing for %r → %r (%s); keeping legacy entry %s" % (
-                    entry["old_name"], entry["new_name"], entry["status"], spell.get("id", "?"),
-                )
-            )
-            kept.append(spell)
-            matched_old_names.add(name_lower)
-            continue
-        dropped.append((entry["old_name"], entry["new_name"], entry["status"], spell.get("id", "")))
-        matched_old_names.add(name_lower)
-
-    unmatched = sorted(
-        rename_map[k]["old_name"]
-        for k in rename_map.keys()
-        if k not in matched_old_names
-    )
-    return kept, dropped, warnings, unmatched
-
-
-def dedupe_by_era(rank_spells):
-    """For each spell name with duplicates, prefer remaster_core > legacy_core > other.
-    Within the same era, prefer the highest aonId (most recently added).
-
-    Returns (kept_spells, dropped_summary) where dropped_summary is a list of
-    (name, dropped_id, kept_id, era_dropped, era_kept) tuples.
-    """
-    by_name = defaultdict(list)
-    for s in rank_spells:
-        by_name[s.get("name", "")].append(s)
-
-    era_priority = {"remaster_core": 2, "legacy_core": 1, "other": 0}
-
-    def aon_int(s):
-        sid = s.get("id", "") or ""
-        if sid.startswith("spell-"):
-            try:
-                return int(sid[6:])
-            except ValueError:
-                return 0
-        return 0
-
-    kept = []
-    dropped = []
-    for name, group in by_name.items():
-        if len(group) == 1:
-            kept.append(group[0])
-            continue
-        # Sort: highest era_priority first, then highest aonId first
-        ranked = sorted(group, key=lambda s: (-era_priority[era(s)], -aon_int(s)))
-        winner = ranked[0]
-        kept.append(winner)
-        for loser in ranked[1:]:
-            dropped.append((
-                name,
-                loser.get("id", ""),
-                winner.get("id", ""),
-                era(loser),
-                era(winner),
-            ))
-    return kept, dropped
 
 
 def extract_aon_id(spell):
@@ -329,6 +198,7 @@ def build_spell_object(spell):
         "name": spell.get("name", ""),
         "native_rank": spell.get("level", 0),
         "tradition": spell.get("tradition") or [],
+        "trait_raw": spell.get("trait_raw") or [],
         "rarity": spell.get("rarity", "Common"),
         "url": spell.get("url", ""),
         "era": era(spell),
@@ -458,10 +328,7 @@ def main():
         all_spells = json.load(f)
     print("  %d total spells loaded" % len(all_spells))
 
-    rank_spells = [
-        s for s in all_spells
-        if s.get("spell_type") == "Spell" and s.get("level", 0) >= 1
-    ]
+    rank_spells = filter_rank_spells(all_spells)
     print("  %d rank spells after filtering (spell_type='Spell', level>=1)" % len(rank_spells))
     print("  Excluded: %d cantrips, %d focus spells" % (
         sum(1 for s in all_spells if s.get("spell_type") == "Cantrip"),
@@ -469,7 +336,7 @@ def main():
     ))
 
     print("\nLoading data/legacy-renames.json...")
-    rename_map, rename_entries = load_rename_map()
+    rename_map, rename_entries = load_rename_map(LEGACY_RENAMES_JSON)
     print("  %d rename entries loaded" % len(rename_entries))
 
     pre_rename_count = len(rank_spells)
