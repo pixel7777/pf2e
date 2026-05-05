@@ -162,13 +162,19 @@ body {
   min-width: var(--sidebar-width);
   background: var(--bg-card);
   border-right: 1px solid var(--border-panel);
-  padding: 1.4rem 0.85rem;
   position: sticky;
   top: 0;
   align-self: flex-start;
-  max-height: calc(100vh - 80px);
-  overflow-y: auto;
+  height: calc(100vh - 80px);
   box-shadow: 0 2px 6px rgba(0,0,0,0.10);
+}
+
+/* Inner wrapper handles scrolling so corner ornaments on .sidebar.framed
+   anchor to the visible bottom edge instead of the scrollable content end. */
+.sidebar-inner {
+  height: 100%;
+  overflow-y: auto;
+  padding: 1.4rem 0.85rem;
 }
 
 .sidebar-resize-handle {
