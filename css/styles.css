@@ -606,6 +606,7 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
   border-radius: var(--radius-lg);
   box-shadow: 0 2px 6px rgba(0,0,0,0.10);
   padding: 1.4rem 1.5rem;
+  position: relative;
 }
 
 /* ── EXPORT BUTTONS ── */
