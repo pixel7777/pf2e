@@ -12,60 +12,9 @@
     'special_tags'
   ];
 
-  var TAG_TOOLTIPS = {
-    'AC':            'Targets AC via attack roll. Benefits from teamwork stacking (off-guard, Bless, fortune effects).',
-    'Fort':          'Targets Fortitude save. Availability varies by tradition.',
-    'Ref':           'Targets Reflex save. Most blast spells target Reflex.',
-    'Will':          'Targets Will save. Availability varies sharply by tradition — Occult excels, Primal struggles.',
-    'Auto':          'Bypasses saves and attack rolls entirely. The effect just happens. Rare and valuable for reliability.',
-    'ST':            'Can effectively target a single enemy. Your boss-fight tools.',
-    'Multi':         'Can effectively target multiple enemies. Your mob-fight tools. Includes area spells, multi-target spells, and zone effects.',
-    'Acid':          'Acid damage. Less commonly resisted than Fire.',
-    'Cold':          'Cold damage. Good complement to Fire — fire-immune creatures often have cold weakness.',
-    'Elec':          'Electricity damage.',
-    'Fire':          'Fire damage. Most common blast type — also most commonly resisted.',
-    'Force':         'Force damage. Practically irresistible — premium coverage type.',
-    'Mental':        'Mental damage. Key occult damage type. Doesn\'t work on mindless creatures.',
-    'Poison':        'Poison damage. Many creatures are immune — tracking this warns you about the gap.',
-    'Sonic':         'Sonic damage. Rarely resisted.',
-    'Spirit':        'Spirit damage. Hard to resist. Key divine damage type.',
-    'Vitality':      'Vitality damage (formerly Positive). Hits undead.',
-    'Void':          'Void damage (formerly Negative). Hits all living creatures. One of the hardest-to-resist types.',
-    'Bludg':         'Bludgeoning damage.',
-    'Pierc':         'Piercing damage.',
-    'Slash':         'Slashing damage.',
-    'Bleed':         'Persistent bleed damage. Bypasses most resistances — stopped only by a DC 15 flat check or healing.',
-    'Varies':        'Damage type chosen on cast. Excellent for coverage — one slot, multiple type options.',
-    'Unspecified':   'Spell deals damage but names no type (Disintegrate, Power Word Kill). Can\'t be resisted by type-specific resistance — but also can\'t exploit type-specific weakness.',
-    'Blinded':       'Total visual shutdown. Target is off-guard to everything and can\'t target anything it can\'t precisely sense.',
-    'Dazzled':       '20% miss chance on all visual targeting. Stronger than it looks.',
-    'Frightened':    'Penalizes ALL checks, DCs, attacks, and saves. The workhorse debuff — even Frightened 1 on a successful save is meaningful.',
-    'Off-Guard':     '−2 AC. Enables sneak attack and other flat-footed-dependent features from allies.',
-    'Paralyzed':     'Complete action denial. Target drops everything, falls prone, can\'t act.',
-    'Prone':         'Costs an action to stand up — pseudo action denial. −2 to attack rolls while down.',
-    'Restrained':    'Immobilized + off-guard + clumsy combined. Comprehensive shutdown.',
-    'Sickened':      'Penalizes all checks and DCs. Broad-spectrum debuff.',
-    'Slowed':        'Removes actions. Taking one action from a 3-action boss is massive action economy.',
-    'Stunned':       'Stronger than Slowed but shorter duration. Devastating when it sticks.',
-    'Unconscious':   'Target drops everything, falls prone, can\'t act, off-guard.',
-    'Clumsy':        'Anti-Dex martial. Penalizes AC, Reflex saves, and Dex-based skills.',
-    'Enfeebled':     'Anti-Str martial. Penalizes melee attacks, Athletics checks, and damage.',
-    'Confused':      'Near-equivalent to removal from combat. Target attacks randomly, including allies.',
-    'Stupefied':     'Anti-caster silver bullet. Penalizes spell DCs, spell attacks, and risks losing spells on cast.',
-    'Immobilized':   'Movement denial. Target can still attack but can\'t reposition.',
-    'Imposes Weakness': 'At least one assigned spell forces enemies to become weak to a damage type. Look for ★ markers on your damage type tags — those show which types you can impose weakness TO. Pairing a weakness-imposing spell with a damage spell of that type is a powerful combo.',
-    'Auto-effect':    'Always does something — no save, no attack roll. Guaranteed output regardless of enemy defenses.',
-    'Success-effect': 'Meaningful effect even when the enemy succeeds on their save — includes basic-save spells (guaranteed half damage) and spells with condition riders on success. Especially important for single-target boss spells where the boss succeeds ~50% of the time.',
-    '1-action':       'Has a 1-action casting mode. Pairs with 2-action spells for the "perfect turn." Best from low-rank slots.',
-    'Reaction':       'Cast as a reaction — acts on enemy turns without spending your combat actions. Doubles your action economy.',
-    'Sustain-action': 'Sustain for ongoing effect. Front-load value on turn 1, then sustain for 1 action on later turns — freeing 2 actions for more offense.',
-    '3-action':       'Has a 3-action casting mode. Uses your entire turn — maximum tempo investment. Worth it when the payoff justifies giving up your +1 action.',
-    'Coverage':      'Good in most encounters — not embarrassing in either AoE or single-target. A safe pick when you don\'t know what you\'ll face.',
-    'Multimodal':    'Multiple distinct modes or uses within one spell slot. A Swiss Army knife — adapts to what you encounter. Summon spells are the classic example.',
-    'Silver Bullet': 'Dominates a narrow situation regardless of spell rank. Revealing Light vs. invisibility. Laughing Fit vs. dangerous reactions. Acid Grip vs. grabs. Worth preparing from any rank slot and an excellent use of low tier slots.',
-    'Pre-buff':      'Long-duration spell cast before combat. Converts a low-rank slot into free in-combat value without spending combat actions.',
-    'Healing':       'Restores ally HP. "Do I have any way to keep allies alive at this rank?" Arcane casters will never fill this — that\'s a known tradition limitation, not a gap to fix.'
-  };
+  function getTagTooltips() {
+    return window.TAG_DEFINITIONS || {};
+  }
 
   var INFO_TOOLTIPS = {
     'section-offense':   { body: 'After picking spells, scan these areas. Each tradition page tags every spell and highlights gaps for every character level. Gaps = swap candidates.' },
@@ -210,7 +159,8 @@
       var ctag = e.target.closest('.ctag');
       if (ctag && sidebar.contains(ctag)) {
         var tag = ctag.dataset.tag;
-        var body = TAG_TOOLTIPS[tag] || '';
+        var tooltips = getTagTooltips();
+        var body = tooltips[tag] || '';
         var note = TAG_NOTES[tag];
         showTooltip(ctag, note ? { body: body, note: note } : body);
         return;

@@ -11,6 +11,7 @@
       this.bindTabs();
       this.switchTab('overview');
       this.initTagTooltips();
+      this.initInfoBubbleTooltips();
       this.markFramedPanels();
       this.injectCornerOrnaments();
       this.initSidebarResize();
@@ -122,25 +123,81 @@
       tooltipEl.style.display = 'none';
       document.body.appendChild(tooltipEl);
 
-      document.addEventListener('click', function(e) {
+      var hoverTimer = null;
+
+      document.addEventListener('mouseover', function(e) {
         var el = e.target.closest('.ctag');
-        // Sidebar tags use hover tooltips from coverage.js — skip click handler.
-        if (el && el.closest('.sidebar')) {
-          tooltipEl.style.display = 'none';
-          return;
-        }
-        if (el) {
-          var tag = el.dataset.tag;
-          var tagDefs = (window.SPELL_DATA && window.SPELL_DATA.tagDefs) || {};
-          var def = tagDefs[tag] || 'No definition available.';
+        if (!el) return;
+        // Sidebar tags use their own tooltip system from coverage.js
+        if (el.closest('.sidebar')) return;
+
+        var tag = el.dataset.tag;
+        var defs = window.TAG_DEFINITIONS || {};
+        var def = defs[tag];
+        if (!def) return;
+
+        if (hoverTimer) clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(function() {
           tooltipEl.textContent = def;
           tooltipEl.style.display = 'block';
           var rect = el.getBoundingClientRect();
           tooltipEl.style.left = rect.left + 'px';
           tooltipEl.style.top = (rect.bottom + 6) + 'px';
-          setTimeout(function() { tooltipEl.style.display = 'none'; }, 3000);
+        }, 200);
+      });
+
+      document.addEventListener('mouseout', function(e) {
+        var el = e.target.closest('.ctag');
+        if (el && !el.closest('.sidebar')) {
+          if (hoverTimer) { clearTimeout(hoverTimer); hoverTimer = null; }
+          tooltipEl.style.display = 'none';
+        }
+      });
+
+      // Prevent pill clicks from bubbling to spell-assignment row handlers
+      document.addEventListener('click', function(e) {
+        var el = e.target.closest('.ctag');
+        if (el && el.closest('.spell-table-wrap')) {
           e.stopPropagation();
-        } else {
+        }
+      }, true);
+    },
+
+    initInfoBubbleTooltips: function() {
+      var tooltipEl = document.querySelector('.tag-tooltip') || document.createElement('div');
+      if (!tooltipEl.parentNode) {
+        tooltipEl.className = 'tag-tooltip';
+        tooltipEl.style.display = 'none';
+        document.body.appendChild(tooltipEl);
+      }
+
+      var hoverTimer = null;
+
+      document.addEventListener('mouseover', function(e) {
+        var el = e.target.closest('.info-bubble');
+        if (!el) return;
+        var text = el.getAttribute('title') || el.dataset.tooltip;
+        if (!text) return;
+        // Suppress native title tooltip by temporarily removing it
+        if (el.getAttribute('title')) {
+          el.dataset.tooltip = el.getAttribute('title');
+          el.removeAttribute('title');
+        }
+
+        if (hoverTimer) clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(function() {
+          tooltipEl.textContent = text;
+          tooltipEl.style.display = 'block';
+          var rect = el.getBoundingClientRect();
+          tooltipEl.style.left = rect.left + 'px';
+          tooltipEl.style.top = (rect.bottom + 6) + 'px';
+        }, 200);
+      });
+
+      document.addEventListener('mouseout', function(e) {
+        var el = e.target.closest('.info-bubble');
+        if (el) {
+          if (hoverTimer) { clearTimeout(hoverTimer); hoverTimer = null; }
           tooltipEl.style.display = 'none';
         }
       });
@@ -199,7 +256,7 @@
         for (var r = 0; r < roleOrder.length; r++) {
           var role = roleOrder[r];
           if (spell.roles.indexOf(role) !== -1) {
-            pills.push({ text: roleLabels[role], cls: 'role-pill ' + roleCls[role] });
+            pills.push({ text: roleLabels[role], tag: roleLabels[role], cls: 'role-pill ' + roleCls[role] });
           }
         }
       }
@@ -230,7 +287,7 @@
       }
       if (spell.weaknesses_imposed) {
         for (var i = 0; i < spell.weaknesses_imposed.length; i++) {
-          pills.push({ text: 'W:' + spell.weaknesses_imposed[i], cls: 'tag-weakness' });
+          pills.push({ text: 'W:' + spell.weaknesses_imposed[i], tag: 'W:' + spell.weaknesses_imposed[i], cls: 'tag-weakness' });
         }
       }
       if (spell.reliability_tags) {
@@ -239,13 +296,14 @@
         }
       }
       if (spell.st_incap) {
-        pills.push({ text: '⚠️ ST-Incap', cls: 'danger' });
+        pills.push({ text: '⚠️ ST-Incap', tag: 'ST-Incap', cls: 'danger' });
       }
       // action_tags and special_tags are NOT rendered as pills in the spell browser
 
       var html = '<div class="slot-tags">';
       for (var i = 0; i < pills.length; i++) {
-        html += '<span class="ctag ' + pills[i].cls + '">' + pills[i].text + '</span>';
+        var tagKey = pills[i].tag || pills[i].text;
+        html += '<span class="ctag ' + pills[i].cls + '" data-tag="' + tagKey + '">' + pills[i].text + '</span>';
       }
       html += '</div>';
       return html;

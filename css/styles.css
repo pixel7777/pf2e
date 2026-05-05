@@ -162,7 +162,7 @@ body {
   min-width: var(--sidebar-width);
   background: var(--bg-card);
   border-right: 1px solid var(--border-panel);
-  padding: 1rem 0.75rem;
+  padding: 1.4rem 0.85rem;
   position: sticky;
   top: 0;
   align-self: flex-start;
@@ -599,7 +599,7 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
   border: 1px solid var(--border-panel);
   border-radius: var(--radius-lg);
   box-shadow: 0 2px 6px rgba(0,0,0,0.10);
-  padding: 1.2rem 1.4rem;
+  padding: 1.4rem 1.5rem;
 }
 
 /* ── EXPORT BUTTONS ── */
@@ -637,17 +637,56 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
 }
 
 .info-bubble {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1rem;
-  height: 1rem;
-  font-size: 0.65rem;
-  color: var(--text-muted);
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid var(--accent-nav-active);
+  color: transparent;
+  font-size: 0;
   cursor: help;
+  transition: border-color 0.15s, background 0.15s;
+  vertical-align: middle;
   position: relative;
+  flex-shrink: 0;
+  box-sizing: border-box;
   margin-left: -0.2rem;
   margin-right: 0.2rem;
+}
+
+.info-bubble::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 2px;
+  background: var(--accent-nav-active);
+  border-radius: 50%;
+}
+
+.info-bubble::after {
+  content: '';
+  position: absolute;
+  top: 5.5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 5px;
+  background: var(--accent-nav-active);
+  border-radius: 1px;
+}
+
+.info-bubble:hover {
+  border-color: var(--accent-header);
+  background: var(--bg-inset);
+}
+
+.info-bubble:hover::before,
+.info-bubble:hover::after {
+  background: var(--accent-header);
 }
 
 /* ── CLASS SELECTOR ── */
@@ -1241,23 +1280,17 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
 
 .browser-advice:empty { display: none; }
 
-/* ── TAG TOOLTIP ── */
-.tag-tooltip {
-  position: fixed;
-  background: var(--bg-inset);
-  border: 1px solid var(--border-panel);
-  border-radius: var(--radius);
-  padding: 0.4rem 0.7rem;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.75rem;
-  color: var(--text-primary);
-  z-index: 1000;
-  max-width: 280px;
-  pointer-events: none;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
+/* ═══════════════════════════════════════════════════════════
+   TOOLTIP STANDARDS — All tooltips in the app use these patterns.
 
-/* Coverage sidebar hover tooltip */
+   Icon style: .cov-info (14x14 circle, custom "i" glyph)
+   Popup style: .cov-tooltip (fixed position, Inter 0.7rem, 250px max)
+
+   When adding new tooltips, use these classes. Do not create new
+   tooltip styles without updating this block.
+   ═══════════════════════════════════════════════════════════ */
+
+.tag-tooltip,
 .cov-tooltip {
   position: fixed;
   background: var(--bg-inset);
