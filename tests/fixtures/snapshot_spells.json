@@ -1,0 +1,803 @@
+[
+  {
+    "aonId": 65,
+    "name": "Detect Alignment",
+    "tradition": [
+      "Divine",
+      "Occult"
+    ],
+    "heighten_pattern": "fixed",
+    "roles": [
+      "utility"
+    ],
+    "defense_tags": [],
+    "era": "legacy_core"
+  },
+  {
+    "aonId": 667,
+    "name": "Animate Rope",
+    "tradition": [
+      "Arcane",
+      "Occult"
+    ],
+    "heighten_pattern": "plus_2",
+    "roles": [
+      "control",
+      "utility"
+    ],
+    "defense_tags": [],
+    "era": "legacy_core"
+  },
+  {
+    "aonId": 820,
+    "name": "Admonishing Ray",
+    "tradition": [
+      "Arcane",
+      "Divine"
+    ],
+    "heighten_pattern": "plus_1",
+    "roles": [
+      "damage"
+    ],
+    "defense_tags": [
+      "AC"
+    ],
+    "era": "other"
+  },
+  {
+    "aonId": 857,
+    "name": "Airburst",
+    "tradition": [
+      "Arcane",
+      "Primal"
+    ],
+    "heighten_pattern": "fixed",
+    "roles": [
+      "control",
+      "oneAction"
+    ],
+    "defense_tags": [
+      "Auto"
+    ],
+    "era": "other"
+  },
+  {
+    "aonId": 863,
+    "name": "Animal Allies",
+    "tradition": [
+      "Primal"
+    ],
+    "heighten_pattern": "plus_1",
+    "roles": [
+      "damage"
+    ],
+    "defense_tags": [
+      "Ref"
+    ],
+    "era": "legacy_core"
+  },
+  {
+    "aonId": 868,
+    "name": "Biting Words",
+    "tradition": [
+      "Occult"
+    ],
+    "heighten_pattern": "plus_1",
+    "roles": [
+      "damage"
+    ],
+    "defense_tags": [
+      "AC"
+    ],
+    "era": "legacy_core"
+  },
+  {
+    "aonId": 876,
+    "name": "Breadcrumbs",
+    "tradition": [
+      "Arcane",
+      "Divine",
+      "Occult",
+      "Primal",
+      "Elemental"
+    ],
+    "heighten_pattern": "fixed",
+    "roles": [
+      "utility"
+    ],
+    "defense_tags": [],
+    "era": "legacy_core"
+  },
+  {
+    "aonId": 1109,
+    "name": "Buffeting Winds",
+    "tradition": [
+      "Primal"
+    ],
+    "heighten_pattern": "plus_1",
+    "roles": [
+      "damage",
+      "debuff"
+    ],
+    "defense_tags": [
+      "Ref"
+    ],
+    "era": "other"
+  },
+  {
+    "aonId": 1220,
+    "name": "Celestial Accord",
+    "tradition": [
+      "Divine",
+      "Occult"
+    ],
+    "heighten_pattern": "none",
+    "roles": [
+      "control"
+    ],
+    "defense_tags": [
+      "Will"
+    ],
+    "era": "other"
+  },
+  {
+    "aonId": 1221,
+    "name": "Elysian Whimsy",
+    "tradition": [
+      "Arcane",
+      "Divine",
+      "Primal"
+    ],
+    "heighten_pattern": "none",
+    "roles": [
+      "control"
+    ],
+    "defense_tags": [
+      "Will"
+    ],
+    "era": "other"
+  },
+  {
+    "aonId": 1236,
+    "name": "Aqueous Blast",
+    "tradition": [
+      "Arcane",
+      "Occult",
+      "Primal"
+    ],
+    "heighten_pattern": "plus_1",
+    "roles": [
+      "damage",
+      "oneAction"
+    ],
+    "defense_tags": [
+      "AC"
+    ],
+    "era": "other"
+  },
+  {
+    "aonId": 1345,
+    "name": "Weaken Earth",
+    "tradition": [
+      "Arcane",
+      "Primal"
+    ],
+    "heighten_pattern": "plus_2",
+    "roles": [
+      "debuff"
+    ],
+    "defense_tags": [
+      "Fort"
+    ],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1367,
+    "name": "Conductive Weapon",
+    "tradition": [
+      "Arcane",
+      "Primal"
+    ],
+    "heighten_pattern": "none",
+    "roles": [
+      "damage"
+    ],
+    "defense_tags": [],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1382,
+    "name": "Brine Dragon Bile",
+    "tradition": [
+      "Arcane",
+      "Primal"
+    ],
+    "heighten_pattern": "plus_2",
+    "roles": [
+      "damage",
+      "reactions"
+    ],
+    "defense_tags": [
+      "AC"
+    ],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1383,
+    "name": "Buoyant Bubbles",
+    "tradition": [
+      "Arcane",
+      "Primal"
+    ],
+    "heighten_pattern": "fixed",
+    "roles": [
+      "buff",
+      "oneAction",
+      "utility"
+    ],
+    "defense_tags": [],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1438,
+    "name": "Air Bubble",
+    "tradition": [
+      "Arcane",
+      "Divine",
+      "Primal"
+    ],
+    "heighten_pattern": "none",
+    "roles": [
+      "reactions",
+      "utility"
+    ],
+    "defense_tags": [],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1439,
+    "name": "Alarm",
+    "tradition": [
+      "Arcane",
+      "Divine",
+      "Occult",
+      "Primal"
+    ],
+    "heighten_pattern": "fixed",
+    "roles": [
+      "utility"
+    ],
+    "defense_tags": [],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1442,
+    "name": "Ant Haul",
+    "tradition": [
+      "Arcane",
+      "Primal"
+    ],
+    "heighten_pattern": "none",
+    "roles": [
+      "buff"
+    ],
+    "defense_tags": [],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1447,
+    "name": "Bane",
+    "tradition": [
+      "Divine",
+      "Occult"
+    ],
+    "heighten_pattern": "none",
+    "roles": [
+      "debuff"
+    ],
+    "defense_tags": [
+      "Will"
+    ],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1451,
+    "name": "Bless",
+    "tradition": [
+      "Divine",
+      "Occult"
+    ],
+    "heighten_pattern": "none",
+    "roles": [
+      "buff"
+    ],
+    "defense_tags": [],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1453,
+    "name": "Blindness",
+    "tradition": [
+      "Arcane",
+      "Divine",
+      "Occult",
+      "Primal"
+    ],
+    "heighten_pattern": "none",
+    "roles": [
+      "debuff"
+    ],
+    "defense_tags": [
+      "Fort"
+    ],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1454,
+    "name": "Blood Vendetta",
+    "tradition": [
+      "Arcane",
+      "Divine",
+      "Occult"
+    ],
+    "heighten_pattern": "plus_2",
+    "roles": [
+      "damage",
+      "debuff",
+      "reactions"
+    ],
+    "defense_tags": [
+      "Will"
+    ],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1457,
+    "name": "Breathe Fire",
+    "tradition": [
+      "Arcane",
+      "Primal"
+    ],
+    "heighten_pattern": "plus_1",
+    "roles": [
+      "damage"
+    ],
+    "defense_tags": [
+      "Ref"
+    ],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1458,
+    "name": "Calm",
+    "tradition": [
+      "Divine",
+      "Occult"
+    ],
+    "heighten_pattern": "none",
+    "roles": [
+      "control"
+    ],
+    "defense_tags": [
+      "Will"
+    ],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1463,
+    "name": "Charm",
+    "tradition": [
+      "Arcane",
+      "Occult",
+      "Primal"
+    ],
+    "heighten_pattern": "fixed",
+    "roles": [
+      "control"
+    ],
+    "defense_tags": [
+      "Will"
+    ],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1468,
+    "name": "Cleanse Cuisine",
+    "tradition": [
+      "Divine",
+      "Primal"
+    ],
+    "heighten_pattern": "plus_2",
+    "roles": [
+      "utility"
+    ],
+    "defense_tags": [],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1470,
+    "name": "Command",
+    "tradition": [
+      "Arcane",
+      "Divine",
+      "Occult"
+    ],
+    "heighten_pattern": "fixed",
+    "roles": [
+      "control",
+      "debuff"
+    ],
+    "defense_tags": [
+      "Will"
+    ],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1476,
+    "name": "Create Water",
+    "tradition": [
+      "Arcane",
+      "Divine",
+      "Primal"
+    ],
+    "heighten_pattern": "none",
+    "roles": [
+      "utility"
+    ],
+    "defense_tags": [],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1500,
+    "name": "Dizzying Colors",
+    "tradition": [
+      "Arcane",
+      "Occult"
+    ],
+    "heighten_pattern": "none",
+    "roles": [
+      "debuff"
+    ],
+    "defense_tags": [
+      "Will"
+    ],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1524,
+    "name": "Fear",
+    "tradition": [
+      "Arcane",
+      "Divine",
+      "Occult",
+      "Primal"
+    ],
+    "heighten_pattern": "fixed",
+    "roles": [
+      "debuff"
+    ],
+    "defense_tags": [
+      "Will"
+    ],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1530,
+    "name": "Fireball",
+    "tradition": [
+      "Arcane",
+      "Primal"
+    ],
+    "heighten_pattern": "plus_1",
+    "roles": [
+      "damage"
+    ],
+    "defense_tags": [
+      "Ref"
+    ],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1948,
+    "name": "Camel Spit",
+    "tradition": [
+      "Arcane",
+      "Primal"
+    ],
+    "heighten_pattern": "plus_1",
+    "roles": [
+      "damage",
+      "debuff"
+    ],
+    "defense_tags": [
+      "AC"
+    ],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1972,
+    "name": "Carryall",
+    "tradition": [
+      "Arcane",
+      "Occult"
+    ],
+    "heighten_pattern": "fixed",
+    "roles": [
+      "utility"
+    ],
+    "defense_tags": [],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1974,
+    "name": "Charitable Urge",
+    "tradition": [
+      "Arcane",
+      "Divine",
+      "Occult"
+    ],
+    "heighten_pattern": "none",
+    "roles": [
+      "control",
+      "debuff"
+    ],
+    "defense_tags": [
+      "Will"
+    ],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1975,
+    "name": "Chilling Spray",
+    "tradition": [
+      "Arcane",
+      "Primal"
+    ],
+    "heighten_pattern": "plus_1",
+    "roles": [
+      "damage"
+    ],
+    "defense_tags": [
+      "Ref"
+    ],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1986,
+    "name": "Déjà Vu",
+    "tradition": [
+      "Arcane",
+      "Occult"
+    ],
+    "heighten_pattern": "none",
+    "roles": [
+      "control",
+      "debuff"
+    ],
+    "defense_tags": [
+      "Will"
+    ],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 1993,
+    "name": "Fungal Infestation",
+    "tradition": [
+      "Primal"
+    ],
+    "heighten_pattern": "plus_2",
+    "roles": [
+      "damage",
+      "debuff"
+    ],
+    "defense_tags": [
+      "Fort"
+    ],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 2005,
+    "name": "Leaden Steps",
+    "tradition": [
+      "Arcane",
+      "Primal"
+    ],
+    "heighten_pattern": "plus_1",
+    "roles": [
+      "debuff"
+    ],
+    "defense_tags": [
+      "Fort"
+    ],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 2314,
+    "name": "Beseech the Sphinx",
+    "tradition": [
+      "Occult",
+      "Divine"
+    ],
+    "heighten_pattern": "fixed",
+    "roles": [
+      "buff"
+    ],
+    "defense_tags": [],
+    "era": "other"
+  },
+  {
+    "aonId": 2335,
+    "name": "500 Toads",
+    "tradition": [
+      "Arcane",
+      "Primal"
+    ],
+    "heighten_pattern": "none",
+    "roles": [
+      "control",
+      "utility"
+    ],
+    "defense_tags": [
+      "Auto"
+    ],
+    "era": "other"
+  },
+  {
+    "aonId": 2340,
+    "name": "Acidic Burst",
+    "tradition": [
+      "Arcane",
+      "Primal"
+    ],
+    "heighten_pattern": "plus_1",
+    "roles": [
+      "damage"
+    ],
+    "defense_tags": [
+      "Ref"
+    ],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 2341,
+    "name": "Agitate",
+    "tradition": [
+      "Arcane",
+      "Occult"
+    ],
+    "heighten_pattern": "plus_1",
+    "roles": [
+      "damage",
+      "debuff"
+    ],
+    "defense_tags": [
+      "Will"
+    ],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 2343,
+    "name": "Anticipate Peril",
+    "tradition": [
+      "Arcane",
+      "Occult"
+    ],
+    "heighten_pattern": "plus_2",
+    "roles": [
+      "buff"
+    ],
+    "defense_tags": [],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 2344,
+    "name": "Befuddle",
+    "tradition": [
+      "Arcane",
+      "Occult"
+    ],
+    "heighten_pattern": "none",
+    "roles": [
+      "debuff"
+    ],
+    "defense_tags": [
+      "Will"
+    ],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 2345,
+    "name": "Benediction",
+    "tradition": [
+      "Divine"
+    ],
+    "heighten_pattern": "none",
+    "roles": [
+      "buff"
+    ],
+    "defense_tags": [],
+    "era": "remaster_core"
+  },
+  {
+    "aonId": 2474,
+    "name": "Veil Of Spirits",
+    "tradition": [
+      "Arcane",
+      "Divine",
+      "Occult"
+    ],
+    "heighten_pattern": "none",
+    "roles": [
+      "debuff"
+    ],
+    "defense_tags": [
+      "Ref"
+    ],
+    "era": "other"
+  },
+  {
+    "aonId": 2498,
+    "name": "Curse of Recoil",
+    "tradition": [
+      "Divine",
+      "Occult"
+    ],
+    "heighten_pattern": "none",
+    "roles": [
+      "debuff",
+      "reactions"
+    ],
+    "defense_tags": [
+      "Will"
+    ],
+    "era": "other"
+  },
+  {
+    "aonId": 2524,
+    "name": "Armor of Thorn and Claw",
+    "tradition": [
+      "Primal"
+    ],
+    "heighten_pattern": "plus_2",
+    "roles": [
+      "damage"
+    ],
+    "defense_tags": [
+      "Auto"
+    ],
+    "era": "other"
+  },
+  {
+    "aonId": 2535,
+    "name": "Briny Bolt",
+    "tradition": [
+      "Arcane",
+      "Primal"
+    ],
+    "heighten_pattern": "plus_1",
+    "roles": [
+      "damage",
+      "debuff"
+    ],
+    "defense_tags": [
+      "AC"
+    ],
+    "era": "other"
+  },
+  {
+    "aonId": 2601,
+    "name": "Behold the Weave",
+    "tradition": [
+      "Divine",
+      "Occult"
+    ],
+    "heighten_pattern": "fixed",
+    "roles": [
+      "control"
+    ],
+    "defense_tags": [
+      "Will"
+    ],
+    "era": "remaster_core"
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "name": "pf2e-spell-planner",
+  "version": "1.0.0",
+  "description": "PF2e Spell Planner — Prepared Caster Edition",
+  "scripts": {
+    "test": "bash tests/run_all.sh"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "playwright": "^1.59.1"
+  }
+}
