@@ -1,0 +1,973 @@
+{
+  "version": "1.0.0",
+  "generated": "2026-05-05",
+  "count": 137,
+  "observations": [
+    {
+      "source": "Acid Grip is UNDERRATED.md",
+      "applies_to": {
+        "custom": "spells vs skill actions for forced movement"
+      },
+      "observation": "Spells are more reliable than skill actions for forced movement, not less. When you strip away the labels and compare actual outcomes, spells come out ahead despite the 'Roller's Advantage' penalty."
+    },
+    {
+      "source": "Acid Grip is UNDERRATED.md",
+      "applies_to": {
+        "custom": "force movement spells"
+      },
+      "observation": "Force movement acts as a force multiplier with persistent area effects. Pushing an enemy back into an Entangling Flora, Wall of Fire, or similar spell doubles down on the value of both spells."
+    },
+    {
+      "source": "Acid Grip is UNDERRATED.md",
+      "applies_to": {
+        "custom": "spells targeting enemy saves"
+      },
+      "observation": "'Roller's Advantage' is real and penalizes spellcasters by ~2 on the D20. Since the enemy rolls against your spell DC, there's an inherent ~+2 disadvantage for casters in pure d20-vs-d20 math."
+    },
+    {
+      "source": "Acid Grip is UNDERRATED.md",
+      "applies_to": {
+        "custom": "grappler-type monsters"
+      },
+      "observation": "Creatures that specialize in grabbing tend to have high Athletics DCs, making skill-based escapes harder. This is a design pattern — the monsters you most need to escape from are the ones where skill checks are least likely to work."
+    },
+    {
+      "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+      "applies_to": {
+        "role": "utility"
+      },
+      "observation": "The vast majority of utility spells just solve problems outright with no check. The 'Knock Problem' is the exception, not the rule."
+    },
+    {
+      "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+      "applies_to": {
+        "role": "utility"
+      },
+      "observation": "Utility spell selection is inherently campaign-dependent. There is no one optimal utility list."
+    },
+    {
+      "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+      "applies_to": {
+        "role": "utility"
+      },
+      "observation": "At low levels, using a spell slot for utility is expensive but can outperform skills. At high levels, that same low-rank slot is cheap but skills have caught up or surpassed it."
+    },
+    {
+      "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+      "applies_to": {
+        "role": "utility"
+      },
+      "observation": "Low-rank utility slots become 'free' at high levels — use them for utility without guilt, but don't expect them to outperform specialized skill users."
+    },
+    {
+      "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+      "applies_to": {
+        "custom": "spells that contest skills"
+      },
+      "observation": "Spells that contest a foe's skill involve a check because the world has adapted to magic. This creates stable worldbuilding where non-magical skill remains relevant alongside magic."
+    },
+    {
+      "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+      "applies_to": {
+        "custom": "just works spells"
+      },
+      "observation": "When browsing for utility picks, prioritize spells that don't involve checks against enemy DCs. These are the ones that solve problems outright."
+    },
+    {
+      "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+      "applies_to": {
+        "custom": "rank 1-2 utility"
+      },
+      "observation": "Rank 1-2 provides basic problem-solving (breathing, carrying, climbing, invisibility)."
+    },
+    {
+      "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+      "applies_to": {
+        "custom": "rank 3-4 utility"
+      },
+      "observation": "Rank 3-4 provides expanded utility (remote communication, flight, teleportation)."
+    },
+    {
+      "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+      "applies_to": {
+        "custom": "rank 5-6 utility"
+      },
+      "observation": "Rank 5-6 provides major permission (long-range teleport, all-day detection)."
+    },
+    {
+      "source": "Are You Preparing Your Spells Wrong.md",
+      "applies_to": {
+        "tag": "Summoning"
+      },
+      "observation": "Incredible for prepared casters. Each summon = 12-20 stat blocks in one slot. Can serve as: body/tank, crowd control, poke damage, flanking buddy. Maximum versatility per slot."
+    },
+    {
+      "source": "Are You Preparing Your Spells Wrong.md",
+      "applies_to": {
+        "trait": "Polymorph"
+      },
+      "observation": "Excellent multimodal spells. 4-5+ forms per spell, pick the best for the situation. Good \"nothing else works\" fallback."
+    },
+    {
+      "source": "Are You Preparing Your Spells Wrong.md",
+      "applies_to": {
+        "custom": "Elemental spell families"
+      },
+      "observation": "Good for prepared casters — 6 element choices (fire, metal, earth, wood, air, water) each applying different damage/debuff/control. Some let you make multiple choices over the spell's duration."
+    },
+    {
+      "source": "Are You Preparing Your Spells Wrong.md",
+      "applies_to": {
+        "custom": "Coverage spells"
+      },
+      "observation": "Should work in both AoE and single-target contexts. Avoid spells that are embarrassing outside their primary use case."
+    },
+    {
+      "source": "Are You Preparing Your Spells Wrong.md",
+      "applies_to": {
+        "custom": "Silver bullets"
+      },
+      "observation": "Dominate narrow situations. Prepared casters are uniquely good at deploying these since they can prepare them the day they're needed."
+    },
+    {
+      "source": "Are You Preparing Your Spells Wrong.md",
+      "applies_to": {
+        "custom": "Slot-efficient spells"
+      },
+      "observation": "Generate more value than one slot's worth through duration, lingering effects, sustained damage, incarnate arrival/departure, buffs, or AoE crit-fail upside."
+    },
+    {
+      "source": "Are You Preparing Your Spells Wrong.md",
+      "applies_to": {
+        "custom": "Evergreen spells in low ranks"
+      },
+      "observation": "Only for extremely low-information days. Normally, low-rank slots should be reactions, 1-action spells, utility, and silver bullets."
+    },
+    {
+      "source": "Are You Preparing Your Spells Wrong.md",
+      "applies_to": {
+        "trait": "Incarnate"
+      },
+      "observation": "Arrival + departure = massive value from one slot. On departure turn, you get all 3 actions free."
+    },
+    {
+      "source": "Are You Preparing Your Spells Wrong.md",
+      "applies_to": {
+        "custom": "Duration buffs"
+      },
+      "observation": "If the buffed ally generates value without further resource expenditure, you've saved future spell slots."
+    },
+    {
+      "source": "Are You Preparing Your Spells Wrong.md",
+      "applies_to": {
+        "custom": "Lingering area effects"
+      },
+      "observation": "Generate value over time after casting. Fire and forget, then it's the enemy's problem."
+    },
+    {
+      "source": "Cinder Swarm is Underrated.md",
+      "applies_to": {
+        "tag": "Sustain-action"
+      },
+      "observation": "One-action sustained damage is premium action economy. Getting cantrip-level damage for a single action on subsequent turns frees two actions for focus spells, slotted spells, or cantrips each turn."
+    },
+    {
+      "source": "Cinder Swarm is Underrated.md",
+      "applies_to": {
+        "tag": "Sustain-action"
+      },
+      "observation": "Sustained spells shift the DPR advantage toward longer combats. The longer a fight goes, the more value you extract from that initial spell slot."
+    },
+    {
+      "source": "Cinder Swarm is Underrated.md",
+      "applies_to": {
+        "tag": "basic_save"
+      },
+      "observation": "Lower risk profiles compound over multiple turns. A character making two basic saves per turn has a ~4% chance of doing zero damage, vs. ~12% for a character making one save + one attack roll."
+    },
+    {
+      "source": "Cinder Swarm is Underrated.md",
+      "applies_to": {
+        "property": "area",
+        "value": "emanation"
+      },
+      "observation": "Emanations are significantly larger than bursts of the same size and often ignore allies — both major tactical advantages."
+    },
+    {
+      "source": "Cinder Swarm is Underrated.md",
+      "applies_to": {
+        "custom": "force movement spells"
+      },
+      "observation": "Force movement is underrated in PF2e. Even 5 feet of forced movement can function as action denial, grab-breaking, flanking disruption, reaction triggering, choke point clearing, and zoning combo enablement."
+    },
+    {
+      "source": "Cinder Swarm is Underrated.md",
+      "applies_to": {
+        "custom": "spells with persistent damage"
+      },
+      "observation": "Persistent damage has hidden upside in sustained fights. 70% chance of ticking again each round means there's a ~49% chance it's still ticking two rounds later."
+    },
+    {
+      "source": "Dehydrate is UNDERRATED.md",
+      "applies_to": {
+        "custom": "burst vs sustained damage spells"
+      },
+      "observation": "Burst damage vs. sustained damage is a party composition decision, not a spell quality decision. Burst spells complement burst-focused frontliners, while sustained damage spells work better with sustained-damage focused parties."
+    },
+    {
+      "source": "Dehydrate is UNDERRATED.md",
+      "applies_to": {
+        "property": "save",
+        "value": "fortitude"
+      },
+      "observation": "Spells that target Fortitude have a hidden advantage over Reflex-targeting AoEs, as most iconic AoE spells target Reflex and many monster stat blocks have weaker Fortitude saves."
+    },
+    {
+      "source": "Dehydrate is UNDERRATED.md",
+      "applies_to": {
+        "trait": "persistent damage"
+      },
+      "observation": "Persistent damage does work while your party can't - when enemies stun, grab, or incapacitate allies, persistent damage keeps ticking as passive income."
+    },
+    {
+      "source": "Dehydrate is UNDERRATED.md",
+      "applies_to": {
+        "custom": "sequential targeting spells"
+      },
+      "observation": "Chain Lightning's sequential targeting creates compounding failure risk where each target's crit success stops the chain entirely, making it dramatically worse against high-Reflex enemies."
+    },
+    {
+      "source": "Dehydrate is UNDERRATED.md",
+      "applies_to": {
+        "role": "damage"
+      },
+      "observation": "DPR averages erase too much context for AoE spell comparison - damage distribution and timing matter more than mean damage when evaluating how fights actually play out."
+    },
+    {
+      "source": "Does Paizo Love Wizards Now.md",
+      "applies_to": {
+        "custom": "10th rank spells"
+      },
+      "observation": "Generally underwhelming. Most are unimpressive — only Manifestation, Shadow Army, and Mystic Armor stood out before Battlecry."
+    },
+    {
+      "source": "Does Paizo Love Wizards Now.md",
+      "applies_to": {
+        "custom": "focus spells"
+      },
+      "observation": "Should provide longevity, not buff already-good spell slots. Focus spells that require spending a high-rank slot first are terrible design."
+    },
+    {
+      "source": "Does Paizo Love Wizards Now.md",
+      "applies_to": {
+        "custom": "blasting spells with rider effects"
+      },
+      "observation": "Rider effects on blasting spells add massive value. A fireball that also moves enemies and frightens them turns every blast into crowd control."
+    },
+    {
+      "source": "Does Paizo Love Wizards Now.md",
+      "applies_to": {
+        "custom": "status bonuses to spell save DCs"
+      },
+      "observation": "Virtually non-existent, so any source of them is massive."
+    },
+    {
+      "source": "Does Paizo Love Wizards Now.md",
+      "applies_to": {
+        "trait": "Incarnate"
+      },
+      "observation": "Strong action-economy plays. Battlecry introduces many new incarnate spells from rank 4 up."
+    },
+    {
+      "source": "Does Paizo Love Wizards Now.md",
+      "applies_to": {
+        "custom": "area damage spells"
+      },
+      "observation": "For War Mage, any non-cantrip area damage spell gets forced movement on failed saves, enabling spell combos."
+    },
+    {
+      "source": "Does Paizo Love Wizards Now.md",
+      "applies_to": {
+        "trait": "Incapacitation"
+      },
+      "observation": "Spells without incapacitation are more valuable in boss fights where incapacitation effects are neutered."
+    },
+    {
+      "source": "Elemental Sorcerer Blaster Guide.md",
+      "applies_to": {
+        "role": "damage"
+      },
+      "observation": "Cantrips carry you at levels 1-2, then steadily fall off — by level 7, cantrips are mostly filler."
+    },
+    {
+      "source": "Elemental Sorcerer Blaster Guide.md",
+      "applies_to": {
+        "custom": "low-rank slots"
+      },
+      "observation": "First-rank slots at mid-to-high levels: reactions and utility. You will almost never cast a two-action first-rank spell once you have three+ ranks of slots."
+    },
+    {
+      "source": "Elemental Sorcerer Blaster Guide.md",
+      "applies_to": {
+        "custom": "evergreen spells"
+      },
+      "observation": "Evergreen spells like Fear are NOT ideal for lowest ranks — you'd never use them over your top three ranks, and you'd rarely run out of those top ranks and reach for a first-rank Fear."
+    },
+    {
+      "source": "Elemental Sorcerer Blaster Guide.md",
+      "applies_to": {
+        "custom": "zoning spells"
+      },
+      "observation": "At higher levels (9-20), a blaster's job crosses over with debuffer/controller — learn to identify when zoning spells justify their tempo cost vs. when you should stick to one-shot blasts."
+    },
+    {
+      "source": "Elemental Sorcerer Blaster Guide.md",
+      "applies_to": {
+        "custom": "signature spells"
+      },
+      "observation": "Signature spell strategy evolves as you level — at levels 3-8, signature choices are constrained and critical. At levels 9-20, you have so many signature slots from Signature Spell Expansion that you feel spoiled for choice."
+    },
+    {
+      "source": "Elemental Sorcerer Blaster Guide.md",
+      "applies_to": {
+        "custom": "reactive defenses"
+      },
+      "observation": "Reactive defenses scale with rank — signature Hidebound and Wooden Double so they block more damage at higher ranks."
+    },
+    {
+      "source": "Hidebound is UNDERRATED.md",
+      "applies_to": {
+        "custom": "spells two ranks below max"
+      },
+      "observation": "Spell slots two ranks below your max are 'spammable' - they don't compete with your big combat nukes and can be cast cheaply via staff or items."
+    },
+    {
+      "source": "Hidebound is UNDERRATED.md",
+      "applies_to": {
+        "custom": "damage mitigation spells that last a full round"
+      },
+      "observation": "Damage mitigation that lasts a full round is more valuable than single-instance reduction, especially when allies face multiple strikes."
+    },
+    {
+      "source": "Hidebound is UNDERRATED.md",
+      "applies_to": {
+        "custom": "underrated spells"
+      },
+      "observation": "Underrated spells are harder to counterspell since counterspelling requires the caster to have the same spell prepared or in their repertoire."
+    },
+    {
+      "source": "Hidebound is UNDERRATED.md",
+      "applies_to": {
+        "custom": "wood-themed spells"
+      },
+      "observation": "The best protective spells in PF2e are wood-themed - Protector Tree, Oaken Resilience, Hidebound, Wooden Double are all strong damage mitigation options."
+    },
+    {
+      "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+      "applies_to": {
+        "role": "reactions"
+      },
+      "observation": "Reaction economy matters for casters. Pick based on expected encounter type."
+    },
+    {
+      "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+      "applies_to": {
+        "custom": "low-rank slots"
+      },
+      "observation": "Low-rank slots on a thematic caster get eaten by utility tax and carry reaction spells plus buff/debuff combos rather than damage."
+    },
+    {
+      "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+      "applies_to": {
+        "custom": "attack roll spells"
+      },
+      "observation": "Don't put too many eggs into attack roll spells — one signature attack spell is fine as an option you can choose not to cast, but loading up on them is risky outside Mythic proficiency."
+    },
+    {
+      "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+      "applies_to": {
+        "custom": "thematic casters"
+      },
+      "observation": "Thematic casters need a backup physical attack option. When your spell selection is thematically narrow, you will hit immunities."
+    },
+    {
+      "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+      "applies_to": {
+        "custom": "thematic spell selection"
+      },
+      "observation": "Two-lane thematic approach gives enough coverage that you're not constantly fighting against the spell list. A single-lane theme would be too restrictive."
+    },
+    {
+      "source": "How to Blast GOOD in Pathfinder 2e.md",
+      "applies_to": {
+        "role": "damage"
+      },
+      "observation": "DPR is a misleading metric for AoE spells. Evaluate AoE by looking at the probability distribution of outcomes, not the average DPR number."
+    },
+    {
+      "source": "How to Blast GOOD in Pathfinder 2e.md",
+      "applies_to": {
+        "custom": "AoE spells"
+      },
+      "observation": "Against three targets at on-level DCs, there is an ~83% chance at least one target fails the save. AoE creates focus fire opportunities by spiking one target into kill range."
+    },
+    {
+      "source": "How to Blast GOOD in Pathfinder 2e.md",
+      "applies_to": {
+        "custom": "fire-and-forget spells"
+      },
+      "observation": "Only use fire-and-forget/persistent damage spells when enemies are expected to survive multiple turns. Let damage rack up passively while party handles other threats."
+    },
+    {
+      "source": "How to Blast GOOD in Pathfinder 2e.md",
+      "applies_to": {
+        "custom": "zoning spells"
+      },
+      "observation": "Require party coordination to maximize. Skip zoning spells if your party won't or can't coordinate around them."
+    },
+    {
+      "source": "How to Blast GOOD in Pathfinder 2e.md",
+      "applies_to": {
+        "custom": "debuff rider spells on failure"
+      },
+      "observation": "Failure riders are very reliable (~83% chance at least one target fails in a 3-target AoE). Reliable rider justifies damage trade-offs."
+    },
+    {
+      "source": "How to Blast GOOD in Pathfinder 2e.md",
+      "applies_to": {
+        "custom": "multi-tool spells"
+      },
+      "observation": "Prepared casters benefit enormously from spells that cover both single-target and multi-target roles from one slot, reducing the risk of preparing the wrong spell."
+    },
+    {
+      "source": "How to Blast GOOD in Pathfinder 2e.md",
+      "applies_to": {
+        "custom": "attack roll spells"
+      },
+      "observation": "Better than save spells for confirmed kills because they benefit from Sure Strike, hero points, and ally buffs to attack."
+    },
+    {
+      "source": "How to Blast GOOD in Pathfinder 2e.md",
+      "applies_to": {
+        "custom": "burst spells"
+      },
+      "observation": "Can be air-burst by raising the center above ground level to shrink the ground footprint and avoid allies in cramped spaces."
+    },
+    {
+      "source": "How to Look at Spells on Archives of Nethys.md",
+      "applies_to": {
+        "role": "reactions"
+      },
+      "observation": "At higher levels, fill lower-rank slots with Reactions, Free Actions, and 1-Action spells. Reactions and 1-action spells squeeze in between your effective 2-action spells."
+    },
+    {
+      "source": "How to Look at Spells on Archives of Nethys.md",
+      "applies_to": {
+        "role": "oneAction"
+      },
+      "observation": "At higher levels, fill lower-rank slots with Reactions, Free Actions, and 1-Action spells. Reactions and 1-action spells squeeze in between your effective 2-action spells."
+    },
+    {
+      "source": "How to Look at Spells on Archives of Nethys.md",
+      "applies_to": {
+        "custom": "offensive spells"
+      },
+      "observation": "Any good offensively built spellcaster should pick spells targeting at least two saves and AC. This is the core defensive coverage principle."
+    },
+    {
+      "source": "How to Look at Spells on Archives of Nethys.md",
+      "applies_to": {
+        "trait": "Arcane"
+      },
+      "observation": "Arcane is privileged — it can target all four defenses at all levels with a full variety of spells. Most other traditions can do two saves + AC but struggle with the third."
+    },
+    {
+      "source": "Hypnotize is UNDERRATED.md",
+      "applies_to": {
+        "custom": "situational spells"
+      },
+      "observation": "Situational spells need to be evaluated in the situations they're good in, weighted by how often those situations come up. A situational spell that's amazing 30% of the time and decent the rest is worth preparing."
+    },
+    {
+      "source": "Hypnotize is UNDERRATED.md",
+      "applies_to": {
+        "custom": "auto-effect spells at low ranks"
+      },
+      "observation": "Auto-effect spells (no saving throw) at low ranks are extremely rare and valuable. At rank 3, auto-effect spells are almost nonexistent."
+    },
+    {
+      "source": "Hypnotize is UNDERRATED.md",
+      "applies_to": {
+        "trait": "Dazzled"
+      },
+      "observation": "Dazzled is stronger than it looks — a 20% flat chance that any single-target action automatically misses, regardless of the enemy's level relative to your party. It doesn't scale down against bosses."
+    },
+    {
+      "source": "Hypnotize is UNDERRATED.md",
+      "applies_to": {
+        "tag": "Sustain-action"
+      },
+      "observation": "Sustained spells like Hypnotize are often free to maintain — once the enemy is trapped or has chosen to stay in the zone, sustaining costs 1 action per turn. If the enemy moves out, you just drop the spell."
+    },
+    {
+      "source": "Is Mystic Armour the Best 10th Rank Spell in Pathfinder 2e.md",
+      "applies_to": {
+        "custom": "defensive spells that replace equipment"
+      },
+      "observation": "The value of a defensive spell isn't just its combat effect — it's the entire economic opportunity cost of the armor runes you no longer need to buy."
+    },
+    {
+      "source": "Is Mystic Armour the Best 10th Rank Spell in Pathfinder 2e.md",
+      "applies_to": {
+        "custom": "spells that substitute for purchased items"
+      },
+      "observation": "Any spell that replaces an equipment purchase should be evaluated against what else that gold could buy."
+    },
+    {
+      "source": "Is Mystic Armour the Best 10th Rank Spell in Pathfinder 2e.md",
+      "applies_to": {
+        "custom": "boring utility spells"
+      },
+      "observation": "Don't dismiss spells as useless without doing the math. Subtly powerful spells are often underrated because they lack combat flashiness."
+    },
+    {
+      "source": "Is Mystic Armour the Best 10th Rank Spell in Pathfinder 2e.md",
+      "applies_to": {
+        "custom": "gold-saving spells"
+      },
+      "observation": "Gold saved should be normalized to purchasing power using scroll prices, not absolute values, due to exponential gold growth in PF2e."
+    },
+    {
+      "source": "Is Vision of Death Better than Synesthesia.md",
+      "applies_to": {
+        "trait": "Frightened"
+      },
+      "observation": "Frightened debuffs everything; Clumsy debuffs a subset. Frightened lowers AC, all saves, attack rolls, spell DCs, and skill checks. Clumsy only lowers AC, Reflex, and Dex-based attacks. This breadth advantage is frequently underrated."
+    },
+    {
+      "source": "Is Vision of Death Better than Synesthesia.md",
+      "applies_to": {
+        "role": "debuff"
+      },
+      "observation": "Evaluate debuffs by outcomes changed, not raw numbers. A -1 to AC that converts a miss to a hit or a hit to a crit is worth one 'outcome changed.' This is the correct unit for comparing debuff spells."
+    },
+    {
+      "source": "Is Vision of Death Better than Synesthesia.md",
+      "applies_to": {
+        "custom": "higher-rank spells"
+      },
+      "observation": "Higher-rank spells are action compression of lower-rank spells. A 4th-rank spell that frightens + damages is compressing what took 3-4 actions at lower levels into 2 actions. Evaluate spell upgrades through this lens."
+    },
+    {
+      "source": "Is Vision of Death Better than Synesthesia.md",
+      "applies_to": {
+        "custom": "spell lists"
+      },
+      "observation": "Spells come in packages, not one-to-one comparisons. Never evaluate a spell in isolation -- evaluate your full spell list as a toolkit with area packages, single-target packages, action denial packages, and silver bullet packages."
+    },
+    {
+      "source": "Is Vision of Death Better than Synesthesia.md",
+      "applies_to": {
+        "custom": "low-rank slots at high level"
+      },
+      "observation": "A 1st-rank Fear is almost never worth casting at level 10. In the rare instance you'd consider it, a wand, staff, scroll, focus spell, or cantrip would serve better. Don't keep evergreen 'meta' spells at low ranks just because they're popular."
+    },
+    {
+      "source": "Is Vision of Death Better than Synesthesia.md",
+      "applies_to": {
+        "trait": "Death"
+      },
+      "observation": "Check your GM's interpretation of death trait immunity before relying on Vision of Death. The correct RAW interpretation is that death immunity only blocks the instant-kill portion, not the mental damage or frightened -- but some GMs rule total immunity to the spell."
+    },
+    {
+      "source": "Mathfinders Blaster Caster RUBRIC.md",
+      "applies_to": {
+        "tag": "basic_save"
+      },
+      "observation": "Basic saves provide guaranteed damage floor and higher reliability through spread damage across d20 rolls."
+    },
+    {
+      "source": "Mathfinders Blaster Caster RUBRIC.md",
+      "applies_to": {
+        "tag": "Sustain-action"
+      },
+      "observation": "Sustained spells front-load value by casting once then sustaining for one action on subsequent turns, coupling efficiency with reliability and sustainability."
+    },
+    {
+      "source": "Mathfinders Blaster Caster RUBRIC.md",
+      "applies_to": {
+        "property": "actions",
+        "value": "1"
+      },
+      "observation": "One-action focus cantrips are premium for weaponizing the third action with zero MAP worries."
+    },
+    {
+      "source": "Mathfinders Blaster Caster RUBRIC.md",
+      "applies_to": {
+        "property": "actions",
+        "value": "reaction"
+      },
+      "observation": "Reaction spells double-dip on action economy by adding damage or defense on other people's turns."
+    },
+    {
+      "source": "Mathfinders Blaster Caster RUBRIC.md",
+      "applies_to": {
+        "property": "actions",
+        "value": "2"
+      },
+      "observation": "Two-action blast spells are optimal because they leave the third action free for efficiency gains."
+    },
+    {
+      "source": "Mathfinders Blaster Caster RUBRIC.md",
+      "applies_to": {
+        "role": "silverBullets"
+      },
+      "observation": "Cover healing, silver bullets, and out-of-combat utility with scrolls and low-rank slots rather than competing with max-rank blasting."
+    },
+    {
+      "source": "Mathfinders Blaster Caster RUBRIC.md",
+      "applies_to": {
+        "trait": "Attack"
+      },
+      "observation": "Attack roll spells serve as brute-force options when saves aren't working, especially important for traditions that struggle with certain defenses."
+    },
+    {
+      "source": "Mathfinders Blaster Caster RUBRIC.md",
+      "applies_to": {
+        "custom": "rider_effects"
+      },
+      "observation": "Spells with condition riders partially restore the versatility lost by blasting, making them superior to pure damage options."
+    },
+    {
+      "source": "Mathfinders Blaster Caster RUBRIC.md",
+      "applies_to": {
+        "custom": "max_rank_slots"
+      },
+      "observation": "Max-rank spell slots are disproportionately powerful and do more damage than is normal for your level."
+    },
+    {
+      "source": "Mathfinders Blaster Caster RUBRIC.md",
+      "applies_to": {
+        "custom": "spike_damage"
+      },
+      "observation": "Spike damage creates scenarios enemies can't respond to but trades down on efficiency, reliability, or sustainability."
+    },
+    {
+      "source": "Mathfinders Blaster Caster RUBRIC.md",
+      "applies_to": {
+        "custom": "continuous_damage"
+      },
+      "observation": "Continuous damage provides predictable fight timelines and higher sustainability but trades down on potency ceiling."
+    },
+    {
+      "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+      "applies_to": {
+        "role": "AoE"
+      },
+      "observation": "Evaluate multi-target spells primarily by their failure effects. If you only look at success effects, you will systematically underestimate AoE and multi-target spells."
+    },
+    {
+      "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+      "applies_to": {
+        "role": "reactions"
+      },
+      "observation": "Reactions and one-action spells are inherently action-efficient. Unlike two-action spells where you commit 2/3 of your turn upfront with no refund on a whiff, action-efficient spells let you fish for failures and still have your turn if they miss."
+    },
+    {
+      "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+      "applies_to": {
+        "role": "oneAction"
+      },
+      "observation": "Action-efficient spells (reactions, one-action spells, focus spells) don't need success effects at all. If the spell whiffs, you still have most of your turn. Fishing for failures is a valid strategy when the action cost is low."
+    },
+    {
+      "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+      "applies_to": {
+        "trait": "Incapacitation"
+      },
+      "observation": "Incapacitation spells are only bad in boss fights. Against on-level or lower enemies in multi-target contexts, they can remove an enemy outright."
+    },
+    {
+      "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+      "applies_to": {
+        "custom": "two-action spells"
+      },
+      "observation": "Two-action spells have high reliability and potency to compensate for their hefty action cost. This is why success effects matter for them -- you need that compensation."
+    },
+    {
+      "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+      "applies_to": {
+        "custom": "low-rank slots"
+      },
+      "observation": "Low-rank slots are perfect for action-efficient fishing spells. Do NOT use your highest-rank slots on spells without success effects."
+    },
+    {
+      "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+      "applies_to": {
+        "custom": "single-target spells in multi-target context"
+      },
+      "observation": "Single-target spells used against one-of-many enemies should prioritize the failure effect over the success effect. Against enemies at or below your level, failure is the mode of the distribution (45% chance)."
+    },
+    {
+      "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+      "applies_to": {
+        "custom": "boss fights"
+      },
+      "observation": "Against a boss (enemy 2-4 levels above you), success IS the expected outcome. Plan around the success effect; treat failure as a nice-to-have."
+    },
+    {
+      "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
+      "applies_to": {
+        "property": "attack_type",
+        "value": "spell_attack_roll"
+      },
+      "observation": "Attack roll spells are situational, not bad. They benefit from teamwork far more easily than save spells and become flat-out better than corresponding save spells after sufficient bonuses stack."
+    },
+    {
+      "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
+      "applies_to": {
+        "property": "attack_type",
+        "value": "save"
+      },
+      "observation": "Save spells have a reliability advantage at baseline. The vast majority of combat-oriented single-target spells have a meaningful success (partial) effect, making them inherently lower-risk."
+    },
+    {
+      "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
+      "applies_to": {
+        "trait": "Fortune"
+      },
+      "observation": "Fortune effects are highly valuable for attack roll strategies and casters naturally accumulate more hero points than people credit them for."
+    },
+    {
+      "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
+      "applies_to": {
+        "custom": "Primal tradition spells"
+      },
+      "observation": "Primal casters should carry attack roll spells to diversify defense targeting since Primal lists heavily target Reflex and Fortitude, and switching to attack rolls can represent a 10-15% accuracy boost against enemies with high saves."
+    },
+    {
+      "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
+      "applies_to": {
+        "custom": "Psychic attack-roll subclasses"
+      },
+      "observation": "Psychic's attack-roll subclasses (Oscillating Wave, Distant Grasp) are NOT bad. The myth that Psychic is a bad class because it focuses on attack roll spells is unfounded."
+    },
+    {
+      "source": "Pernicious Poltergeist is TERRIBLY Underrated.md",
+      "applies_to": {
+        "custom": "multimodal spells"
+      },
+      "observation": "Multimodal spells are high-value picks for prepared casters because a single spell slot can adapt to any encounter, making you less likely to be stuck having prepared the wrong saving throw distribution for the day."
+    },
+    {
+      "source": "Pernicious Poltergeist is TERRIBLY Underrated.md",
+      "applies_to": {
+        "custom": "stationary AoE spells"
+      },
+      "observation": "The usual downside of stationary AoEs (messing with melee allies, enemies walking out) is reduced when the spell can switch to single-target mode on sustain."
+    },
+    {
+      "source": "Pernicious Poltergeist is TERRIBLY Underrated.md",
+      "applies_to": {
+        "tag": "Sustain-action"
+      },
+      "observation": "Sustain spells gain value when you can change the effect each round, providing excellent action economy by adapting to the evolving fight."
+    },
+    {
+      "source": "Pernicious Poltergeist is TERRIBLY Underrated.md",
+      "applies_to": {
+        "custom": "heightened +2 spells"
+      },
+      "observation": "Spells that scale every other rank fall off relatively quickly and become questionable by level 11, almost definitely not worth using by level 13."
+    },
+    {
+      "source": "Spell Selection Basics.md",
+      "applies_to": {
+        "role": "damage"
+      },
+      "observation": "Avoid the highest defense, don't chase the lowest. Trying to always hit the lowest burns actions on Recall Knowledge and risks false info."
+    },
+    {
+      "source": "Spell Selection Basics.md",
+      "applies_to": {
+        "role": "damage"
+      },
+      "observation": "Carry at least 2 damage types and/or traits to avoid immunities."
+    },
+    {
+      "source": "Spell Selection Basics.md",
+      "applies_to": {
+        "custom": "single-target spells"
+      },
+      "observation": "Prioritize ones with success effects since bosses succeed ~50% of the time."
+    },
+    {
+      "source": "Spell Selection Basics.md",
+      "applies_to": {
+        "trait": "Incapacitation"
+      },
+      "observation": "Avoid incapacitation trait on single-target spells since bosses crit-succeed ~70%."
+    },
+    {
+      "source": "Spell Selection Basics.md",
+      "applies_to": {
+        "custom": "AOE spells"
+      },
+      "observation": "Don't need success effects as badly since with multiple targets, someone will fail."
+    },
+    {
+      "source": "Spell Selection Basics.md",
+      "applies_to": {
+        "role": "control"
+      },
+      "observation": "Many control spells have automatic effects that provide unconditional reliability."
+    },
+    {
+      "source": "Spell Selection Basics.md",
+      "applies_to": {
+        "custom": "native high-rank spells"
+      },
+      "observation": "Tend to be strictly better than heightened low-rank spells for debuff/control roles due to designer 'permission'."
+    },
+    {
+      "source": "Spell Selection Basics.md",
+      "applies_to": {
+        "custom": "low-rank slots"
+      },
+      "observation": "Do not fill with 'evergreen' combat spells like Fear - they won't compete with high-rank slots and waste combat actions."
+    },
+    {
+      "source": "Spell Selection Basics.md",
+      "applies_to": {
+        "custom": "sustained spells"
+      },
+      "observation": "Especially good on classes with lots of spell slots but weak focus spells like Wizard."
+    },
+    {
+      "source": "Spell Selection Basics.md",
+      "applies_to": {
+        "custom": "reaction spells"
+      },
+      "observation": "Cheap slot cost and doesn't cost combat actions, making them excellent low-rank slot usage."
+    },
+    {
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "applies_to": {
+        "trait": "Arcane"
+      },
+      "observation": "The gold standard for offensive fundamentals — all other lists are measured against it. Best defense targeting, best brute forcing, best damage variety, best riders, best low-rank value."
+    },
+    {
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "applies_to": {
+        "trait": "Primal"
+      },
+      "observation": "Very strong for blasting but struggles with Will saves. Excellent damage type variety (all physical and energy types, ~10 total). Great low-rank reactions."
+    },
+    {
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "applies_to": {
+        "trait": "Occult"
+      },
+      "observation": "Naturally good at targeting Will. When combined with granted spells (e.g., Psychic), can cover Reflex and Fortitude gaps."
+    },
+    {
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "applies_to": {
+        "trait": "Divine"
+      },
+      "observation": "Has the hardest-to-resist damage types (void, vitality, spirit) but the weakest blasting fundamentals overall — no brute forcing options, limited riders, poor low-rank slot value."
+    },
+    {
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "applies_to": {
+        "tag": "sustain"
+      },
+      "observation": "Major source of action compression for primal casters — set up a big spell turn one, then sustain it while using focus spells."
+    },
+    {
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "applies_to": {
+        "tag": "one_action"
+      },
+      "observation": "Key to great action economy for blasters — they enable '1+2 action' offensive turns."
+    },
+    {
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "applies_to": {
+        "tag": "defensive_reaction"
+      },
+      "observation": "Prepared casters must predict how many of each low-rank spell to prepare, leading to missteps; spontaneous casters always have the right reaction when they want it."
+    },
+    {
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "applies_to": {
+        "tag": "signature_spell"
+      },
+      "observation": "Spontaneous casters pay a heavy signature spell tax when blasting — most signature slots get consumed by blasting spells, reducing versatility."
+    },
+    {
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "applies_to": {
+        "role": "blaster"
+      },
+      "observation": "Defense overloading (forcing multiple d20 rolls per turn via one-action options + two-action spells + reactions) is a key reliability mechanism."
+    },
+    {
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "applies_to": {
+        "custom": "brute_forcing_spells"
+      },
+      "observation": "Bypass saves/AC entirely, providing guaranteed damage output against high-defense enemies."
+    },
+    {
+      "source": "Why I Hate (and Why I Love) the Wizard.md",
+      "applies_to": {
+        "tag": "heightened"
+      },
+      "observation": "Heightened spells naturally fall behind native-rank spells — this is the design tension the Rudimental Perfectionism thesis addresses."
+    },
+    {
+      "source": "Why I Hate (and Why I Love) the Wizard.md",
+      "applies_to": {
+        "custom": "force spells"
+      },
+      "observation": "Force spells could be converted via the exploit trait into a mini-blast with forced movement when their intended use case doesn't come up."
+    },
+    {
+      "source": "Witch and Wizard Blaster Build Guides.md",
+      "applies_to": {
+        "tag": "sustain"
+      },
+      "observation": "Sustain spells are fundamentally good for three-slot casters — they let you get repeated value from a single spell slot. Can be cast one rank below max and still be very good because repeated damage over multiple rounds compensates for the slightly lower per-hit numbers."
+    },
+    {
+      "source": "Witch and Wizard Blaster Build Guides.md",
+      "applies_to": {
+        "role": "multimodal"
+      },
+      "observation": "Multimodal spells are more valuable on prepared casters — spells that are good in multiple situations reduce the pain of 'I prepared the wrong thing today.'"
+    },
+    {
+      "source": "Witch and Wizard Blaster Build Guides.md",
+      "applies_to": {
+        "trait": "Arcane"
+      },
+      "observation": "Arcane is the better blasting tradition than Primal for two reasons: Will-targeting blasts become available from rank 3 onward, whereas Primal's Will-targeting options lean debuff rather than blast. Shore Strike and Force Barrage provide a reliability floor that Primal lacks entirely."
+    },
+    {
+      "source": "Witch and Wizard Blaster Build Guides.md",
+      "applies_to": {
+        "role": "silver_bullets"
+      },
+      "observation": "Three categories of spells to feed your low-rank slots: Silver bullets (Acid Grip, Earthbind), Reactions you'd cast between turns (Hidebound, Brine Dragon's Bile), Campaign-relevant utility."
+    },
+    {
+      "source": "Witch and Wizard Blaster Build Guides.md",
+      "applies_to": {
+        "role": "healing"
+      },
+      "observation": "Prepared blaster casters should not be healers — you can't predict how many heals you'll need, and every heal slot constrains your blasting. Carry emergency scrolls, but make it clear to the party that healing is not your job."
+    }
+  ]
+}

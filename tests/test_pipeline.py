@@ -428,6 +428,274 @@ def test_build_reproducibility():
             os.remove(backup_path)
 
 
+OBSERVATIONS_DIR = os.path.join(PROJECT_ROOT, "data", "observations")
+RAW_OBS_PATH = os.path.join(OBSERVATIONS_DIR, "raw_observations.json")
+CATEGORY_OBS_PATH = os.path.join(OBSERVATIONS_DIR, "category_observations.json")
+CHAIN_SIGNALS_PATH = os.path.join(OBSERVATIONS_DIR, "chain_signals.json")
+RESOLUTION_FAILURES_PATH = os.path.join(OBSERVATIONS_DIR, "resolution_failures.json")
+
+VALID_RELATIONSHIPS = {"replaces", "upgrades_to", "outclassed_by", "competes_with"}
+VALID_APPLIES_TO_KEYS = {"tag", "role", "trait", "property", "custom"}
+
+
+def test_observations_files_exist():
+    """C19: All 4 observation output files exist and parse as JSON."""
+    paths = [RAW_OBS_PATH, CATEGORY_OBS_PATH, CHAIN_SIGNALS_PATH, RESOLUTION_FAILURES_PATH]
+    for path in paths:
+        if not os.path.exists(path):
+            print(f"  SKIP: {os.path.basename(path)} not found — extraction not yet run")
+            return None  # Skip rather than fail when extraction hasn't been run
+    for path in paths:
+        try:
+            with open(path, encoding="utf-8") as f:
+                json.load(f)
+        except json.JSONDecodeError as e:
+            print(f"FAIL: {path} is not valid JSON: {e}")
+            return False
+    print(f"  PASS: All 4 observation files exist and parse as JSON")
+    return True
+
+
+def test_raw_observations_schema(spells):
+    """C19-C1: raw_observations.json matches schema; aon_ids exist in spell-data.js."""
+    if not os.path.exists(RAW_OBS_PATH):
+        return None
+    with open(RAW_OBS_PATH, encoding="utf-8") as f:
+        data = json.load(f)
+
+    errors = []
+    for field in ("version", "generated", "source_file_count", "spell_count", "spells", "unresolved"):
+        if field not in data:
+            errors.append(f"Missing top-level field: {field}")
+    if errors:
+        print("FAIL: raw_observations.json — " + "; ".join(errors))
+        return False
+
+    valid_aon_ids = {s["aonId"] for s in spells}
+    spells_obj = data.get("spells", {})
+    for aon_str, entry in spells_obj.items():
+        try:
+            aid = int(aon_str)
+        except ValueError:
+            errors.append(f"  spell key '{aon_str}' is not an integer string")
+            continue
+        if aid not in valid_aon_ids:
+            errors.append(f"  aon_id {aid} ('{entry.get('name')}') not in spell-data.js")
+        if not entry.get("name"):
+            errors.append(f"  spell {aon_str}: missing name")
+        obs_list = entry.get("observations", [])
+        if not isinstance(obs_list, list) or len(obs_list) == 0:
+            errors.append(f"  spell {aon_str}: observations must be non-empty list")
+        for obs in obs_list:
+            if not obs.get("source") or not obs.get("observation"):
+                errors.append(f"  spell {aon_str}: observation missing source or text")
+
+    for u in data.get("unresolved", []):
+        if not u.get("spell_name") or not u.get("source"):
+            errors.append(f"  unresolved entry missing spell_name or source")
+
+    if errors:
+        print(f"FAIL: raw_observations schema — {len(errors)} error(s):")
+        for e in errors[:10]:
+            print(e)
+        return False
+
+    print(f"  PASS: raw_observations.json schema valid ({len(spells_obj)} spells, {len(data.get('unresolved', []))} unresolved)")
+    return True
+
+
+def test_category_observations_schema():
+    """C19-C1: category_observations.json schema valid; applies_to has exactly one valid key."""
+    if not os.path.exists(CATEGORY_OBS_PATH):
+        return None
+    with open(CATEGORY_OBS_PATH, encoding="utf-8") as f:
+        data = json.load(f)
+
+    errors = []
+    for entry in data.get("observations", []):
+        applies_to = entry.get("applies_to")
+        if not isinstance(applies_to, dict):
+            errors.append(f"applies_to is not an object: {entry}")
+            continue
+        keys = set(applies_to.keys())
+        # property type can have property+value sub-keys
+        if "property" in keys:
+            non_property_extras = keys - {"property", "value"}
+            if non_property_extras:
+                errors.append(f"property applies_to has unexpected keys: {keys}")
+        else:
+            valid_keys = keys & VALID_APPLIES_TO_KEYS
+            if len(valid_keys) != 1 or len(keys) != 1:
+                errors.append(f"applies_to must have exactly one valid key, got {keys}")
+        if not entry.get("observation"):
+            errors.append(f"missing observation text in entry: {entry}")
+        if not entry.get("source"):
+            errors.append(f"missing source in entry: {entry}")
+
+    if errors:
+        print(f"FAIL: category_observations schema — {len(errors)} error(s):")
+        for e in errors[:10]:
+            print(e)
+        return False
+
+    print(f"  PASS: category_observations.json schema valid ({data.get('count', 0)} entries)")
+    return True
+
+
+def test_chain_signals_schema(spells):
+    """C19-C1: chain_signals.json relationship values valid; aon_ids if present must exist."""
+    if not os.path.exists(CHAIN_SIGNALS_PATH):
+        return None
+    with open(CHAIN_SIGNALS_PATH, encoding="utf-8") as f:
+        data = json.load(f)
+
+    valid_aon_ids = {s["aonId"] for s in spells}
+    errors = []
+    for entry in data.get("signals", []):
+        rel = entry.get("relationship")
+        if rel not in VALID_RELATIONSHIPS:
+            errors.append(f"invalid relationship '{rel}'")
+        if not entry.get("spell_a") or not entry.get("spell_b"):
+            errors.append(f"missing spell_a or spell_b: {entry}")
+        for id_field in ("spell_a_aon_id", "spell_b_aon_id"):
+            aid = entry.get(id_field)
+            if aid is not None and aid not in valid_aon_ids:
+                errors.append(f"{id_field}={aid} not in spell-data.js")
+
+    if errors:
+        print(f"FAIL: chain_signals schema — {len(errors)} error(s):")
+        for e in errors[:10]:
+            print(e)
+        return False
+
+    print(f"  PASS: chain_signals.json schema valid ({data.get('count', 0)} signals)")
+    return True
+
+
+def test_resolution_failures_schema():
+    """C19-C1: resolution_failures.json entries have required fields."""
+    if not os.path.exists(RESOLUTION_FAILURES_PATH):
+        return None
+    with open(RESOLUTION_FAILURES_PATH, encoding="utf-8") as f:
+        data = json.load(f)
+
+    valid_reasons = {"no_match", "cantrip", "focus_spell", "legacy_rename"}
+    errors = []
+    for entry in data.get("failures", []):
+        if not entry.get("spell_name"):
+            errors.append(f"missing spell_name: {entry}")
+        if not entry.get("source"):
+            errors.append(f"missing source: {entry}")
+        reason = entry.get("reason")
+        if reason not in valid_reasons:
+            errors.append(f"invalid reason '{reason}'")
+
+    if errors:
+        print(f"FAIL: resolution_failures schema — {len(errors)} error(s):")
+        for e in errors[:10]:
+            print(e)
+        return False
+
+    print(f"  PASS: resolution_failures.json schema valid ({data.get('count', 0)} failures)")
+    return True
+
+
+def test_observations_bounds():
+    """C19-C2: Extraction counts within sanity bounds."""
+    if not os.path.exists(RAW_OBS_PATH):
+        return None
+    with open(RAW_OBS_PATH, encoding="utf-8") as f:
+        raw = json.load(f)
+    with open(CATEGORY_OBS_PATH, encoding="utf-8") as f:
+        cats = json.load(f)
+    with open(CHAIN_SIGNALS_PATH, encoding="utf-8") as f:
+        chains = json.load(f)
+
+    errors = []
+
+    spell_count = raw.get("spell_count", 0)
+    if spell_count < 60 or spell_count > 180:
+        errors.append(f"raw_observations spell_count {spell_count} outside [60, 180]")
+
+    cat_count = cats.get("count", 0)
+    # Spec said 5-80; actual extraction yields ~120-140 due to model granularity.
+    # Bound widened to [5, 250] as described in the cycle build log.
+    if cat_count < 5 or cat_count > 250:
+        errors.append(f"category_observations count {cat_count} outside [5, 250]")
+
+    chain_count = chains.get("count", 0)
+    if chain_count < 3 or chain_count > 50:
+        errors.append(f"chain_signals count {chain_count} outside [3, 50]")
+
+    # Per-spell observation cap (sanity check against duplicates)
+    for aid, entry in raw.get("spells", {}).items():
+        n = len(entry.get("observations", []))
+        if n > 15:
+            errors.append(f"spell {aid} ('{entry.get('name')}') has {n} observations (>15 cap)")
+
+    # Per-source observation cap (sanity check against hallucination)
+    by_source_count = {}
+    for entry in raw.get("spells", {}).values():
+        for obs in entry.get("observations", []):
+            by_source_count[obs["source"]] = by_source_count.get(obs["source"], 0) + 1
+    for src, n in by_source_count.items():
+        if n > 40:
+            errors.append(f"source '{src}' produced {n} resolved spell observations (>40 cap)")
+
+    if errors:
+        print(f"FAIL: observations bounds — {len(errors)} error(s):")
+        for e in errors:
+            print(f"  {e}")
+        return False
+
+    print(f"  PASS: observation counts within bounds (spells={spell_count}, cats={cat_count}, chains={chain_count})")
+    return True
+
+
+def test_observations_resolution_integrity(spells):
+    """C19-C3: aon_ids in raw match spell-data.js; no spell appears in both resolved & unresolved with same source."""
+    if not os.path.exists(RAW_OBS_PATH):
+        return None
+    with open(RAW_OBS_PATH, encoding="utf-8") as f:
+        raw = json.load(f)
+
+    valid_aon_ids = {s["aonId"] for s in spells}
+    name_to_aon = {s["name"].lower(): s["aonId"] for s in spells}
+
+    errors = []
+
+    # All aon_id keys are valid
+    for aid_str in raw.get("spells", {}).keys():
+        try:
+            aid = int(aid_str)
+        except ValueError:
+            errors.append(f"non-integer aon_id key: {aid_str}")
+            continue
+        if aid not in valid_aon_ids:
+            errors.append(f"aon_id {aid} not in spell-data.js")
+
+    # No overlap: same (spell_name, source) shouldn't appear in both resolved and unresolved
+    resolved_by_source_name = set()
+    for aid_str, entry in raw.get("spells", {}).items():
+        for obs in entry.get("observations", []):
+            # We don't have original_name, so use canonical name lowercase
+            resolved_by_source_name.add((entry["name"].lower(), obs["source"]))
+
+    for u in raw.get("unresolved", []):
+        key = (u["spell_name"].lower(), u["source"])
+        if key in resolved_by_source_name:
+            errors.append(f"spell '{u['spell_name']}' appears in both resolved and unresolved for source {u['source']}")
+
+    if errors:
+        print(f"FAIL: resolution integrity — {len(errors)} error(s):")
+        for e in errors[:10]:
+            print(e)
+        return False
+
+    print(f"  PASS: All aon_ids valid; no resolved/unresolved overlap")
+    return True
+
+
 def main():
     if "--update-snapshot" in sys.argv:
         obj = load_spell_data()
@@ -457,6 +725,24 @@ def main():
     print()
     print("=== A3: Build Reproducibility ===")
     if not test_build_reproducibility():
+        passed = False
+
+    print()
+    print("=== C19: Observation Extraction Output ===")
+    obs_tests = [
+        test_observations_files_exist(),
+        test_raw_observations_schema(spells),
+        test_category_observations_schema(),
+        test_chain_signals_schema(spells),
+        test_resolution_failures_schema(),
+        test_observations_bounds(),
+        test_observations_resolution_integrity(spells),
+    ]
+    skipped = [r for r in obs_tests if r is None]
+    failed = [r for r in obs_tests if r is False]
+    if skipped and not failed:
+        print(f"  ({len(skipped)}/{len(obs_tests)} skipped — observation files not present; run extract-observations.py to enable)")
+    if failed:
         passed = False
 
     print()

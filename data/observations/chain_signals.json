@@ -1,0 +1,135 @@
+{
+  "version": "1.0.0",
+  "generated": "2026-05-05",
+  "count": 16,
+  "signals": [
+    {
+      "spell_a": "Acid Arrow",
+      "spell_b": "Acid Grip",
+      "spell_a_aon_id": 2,
+      "spell_b_aon_id": 1436,
+      "relationship": "replaces",
+      "source": "Acid Grip is UNDERRATED.md"
+    },
+    {
+      "spell_a": "Dream Message",
+      "spell_b": "Sending",
+      "spell_a_aon_id": 1503,
+      "spell_b_aon_id": 1665,
+      "relationship": "upgrades_to",
+      "source": "Are Utility Spells BAD in Pathfinder 2e.md"
+    },
+    {
+      "spell_a": "Clairvoyance",
+      "spell_b": "Scouting Eye",
+      "spell_a_aon_id": 1466,
+      "spell_b_aon_id": 1661,
+      "relationship": "outclassed_by",
+      "source": "Are Utility Spells BAD in Pathfinder 2e.md"
+    },
+    {
+      "spell_a": "Translocate",
+      "spell_b": "Teleport",
+      "spell_a_aon_id": 1724,
+      "spell_b_aon_id": 1720,
+      "relationship": "upgrades_to",
+      "source": "Are Utility Spells BAD in Pathfinder 2e.md"
+    },
+    {
+      "spell_a": "Floating Flame",
+      "spell_b": "Cinder Swarm",
+      "spell_a_aon_id": 1533,
+      "spell_b_aon_id": 1350,
+      "relationship": "outclassed_by",
+      "source": "Cinder Swarm is Underrated.md"
+    },
+    {
+      "spell_a": "Fireball",
+      "spell_b": "Eclipse Burst",
+      "spell_a_aon_id": 1530,
+      "spell_b_aon_id": 1508,
+      "relationship": "outclassed_by",
+      "source": "Dehydrate is UNDERRATED.md"
+    },
+    {
+      "spell_a": "Floating Flame",
+      "spell_b": "Cinder Swarm",
+      "spell_a_aon_id": 1533,
+      "spell_b_aon_id": 1350,
+      "relationship": "replaces",
+      "source": "Elemental Sorcerer Blaster Guide.md"
+    },
+    {
+      "spell_a": "Cave Fangs",
+      "spell_b": "Howling Blizzard",
+      "spell_a_aon_id": 1329,
+      "spell_b_aon_id": 1559,
+      "relationship": "replaces",
+      "source": "Elemental Sorcerer Blaster Guide.md"
+    },
+    {
+      "spell_a": "Fireball",
+      "spell_b": "Howling Blizzard",
+      "spell_a_aon_id": 1530,
+      "spell_b_aon_id": 1559,
+      "relationship": "replaces",
+      "source": "Elemental Sorcerer Blaster Guide.md"
+    },
+    {
+      "spell_a": "Cave Fangs",
+      "spell_b": "Eclipse Burst",
+      "spell_a_aon_id": 1329,
+      "spell_b_aon_id": 1508,
+      "relationship": "replaces",
+      "source": "Elemental Sorcerer Blaster Guide.md"
+    },
+    {
+      "spell_a": "Fireball",
+      "spell_b": "Eclipse Burst",
+      "spell_a_aon_id": 1530,
+      "spell_b_aon_id": 1508,
+      "relationship": "replaces",
+      "source": "Elemental Sorcerer Blaster Guide.md"
+    },
+    {
+      "spell_a": "Floating Flame",
+      "spell_b": "Cinder Swarm",
+      "spell_a_aon_id": 1533,
+      "spell_b_aon_id": 1350,
+      "relationship": "replaces",
+      "source": "How to Blast GOOD in Pathfinder 2e.md"
+    },
+    {
+      "spell_a": "Thunder Strike",
+      "spell_b": "Horizon Thunder Sphere",
+      "spell_a_aon_id": null,
+      "spell_b_aon_id": 927,
+      "relationship": "competes_with",
+      "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md"
+    },
+    {
+      "spell_a": "Thunderstrike",
+      "spell_b": "Horizon Thunder Sphere",
+      "spell_a_aon_id": 1721,
+      "spell_b_aon_id": 927,
+      "relationship": "outclassed_by",
+      "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md"
+    },
+    {
+      "spell_a": "Bless",
+      "spell_b": "Heroism",
+      "spell_a_aon_id": 1451,
+      "spell_b_aon_id": 1555,
+      "relationship": "replaces",
+      "source": "Spell Selection Basics.md"
+    },
+    {
+      "spell_a": "Agitate",
+      "spell_b": "Slow",
+      "spell_a_aon_id": 2341,
+      "spell_b_aon_id": 1677,
+      "relationship": "outclassed_by",
+      "source": "Spell Selection Basics.md"
+    }
+  ]
+}

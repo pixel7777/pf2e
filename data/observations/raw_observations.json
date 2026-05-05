@@ -1,0 +1,2858 @@
+{
+  "version": "1.0.0",
+  "generated": "2026-05-05",
+  "source_file_count": 22,
+  "spell_count": 137,
+  "spells": {
+    "1436": {
+      "name": "Acid Grip",
+      "observations": [
+        {
+          "source": "Acid Grip is UNDERRATED.md",
+          "observation": "Excellent rank 2 Arcane/Primal force movement spell that's more reliable than martial Shove/Reposition even when the math is stacked against the caster. The more urgently you need to move someone, the better this spell gets.",
+          "context": "force movement"
+        },
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Silver bullet against enemies that grab (especially Improved Grab). Forcibly moves them 5ft and ends the grab. Emergency rescue for grabbed allies.",
+          "context": "silver bullet"
+        },
+        {
+          "source": "Cinder Swarm is Underrated.md",
+          "observation": "Better force movement than Cinder Swarm against bosses/single targets, but costs a spell slot and two actions each time. Not repeatable for one action.",
+          "context": "force movement"
+        },
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Best force movement in the game for breaking grabs and restrains on allies. On theme for blasters. Recommend on any arcane or primal caster.",
+          "context": "force movement"
+        },
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Forced movement on Reflex. Different effect than Containment in same defense.",
+          "context": "silver bullet + variety"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Possible alternative rank 2 signature for non-blasting elemental sorcerer.",
+          "context": "versatility option"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Always a good silver bullet to have in low-rank slots.",
+          "context": "silver bullet"
+        }
+      ]
+    },
+    "2": {
+      "name": "Acid Arrow",
+      "observations": [
+        {
+          "source": "Acid Grip is UNDERRATED.md",
+          "observation": "Was a very good spell for dealing damage, largely for Maguses. Acid Grip is seen as a nerf because it replaced Acid Arrow, causing people to overlook Acid Grip's unique force movement utility.",
+          "context": "legacy context"
+        }
+      ]
+    },
+    "1515": {
+      "name": "Entangling Flora",
+      "observations": [
+        {
+          "source": "Acid Grip is UNDERRATED.md",
+          "observation": "Already a good spell for slowing/immobilizing enemies. Acid Grip combos with it as a force multiplier — push enemies back into the difficult terrain / immobilization zone after they've saved and started approaching.",
+          "context": "combo piece"
+        },
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Lingering area crowd control — generates value over time after casting.",
+          "context": "slot-efficient"
+        },
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+          "observation": "Looks weak by success effect (no real loss for enemies). Strong in multi-target context: difficult terrain muddles turns, failures trap enemies in the area, and succeeding enemies face a choice -- leave or stay and risk failing later.",
+          "context": "AoE control"
+        },
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Automatic difficult terrain. Value multiplied by scouting/positioning.",
+          "context": "control"
+        }
+      ]
+    },
+    "1581": {
+      "name": "Knock",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "+4 status bonus to thievery, free check, lets untrained attempt. The poster child of the 'Knock Problem' — requires a check because it contests a craftsman's skill. Still good, just not auto-solve.",
+          "context": "skill contest"
+        }
+      ]
+    },
+    "1589": {
+      "name": "Lock",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Counterpart to Knock — locks a door and sets DC to your spellcasting DC or the lock's DC, whichever is higher. Same design logic.",
+          "context": "skill contest"
+        }
+      ]
+    },
+    "1737": {
+      "name": "Vanishing Tracks",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Covers tracks with +4 DC or your spellcasting DC. Check-based because a skilled tracker can counter magic.",
+          "context": "skill contest"
+        }
+      ]
+    },
+    "2354": {
+      "name": "Liberating Command",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Makes escape a reaction (saving ally's action), prevents MAP on their turn since escape has the attack trait. Huge action economy value.",
+          "context": "action economy"
+        },
+        {
+          "source": "Is Vision of Death Better than Synesthesia.md",
+          "observation": "Listed as a utility option on a level 10 bard's spell list.",
+          "context": "utility"
+        }
+      ]
+    },
+    "970": {
+      "name": "Pocket Library",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "+1 to +4 status bonus to recall knowledge (scales with heightening). Prevents critical failure misinformation. Additional value on crit success.",
+          "context": "knowledge utility"
+        }
+      ]
+    },
+    "1438": {
+      "name": "Air Bubble",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Just lets an ally breathe. No check.",
+          "context": "environmental"
+        }
+      ]
+    },
+    "1442": {
+      "name": "Ant Haul",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Just lets you carry more stuff.",
+          "context": "carrying capacity"
+        },
+        {
+          "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+          "observation": "Necessary utility tax for tiny characters (Sprites have half bulk limit — can only carry 2 bulk). Annoying but required.",
+          "context": "utility tax"
+        }
+      ]
+    },
+    "1286": {
+      "name": "Helpful Steps",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Solves verticality if a ladder or stairs would solve it. Just works.",
+          "context": "movement"
+        },
+        {
+          "source": "Is Vision of Death Better than Synesthesia.md",
+          "observation": "Listed as a utility option on a level 10 bard's spell list.",
+          "context": "utility"
+        }
+      ]
+    },
+    "1445": {
+      "name": "Augury",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Just lets you ask the GM a question.",
+          "context": "divination"
+        }
+      ]
+    },
+    "1541": {
+      "name": "Gecko Grip",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Just lets you climb — no athletics checks. At low levels (rank 2), expensive but outperforms athletics. At high levels, athletics users get quick climb or their own climb speed.",
+          "context": "movement"
+        }
+      ]
+    },
+    "1577": {
+      "name": "Invisibility",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Much stronger than 5e version — you're automatically undetected. Even if found, much harder to track than in 5e. Just works.",
+          "context": "stealth"
+        }
+      ]
+    },
+    "1680": {
+      "name": "Speak with Animals",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Just works. No skill can replicate this non-magically.",
+          "context": "communication"
+        }
+      ]
+    },
+    "1755": {
+      "name": "Water Breathing",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Just works. Does exactly what it says.",
+          "context": "environmental"
+        }
+      ]
+    },
+    "1465": {
+      "name": "Clairaudience",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Listen through walls, breaking line of effect. Just works.",
+          "context": "detection"
+        }
+      ]
+    },
+    "1503": {
+      "name": "Dream Message",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Contact someone at the other end of the world. Just works. No skill equivalent.",
+          "context": "communication"
+        }
+      ]
+    },
+    "2025": {
+      "name": "Shared Invisibility",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Make the whole party invisible.",
+          "context": "stealth"
+        }
+      ]
+    },
+    "1681": {
+      "name": "Speak with Plants",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Just works.",
+          "context": "communication"
+        }
+      ]
+    },
+    "1303": {
+      "name": "Airlift",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Solves a wide variety of utility problems. Just works.",
+          "context": "movement"
+        },
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Utility option — feels great when the party is out of position. On theme for a blaster.",
+          "context": "utility"
+        },
+        {
+          "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+          "observation": "Reposition all friends, and hilariously can try to kidnap one enemy. Fun but may not prepare on game day.",
+          "context": "mass repositioning"
+        }
+      ]
+    },
+    "1466": {
+      "name": "Clairvoyance",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Remote sensing. Just works.",
+          "context": "detection"
+        }
+      ]
+    },
+    "1534": {
+      "name": "Fly",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Better than jumping at most levels. At highest levels, martials close the gap with legendary athletics feats.",
+          "context": "movement"
+        },
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Sometimes you or a party member needs to fly. Worth having.",
+          "context": "utility"
+        }
+      ]
+    },
+    "1724": {
+      "name": "Translocate",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Short-distance teleportation. Heightens to medium (rank 5), then Teleport at rank 6 covers city → country → continent → planet.",
+          "context": "teleportation"
+        },
+        {
+          "source": "Is Vision of Death Better than Synesthesia.md",
+          "observation": "Listed as a utility option on a level 10 bard's spell list.",
+          "context": "utility"
+        }
+      ]
+    },
+    "1665": {
+      "name": "Sending",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Upgraded dream message.",
+          "context": "communication"
+        }
+      ]
+    },
+    "1661": {
+      "name": "Scouting Eye",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Way better than clairvoyance.",
+          "context": "detection"
+        }
+      ]
+    },
+    "1663": {
+      "name": "See the Unseen",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Detect invisible enemies, last all day. At highest levels, a high-perception martial with True Sight general feat actually surpasses these (auto-heightening, higher counteract modifier).",
+          "context": "detection"
+        }
+      ]
+    },
+    "1422": {
+      "name": "Elemental Sense",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Detect invisible enemies, last all day. At highest levels, a high-perception martial with True Sight general feat actually surpasses these (auto-heightening, higher counteract modifier).",
+          "context": "detection"
+        }
+      ]
+    },
+    "1720": {
+      "name": "Teleport",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "City → country → continent → planet as heightened. No skill equivalent.",
+          "context": "teleportation"
+        }
+      ]
+    },
+    "1542": {
+      "name": "Gentle Landing",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Mentioned as great utility.",
+          "context": "utility"
+        }
+      ]
+    },
+    "1517": {
+      "name": "Environmental Endurance",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Mentioned as great utility.",
+          "context": "utility"
+        }
+      ]
+    },
+    "1751": {
+      "name": "Wall of Stone",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Mentioned as great utility.",
+          "context": "utility"
+        },
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+          "observation": "Cited as a powerful AoE/control spell at higher ranks where minions have meaningful HP.",
+          "context": "high-rank control"
+        },
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Way better than heightened lower-rank control at rank 5. Always pick native.",
+          "context": "control staple"
+        }
+      ]
+    },
+    "1492": {
+      "name": "Disintegrate",
+      "observations": [
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Mentioned as useful when party can't deal with walls (e.g., heavy Dex martial party).",
+          "context": "situational utility"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Sin spell (Wrath), heavy hitter.",
+          "context": "heavy hitter"
+        }
+      ]
+    },
+    "1530": {
+      "name": "Fireball",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Worse for prepared casters than spontaneous. Good AoE damage but embarrassing against 1-2 enemies or high-Reflex targets. You can get stuck with it when it's not what you need.",
+          "context": "AoE damage"
+        },
+        {
+          "source": "Dehydrate is UNDERRATED.md",
+          "observation": "Great burst damage spell but not automatic best-in-slot for AoE at higher ranks. Strength is massive upfront hit for burst-focused parties, but has embarrassingly low damage in single-target situations.",
+          "context": "AoE burst damage"
+        },
+        {
+          "source": "Does Paizo Love Wizards Now.md",
+          "observation": "Gets forced movement rider at level 2, frighten rider at level 6 with War Mage. Can combo with persistent effects like Cinder Swarm by pulling enemies into tighter formation.",
+          "context": "War Mage combo piece"
+        },
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Fine alternative to Cave Fangs. Iconic but eventually outclassed.",
+          "context": "AoE damage"
+        },
+        {
+          "source": "How to Blast GOOD in Pathfinder 2e.md",
+          "observation": "Premier AoE burst. Still better than single-target spells even when going late in initiative, because the spike chance on the primary target equals Thunder Strike while also damaging others.",
+          "context": "Core AoE"
+        },
+        {
+          "source": "Hypnotize is UNDERRATED.md",
+          "observation": "The premier generically good AoE — if fighting 2+ enemies, always a good reason to use it. But Lightning Bolt is better in narrow corridors.",
+          "context": "AoE damage"
+        },
+        {
+          "source": "Is Vision of Death Better than Synesthesia.md",
+          "observation": "Mentioned as an example of a 'generically powerful and iconic' spell.",
+          "context": "meta staple"
+        },
+        {
+          "source": "Mathfinders Blaster Caster RUBRIC.md",
+          "observation": "Standard two-action blast spell that leaves third action free.",
+          "context": "core blasting"
+        },
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+          "observation": "Underestimated if evaluated by success effect only (3d6 success damage looks bad for rank 5). Properly evaluated by failure (6d6) and crit failure (12d6) against multiple targets, it's strong.",
+          "context": "AoE damage"
+        },
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Heightens decently. Less risky than Chain Lightning, more ally-friendly than Eclipse Burst. All three worth considering.",
+          "context": "AoE damage"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Rank 3 signature candidate for elemental sorcerer; competes with Lightning Bolt and Cave Fangs.",
+          "context": "signature selection"
+        },
+        {
+          "source": "Why I Hate (and Why I Love) the Wizard.md",
+          "observation": "At base, it falls behind native-rank AoEs when heightened without additional support.",
+          "context": "Blasting, heightening discussion"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "One-shot AoE staple.",
+          "context": "AoE damage"
+        }
+      ]
+    },
+    "1586": {
+      "name": "Lightning Bolt",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Better AoE choice for prepared casters than Fireball. Incredible against exactly 2 enemies, and against 1 enemy it's as good as an on-rank Thunderstrike. Decent AoE that also works single-target.",
+          "context": "AoE damage"
+        },
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Often underrated — does about the same damage as Thunder Strike single-target, but if you hit 2-3 enemies in the line, it's like Thunder Striking all of them.",
+          "context": "line AoE"
+        },
+        {
+          "source": "How to Blast GOOD in Pathfinder 2e.md",
+          "observation": "Treat as a single-target spell with a multi-target rider. Better than Fireball when going late in initiative for kill confirms because higher single-target damage while still potentially hitting others.",
+          "context": "Hybrid single/multi"
+        },
+        {
+          "source": "Hypnotize is UNDERRATED.md",
+          "observation": "Better than Fireball specifically in narrow corridors with 2-3 enemies in a line. Classic example of a situational spell that outperforms the generic option in its niche.",
+          "context": "situational AoE"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Alternative rank 3 signature candidate.",
+          "context": "signature selection"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Excellent multimodal spell — works as both single-target and AoE, more valuable on prepared casters for this reason.",
+          "context": "multimodal"
+        }
+      ]
+    },
+    "1351": {
+      "name": "Dehydrate",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Better AoE choice for prepared casters than Fireball for the same reason — decent AoE that doesn't embarrass you in single-target situations.",
+          "context": "AoE damage"
+        },
+        {
+          "source": "Cinder Swarm is Underrated.md",
+          "observation": "Covers only 4 squares vs. Cinder Swarm's 5ft emanation covering 9 squares.",
+          "context": "AoE area"
+        },
+        {
+          "source": "Dehydrate is UNDERRATED.md",
+          "observation": "Fantastic rank 1 Arcane/Primal AoE that stays competitive at high ranks through sustained damage and growing area. More flexible than Fireball in both AoE and single-target situations, with passive damage that keeps ticking while party recovers.",
+          "context": "AoE sustained damage"
+        },
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Decent AoE against clumped enemies targeting fortitude. At rank 3, actually does excellent single-target damage — usable as a single-target fort-targeting option.",
+          "context": "fortitude targeting"
+        },
+        {
+          "source": "How to Blast GOOD in Pathfinder 2e.md",
+          "observation": "Premier fire-and-forget spell. Persistent damage racks up value in the background while party focuses other targets.",
+          "context": "Fire-and-forget"
+        },
+        {
+          "source": "How to Look at Spells on Archives of Nethys.md",
+          "observation": "Good rank 1 Fort option.",
+          "context": "fortitude targeting"
+        },
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+          "observation": "Good single-target boss spell -- useful even on success.",
+          "context": "boss single-target"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Rank 1 staple.",
+          "context": "low-rank staple"
+        }
+      ]
+    },
+    "1536": {
+      "name": "Force Barrage",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Great coverage spell. Single-target focused but can split missiles among multiple targets for no-save, no-attack-roll poke damage. Good as auto-damage vs bosses.",
+          "context": "coverage"
+        },
+        {
+          "source": "How to Look at Spells on Archives of Nethys.md",
+          "observation": "Good 1-action spell to fire from a lower-rank slot.",
+          "context": "low-rank filler"
+        },
+        {
+          "source": "Hypnotize is UNDERRATED.md",
+          "observation": "Called out as the rare rank 1 auto-effect spell (no save). The exception that proves how rare auto-effects are at low ranks.",
+          "context": "auto-effect rarity"
+        },
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Always carry. Best \"I don't know what to target\" option. Middle-ground reliable performance.",
+          "context": "auto-hit reliability"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Strong brute-forcing option; combines exceptionally well with Unleash Psyche.",
+          "context": "brute forcing"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Arcane staple, auto-hit damage that ignores saves and AC entirely. Good to stock a couple copies in top ranks.",
+          "context": "auto-hit damage"
+        }
+      ]
+    },
+    "1533": {
+      "name": "Floating Flame",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Good coverage spell. Single-target focused but can ping-pong between multiple enemies for solid cumulative damage. Better than Slow if facing 5+ enemies unexpectedly. Especially good vs bosses (repeatable basic save).",
+          "context": "coverage"
+        },
+        {
+          "source": "Cinder Swarm is Underrated.md",
+          "observation": "At rank 4, nearly identical base damage to Cinder Swarm but only heightens +1d6/rank, occupies one square, and is harder to keep on target. Cinder Swarm is strictly better from rank 5 onward.",
+          "context": "sustained damage comparison"
+        },
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Powerful continuous-damage reflex-targeting spell, good complement to Thunder Strike's one-shot damage. Drop it once you have enough high-rank slots for Cinder Swarm.",
+          "context": "continuous damage"
+        },
+        {
+          "source": "How to Blast GOOD in Pathfinder 2e.md",
+          "observation": "Single-target spell with multi-target rider. Good for fire-and-forget persistent damage. Relevant until replaced by Cinder Swarm.",
+          "context": "Persistent damage"
+        },
+        {
+          "source": "Mathfinders Blaster Caster RUBRIC.md",
+          "observation": "Good sustained spell — cast once, sustain for ongoing damage across multiple turns.",
+          "context": "sustained damage"
+        },
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Good sustain-and-weave spell.",
+          "context": "third action"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Likely rank 2 signature spell for elemental sorcerer; also a good sustain-then-focus-spell setup option.",
+          "context": "signature selection"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Fantastic sustain spell, staple for both Witch and Wizard.",
+          "context": "top-rank sustain"
+        }
+      ]
+    },
+    "1677": {
+      "name": "Slow",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Good generically. Targets Fortitude. Better against small numbers of enemies where action denial has pronounced effect. Classic prepared caster coverage spell.",
+          "context": "coverage"
+        },
+        {
+          "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+          "observation": "Standard strong debuff, reflavored as encrusting enemy in frost.",
+          "context": "debuff"
+        },
+        {
+          "source": "Hypnotize is UNDERRATED.md",
+          "observation": "The generically good comparison point with higher ceiling than Hypnotize (permanent action loss on fail) but lower floor (nothing on crit success). Mathfinder would pick Slow over Hypnotize against a generic single target boss in a vacuum — but Hypnotize wins in many specific situations.",
+          "context": "debuff comparison"
+        },
+        {
+          "source": "Is Vision of Death Better than Synesthesia.md",
+          "observation": "Strong single-target action denial. Complements Vision of Death rather than competing -- Slow targets Fort, Vision of Death targets Will. Where one is bad (e.g., ogres have strong Fort), the other is good. Both belong on a debuffer's list.",
+          "context": "single-target action denial"
+        },
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+          "observation": "Good when evaluated by failure effect at rank 6 multi-target. On success against many foes, only removes one action per foe -- not impressive. On failure, one foe loses significant actions, enabling divide-and-conquer.",
+          "context": "AoE debuff"
+        },
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+          "observation": "Decent against one-of-many enemies at rank 3 single-target. Success: minimal impact. Failure: deny one action for rest of combat. Crit failure: outstanding, practically removes them.",
+          "context": "single-target in multi-target context"
+        },
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Action denial on Fort. Better than heightening Agitate.",
+          "context": "debuff"
+        }
+      ]
+    },
+    "1553": {
+      "name": "Haste",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Good generically as a buff. When your offensive spells don't match the situation, buffing an ally is always useful. Duration-based value multiplier.",
+          "context": "buff"
+        },
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Really good teammate spell — huge tempo shift for the whole party. Incidentally helps you too. Worth picking despite not being a blast.",
+          "context": "party buff"
+        }
+      ]
+    },
+    "1569": {
+      "name": "Illusory Object",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Classic multimodal spell available at rank 1. Wall off battlefield sections, trap enemies (they must disbelieve), protect ally flanks, divide and conquer, or just wall off and run. Huge variety of uses in one slot.",
+          "context": "multimodal"
+        }
+      ]
+    },
+    "1350": {
+      "name": "Cinder Swarm",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Excellent multimodal + silver bullet. Fireflies mode for crowds, fire ants mode for bosses. Can forcibly move grabbed enemies every turn, potentially nullifying grab-based threats entirely.",
+          "context": "multimodal"
+        },
+        {
+          "source": "Cinder Swarm is Underrated.md",
+          "observation": "Criminally underrated. Excellent sustained single-target and AoE damage, plus force movement rider, all ally-friendly. Better than Floating Flame at same rank and scales faster.",
+          "context": "sustained damage"
+        },
+        {
+          "source": "Cinder Swarm is Underrated.md",
+          "observation": "Situational incapacitation variant. Only useful as AoE (not single target due to incap trait). Can Dazzle/Blind on Fort save with slightly less damage.",
+          "context": "fireflies variant"
+        },
+        {
+          "source": "Does Paizo Love Wizards Now.md",
+          "observation": "Place it on one target, then Fireball the group and pull failed-save enemies into it for multi-target damage.",
+          "context": "combo synergy"
+        },
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Excellent single-target blast, about as much damage as Floating Flame. Replaces Floating Flame at higher levels.",
+          "context": "single-target replacement"
+        },
+        {
+          "source": "How to Blast GOOD in Pathfinder 2e.md",
+          "observation": "Direct replacement for Floating Flame. Stays relevant for the entire remaining level range. Good for fire-and-forget and focus fire both.",
+          "context": "Persistent damage"
+        },
+        {
+          "source": "Is Mystic Armour the Best 10th Rank Spell in Pathfinder 2e.md",
+          "observation": "Mentioned as still available — implied positive evaluation.",
+          "context": "slot opportunity cost"
+        },
+        {
+          "source": "Mathfinders Blaster Caster RUBRIC.md",
+          "observation": "Good sustained spell for multi-turn value.",
+          "context": "sustained damage"
+        },
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Good sustain-and-weave spell.",
+          "context": "third action"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Good sustain spell for setup turns.",
+          "context": "sustain spell"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Pretty good sustain, has a secondary blind mode that's situationally useful against many enemies — adds multimodal value.",
+          "context": "sustain spell"
+        }
+      ]
+    },
+    "1653": {
+      "name": "Revealing Light",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Silver bullet against invisible enemies. Directly counters invisibility-reliant threats.",
+          "context": "silver bullet"
+        },
+        {
+          "source": "Cinder Swarm is Underrated.md",
+          "observation": "Better at inflicting Dazzled than Cinder Swarm's firefly mode, but doesn't come with damage or force movement.",
+          "context": "debuff comparison"
+        },
+        {
+          "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+          "observation": "Good for dazzling enemies. Can reflavor as snow blindness — reflecting light off snow already thrown out.",
+          "context": "debuff"
+        },
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Reflavored as \"snow blindness\" for cold mage. Dazzle.",
+          "context": "thematics + utility"
+        }
+      ]
+    },
+    "1583": {
+      "name": "Laughing Fit",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Silver bullet against enemies with dangerous reactions. Directly counters reaction-heavy threats.",
+          "context": "silver bullet"
+        },
+        {
+          "source": "Is Vision of Death Better than Synesthesia.md",
+          "observation": "Listed as part of a bard's 'silver bullets' package -- situational spell kept for specific encounters.",
+          "context": "silver bullet slot"
+        }
+      ]
+    },
+    "1348": {
+      "name": "Blazing Armory",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Example of a deep silver bullet only prepared casters can exploit. A spontaneous caster would need a scroll; a prepared caster just prepares it the day they know they're fighting a Hydra.",
+          "context": "silver bullet"
+        }
+      ]
+    },
+    "2344": {
+      "name": "Befuddle",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Silver bullet against enemy spellcasters (inflicts Stupefied). Cut it when facing non-casters like animals.",
+          "context": "silver bullet"
+        }
+      ]
+    },
+    "1524": {
+      "name": "Fear",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Generically useful debuff. Good to swap into lower ranks when will-targeting is needed. Replaced by Dirge of Doom if a party member has it (redundant value).",
+          "context": "debuff"
+        },
+        {
+          "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+          "observation": "Standard pick, reflavored as the dread of winter / channeling Old Man Winter's power.",
+          "context": "debuff"
+        },
+        {
+          "source": "How to Look at Spells on Archives of Nethys.md",
+          "observation": "Recommended rank 1 Will-targeting pick.",
+          "context": "will targeting"
+        },
+        {
+          "source": "Is Vision of Death Better than Synesthesia.md",
+          "observation": "Great multi-target debuff -- compresses debuffing a whole crowd into 2 actions. Not a competitor to Vision of Death; they serve entirely different roles (AoE vs single-target).",
+          "context": "AoE debuff"
+        },
+        {
+          "source": "Is Vision of Death Better than Synesthesia.md",
+          "observation": "Almost never worth casting at level 10 when you have better options from wands, staves, scrolls, focus spells, or cantrips. Don't put it on your list just because it's 'evergreen.'",
+          "context": "low-rank slot filler"
+        },
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+          "observation": "Good single-target boss spell -- delivers value even on success.",
+          "context": "boss single-target"
+        },
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Do NOT keep in low-rank slots as evergreen. Directly worse than higher-rank frightened spells.",
+          "context": "anti-pattern"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "One of only two real Will-targeting options for primal casters.",
+          "context": "Will targeting"
+        }
+      ]
+    },
+    "665": {
+      "name": "Agonizing Despair",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Will-targeting debuff, good when you learn enemies have low Will (e.g., animals). Dropped from list when switching to boss-fight prep.",
+          "context": "debuff"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Strong Will-targeting blast — available to arcane and occult, not primal.",
+          "context": "Will targeting"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Will-targeting blast available to arcane casters.",
+          "context": "will-targeting blast"
+        }
+      ]
+    },
+    "2005": {
+      "name": "Leaden Steps",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Multimodal — can reduce speed OR inflict Clumsy OR both. Good against mobile enemies like fey.",
+          "context": "multimodal"
+        }
+      ]
+    },
+    "927": {
+      "name": "Horizon Thunder Sphere",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Good swap-in when you expect enemies with high Reflex but normal AC (e.g., fey). Targets AC instead of Reflex saves. Swapped back out for boss fights (attacks risky vs bosses).",
+          "context": "situational swap"
+        },
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Excellent damage at levels 1-2. Attack roll gives roller's advantage (~virtual +2). Three-action version deals half on miss. Situational because it costs all three actions.",
+          "context": "early game alpha strike"
+        },
+        {
+          "source": "How to Look at Spells on Archives of Nethys.md",
+          "observation": "Good spell, differently good from Hydraulic Push.",
+          "context": "comparable options"
+        },
+        {
+          "source": "Mathfinders Blaster Caster RUBRIC.md",
+          "observation": "Useful as a brute-force option — attack roll bypasses when saves aren't working.",
+          "context": "brute-force alternative"
+        },
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+          "observation": "May be better than Thunder Strike against lower-level enemies in multi-target context. Benefits from attack roll boosts (Guidance, Courageous Anthem, off-guard, hero points, Sure Strike, Shadow Signet spell shape).",
+          "context": "single-target in multi-target context"
+        },
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
+          "observation": "Strong. At 3 actions, gains a half-hit option that moderates the risk of attack roll spells. Direct comparison to Thunderstrike — HTS is simply the correct answer when you have off-guard + bonuses + fortune.",
+          "context": "damage"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Good brute-forcing option for primal; also a signature spell candidate for rank 1.",
+          "context": "brute forcing"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Rank 1 staple.",
+          "context": "low-rank staple"
+        }
+      ]
+    },
+    "1506": {
+      "name": "Earthbind",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Good silver bullet when expecting flying enemies. Brought in for fey encounters.",
+          "context": "silver bullet"
+        },
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Anti-flying silver bullet. Pick up at third rank.",
+          "context": "anti-flying"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Always a good silver bullet.",
+          "context": "silver bullet"
+        }
+      ]
+    },
+    "1416": {
+      "name": "Wooden Double",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Good for boss-fight days when you expect to take a crit. Defensive preparation.",
+          "context": "boss prep"
+        },
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Defensive option, signatured at third rank.",
+          "context": "reactive defense"
+        },
+        {
+          "source": "Hidebound is UNDERRATED.md",
+          "observation": "Listed alongside other wood-themed protective spells as strong damage mitigation.",
+          "context": "damage mitigation"
+        },
+        {
+          "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+          "observation": "Great reaction for self-protection. Fits trickster vibes.",
+          "context": "defensive reaction"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Good defensive reaction from primal; blocked by Wrath Runelord anathema.",
+          "context": "defensive reaction"
+        }
+      ]
+    },
+    "1341": {
+      "name": "Sliding Blocks",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Lingering area crowd control.",
+          "context": "slot-efficient"
+        }
+      ]
+    },
+    "1377": {
+      "name": "Rust Cloud",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Lingering area damage + dazzled rider. Enemies may also lose actions running out of it. Generates more value than raw damage numbers suggest.",
+          "context": "slot-efficient"
+        },
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Good for zoning + fortitude targeting. Ask allies to keep enemies in the cloud. Doesn't need to be signatured — doesn't scale damage well.",
+          "context": "zoning"
+        },
+        {
+          "source": "How to Blast GOOD in Pathfinder 2e.md",
+          "observation": "Zoning spell. The two-way DC 5 flat check roughly cancels out, and the area damage outweighs the miss chance.",
+          "context": "Zoning"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Good AoE spell but blocked by Wrath Runelord 'can't create' anathema.",
+          "context": "anathema limitation"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Zoning spell that benefits from difficult terrain layering.",
+          "context": "zoning"
+        }
+      ]
+    },
+    "1748": {
+      "name": "Wall of Fire",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Lingering area damage. Fire and forget, then it's the enemy's problem.",
+          "context": "slot-efficient"
+        },
+        {
+          "source": "How to Blast GOOD in Pathfinder 2e.md",
+          "observation": "Zoning spell. Tells enemies they cannot stay in an area. Combine with force movement (Shove is RAW unambiguous) to double/triple dip on damage.",
+          "context": "Zoning"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Sin spell (Wrath), sustain option.",
+          "context": "sustain spell"
+        }
+      ]
+    },
+    "994": {
+      "name": "Shadow Army",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Lingering area with both damage and crowd control. Enemies may have no option to avoid it.",
+          "context": "slot-efficient"
+        },
+        {
+          "source": "Is Mystic Armour the Best 10th Rank Spell in Pathfinder 2e.md",
+          "observation": "Listed as objectively powerful 10th rank spell.",
+          "context": "10th rank comparison"
+        }
+      ]
+    },
+    "1388": {
+      "name": "Freezing Rain",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Sustained damage with useful rider. Good value per slot.",
+          "context": "slot-efficient"
+        },
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Slows enemies + huge difficult terrain. Picked for the rider effects, not the damage — no signature needed.",
+          "context": "zoning"
+        },
+        {
+          "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+          "observation": "Candidate for one of my favorite spells in the game. Creates huge area of difficult terrain and potentially repeatedly slows enemies.",
+          "context": "AoE control"
+        },
+        {
+          "source": "How to Blast GOOD in Pathfinder 2e.md",
+          "observation": "In a coordinated party, this is effectively a no-save Slowed 1-2 on every enemy on the other side of the field on turn 1. Extremely powerful with party coordination; skip it without coordination.",
+          "context": "Zoning"
+        },
+        {
+          "source": "Mathfinders Blaster Caster RUBRIC.md",
+          "observation": "Good sustained spell for multi-turn value.",
+          "context": "sustained damage"
+        },
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+          "observation": "Genuinely garbage if evaluated by success effect (terrible damage for rank 5). Excellent by failure effect: Slowed 1 or 2 + difficult terrain essentially removes enemies from combat for one or more turns.",
+          "context": "AoE debuff + damage"
+        },
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Good sustain target. Automatic effect.",
+          "context": "control + sustain"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Good sustain spell for setup turns.",
+          "context": "sustain spell"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Fantastic sustain spell.",
+          "context": "top-rank sustain"
+        }
+      ]
+    },
+    "1008": {
+      "name": "Summon Draconic Legion",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Incarnate spell. Arrival + departure = massive value from one slot. On departure turn, you get all 3 actions free.",
+          "context": "slot-efficient"
+        }
+      ]
+    },
+    "1423": {
+      "name": "Summon Elemental Herald",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Incarnate spell. Same arrival/departure value logic.",
+          "context": "slot-efficient"
+        }
+      ]
+    },
+    "1451": {
+      "name": "Bless",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Buff with duration. If the buffed ally generates value without further resource expenditure, you've saved future spell slots.",
+          "context": "slot-efficient"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Standard divine support spell that Flames Oracle can still fit in due to abundant resource pools.",
+          "context": "versatility preservation"
+        }
+      ]
+    },
+    "2345": {
+      "name": "Benediction",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Buff with duration. Same logic as Bless.",
+          "context": "slot-efficient"
+        }
+      ]
+    },
+    "1455": {
+      "name": "Blur",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Buff with duration.",
+          "context": "slot-efficient"
+        }
+      ]
+    },
+    "1555": {
+      "name": "Heroism",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Buff with duration.",
+          "context": "slot-efficient"
+        },
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Largely replaces Bless at rank 5. Keep heightening past rank 5.",
+          "context": "buff staple"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Standard divine support spell that Flames Oracle can still fit in.",
+          "context": "versatility preservation"
+        }
+      ]
+    },
+    "1630": {
+      "name": "Phantasmal Calamity",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "AoE with disproportionate crit-fail effect. Against 4-5+ targets, good chance someone crit-fails and is effectively removed from the fight.",
+          "context": "slot-efficient"
+        },
+        {
+          "source": "How to Blast GOOD in Pathfinder 2e.md",
+          "observation": "Penalized in both damage and rider reliability, BUT the rider is stunned for a full round with follow-up save or stunned again. Amazing with 7-8 targets.",
+          "context": "Extreme rider"
+        },
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+          "observation": "Cited as a powerful AoE spell at higher ranks.",
+          "context": "high-rank AoE"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Excellent Will-targeting AoE against many enemies.",
+          "context": "will-targeting AoE"
+        }
+      ]
+    },
+    "1508": {
+      "name": "Eclipse Burst",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "AoE with disproportionate crit-fail effect. Crit-fail blindness can shut an enemy down for the rest of combat.",
+          "context": "slot-efficient"
+        },
+        {
+          "source": "Dehydrate is UNDERRATED.md",
+          "observation": "At rank 7 does 18d6 vs Fireball's 14d6, eclipsing Fireball's performance at that tier. The burst-damage benchmark shifts to Eclipse Burst at higher levels.",
+          "context": "high-rank AoE burst"
+        },
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Fantastic scaling blast, much higher damage than heightened Cave Fangs or Howling Blizzard. Signatured.",
+          "context": "high-level AoE"
+        },
+        {
+          "source": "How to Blast GOOD in Pathfinder 2e.md",
+          "observation": "Above-par damage with unreliable rider (blinding on crit fail only). So large it basically requires party coordination/zoning tactics to avoid hitting allies.",
+          "context": "High-rank AoE"
+        },
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+          "observation": "Against 6 enemies, 62% chance at least one permanently blinds (crit failure). Blinded: everything is difficult terrain, 50% chance to whiff on everything. Massive value from a spell that also deals heavy damage.",
+          "context": "AoE damage + debuff"
+        },
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Even more targets, no risk, but can hit allies.",
+          "context": "AoE damage"
+        },
+        {
+          "source": "Why I Hate (and Why I Love) the Wizard.md",
+          "observation": "Referenced as a higher-rank AoE that naturally scales better than heightened Fireball — the benchmark that heightened spells need to compete with.",
+          "context": "Blasting, rank scaling"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Sin spell (Wrath), heavy hitter.",
+          "context": "heavy hitter"
+        }
+      ]
+    },
+    "1709": {
+      "name": "Sure Strike",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Low-rank spell to pad out value on staff thesis wizards. Pairs with Live Wire, amped Ignition (psychic archetype), a bow, or Hand of the Apprentice.",
+          "context": "staff thesis"
+        },
+        {
+          "source": "Does Paizo Love Wizards Now.md",
+          "observation": "Good spell to have on hand, but the core problem for prepared casters is you can't predict how many castings you'll need. War Mage solves this — never prepare it, just swap into it as a free action whenever needed.",
+          "context": "prepared caster utility"
+        },
+        {
+          "source": "Mathfinders Blaster Caster RUBRIC.md",
+          "observation": "Supports blasting from low-rank slots.",
+          "context": "low-rank slot use"
+        },
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
+          "observation": "Fortune effect (roll twice pick higher) available to Arcane and Occult casters at baseline; others via archetypes. A tool for tilting attack roll math, not a mandatory band-aid.",
+          "context": "accuracy support"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Great low-rank value generator; good brute-forcing option.",
+          "context": "brute forcing"
+        }
+      ]
+    },
+    "1742": {
+      "name": "Vision of Death",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Will-targeting debuff. Mathfinder used it less after party barb got Dirge of Doom (redundant frightened), but brought it back when it became relevant again — something a spontaneous caster couldn't do after retraining out.",
+          "context": "debuff"
+        },
+        {
+          "source": "How to Blast GOOD in Pathfinder 2e.md",
+          "observation": "Good single-target boss spell. Mini-fireball damage to one target while inflicting Frightened. Relevant rider for boss fights.",
+          "context": "Single-target boss"
+        },
+        {
+          "source": "Is Vision of Death Better than Synesthesia.md",
+          "observation": "Criminally underrated. Strong single-target debuff+damage hybrid. Competitive with Synesthesia when all factors are weighed (range, frightened breadth, damage, crit fail effect). Belongs on every debuffer's list that has access to it.",
+          "context": "single-target debuff+damage"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Strong Will-targeting blast — available to arcane, occult, and divine (via apparitions).",
+          "context": "Will targeting"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Will-targeting blast, arcane.",
+          "context": "will-targeting blast"
+        }
+      ]
+    },
+    "1658": {
+      "name": "Runic Weapon",
+      "observations": [
+        {
+          "source": "Are You Preparing Your Spells Wrong.md",
+          "observation": "Example of a spell that becomes obsolete (once party gets striking runes). Prepared casters just stop preparing it; spontaneous casters must wait for retraining.",
+          "context": "obsolescence"
+        }
+      ]
+    },
+    "1997": {
+      "name": "Gravity Well",
+      "observations": [
+        {
+          "source": "Cinder Swarm is Underrated.md",
+          "observation": "Better force movement than Cinder Swarm against multiple targets, but same slot+action cost issue. One and done.",
+          "context": "force movement"
+        }
+      ]
+    },
+    "928": {
+      "name": "Ignite Fireworks",
+      "observations": [
+        {
+          "source": "Cinder Swarm is Underrated.md",
+          "observation": "Better at inflicting Dazzled than Cinder Swarm's firefly mode, but Cinder Swarm offers more total value.",
+          "context": "debuff comparison"
+        },
+        {
+          "source": "How to Blast GOOD in Pathfinder 2e.md",
+          "observation": "Low-risk, low-ceiling option. Rider (dazzled) happens on success, so very reliable but not exciting. At higher levels, Mathfinder prefers spells that weaponize swinginess over safe low-ceiling options.",
+          "context": "Debuff-on-success"
+        },
+        {
+          "source": "Mathfinders Blaster Caster RUBRIC.md",
+          "observation": "Good example of a blast with a Dazzle rider — negates versatility loss.",
+          "context": "rider effects"
+        },
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Damage + Dazzle rider. Good for pyromancer variety.",
+          "context": "effect variety"
+        }
+      ]
+    },
+    "1462": {
+      "name": "Chain Lightning",
+      "observations": [
+        {
+          "source": "Dehydrate is UNDERRATED.md",
+          "observation": "Incredible spell with major upsides but offset by compounding failure risk - ~18.5% chance that 3+ of 6 targets take zero damage due to sequential targeting. Gets much worse against high-Reflex enemies.",
+          "context": "AoE burst with failure risk"
+        },
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Forced bloodline pick at rank 6 — no one complains. Signature it.",
+          "context": "bloodline spell"
+        },
+        {
+          "source": "How to Blast GOOD in Pathfinder 2e.md",
+          "observation": "Spiciest take: Paizo balanced this as a single-target spell that happens to hit many targets when lucky. Has a significant risk (~18% chance) that 3+ of 6 targets take zero damage. Treat as a multi-tool, not a premier AoE.",
+          "context": "Hybrid single/multi"
+        },
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "More targets than Fireball, no placement worry, but carries risk.",
+          "context": "AoE damage"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Many of the same multimodal benefits as Lightning Bolt, turned up to 11.",
+          "context": "multimodal"
+        }
+      ]
+    },
+    "2497": {
+      "name": "Conquering Soldiers",
+      "observations": [
+        {
+          "source": "Does Paizo Love Wizards Now.md",
+          "observation": "Banger 10th-rank spell. Status bonus to spell save DCs is virtually non-existent elsewhere — this is massive.",
+          "context": "rank 10 standout"
+        },
+        {
+          "source": "Is Mystic Armour the Best 10th Rank Spell in Pathfinder 2e.md",
+          "observation": "Listed as objectively powerful 10th rank spell — one of the flashy alternatives to Mystic Armor at that rank.",
+          "context": "10th rank comparison"
+        }
+      ]
+    },
+    "2507": {
+      "name": "Helpful Reload",
+      "observations": [
+        {
+          "source": "Does Paizo Love Wizards Now.md",
+          "observation": "Reaction to reload an ally's weapon. Baseline: trade your reaction for their action (efficient). Fun teamwork spell.",
+          "context": "teamwork utility"
+        }
+      ]
+    },
+    "2513": {
+      "name": "Shock and Awe",
+      "observations": [
+        {
+          "source": "Does Paizo Love Wizards Now.md",
+          "observation": "Comparable to Synaptic Pulse but without incapacitation — usable in boss fights.",
+          "context": "boss-viable control"
+        }
+      ]
+    },
+    "1611": {
+      "name": "Mystic Armor",
+      "observations": [
+        {
+          "source": "Does Paizo Love Wizards Now.md",
+          "observation": "One of the best 10th-rank spells because saving tens of thousands of gold on runes is better than many 10th-rank combat options.",
+          "context": "economic value"
+        },
+        {
+          "source": "Is Mystic Armour the Best 10th Rank Spell in Pathfinder 2e.md",
+          "observation": "Massively underrated. Gold savings across levels 5-20 translate to multiple equivalent scrolls of value. Almost always net positive in slow-to-medium attrition campaigns.",
+          "context": "economic value"
+        },
+        {
+          "source": "Is Mystic Armour the Best 10th Rank Spell in Pathfinder 2e.md",
+          "observation": "Fantastic and top tier at 10th rank — worth 7-9 10th rank scrolls in a campaign, more 10th rank spells than you'd cast from your own slots in a typical level 20 arc. Worth retraining into even if you never used it before.",
+          "context": "10th rank capstone"
+        },
+        {
+          "source": "Is Mystic Armour the Best 10th Rank Spell in Pathfinder 2e.md",
+          "observation": "Pretty damn good at rank 1 if you don't have light/medium armor proficiency or thematically don't want armor. Brings you to 1 AC behind medium armor instead of 2 behind.",
+          "context": "low-level unarmored"
+        },
+        {
+          "source": "Is Mystic Armour the Best 10th Rank Spell in Pathfinder 2e.md",
+          "observation": "Toss-up at levels 5-14. Not amazing but not bad. Worth it if you have plans for the saved gold.",
+          "context": "mid-level play"
+        },
+        {
+          "source": "Is Mystic Armour the Best 10th Rank Spell in Pathfinder 2e.md",
+          "observation": "Weakest window at levels 15-18. Not saving much gold, and comes with downsides. Skip if this is the bulk of your campaign.",
+          "context": "high-level pre-capstone"
+        }
+      ]
+    },
+    "1710": {
+      "name": "Synaptic Pulse",
+      "observations": [
+        {
+          "source": "Does Paizo Love Wizards Now.md",
+          "observation": "Stun 1/2/3 with Will save, ignores allies, but HAS incapacitation (unlike Shock and Awe).",
+          "context": "incapacitation limitation"
+        },
+        {
+          "source": "Is Vision of Death Better than Synesthesia.md",
+          "observation": "Listed as part of a bard's area-effect debuff package.",
+          "context": "AoE package"
+        },
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+          "observation": "Not just Stunned 1 on most foes -- it's Stunned 2 on almost half the foes in a typical multi-target scenario. Evaluate by failure effect.",
+          "context": "AoE debuff"
+        }
+      ]
+    },
+    "1329": {
+      "name": "Cave Fangs",
+      "observations": [
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Fireball with difficult terrain attached, great spell overall. Can be replaced with Fireball if you don't want the terrain. Drops off at high levels when Howling Blizzard and Eclipse Burst come online.",
+          "context": "AoE with terrain"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Alternative rank 3 signature candidate.",
+          "context": "signature selection"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "AoE option alongside Fireball/Lightning Bolt.",
+          "context": "AoE damage"
+        }
+      ]
+    },
+    "1554": {
+      "name": "Heal",
+      "observations": [
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Emergency button, not routine. Signature it at higher levels so you can cast at any rank. Coordinate with party that this is tertiary healing.",
+          "context": "emergency healing"
+        },
+        {
+          "source": "Hypnotize is UNDERRATED.md",
+          "observation": "You can never really go wrong with having Heal in your toolkit. The canonical generically good spell.",
+          "context": "generically good"
+        },
+        {
+          "source": "Is Vision of Death Better than Synesthesia.md",
+          "observation": "Mentioned as an example of a 'generically powerful and iconic' spell that dominates discourse.",
+          "context": "meta staple"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "What a non-blasting sorcerer might take; illustrates the signature spell tax of blasting.",
+          "context": "versatility cost"
+        }
+      ]
+    },
+    "1954": {
+      "name": "Hidebound",
+      "observations": [
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Fantastic reactive defense for protecting self or allies. Signature for scaling.",
+          "context": "reactive defense"
+        },
+        {
+          "source": "Hidebound is UNDERRATED.md",
+          "observation": "One of the strongest damage mitigation spells in the game, comparable to and sometimes better than Champion's Reaction. At levels 15-16 and 19-20, actually overtakes Champion's Reaction in expected damage reduction.",
+          "context": "damage mitigation"
+        },
+        {
+          "source": "How to Look at Spells on Archives of Nethys.md",
+          "observation": "Good low-rank defensive reaction for protecting self or allies.",
+          "context": "low-rank filler"
+        },
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Mitigation option. Absorb a hit.",
+          "context": "backup defense"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Good defensive reaction from primal; blocked by Wrath Runelord anathema.",
+          "context": "defensive reaction"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Always a good defensive reaction in low-rank slots (but Runelord Wrath Wizards can't use it to protect allies due to anathema).",
+          "context": "defensive reaction"
+        }
+      ]
+    },
+    "1982": {
+      "name": "Corrosive Muck",
+      "observations": [
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Repeated damage + greater difficult terrain. Doesn't need to heighten for good damage, no signature needed.",
+          "context": "zoning"
+        },
+        {
+          "source": "How to Blast GOOD in Pathfinder 2e.md",
+          "observation": "Zoning spell. Coordinate with frontliners using reactions, trips, and difficult terrain to keep enemies in the zone. Combos with Wall of Stone for default kills.",
+          "context": "Zoning"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "High-level zoning spell that combos well with Familiar of Freezing Rhyme's difficult terrain.",
+          "context": "zoning combo"
+        }
+      ]
+    },
+    "1559": {
+      "name": "Howling Blizzard",
+      "observations": [
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Replaces Cave Fangs/Fireball at higher levels. Signatured for flexible heightening.",
+          "context": "AoE replacement"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "One-shot blast option.",
+          "context": "one-shot blast"
+        }
+      ]
+    },
+    "1370": {
+      "name": "Field of Razors",
+      "observations": [
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Zoning + damage at rank 6, similar role to Corrosive Muck. Could swap for Slow 6 if you want more control.",
+          "context": "zoning"
+        }
+      ]
+    },
+    "1444": {
+      "name": "Arctic Rift",
+      "observations": [
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Fantastic blast with good rider effect on failures/critical failures. Needs good line targeting.",
+          "context": "line blast"
+        }
+      ]
+    },
+    "1327": {
+      "name": "Zephyr Slip",
+      "observations": [
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Incredibly powerful reactive repositioning. Heighten to rank 6 to carry an adjacent ally, rank 8 to carry friends.",
+          "context": "reactive repositioning"
+        }
+      ]
+    },
+    "1521": {
+      "name": "Falling Stars",
+      "observations": [
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "One of the best blasts in the game for large battlefields.",
+          "context": "battlefield AoE"
+        },
+        {
+          "source": "How to Blast GOOD in Pathfinder 2e.md",
+          "observation": "High damage AoE. So large it requires party coordination to land without hitting allies.",
+          "context": "High-rank AoE"
+        }
+      ]
+    },
+    "1572": {
+      "name": "Implosion",
+      "observations": [
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Very powerful single-target blast. Signatured at rank 9 as a formality — rarely worth using your 10th-rank slot on.",
+          "context": "single-target"
+        }
+      ]
+    },
+    "1651": {
+      "name": "Resist Energy",
+      "observations": [
+        {
+          "source": "Elemental Sorcerer Blaster Guide.md",
+          "observation": "Mandatory second-rank pick.",
+          "context": "mandatory"
+        }
+      ]
+    },
+    "2015": {
+      "name": "Protector Tree",
+      "observations": [
+        {
+          "source": "Hidebound is UNDERRATED.md",
+          "observation": "Referenced as one of the strongest protective spells in the game; Hidebound is described as 'arguably on par' with it.",
+          "context": "damage mitigation"
+        },
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Mitigation option. Absorb a hit.",
+          "context": "backup defense"
+        }
+      ]
+    },
+    "1617": {
+      "name": "Oaken Resilience",
+      "observations": [
+        {
+          "source": "Hidebound is UNDERRATED.md",
+          "observation": "Listed alongside Protector Tree, Hidebound, and Wooden Double as top-tier protective spells.",
+          "context": "damage mitigation"
+        }
+      ]
+    },
+    "1750": {
+      "name": "Wall of Ice",
+      "observations": [
+        {
+          "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+          "observation": "Actually better against cold enemies, not worse — the wall is immune to cold damage, so cold-dealing enemies can't break through easily.",
+          "context": "battlefield division"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Sin spell (Wrath).",
+          "context": "sin spell"
+        }
+      ]
+    },
+    "2160": {
+      "name": "Rainbow's End",
+      "observations": [
+        {
+          "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+          "observation": "Burst of damage plus allies can teleport there. Fits trickster fey vibe and weather themes.",
+          "context": "AoE damage"
+        }
+      ]
+    },
+    "1698": {
+      "name": "Summon Elemental",
+      "observations": [
+        {
+          "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+          "observation": "Wild card for situations where thematic spells fail. Can summon fire elemental to exploit weaknesses on cold-immune enemies, or air elemental to restrict movement.",
+          "context": "silver bullet"
+        }
+      ]
+    },
+    "940": {
+      "name": "Lose the Path",
+      "observations": [
+        {
+          "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+          "observation": "Reaction that can potentially deny an enemy their action while moving. Reaction-based action denial is just incredible.",
+          "context": "action denial"
+        },
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+          "observation": "Excellent as a low-rank reaction fishing spell. Crit success/success: no harm, just spent a 1st-rank slot. Failure: costs enemy an extra action to approach. Crit failure: control their movement.",
+          "context": "reaction fishing"
+        },
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Reaction. Not worth it at rank 1 (save-dependent), great from a cheap slot at level 9+.",
+          "context": "low-rank reaction"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "One of only two real Will-targeting options for primal; also usable as a controlling reaction.",
+          "context": "Will targeting"
+        }
+      ]
+    },
+    "1021": {
+      "name": "Tortoise and the Hare",
+      "observations": [
+        {
+          "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+          "observation": "Like Slow but on failure/crit failure it quickens an ally instead of increasing slow severity. Cool mishmash of ice + trickster themes.",
+          "context": "debuff"
+        }
+      ]
+    },
+    "1946": {
+      "name": "Albatross Curse",
+      "observations": [
+        {
+          "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+          "observation": "Good buff/debuff one-two punch combo against bosses. Fits trickster fey vibe.",
+          "context": "boss debuff combo"
+        }
+      ]
+    },
+    "2007": {
+      "name": "Lightning Storm",
+      "observations": [
+        {
+          "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+          "observation": "Single-target burst damage. Turn the brain off option.",
+          "context": "boss single-target"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Fantastic sustain spell.",
+          "context": "top-rank sustain"
+        }
+      ]
+    },
+    "1319": {
+      "name": "Propulsive Breeze",
+      "observations": [
+        {
+          "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+          "observation": "Reaction to help friend move. Situational — less useful if party already has high mobility.",
+          "context": "ally repositioning"
+        }
+      ]
+    },
+    "1420": {
+      "name": "Elemental Breath",
+      "observations": [
+        {
+          "source": "How to Blast GOOD in Pathfinder 2e.md",
+          "observation": "Below-par damage but knocks enemies prone on failure. Good because failure riders are very reliable (~83% chance at least one target fails in a 3-target AoE).",
+          "context": "Debuff rider on failure"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Good multimodal spell — wide variety of conditions it can inflict.",
+          "context": "multimodal"
+        }
+      ]
+    },
+    "918": {
+      "name": "Geyser",
+      "observations": [
+        {
+          "source": "How to Blast GOOD in Pathfinder 2e.md",
+          "observation": "Similar to Elemental Breath -- below-par damage but knocks prone on failure. Reliable rider justifies the damage trade-off.",
+          "context": "Debuff rider on failure"
+        }
+      ]
+    },
+    "1344": {
+      "name": "Vitrifying Blast",
+      "observations": [
+        {
+          "source": "How to Blast GOOD in Pathfinder 2e.md",
+          "observation": "Below-par damage but slows enemies, potentially vitrifies over 3 rounds. Creates fire-and-forget gameplay loop. Excellent at higher levels.",
+          "context": "Debuff rider on failure"
+        }
+      ]
+    },
+    "1629": {
+      "name": "Phantasmagoria",
+      "observations": [
+        {
+          "source": "How to Blast GOOD in Pathfinder 2e.md",
+          "observation": "Below-par damage (less than Falling Stars) but confuses enemies. Safe to ignore confused targets. Creates fire-and-forget loop.",
+          "context": "Debuff rider on failure"
+        },
+        {
+          "source": "Witch and Wizard Blaster Build Guides.md",
+          "observation": "Very ally-friendly Will-targeting AoE.",
+          "context": "will-targeting AoE"
+        }
+      ]
+    },
+    "865": {
+      "name": "Ash Cloud",
+      "observations": [
+        {
+          "source": "How to Blast GOOD in Pathfinder 2e.md",
+          "observation": "Good boss spell. Zones away a boss, deals persistent damage, potentially blinds.",
+          "context": "Single-target boss"
+        },
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Area denial. Good for pyromancer variety.",
+          "context": "effect variety"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Good AoE spell but blocked by Wrath Runelord 'can't create' anathema.",
+          "context": "anathema limitation"
+        }
+      ]
+    },
+    "1721": {
+      "name": "Thunderstrike",
+      "observations": [
+        {
+          "source": "How to Look at Spells on Archives of Nethys.md",
+          "observation": "Good rank 1 Reflex option.",
+          "context": "reflex targeting"
+        },
+        {
+          "source": "Mathfinders Blaster Caster RUBRIC.md",
+          "observation": "Standard two-action blast spell that leaves third action free.",
+          "context": "core blasting"
+        },
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
+          "observation": "Good baseline save spell (targets Reflex, has success effect), but becomes the inferior choice compared to HTS once attack roll math is favorable.",
+          "context": "damage"
+        }
+      ]
+    },
+    "1457": {
+      "name": "Breathe Fire",
+      "observations": [
+        {
+          "source": "How to Look at Spells on Archives of Nethys.md",
+          "observation": "Good rank 1 Reflex option.",
+          "context": "reflex targeting"
+        }
+      ]
+    },
+    "1975": {
+      "name": "Chilling Spray",
+      "observations": [
+        {
+          "source": "How to Look at Spells on Archives of Nethys.md",
+          "observation": "Good rank 1 Reflex option.",
+          "context": "reflex targeting"
+        }
+      ]
+    },
+    "1513": {
+      "name": "Enfeeble",
+      "observations": [
+        {
+          "source": "How to Look at Spells on Archives of Nethys.md",
+          "observation": "Good rank 1 Fort option.",
+          "context": "fortitude targeting"
+        }
+      ]
+    },
+    "921": {
+      "name": "Gravitational Pull",
+      "observations": [
+        {
+          "source": "How to Look at Spells on Archives of Nethys.md",
+          "observation": "Good rank 1 Fort option.",
+          "context": "fortitude targeting"
+        }
+      ]
+    },
+    "1302": {
+      "name": "Forge",
+      "observations": [
+        {
+          "source": "How to Look at Spells on Archives of Nethys.md",
+          "observation": "Good rank 1 Fort option.",
+          "context": "fortitude targeting"
+        }
+      ]
+    },
+    "1561": {
+      "name": "Hydraulic Push",
+      "observations": [
+        {
+          "source": "How to Look at Spells on Archives of Nethys.md",
+          "observation": "Good spell, but you won't necessarily miss it over Horizon Thunder Sphere — this is just a differently good spell.",
+          "context": "comparable options"
+        },
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
+          "observation": "Pushes enemies as part of damage. Pushing is inherently stronger than other forced movement because it bypasses forced movement restrictions — can push off ledges, into hazardous terrain, etc.",
+          "context": "damage + control rider"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Good blast available from Vanguard of Roaring Waters apparition; good rider.",
+          "context": "damage type switching"
+        }
+      ]
+    },
+    "1337": {
+      "name": "Interposing Earth",
+      "observations": [
+        {
+          "source": "How to Look at Spells on Archives of Nethys.md",
+          "observation": "Good low-rank defensive reaction at higher levels.",
+          "context": "low-rank filler"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Good defensive reaction from primal.",
+          "context": "defensive reaction"
+        }
+      ]
+    },
+    "1020": {
+      "name": "Timely Tutor",
+      "observations": [
+        {
+          "source": "How to Look at Spells on Archives of Nethys.md",
+          "observation": "Easy to throw out from a lower-rank slot.",
+          "context": "low-rank filler"
+        }
+      ]
+    },
+    "1564": {
+      "name": "Hypnotize",
+      "observations": [
+        {
+          "source": "Hypnotize is UNDERRATED.md",
+          "observation": "One of the most criminally underrated spells in the game. The real value isn't the Fascinated condition — it's the auto Dazzled on all creatures in the area with no save. Creates a lose-lose: enemies either accept a 20% miss chance on all single-target actions or waste an action leaving the area.",
+          "context": "debuff/control"
+        },
+        {
+          "source": "Is Vision of Death Better than Synesthesia.md",
+          "observation": "Mathfinder's first 'underrated spell' video covered this. Referenced as the start of the series.",
+          "context": "underrated spell series"
+        },
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Automatic dazzle regardless of save result. Control/debuff hybrid.",
+          "context": "reliable"
+        }
+      ]
+    },
+    "1520": {
+      "name": "Fabricated Truth",
+      "observations": [
+        {
+          "source": "Is Mystic Armour the Best 10th Rank Spell in Pathfinder 2e.md",
+          "observation": "Listed as objectively powerful 10th rank spell.",
+          "context": "10th rank comparison"
+        }
+      ]
+    },
+    "1538": {
+      "name": "Freeze Time",
+      "observations": [
+        {
+          "source": "Is Mystic Armour the Best 10th Rank Spell in Pathfinder 2e.md",
+          "observation": "Listed as objectively powerful 10th rank spell.",
+          "context": "10th rank comparison"
+        }
+      ]
+    },
+    "1592": {
+      "name": "Manifestation",
+      "observations": [
+        {
+          "source": "Is Mystic Armour the Best 10th Rank Spell in Pathfinder 2e.md",
+          "observation": "Listed as objectively powerful 10th rank spell.",
+          "context": "10th rank comparison"
+        }
+      ]
+    },
+    "958": {
+      "name": "Nullify",
+      "observations": [
+        {
+          "source": "Is Mystic Armour the Best 10th Rank Spell in Pathfinder 2e.md",
+          "observation": "Listed as objectively powerful 10th rank spell.",
+          "context": "10th rank comparison"
+        }
+      ]
+    },
+    "1446": {
+      "name": "Avatar",
+      "observations": [
+        {
+          "source": "Is Mystic Armour the Best 10th Rank Spell in Pathfinder 2e.md",
+          "observation": "Pretty objectively not great but flashy — Mystic Armor looks worse by comparison because it's boring, but is actually better.",
+          "context": "10th rank comparison"
+        }
+      ]
+    },
+    "908": {
+      "name": "Fated Confrontation",
+      "observations": [
+        {
+          "source": "Is Mystic Armour the Best 10th Rank Spell in Pathfinder 2e.md",
+          "observation": "Pretty objectively not great but flashy.",
+          "context": "10th rank comparison"
+        }
+      ]
+    },
+    "2035": {
+      "name": "Synesthesia",
+      "observations": [
+        {
+          "source": "Is Vision of Death Better than Synesthesia.md",
+          "observation": "Excellent single-target debuff. Superior to Vision of Death at lowering AC for martial allies in isolation (Clumsy 3 changes ~1.5 outcomes on success vs ~0.46 for frightened 1). Also inflicts concealed, concentrate disruption (DC 5 flat check), and movement penalty.",
+          "context": "single-target debuff"
+        },
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
+          "observation": "Mentioned as a powerful debuff that can stack with off-guard to make AC the best target even over an enemy's lowest save via Shadow Signet.",
+          "context": "debuff stacking"
+        }
+      ]
+    },
+    "934": {
+      "name": "Inner Radiance Torrent",
+      "observations": [
+        {
+          "source": "Is Vision of Death Better than Synesthesia.md",
+          "observation": "Listed as part of a bard's area-effect debuff package alongside Fear, Command, and Synaptic Pulse.",
+          "context": "AoE package"
+        },
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Decent Reflex-targeting divine blast.",
+          "context": "Reflex targeting"
+        }
+      ]
+    },
+    "1470": {
+      "name": "Command",
+      "observations": [
+        {
+          "source": "Is Vision of Death Better than Synesthesia.md",
+          "observation": "Listed as part of a bard's area-effect debuff package.",
+          "context": "AoE package"
+        }
+      ]
+    },
+    "1981": {
+      "name": "Containment",
+      "observations": [
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+          "observation": "Better than Slow in multi-target context. On failure, enemy spends 3-5 actions breaking out -- effectively removed from combat. Enables divide-and-conquer: isolate one enemy, handle the rest, then deal with them.",
+          "context": "single-target in multi-target context"
+        },
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Action denial on Reflex. Pairs with Slow for defense variety.",
+          "context": "debuff"
+        }
+      ]
+    },
+    "1996": {
+      "name": "Ghoulish Cravings",
+      "observations": [
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+          "observation": "Good single-target boss spell -- delivers value on success.",
+          "context": "boss single-target"
+        }
+      ]
+    },
+    "1730": {
+      "name": "Uncontrollable Dance",
+      "observations": [
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+          "observation": "Good incapacitation spell in multi-target context -- can take an on-level or lower enemy out of combat. Bad vs. bosses (incapacitation trait), but strong when used correctly.",
+          "context": "incapacitation in multi-target context"
+        }
+      ]
+    },
+    "1450": {
+      "name": "Blazing Bolt",
+      "observations": [
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
+          "observation": "Can blind enemies without the incapacitation trait, which is rare and powerful for casters. Blinding is hard to access until much higher levels; dazzling is easy, blinding is not.",
+          "context": "damage + debuff rider"
+        }
+      ]
+    },
+    "1948": {
+      "name": "Camel Spit",
+      "observations": [
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
+          "observation": "Spreads attack across 3 rolls over 3 turns (2+1+1 actions). Creates effective degrees of success and moderates single-roll variance.",
+          "context": "multi-turn"
+        }
+      ]
+    },
+    "868": {
+      "name": "Biting Words",
+      "observations": [
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
+          "observation": "Same multi-roll pattern as Camel Spit — 3 separate attack rolls across turns, smoothing accuracy variance.",
+          "context": "multi-turn"
+        }
+      ]
+    },
+    "1726": {
+      "name": "True Target",
+      "observations": [
+        {
+          "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
+          "observation": "Higher-level fortune effect. Not only gives you fortune on your attack roll but also grants the rest of the party fortune on their next attack roll — significant party-wide value.",
+          "context": "accuracy support"
+        }
+      ]
+    },
+    "965": {
+      "name": "Pernicious Poltergeist",
+      "observations": [
+        {
+          "source": "Pernicious Poltergeist is TERRIBLY Underrated.md",
+          "observation": "Fantastic multimodal spell with all 3 saves, practically irresistible damage types (void + force), and sustain with mode-switching. One of the best 4th-rank picks on divine/occult lists, but falls off after level 11 due to heightened +2 scaling.",
+          "context": "multimodal sustain"
+        }
+      ]
+    },
+    "1749": {
+      "name": "Wall of Force",
+      "observations": [
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Uncontested indoor area denial. Automatic effect.",
+          "context": "control"
+        },
+        {
+          "source": "Why I Hate (and Why I Love) the Wizard.md",
+          "observation": "Could be converted via the exploit trait into a mini-blast with forced movement when its intended use case doesn't come up.",
+          "context": "Battlefield control, slot conversion"
+        }
+      ]
+    },
+    "2364": {
+      "name": "Shattering Gem",
+      "observations": [
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Mitigation option for Arcane casters.",
+          "context": "backup defense"
+        }
+      ]
+    },
+    "1523": {
+      "name": "False Vitality",
+      "observations": [
+        {
+          "source": "Spell Selection Basics.md",
+          "observation": "Long-duration pre-buff. Boost defenses without combat actions.",
+          "context": "low-rank slot usage"
+        }
+      ]
+    },
+    "1989": {
+      "name": "Drop Dead",
+      "observations": [
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Good defensive reaction from occult.",
+          "context": "defensive reaction"
+        }
+      ]
+    },
+    "1024": {
+      "name": "Unexpected Transposition",
+      "observations": [
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Good defensive reaction from occult; blocked by Wrath Runelord anathema.",
+          "context": "defensive reaction"
+        }
+      ]
+    },
+    "1979": {
+      "name": "Concordant Choir",
+      "observations": [
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Good Fortitude-targeting divine blast.",
+          "context": "Fortitude targeting"
+        }
+      ]
+    },
+    "2033": {
+      "name": "Sudden Blight",
+      "observations": [
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Good Fortitude-targeting divine blast; ruins diseased enemies specifically.",
+          "context": "Fortitude targeting"
+        }
+      ]
+    },
+    "1984": {
+      "name": "Crashing Wave",
+      "observations": [
+        {
+          "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+          "observation": "Alternative blast from Vanguard apparition for when fire is resisted.",
+          "context": "damage type switching"
+        }
+      ]
+    }
+  },
+  "unresolved": [
+    {
+      "spell_name": "Bullhorn",
+      "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+      "observation": "Just works — speak much louder. No check.",
+      "context": "communication"
+    },
+    {
+      "spell_name": "Deep Breath",
+      "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+      "observation": "Just works — breathe underwater. At higher levels auto-heightens to let you cast spells underwater/in suffocating environments.",
+      "context": "environmental"
+    },
+    {
+      "spell_name": "Message",
+      "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+      "observation": "Just gives telepathy. No check.",
+      "context": "communication"
+    },
+    {
+      "spell_name": "Root Reading",
+      "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+      "observation": "Reveals enemies who passed through an area of plant life. Just works.",
+      "context": "detection"
+    },
+    {
+      "spell_name": "Carry All",
+      "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+      "observation": "Just lets you carry more stuff.",
+      "context": "carrying capacity"
+    },
+    {
+      "spell_name": "Water Walking",
+      "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+      "observation": "Just works. Does exactly what it says.",
+      "context": "environmental"
+    },
+    {
+      "spell_name": "Infused Vitality",
+      "source": "Are You Preparing Your Spells Wrong.md",
+      "observation": "Silver bullet for Undead encounters.",
+      "context": "silver bullet"
+    },
+    {
+      "spell_name": "Corrosive Mist",
+      "source": "Are You Preparing Your Spells Wrong.md",
+      "observation": "Lingering area with both damage and crowd control.",
+      "context": "slot-efficient"
+    },
+    {
+      "spell_name": "Heightened Invisibility",
+      "source": "Are You Preparing Your Spells Wrong.md",
+      "observation": "Buff with duration.",
+      "context": "slot-efficient"
+    },
+    {
+      "spell_name": "Live Wire",
+      "source": "Are You Preparing Your Spells Wrong.md",
+      "observation": "Pairs with Sure Strike for staff thesis wizard damage routine.",
+      "context": "staff thesis"
+    },
+    {
+      "spell_name": "Thunder Strike",
+      "source": "Cinder Swarm is Underrated.md",
+      "observation": "Good front-loaded spike damage. Wins on turn one but loses in sustained DPR over 3+ turns compared to Cinder Swarm + focus spell turns.",
+      "context": "spike damage"
+    },
+    {
+      "spell_name": "Elemental Toss",
+      "source": "Cinder Swarm is Underrated.md",
+      "observation": "Decent one-action attack but 30ft range is a liability and attack roll adds risk.",
+      "context": "third action"
+    },
+    {
+      "spell_name": "Electric Arc",
+      "source": "Cinder Swarm is Underrated.md",
+      "observation": "Solid sustained cantrip damage, but can't match the sustained output of Cinder Swarm sustain + focus spell.",
+      "context": "sustained cantrip"
+    },
+    {
+      "spell_name": "Crushing Ground",
+      "source": "Cinder Swarm is Underrated.md",
+      "observation": "Powerful two-action Druid focus spell. Pairs exceptionally well with Cinder Swarm sustain — together they produce 27.3 average damage per turn with riders.",
+      "context": "combo piece"
+    },
+    {
+      "spell_name": "Force Bolt",
+      "source": "Does Paizo Love Wizards Now.md",
+      "observation": "Basically a 1-action Force Barrage auto-heightened to your level. Solid initial focus spell for Battle Magic school.",
+      "context": "focus spell"
+    },
+    {
+      "spell_name": "Energy Absorption",
+      "source": "Does Paizo Love Wizards Now.md",
+      "observation": "Reaction that grants energy resistance. Good advanced focus spell.",
+      "context": "defensive reaction"
+    },
+    {
+      "spell_name": "Shielding Formation",
+      "source": "Does Paizo Love Wizards Now.md",
+      "observation": "Excellent defensive focus spell. 2 actions, 30-ft emanation, all allies constantly have Shield cantrip cast on them and can shield block as a free action. What Ars Grammatica wishes it could be.",
+      "context": "party defense"
+    },
+    {
+      "spell_name": "Thunder Strike",
+      "source": "Elemental Sorcerer Blaster Guide.md",
+      "observation": "Amazing signature spell — best single-target blast for a huge portion of the level range, boosted by bloodline and Sorcerer's Potency. Mainly used to beat down dangerous bosses.",
+      "context": "boss single-target"
+    },
+    {
+      "spell_name": "Brine Dragon's Bile",
+      "source": "Elemental Sorcerer Blaster Guide.md",
+      "observation": "Offensive reaction — efficient way to make second-rank slots deal damage between your main blasts. Alternative to Acid Grip for second-rank signature.",
+      "context": "offensive reaction"
+    },
+    {
+      "spell_name": "Elemental Toss",
+      "source": "Elemental Sorcerer Blaster Guide.md",
+      "observation": "Core focus spell. Spammable from level 5+ with 3 focus points and recovery options. One action, pairs with any two-action spell.",
+      "context": "focus spell"
+    },
+    {
+      "spell_name": "Amped Frostbite",
+      "source": "Elemental Sorcerer Blaster Guide.md",
+      "observation": "Powerful damaging cantrip from Psychic Dedication — saving throw (no MAP), gives temp HP on damage, long range. Good alternative to Elemental Toss on some turns.",
+      "context": "cantrip"
+    },
+    {
+      "spell_name": "Electric Arc",
+      "source": "Elemental Sorcerer Blaster Guide.md",
+      "observation": "Multi-target cantrip, still occasionally useful even at higher levels.",
+      "context": "cantrip"
+    },
+    {
+      "spell_name": "Slashing Gust",
+      "source": "Elemental Sorcerer Blaster Guide.md",
+      "observation": "Good for clearing groups of weak enemies (6-10 HP mooks).",
+      "context": "cantrip"
+    },
+    {
+      "spell_name": "Needle Darts",
+      "source": "Elemental Sorcerer Blaster Guide.md",
+      "observation": "Rarely used for damage at high levels, but can trigger weaknesses.",
+      "context": "cantrip"
+    },
+    {
+      "spell_name": "Rousing Splash",
+      "source": "Elemental Sorcerer Blaster Guide.md",
+      "observation": "Pre-buffing either before combat or on slow turn 1. Defensive buff on a teammate.",
+      "context": "cantrip utility"
+    },
+    {
+      "spell_name": "Glass Shield",
+      "source": "Elemental Sorcerer Blaster Guide.md",
+      "observation": "Defensive third action when Demoralize and Elemental Toss don't apply. Eventually replaceable via spell heart Shield cantrip.",
+      "context": "cantrip defense"
+    },
+    {
+      "spell_name": "Champion's Reaction",
+      "source": "Hidebound is UNDERRATED.md",
+      "observation": "The benchmark for damage mitigation reactions. Stronger in single-strike scenarios and against multi-type damage, also works against non-strike damage like AoEs.",
+      "context": "mitigation benchmark"
+    },
+    {
+      "spell_name": "Glacial Heart",
+      "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+      "observation": "Genuinely might be a candidate for one of the strongest focus spells in the game. Deals good cold damage and inflicts slowed.",
+      "context": "boss single-target"
+    },
+    {
+      "spell_name": "Brine Bolt",
+      "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+      "observation": "Great damage and a great debuff. 10d6 damage and blinded. At Mythic proficiency you're +6 ahead of expectations, which more than overcomes potency/proficiency lag.",
+      "context": "boss single-target"
+    },
+    {
+      "spell_name": "Cackle",
+      "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+      "observation": "Sustaining spells with a focus point and a free action is good. Core action economy tool.",
+      "context": "sustain economy"
+    },
+    {
+      "spell_name": "Clinging Ice",
+      "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+      "observation": "One-action cold damage + circumstance penalty to speeds. Problem: cold immunities shut it down entirely.",
+      "context": "damage cantrip"
+    },
+    {
+      "spell_name": "Live Wire",
+      "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
+      "observation": "Recently errata'd, now feels good to pick.",
+      "context": "damage cantrip"
+    },
+    {
+      "spell_name": "Electric Arc",
+      "source": "How to Blast GOOD in Pathfinder 2e.md",
+      "observation": "One of only two good AoE options at levels 1-2. Useful for softening two targets after a fireball round.",
+      "context": "Low-level AoE"
+    },
+    {
+      "spell_name": "Slashing Gust",
+      "source": "How to Blast GOOD in Pathfinder 2e.md",
+      "observation": "One of only two good AoE options at levels 1-2.",
+      "context": "Low-level AoE"
+    },
+    {
+      "spell_name": "Thunder Strike",
+      "source": "How to Blast GOOD in Pathfinder 2e.md",
+      "observation": "Good single-target damage but almost never better than Fireball in multi-target situations. Only preferable if you have high confidence the enemy is at an HP threshold where the extra ~6 average damage matters for a kill confirm.",
+      "context": "Single-target comparison"
+    },
+    {
+      "spell_name": "Beheading Buzzsaw",
+      "source": "How to Blast GOOD in Pathfinder 2e.md",
+      "observation": "Penalized in both damage and rider reliability, BUT the rider is instant death on crit fail + failed follow-up save. Reserve for exceptionally large target counts.",
+      "context": "Extreme rider"
+    },
+    {
+      "spell_name": "Awakened Entropy",
+      "source": "How to Blast GOOD in Pathfinder 2e.md",
+      "observation": "Zoning spell. Large area denial. Same coordination principles as other zoning spells.",
+      "context": "Zoning"
+    },
+    {
+      "spell_name": "Mist Curl",
+      "source": "How to Blast GOOD in Pathfinder 2e.md",
+      "observation": "Upgraded Vision of Death at higher levels. Action-denying rider makes it amazing against bosses.",
+      "context": "Single-target boss"
+    },
+    {
+      "spell_name": "Aeros Salvo",
+      "source": "How to Blast GOOD in Pathfinder 2e.md",
+      "observation": "Its rider effect sucks.",
+      "context": "Bad rider"
+    },
+    {
+      "spell_name": "Shore Strike",
+      "source": "How to Blast GOOD in Pathfinder 2e.md",
+      "observation": "Useful for kill confirms because it benefits from fortune effects (Sure Strike, hero points) and ally-granted bonuses to attack/penalties to AC.",
+      "context": "Attack roll"
+    },
+    {
+      "spell_name": "Electric Arc",
+      "source": "How to Look at Spells on Archives of Nethys.md",
+      "observation": "Recommended reflex cantrip pick.",
+      "context": "cantrip reflex"
+    },
+    {
+      "spell_name": "Frostbite",
+      "source": "How to Look at Spells on Archives of Nethys.md",
+      "observation": "Good Fort-targeting cantrip option.",
+      "context": "cantrip fortitude"
+    },
+    {
+      "spell_name": "Void Warp",
+      "source": "How to Look at Spells on Archives of Nethys.md",
+      "observation": "Good Fort-targeting cantrip option.",
+      "context": "cantrip fortitude"
+    },
+    {
+      "spell_name": "Clinging Ice",
+      "source": "Is Vision of Death Better than Synesthesia.md",
+      "observation": "Mentioned as a 1-action damaging option to pair with Fear at low levels.",
+      "context": "3rd action option"
+    },
+    {
+      "spell_name": "Elemental Toss",
+      "source": "Is Vision of Death Better than Synesthesia.md",
+      "observation": "Mentioned as a 1-action damaging option to pair with Fear at low levels.",
+      "context": "3rd action option"
+    },
+    {
+      "spell_name": "Brine Dragon's Bile",
+      "source": "Mathfinders Blaster Caster RUBRIC.md",
+      "observation": "Incredible reaction-based offense; adds damage on anyone else's turn when slashing/piercing happens in your party.",
+      "context": "reaction offense"
+    },
+    {
+      "spell_name": "Silence in Snow",
+      "source": "Mathfinders Blaster Caster RUBRIC.md",
+      "observation": "Premium one-action focus cantrip — poke for damage with one action, blast with two, zero MAP worries.",
+      "context": "third action efficiency"
+    },
+    {
+      "spell_name": "Evil Eye",
+      "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+      "observation": "Only has failure and crit failure effects -- no success effect. This is fine because it costs one action. Fish for Sickened 1; if it doesn't work, you still have two actions left.",
+      "context": "one-action focus spell"
+    },
+    {
+      "spell_name": "Thunder Strike",
+      "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+      "observation": "Good single-target boss spell -- good success effect. Less optimal in multi-target context compared to attack roll alternatives like Horizon Thunder Sphere.",
+      "context": "boss single-target"
+    },
+    {
+      "spell_name": "Lean Steps",
+      "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
+      "observation": "Good single-target boss spell -- good success effect.",
+      "context": "boss single-target"
+    },
+    {
+      "spell_name": "Needle Darts",
+      "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
+      "observation": "Good way to trigger metallic weaknesses on enemies, which casters may otherwise lack access to.",
+      "context": "trait exploitation"
+    },
+    {
+      "spell_name": "Diem of Divine Radiance",
+      "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
+      "observation": "Mythic spell. Attacks at much higher proficiency than enemy AC accounts for, more than offsetting the item bonus gap. Can be repeated like Camel Spit/Biting Words but without a fixed limit. Extreme example of attack roll math in casters' favor.",
+      "context": "mythic damage"
+    },
+    {
+      "spell_name": "Shadow Signet",
+      "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
+      "observation": "Explicitly called 'overrated.' It is a nice-to-have, not a gold tax or math band-aid. Does NOT work with Psychic amps, Reach Spell, or Sorcerer spell shapes that target two creatures.",
+      "context": "overrated item"
+    },
+    {
+      "spell_name": "Greater Invisibility",
+      "source": "Spell Selection Basics.md",
+      "observation": "Dual-use: protect a friend OR give rogue off-guard access.",
+      "context": "buff flexibility"
+    },
+    {
+      "spell_name": "Amped Frostbite",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Good — lets Psychic target Fortitude, has a good rider effect.",
+      "context": "Oscillating Wave Psychic fundamentals"
+    },
+    {
+      "spell_name": "Amped Ignition",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Good — lets Psychic target AC.",
+      "context": "Oscillating Wave Psychic fundamentals"
+    },
+    {
+      "spell_name": "Live Wire",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Good brute-forcing option.",
+      "context": "brute forcing"
+    },
+    {
+      "spell_name": "Thunder Strike",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Signature spell candidate for rank 1 (elemental sorcerer).",
+      "context": "signature selection"
+    },
+    {
+      "spell_name": "Elemental Toss",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Excellent one-action option for elemental sorcerers — enables defense overloading turns; triggers Blood Magic and Explosion of Power.",
+      "context": "action economy"
+    },
+    {
+      "spell_name": "Brine Dragon's Bile",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Excellent offensive reaction for low-rank slots; key defense overloading tool; spontaneous casters use it better than prepared casters.",
+      "context": "defensive reaction"
+    },
+    {
+      "spell_name": "Divine Lance",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Notable for having one of the hardest damage types to resist.",
+      "context": "damage type"
+    },
+    {
+      "spell_name": "Incendiary Aura",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Enables Flames Oracle brute forcing (sticks persistent fire damage via ally attacks); but hurts allies in the aura and takes two actions to set up.",
+      "context": "brute forcing"
+    },
+    {
+      "spell_name": "Foretell Harm",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Good free damage rider for Flames Oracle.",
+      "context": "damage rider"
+    },
+    {
+      "spell_name": "Debilitating Dichotomy",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Incredible — doesn't cost spell slot resources.",
+      "context": "resource efficiency"
+    },
+    {
+      "spell_name": "Whispers of Weakness",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Good cursebound option that doesn't impact resource pool.",
+      "context": "resource efficiency"
+    },
+    {
+      "spell_name": "Blood Spray Curse",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "One of divine's few low-rank options.",
+      "context": "low-rank value"
+    },
+    {
+      "spell_name": "Crushing Ground",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Excellent two-action single target focus spell with decent rider (speed penalty).",
+      "context": "single target"
+    },
+    {
+      "spell_name": "Stone Lance",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Good higher-level single target focus spell.",
+      "context": "single target"
+    },
+    {
+      "spell_name": "Updraft",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Best blasting focus spell at first level; knocks enemy prone on failed save (outstanding rider).",
+      "context": "early game"
+    },
+    {
+      "spell_name": "Clinging Ice",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Good one-action hex cantrip — slows enemies; triggers familiar action on use/sustain.",
+      "context": "action economy"
+    },
+    {
+      "spell_name": "Personal Blizzard",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Good hex — makes everything concealed to affected enemies.",
+      "context": "rider effect"
+    },
+    {
+      "spell_name": "Elemental Betrayal",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Good hex — gives enemies weakness to a specific damage type you or allies can exploit.",
+      "context": "rider effect"
+    },
+    {
+      "spell_name": "Glacial Heart",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Contender for one of the strongest single target focus spells in the game (available at level 10).",
+      "context": "single target"
+    },
+    {
+      "spell_name": "Cackle",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Incredible — lets you sustain ANY spell (not just hexes) as a free action; cornerstone of witch action economy.",
+      "context": "action economy"
+    },
+    {
+      "spell_name": "Earth's Bile",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Best one-action focus spell in the game; cornerstone of Animist blasting.",
+      "context": "action economy"
+    },
+    {
+      "spell_name": "Dancing Invocation",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Excellent — sustain spells as free action while moving (step or leap); huge action compression.",
+      "context": "action economy"
+    },
+    {
+      "spell_name": "Channeler Stance",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Upgrades Earth's Bile damage.",
+      "context": "damage boost"
+    },
+    {
+      "spell_name": "Forcebolt",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Better than Elemental Toss for defense overloading because it auto-damages (no roll needed).",
+      "context": "defense overloading"
+    },
+    {
+      "spell_name": "Vengeful Glare",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Good one-action focus spell (1d4 heightened by 1d4 + persistent damage); can switch between fire and cold damage types, making it nearly impossible to resist.",
+      "context": "damage type switching"
+    },
+    {
+      "spell_name": "Personal Runewell",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Great potency boost but requires setup time; use when you have setup opportunity in combat.",
+      "context": "damage boost"
+    },
+    {
+      "spell_name": "Sinblade Spell",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Additional potency option for Wrath Runelord.",
+      "context": "damage boost"
+    },
+    {
+      "spell_name": "Stray Mind",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Gives Psychic a fourth focus point once per hour; helps sustainability.",
+      "context": "resource management"
+    },
+    {
+      "spell_name": "Amped Shield",
+      "source": "Who are the BEST Blasters in Pathfinder 2e.md",
+      "observation": "Mentioned as a Parallel Breakthrough option for Psychics wanting non-blast utility.",
+      "context": "versatility option"
+    },
+    {
+      "spell_name": "Thunder Strike",
+      "source": "Witch and Wizard Blaster Build Guides.md",
+      "observation": "One-shot blast staple, good in top ranks.",
+      "context": "one-shot blast"
+    },
+    {
+      "spell_name": "Brine Dragon's Bile",
+      "source": "Witch and Wizard Blaster Build Guides.md",
+      "observation": "Great offensive reaction in low-rank slots.",
+      "context": "offensive reaction"
+    },
+    {
+      "spell_name": "Elemental Betrayal",
+      "source": "Witch and Wizard Blaster Build Guides.md",
+      "observation": "Solid hex for damage, but notably does NOT grant weakness to cold (won't boost Clinging Ice).",
+      "context": "witch hex"
+    },
+    {
+      "spell_name": "Personal Blizzard",
+      "source": "Witch and Wizard Blaster Build Guides.md",
+      "observation": "Pretty good blast from Lesson of Snow, one-action hex.",
+      "context": "witch focus spell"
+    },
+    {
+      "spell_name": "Malicious Shadow",
+      "source": "Witch and Wizard Blaster Build Guides.md",
+      "observation": "Two-action focus spell, good blast for padding value in longer combats.",
+      "context": "witch focus spell"
+    },
+    {
+      "spell_name": "Glacial Heart",
+      "source": "Witch and Wizard Blaster Build Guides.md",
+      "observation": "Two-action focus spell, good for longer combats at high levels.",
+      "context": "witch focus spell"
+    },
+    {
+      "spell_name": "Shore Strike",
+      "source": "Witch and Wizard Blaster Build Guides.md",
+      "observation": "Arcane staple, huge reliability boost — avoids saves entirely.",
+      "context": "reliability"
+    },
+    {
+      "spell_name": "Vengeful Glare",
+      "source": "Witch and Wizard Blaster Build Guides.md",
+      "observation": "Runelord Wrath focus spell — 1 action, can deal fire OR cold damage. Fire preferred (benefits from Burn It) but cold as backup against fire-resistant enemies. Not an attack roll, so combos well with Amped Ignition.",
+      "context": "wizard focus spell"
+    },
+    {
+      "spell_name": "Amped Ignition",
+      "source": "Witch and Wizard Blaster Build Guides.md",
+      "observation": "Preferred cantrip for Wrath Wizard via Psychic Dedication — no MAP after Vengeful Glare (since it's not an attack roll), splash damage multiplies Burn It value, works well as 2-action option while sustaining a spell.",
+      "context": "cantrip synergy"
+    },
+    {
+      "spell_name": "Frostbite",
+      "source": "Witch and Wizard Blaster Build Guides.md",
+      "observation": "NOT recommended for Wizard Psychic Dedication (unlike Sorcerer) — Vengeful Glare isn't an attack roll, so no MAP issue favoring save-based cantrip.",
+      "context": "cantrip choice"
+    }
+  ]
+}
