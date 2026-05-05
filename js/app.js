@@ -19,16 +19,15 @@
 
     markFramedPanels: function() {
       // Major panels that should have corner ornaments per Decision 017
+      // Inner content panels only — tradition pages (#page-*) are flex containers
+      // with a sticky sidebar; framing them puts bottom corners at the wrong place
+      // depending on which child is taller. Inner panels frame themselves correctly.
       var selectors = [
         '.hero',
         '.overview-hero',
         '.tier-card',
         '.tier-table-wrap',
-        '.data-table-wrap',
-        '#page-arcane',
-        '#page-divine',
-        '#page-occult',
-        '#page-primal'
+        '.data-table-wrap'
       ];
       for (var s = 0; s < selectors.length; s++) {
         var els = document.querySelectorAll(selectors[s]);
