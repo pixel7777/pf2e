@@ -213,7 +213,12 @@
     getTier: function(level, rank) {
       var maxRank = Math.ceil(level / 2);
       if (rank >= maxRank - 1) return 'top';
-      if (rank === maxRank - 2) return 'mid';
+      // At level 15+, mid expands to 2 ranks
+      if (level >= 15) {
+        if (rank >= maxRank - 3) return 'mid';
+      } else {
+        if (rank === maxRank - 2) return 'mid';
+      }
       return 'low';
     },
 
