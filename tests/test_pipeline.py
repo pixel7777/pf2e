@@ -26,7 +26,7 @@ EXPECTED_FIELDS = [
     "conditions_imposed", "curated", "damage_types", "defense_tags",
     "era", "heighten_pattern", "heighten_quality", "heighten_ranks",
     "heighten_raw", "mathfinder_observations", "mathfinder_reviewed",
-    "mathfinder_summary", "name", "native_rank", "rarity",
+    "mathfinder_sources", "mathfinder_summary", "name", "native_rank", "rarity",
     "reliability_tags", "replaced_by", "replaces", "roles",
     "special_tags", "st_incap", "targeting_subtypes", "targeting_tags",
     "tradition", "trait_raw", "url", "weaknesses_imposed"
@@ -56,7 +56,7 @@ NULLABLE_DICT_FIELDS = ["conditions_by_outcome"]
 NULLABLE_STRING_FIELDS = ["mathfinder_summary"]
 
 # Array fields that can be empty lists (observation/chain merge output)
-OBSERVATION_ARRAY_FIELDS = ["mathfinder_observations", "replaced_by", "replaces"]
+OBSERVATION_ARRAY_FIELDS = ["mathfinder_observations", "mathfinder_sources", "replaced_by", "replaces"]
 
 # Boolean fields
 BOOL_FIELDS = ["basic_save", "st_incap", "curated", "mathfinder_reviewed"]

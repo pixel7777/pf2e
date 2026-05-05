@@ -24,6 +24,8 @@ def parse_args():
                         help="Path to consolidated.json")
     parser.add_argument("--chains", default="data/observations/chain_registry.json",
                         help="Path to chain_registry.json")
+    parser.add_argument("--video-sources", default="data/observations/video_sources.json",
+                        help="Path to video_sources.json (filename-to-URL mapping)")
     parser.add_argument("--spell-data", default="data/spell-data.js",
                         help="Path to spell-data.js (read + write)")
     return parser.parse_args()
@@ -158,6 +160,38 @@ def build_chain_data(chain_registry):
     return result
 
 
+def build_sources(observations, video_sources):
+    """Build mathfinder_sources from a spell's observations and video URL lookup.
+
+    Deduplicates source filenames, classifies each as "direct" if ANY observation
+    from that source has source_type "direct", otherwise "category".
+    """
+    if not observations or not video_sources:
+        return []
+
+    source_map = {}
+    for obs in observations:
+        src = obs.get("source", "")
+        st = obs.get("source_type", "category")
+        if src not in source_map:
+            source_map[src] = st
+        elif st == "direct":
+            source_map[src] = "direct"
+
+    result = []
+    for src_file, src_type in source_map.items():
+        url = video_sources.get(src_file, "")
+        if not url:
+            continue
+        name = src_file.replace(".md", "")
+        result.append({
+            "name": name,
+            "url": url,
+            "source_type": src_type,
+        })
+    return result
+
+
 def main():
     args = parse_args()
 
@@ -173,6 +207,15 @@ def main():
               f"{consolidated['category_only_count']} category-only")
     else:
         print(f"WARNING: {args.consolidated} not found. Observation fields will be defaults.")
+
+    # Load video sources
+    video_sources = {}
+    if os.path.exists(args.video_sources):
+        with open(args.video_sources, encoding="utf-8") as f:
+            video_sources = json.load(f)
+        print(f"Loaded video_sources.json: {len(video_sources)} entries")
+    else:
+        print(f"WARNING: {args.video_sources} not found. mathfinder_sources will be empty.")
 
     chain_registry = None
     chain_data = {}
@@ -212,6 +255,12 @@ def main():
                     "observation": obs["observation"],
                 })
             spell["mathfinder_observations"] = exported_obs
+            if entry["mathfinder_reviewed"]:
+                spell["mathfinder_sources"] = build_sources(
+                    entry.get("observations", []), video_sources
+                )
+            else:
+                spell["mathfinder_sources"] = []
             obs_applied += 1
             if entry["mathfinder_summary"]:
                 summary_applied += 1
@@ -219,6 +268,7 @@ def main():
             spell["mathfinder_summary"] = None
             spell["mathfinder_observations"] = []
             spell["mathfinder_reviewed"] = False
+            spell["mathfinder_sources"] = []
 
         # Chain fields
         if aon_id in chain_data:
