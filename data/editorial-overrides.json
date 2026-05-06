@@ -16,7 +16,9 @@
       "conditions_imposed": [],
       "conditions_by_outcome": null,
       "basic_save": true,
-      "reliability_tags": ["Success-effect"]
+      "reliability_tags": [
+        "Success-effect"
+      ]
     }
   },
   {
@@ -24,7 +26,9 @@
     "name": "Spirit Link",
     "reason": "Cycle 07 spot-check (Heidi sample 9): Pure HP-transfer-over-time spell with no stat bonuses, abilities, or protective effects beyond healing. Per Decision 011 'Healing spells get healing, not buff. A spell that both heals AND provides a buff effect gets both roles.' Spirit Link doesn't have a buff effect beyond the heal pattern. Remove buff role.",
     "overrides": {
-      "roles": ["healing"]
+      "roles": [
+        "healing"
+      ]
     }
   },
   {
@@ -115,7 +119,14 @@
     "overrides": {
       "conditions_imposed": [],
       "conditions_by_outcome": null,
-      "roles": ["damage", "debuff", "silverBullets"]
+      "roles": [
+        "damage",
+        "debuff",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
     }
   },
   {
@@ -132,16 +143,27 @@
     "name": "Abyssal Plague",
     "reason": "Cycle 07 Phase 2 skip: model emitted invalid damage type 'Evil' (legacy alignment damage). Spell deals legacy 'evil damage' on Success and inflicts persistent Drained via the Abyssal Plague disease. Remaster mapping: evil damage → Spirit. Drained imposed at all degrees of failure.",
     "overrides": {
-      "damage_types": ["Spirit"],
-      "conditions_imposed": ["Drained"],
+      "damage_types": [
+        "Spirit"
+      ],
+      "conditions_imposed": [
+        "Drained"
+      ],
       "conditions_by_outcome": {
         "critical_success": [],
         "success": [],
-        "failure": ["Drained"],
-        "critical_failure": ["Drained"]
+        "failure": [
+          "Drained"
+        ],
+        "critical_failure": [
+          "Drained"
+        ]
       },
       "weaknesses_imposed": [],
-      "roles": ["damage", "debuff"],
+      "roles": [
+        "damage",
+        "debuff"
+      ],
       "reliability_tags": [],
       "heighten_quality": "no-heighten"
     }
@@ -151,17 +173,34 @@
     "name": "Transmute Rock and Mud",
     "reason": "Cycle 07 Phase 2 skip: model tried to add 'Ref' to defense_tags_added (rule violation). spell.json's saving_throw field is null even though spell text describes a basic Reflex save for the mud-to-rock catch — so structured pass missed it. Editorial override sets defense_tags=['Ref'] so offense-eval gate doesn't strip our offense fields. Spell creates difficult terrain (control), can deal Bludgeoning if cast on a ceiling, and impose Prone/Grabbed when mud-to-rock catches creatures. heighten_quality scales-okay (heighten_pattern=plus_2).",
     "overrides": {
-      "defense_tags": ["Ref"],
-      "damage_types": ["Bludg"],
-      "conditions_imposed": ["Prone", "Grabbed"],
+      "defense_tags": [
+        "Ref"
+      ],
+      "damage_types": [
+        "Bludg"
+      ],
+      "conditions_imposed": [
+        "Prone",
+        "Grabbed"
+      ],
       "conditions_by_outcome": {
         "critical_success": [],
-        "success": ["Prone"],
-        "failure": ["Grabbed"],
-        "critical_failure": ["Grabbed"]
+        "success": [
+          "Prone"
+        ],
+        "failure": [
+          "Grabbed"
+        ],
+        "critical_failure": [
+          "Grabbed"
+        ]
       },
       "weaknesses_imposed": [],
-      "roles": ["control", "damage", "debuff"],
+      "roles": [
+        "control",
+        "damage",
+        "debuff"
+      ],
       "reliability_tags": [],
       "heighten_quality": "scales-okay"
     }
@@ -171,16 +210,31 @@
     "name": "Imp Sting",
     "reason": "Cycle 07 Phase 2 skip: model emitted invalid damage type 'Evil'. Spell deals piercing + 1d6 evil damage initially, then poison via Imp Venom (Clumsy at stage 1, Slowed at stage 2). Remaster mapping: evil → Spirit. Conditions are Clumsy + Slowed (literal text mentions clumsy and slowed in the Imp Venom block).",
     "overrides": {
-      "damage_types": ["Pierc", "Spirit", "Poison"],
-      "conditions_imposed": ["Clumsy", "Slowed"],
+      "damage_types": [
+        "Pierc",
+        "Spirit",
+        "Poison"
+      ],
+      "conditions_imposed": [
+        "Clumsy",
+        "Slowed"
+      ],
       "conditions_by_outcome": {
         "critical_success": [],
         "success": [],
-        "failure": ["Clumsy"],
-        "critical_failure": ["Clumsy", "Slowed"]
+        "failure": [
+          "Clumsy"
+        ],
+        "critical_failure": [
+          "Clumsy",
+          "Slowed"
+        ]
       },
       "weaknesses_imposed": [],
-      "roles": ["damage", "debuff"],
+      "roles": [
+        "damage",
+        "debuff"
+      ],
       "reliability_tags": [],
       "heighten_quality": "no-heighten"
     }
@@ -194,7 +248,9 @@
       "conditions_imposed": [],
       "conditions_by_outcome": null,
       "weaknesses_imposed": [],
-      "roles": ["buff"],
+      "roles": [
+        "buff"
+      ],
       "reliability_tags": [],
       "heighten_quality": "fixed-meaningful"
     }
@@ -208,7 +264,10 @@
       "conditions_imposed": [],
       "conditions_by_outcome": null,
       "weaknesses_imposed": [],
-      "roles": ["control", "utility"],
+      "roles": [
+        "control",
+        "utility"
+      ],
       "reliability_tags": [],
       "heighten_quality": "no-heighten"
     }
@@ -218,17 +277,33 @@
     "name": "Ymeri's Mark",
     "reason": "Cycle 07 Phase 2 skip: model emitted invalid role 'detection' (not in valid role set). Curse spell that imposes Fatigued on the target and detonates for fire damage on dismiss (basic Reflex save). Has both tracking (utility) and combat-debuff functions. Conditions imposed: Fatigued (auto, for the duration determined by Fort save).",
     "overrides": {
-      "damage_types": ["Fire"],
-      "conditions_imposed": ["Fatigued"],
+      "damage_types": [
+        "Fire"
+      ],
+      "conditions_imposed": [
+        "Fatigued"
+      ],
       "conditions_by_outcome": {
         "critical_success": [],
-        "success": ["Fatigued"],
-        "failure": ["Fatigued"],
-        "critical_failure": ["Fatigued"]
+        "success": [
+          "Fatigued"
+        ],
+        "failure": [
+          "Fatigued"
+        ],
+        "critical_failure": [
+          "Fatigued"
+        ]
       },
       "weaknesses_imposed": [],
-      "roles": ["damage", "debuff", "utility"],
-      "reliability_tags": ["Success-effect"],
+      "roles": [
+        "damage",
+        "debuff",
+        "utility"
+      ],
+      "reliability_tags": [
+        "Success-effect"
+      ],
       "heighten_quality": "scales-okay"
     }
   },
@@ -237,14 +312,24 @@
     "name": "Sawtooth Terrain",
     "reason": "Cycle 07 Phase 2 skip: model tried to add 'Ref' to defense_tags_added (rule violation). spell.json's saving_throw is null even though spell text says 'basic Reflex save' — structured pass missed it. Editorial override sets defense_tags=['Ref'] AND basic_save=true so offense gate retains our values and Success-effect rule applies. Difficult terrain + slashing + persistent bleed + speed penalty. Speed penalty is NOT Slowed (literal text says '-10-foot circumstance penalty to their Speed').",
     "overrides": {
-      "defense_tags": ["Ref"],
+      "defense_tags": [
+        "Ref"
+      ],
       "basic_save": true,
-      "damage_types": ["Slash", "Bleed"],
+      "damage_types": [
+        "Slash",
+        "Bleed"
+      ],
       "conditions_imposed": [],
       "conditions_by_outcome": null,
       "weaknesses_imposed": [],
-      "roles": ["control", "damage"],
-      "reliability_tags": ["Success-effect"],
+      "roles": [
+        "control",
+        "damage"
+      ],
+      "reliability_tags": [
+        "Success-effect"
+      ],
       "heighten_quality": "scales-well"
     }
   },
@@ -253,14 +338,24 @@
     "name": "Clockwork Devotion",
     "reason": "Cycle 07 Phase 2 skip: model tried to add 'Ref' to defense_tags_added (rule violation). spell.json's saving_throw is null even though spell text says 'basic Reflex save' — structured pass missed it. Editorial override sets defense_tags=['Ref'] AND basic_save=true. Summon spell with two damage waves: arrival slash + departure slash + fire (basic Reflex save), persistent fire on crit fail. Treat as damage + summon-control.",
     "overrides": {
-      "defense_tags": ["Ref"],
+      "defense_tags": [
+        "Ref"
+      ],
       "basic_save": true,
-      "damage_types": ["Slash", "Fire"],
+      "damage_types": [
+        "Slash",
+        "Fire"
+      ],
       "conditions_imposed": [],
       "conditions_by_outcome": null,
       "weaknesses_imposed": [],
-      "roles": ["damage", "control"],
-      "reliability_tags": ["Success-effect"],
+      "roles": [
+        "damage",
+        "control"
+      ],
+      "reliability_tags": [
+        "Success-effect"
+      ],
       "heighten_quality": "no-heighten"
     }
   },
@@ -269,7 +364,13 @@
     "name": "Blazing Armory",
     "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
     "overrides": {
-      "roles": ["buff", "silverBullets"]
+      "roles": [
+        "buff",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
     }
   },
   {
@@ -277,7 +378,14 @@
     "name": "Infuse Vitality",
     "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
     "overrides": {
-      "roles": ["buff", "oneAction", "silverBullets"]
+      "roles": [
+        "buff",
+        "oneAction",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
     }
   },
   {
@@ -285,7 +393,13 @@
     "name": "Befuddle",
     "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
     "overrides": {
-      "roles": ["debuff", "silverBullets"]
+      "roles": [
+        "debuff",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
     }
   },
   {
@@ -293,7 +407,13 @@
     "name": "Calm",
     "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
     "overrides": {
-      "roles": ["control", "silverBullets"]
+      "roles": [
+        "control",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
     }
   },
   {
@@ -301,7 +421,13 @@
     "name": "Benediction",
     "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
     "overrides": {
-      "roles": ["buff", "silverBullets"]
+      "roles": [
+        "buff",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
     }
   },
   {
@@ -309,7 +435,15 @@
     "name": "Cleanse Affliction",
     "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
     "overrides": {
-      "roles": ["healing", "utility", "silverBullets"]
+      "roles": [
+        "healing",
+        "utility",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Healing",
+        "Silver Bullet"
+      ]
     }
   },
   {
@@ -317,7 +451,14 @@
     "name": "Air Bubble",
     "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
     "overrides": {
-      "roles": ["reactions", "utility", "silverBullets"]
+      "roles": [
+        "reactions",
+        "utility",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
     }
   },
   {
@@ -325,7 +466,12 @@
     "name": "Earthbind",
     "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-flying silver bullet.",
     "overrides": {
-      "roles": ["silverBullets"]
+      "roles": [
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
     }
   },
   {
@@ -333,7 +479,13 @@
     "name": "Revealing Light",
     "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-invisibility silver bullet. Preserves populator-derived debuff role.",
     "overrides": {
-      "roles": ["debuff", "silverBullets"]
+      "roles": [
+        "debuff",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
     }
   },
   {
@@ -341,7 +493,13 @@
     "name": "Laughing Fit",
     "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet. Preserves populator-derived debuff role.",
     "overrides": {
-      "roles": ["debuff", "silverBullets"]
+      "roles": [
+        "debuff",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
     }
   },
   {
@@ -349,7 +507,14 @@
     "name": "Cinder Swarm",
     "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet. Preserves populator-derived damage+debuff roles.",
     "overrides": {
-      "roles": ["damage", "debuff", "silverBullets"]
+      "roles": [
+        "damage",
+        "debuff",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
     }
   },
   {
@@ -357,7 +522,12 @@
     "name": "Environmental Endurance",
     "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
     "overrides": {
-      "roles": ["silverBullets"]
+      "roles": [
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
     }
   },
   {
@@ -365,7 +535,12 @@
     "name": "Resist Energy",
     "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
     "overrides": {
-      "roles": ["silverBullets"]
+      "roles": [
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
     }
   },
   {
@@ -373,7 +548,12 @@
     "name": "See the Unseen",
     "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-invisibility silver bullet.",
     "overrides": {
-      "roles": ["silverBullets"]
+      "roles": [
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
     }
   },
   {
@@ -381,7 +561,12 @@
     "name": "Freedom of Movement",
     "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-grapple/restraint silver bullet.",
     "overrides": {
-      "roles": ["silverBullets"]
+      "roles": [
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
     }
   },
   {
@@ -389,7 +574,12 @@
     "name": "Remove Curse",
     "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-curse silver bullet.",
     "overrides": {
-      "roles": ["silverBullets"]
+      "roles": [
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
     }
   },
   {
@@ -397,7 +587,12 @@
     "name": "Fly",
     "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged mobility silver bullet.",
     "overrides": {
-      "roles": ["silverBullets"]
+      "roles": [
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
     }
   },
   {
@@ -405,7 +600,12 @@
     "name": "Nullify",
     "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-magic silver bullet.",
     "overrides": {
-      "roles": ["silverBullets"]
+      "roles": [
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
     }
   }
 ]
