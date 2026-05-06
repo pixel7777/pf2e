@@ -2150,6 +2150,13 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
    distinct boxed look on the filter buttons keep the two roles obvious. */
 .sortable-header .sort-indicator { margin-right: 0.05rem; }
 
+/* Table-header info bubble (e.g. Tags column) needs breathing room
+   from its label — override the export-bar negative margin. */
+.spell-table th .info-bubble {
+  margin-left: 0.35rem;
+  margin-right: 0;
+}
+
 /* ── Column Filter Dropdown ── */
 .column-filter-dropdown {
   position: fixed;
