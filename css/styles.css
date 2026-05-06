@@ -2040,3 +2040,268 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
 .chain-replaced-by {
   color: #993C1D;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Cycle 22 — Trait Filters / Column Filters / Active Filter Bar
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Trait Filter Pills (sidebar section) ── */
+.trait-section {
+  border-top: 1px solid var(--border-panel);
+  padding-top: 0.6rem;
+  margin-top: 0.6rem;
+}
+
+.trait-filter-input {
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-panel);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+  box-sizing: border-box;
+}
+.trait-filter-input:focus {
+  outline: none;
+  border-color: var(--accent-nav-active);
+}
+.trait-filter-input::placeholder { color: var(--text-tertiary); }
+
+.trait-empty-msg {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-style: italic;
+  color: var(--text-tertiary);
+  padding: 0.3rem 0;
+}
+
+/* Trait pills — use neutral palette by default; reuse filter-included/excluded states */
+.sidebar .ctag.tag-trait {
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  border-color: var(--border-panel);
+  cursor: pointer;
+  opacity: 0.75;
+}
+.sidebar .ctag.tag-trait:hover { opacity: 1; }
+
+/* Tradition-aware dimming — still clickable */
+.sidebar .ctag.tag-trait.trait-dimmed {
+  opacity: 0.35;
+  pointer-events: auto;
+}
+.sidebar .ctag.tag-trait.trait-dimmed:hover { opacity: 0.6; }
+
+/* Filter-included reuses .filter-included styling already defined.
+   For trait pills, ensure visibility even when dimmed. */
+.sidebar .ctag.tag-trait.filter-included,
+.sidebar .ctag.tag-trait.filter-excluded {
+  opacity: 1;
+}
+
+/* ── Column Filter Icons ── */
+.col-filter-icon {
+  display: inline-block;
+  font-size: 0.7rem;
+  margin-left: 0.25rem;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: opacity 0.15s, color 0.15s;
+  user-select: none;
+}
+.col-filter-icon:hover { opacity: 0.85; }
+.col-filter-icon.active {
+  opacity: 1;
+  color: var(--accent-nav-active);
+  font-weight: 700;
+}
+
+.col-filter-icon.star-toggle {
+  font-size: 0.85rem;
+}
+.col-filter-icon.star-toggle.active {
+  color: #b8860b;
+}
+
+/* ── Column Filter Dropdown ── */
+.column-filter-dropdown {
+  position: fixed;
+  z-index: 1100;
+  background: var(--bg-card);
+  border: 1px solid var(--border-panel);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+  padding: 0.6rem 0.7rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  min-width: 180px;
+  max-width: 260px;
+}
+
+.column-filter-dropdown .cfd-row { display: flex; }
+
+.column-filter-dropdown .cfd-name-input {
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-panel);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  box-sizing: border-box;
+}
+.column-filter-dropdown .cfd-name-input:focus {
+  outline: none;
+  border-color: var(--accent-nav-active);
+}
+
+.column-filter-dropdown .cfd-info {
+  font-size: 0.68rem;
+  font-style: italic;
+  color: var(--text-tertiary);
+  margin-bottom: 0.35rem;
+  line-height: 1.3;
+}
+
+.column-filter-dropdown .cfd-controls {
+  display: flex;
+  gap: 0.3rem;
+  margin-bottom: 0.35rem;
+}
+
+.column-filter-dropdown .cfd-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  cursor: pointer;
+  border: 1px solid var(--border-panel);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  transition: all 0.15s;
+}
+.column-filter-dropdown .cfd-btn:hover {
+  border-color: var(--accent-header);
+  color: var(--accent-header);
+}
+
+.column-filter-dropdown .cfd-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.column-filter-dropdown .cfd-check {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  font-size: 0.78rem;
+  color: var(--text-primary);
+  padding: 0.1rem 0;
+}
+
+/* ── Active Filter Summary Bar ── */
+.active-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.6rem;
+  margin-bottom: 0.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-panel);
+  border-radius: var(--radius);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+}
+
+.active-filter-bar .afb-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: 0.2rem;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.18rem 0.5rem;
+  border-radius: 12px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border-panel);
+  color: var(--text-primary);
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.filter-chip.neg {
+  background: #fde8e8;
+  border-color: #e8a0a0;
+  color: #a32d2d;
+}
+
+.filter-chip.paused {
+  opacity: 0.5;
+  font-style: italic;
+}
+
+.filter-chip .afb-x {
+  cursor: pointer;
+  color: var(--text-tertiary);
+  font-weight: 700;
+  transition: color 0.15s;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+.filter-chip .afb-x:hover { color: var(--accent-header); }
+.filter-chip.neg .afb-x:hover { color: #a32d2d; }
+
+.afb-clear {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid var(--accent-nav-active);
+  background: transparent;
+  color: var(--accent-nav-active);
+  margin-left: auto;
+  transition: all 0.15s;
+}
+.afb-clear:hover {
+  background: var(--accent-nav-active);
+  color: #ffffff;
+}
+
+/* ── No-results message with clear-filters link ── */
+.no-results-msg {
+  padding: 1.2rem 1rem;
+  text-align: center;
+  font-style: italic;
+  color: var(--text-secondary);
+}
+.no-results-msg .clear-filters-link {
+  color: var(--accent-nav-active);
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.no-results-msg .clear-filters-link:hover {
+  color: var(--accent-header);
+}
+
+/* Tags column header — gets a help cursor since clicking it shows a toast */
+.col-tags-header { cursor: help; }

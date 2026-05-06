@@ -59,8 +59,19 @@
     sortColumn: null,
     sortDirection: null,
     searchQuery: '',
-    searchFiltersDisabled: false
+    searchFiltersDisabled: false,
+    // Cycle 22 — trait filters (always active, not gated by coverageMode)
+    traitInclude: [],   // ["Fire", ...] — spell must have ALL
+    traitExclude: [],   // ["Mental", ...] — spell must have NONE
+    // Cycle 22 — column filters (suspended in Search tab)
+    columnNameFilter: '',
+    columnRankFilter: null,    // null = all, or array of allowed ranks
+    columnActionFilter: null,  // null = all, or array of allowed action labels
+    columnStarredOnly: false
   };
+
+  // Defaults snapshot for "is filter active?" comparisons (Feature 3)
+  var RARITY_DEFAULT = { Common: true, Uncommon: true, Rare: false, Unique: false };
 
   // ── Advice Text Matrix (Decision 022 — verbatim) ──
 
@@ -262,23 +273,98 @@
     return true;
   }
 
-  // ── Filter spells by tradition + role + rank + rarity/legacy + coverage ──
-  function filterSpells(tradition, role, slotRank) {
+  // ── Trait filter check (Cycle 22 — always active) ──
+  function passesTraitFilters(spell) {
+    var f = window.SpellFilters;
+    if (f.traitInclude.length === 0 && f.traitExclude.length === 0) return true;
+    var traits = spell.trait_raw || [];
+    for (var i = 0; i < f.traitInclude.length; i++) {
+      if (traits.indexOf(f.traitInclude[i]) === -1) return false;
+    }
+    for (var i = 0; i < f.traitExclude.length; i++) {
+      if (traits.indexOf(f.traitExclude[i]) !== -1) return false;
+    }
+    return true;
+  }
+
+  // ── Action label derivation (Cycle 22 — column filter) ──
+  // Returns the set of label values a spell matches: ['1-action','2-action',...]
+  function getSpellActionLabels(spell) {
+    var tags = spell.action_tags || [];
+    var labels = [];
+    if (tags.length === 0) {
+      labels.push('2-action');
+    } else {
+      if (tags.indexOf('1-action') !== -1) labels.push('1-action');
+      if (tags.indexOf('3-action') !== -1) labels.push('3-action');
+      if (tags.indexOf('Reaction') !== -1) labels.push('Reaction');
+      if (tags.indexOf('Free') !== -1) labels.push('Free');
+      // No standard cost tag means 2-action default (alongside any modifiers)
+      if (tags.indexOf('1-action') === -1 && tags.indexOf('3-action') === -1 &&
+          tags.indexOf('Reaction') === -1 && tags.indexOf('Free') === -1) {
+        labels.push('2-action');
+      }
+    }
+    if (tags.indexOf('Sustain-action') !== -1) labels.push('Sustained');
+    return labels;
+  }
+
+  // ── Column filter check (Cycle 22 — skipped in Search tab) ──
+  function passesColumnFilters(spell, tradition) {
+    var tab = activeTab[tradition] || 'role';
+    if (tab === 'search') return true; // pass-through in search
+
+    var f = window.SpellFilters;
+
+    // Name substring (case-insensitive)
+    if (f.columnNameFilter && f.columnNameFilter.length > 0) {
+      var needle = f.columnNameFilter.toLowerCase();
+      if (spell.name.toLowerCase().indexOf(needle) === -1) return false;
+    }
+    // Rank
+    if (f.columnRankFilter && f.columnRankFilter.length > 0) {
+      if (f.columnRankFilter.indexOf(spell.native_rank) === -1) return false;
+    }
+    // Action
+    if (f.columnActionFilter && f.columnActionFilter.length > 0) {
+      var labels = getSpellActionLabels(spell);
+      var any = false;
+      for (var i = 0; i < labels.length; i++) {
+        if (f.columnActionFilter.indexOf(labels[i]) !== -1) { any = true; break; }
+      }
+      if (!any) return false;
+    }
+    // Starred
+    if (f.columnStarredOnly && !spell.mathfinder_reviewed) return false;
+
+    return true;
+  }
+
+  // ── Filter spells by tradition + role + rank + rarity/legacy + coverage + traits + columns ──
+  // Returns { results, baseCount } — baseCount = passes tradition+role+rank only (for no-results UX)
+  function filterSpells(tradition, role, slotRank, opts) {
+    opts = opts || {};
     var allSpells = getSpellSchemaSpells();
     var tradCap = tradition.charAt(0).toUpperCase() + tradition.slice(1);
     var results = [];
+    var baseCount = 0;
 
     for (var i = 0; i < allSpells.length; i++) {
       var s = allSpells[i];
       if (s.tradition.indexOf(tradCap) === -1) continue;
       if (s.roles.indexOf(role) === -1) continue;
       if (s.native_rank > slotRank) continue;
+      baseCount++;
       if (!passesRarityLegacy(s)) continue;
       if (!passesCoverageFilters(s)) continue;
+      if (!passesTraitFilters(s)) continue;
+      if (!passesColumnFilters(s, tradition)) continue;
       results.push(s);
     }
 
-    return applySortOrder(results);
+    var sorted = applySortOrder(results);
+    if (opts.withMeta) return { results: sorted, baseCount: baseCount };
+    return sorted;
   }
 
   // ── Sort logic ──
@@ -527,18 +613,370 @@
     return html;
   }
 
+  function colFilterIcon(col) {
+    var f = window.SpellFilters;
+    var active = false;
+    if (col === 'name') active = !!(f.columnNameFilter && f.columnNameFilter.length > 0);
+    else if (col === 'rank') active = !!(f.columnRankFilter && f.columnRankFilter.length > 0);
+    else if (col === 'action') active = !!(f.columnActionFilter && f.columnActionFilter.length > 0);
+    else if (col === 'starred') active = !!f.columnStarredOnly;
+    var cls = 'col-filter-icon' + (active ? ' active' : '');
+    return ' <span class="' + cls + '" data-col-filter="' + col + '" title="Filter this column">&#9660;</span>';
+  }
+
   function buildTableHeader(isSearch) {
     var html = '<table class="spell-table"><thead><tr>';
     if (isSearch) {
       html += '<th>Spell</th><th>Rank</th><th>Action</th><th>Tags</th><th>Notes</th>';
     } else {
-      html += '<th class="sortable-header" data-sort-col="name">Spell' + sortIndicator('name') + '</th>';
-      html += '<th class="sortable-header" data-sort-col="rank">Rank' + sortIndicator('rank') + '</th>';
-      html += '<th class="sortable-header" data-sort-col="action">Action' + sortIndicator('action') + '</th>';
-      html += '<th>Tags</th><th>Notes</th>';
+      var starActive = window.SpellFilters.columnStarredOnly ? ' active' : '';
+      html += '<th class="sortable-header" data-sort-col="name"><span class="col-label">Spell</span>' + sortIndicator('name') + colFilterIcon('name') + ' <span class="col-filter-icon star-toggle' + starActive + '" data-col-filter="starred" title="Show only starred (Mathfinder-reviewed) spells">&#9733;</span></th>';
+      html += '<th class="sortable-header" data-sort-col="rank"><span class="col-label">Rank</span>' + sortIndicator('rank') + colFilterIcon('rank') + '</th>';
+      html += '<th class="sortable-header" data-sort-col="action"><span class="col-label">Action</span>' + sortIndicator('action') + colFilterIcon('action') + '</th>';
+      html += '<th data-col="tags" class="col-tags-header"><span class="col-label">Tags</span></th>';
+      html += '<th data-col="notes"><span class="col-label">Notes</span></th>';
     }
     html += '</tr></thead><tbody>';
     return html;
+  }
+
+  // ── Cycle 22 — Column Filter Dropdowns ──
+
+  var openDropdownEl = null;
+
+  function closeColumnDropdown() {
+    if (openDropdownEl && openDropdownEl.parentNode) {
+      openDropdownEl.parentNode.removeChild(openDropdownEl);
+    }
+    openDropdownEl = null;
+  }
+
+  function getMaxRankForTradition(tradition) {
+    // Use current selected slot's rank as upper bound
+    var slot = Planner.getSelectedSlot();
+    return slot ? slot.rank : 10;
+  }
+
+  function getActionOptionsForTradition(tradition) {
+    // Standard 5 + conditional Free
+    var standard = ['1-action', '2-action', '3-action', 'Reaction', 'Sustained'];
+    var hasFree = false;
+    if (window.SPELL_SCHEMA && window.SPELL_SCHEMA.spells) {
+      var tradCap = tradition.charAt(0).toUpperCase() + tradition.slice(1);
+      var spells = window.SPELL_SCHEMA.spells;
+      for (var i = 0; i < spells.length; i++) {
+        if (spells[i].tradition.indexOf(tradCap) === -1) continue;
+        if ((spells[i].action_tags || []).indexOf('Free') !== -1) { hasFree = true; break; }
+      }
+    }
+    if (hasFree) standard.push('Free');
+    return standard;
+  }
+
+  function openColumnDropdown(tradition, col, anchorEl) {
+    closeColumnDropdown();
+
+    var dropdown = document.createElement('div');
+    dropdown.className = 'column-filter-dropdown';
+    dropdown.dataset.col = col;
+
+    var f = window.SpellFilters;
+    var html = '';
+
+    if (col === 'name') {
+      html += '<div class="cfd-row"><input type="text" class="cfd-name-input" placeholder="Filter by name..." value="' + (f.columnNameFilter || '').replace(/"/g, '&quot;') + '"></div>';
+    } else if (col === 'rank') {
+      var maxRank = getMaxRankForTradition(tradition);
+      html += '<div class="cfd-info">Spells shown are already limited to your slot\'s maximum rank. This filter further narrows which ranks appear.</div>';
+      html += '<div class="cfd-controls"><button type="button" class="cfd-btn" data-action="select-all">Select All</button><button type="button" class="cfd-btn" data-action="clear-all">Clear All</button></div>';
+      html += '<div class="cfd-checks">';
+      var selected = f.columnRankFilter;
+      for (var r = 1; r <= maxRank; r++) {
+        var checked = !selected || selected.indexOf(r) !== -1;
+        html += '<label class="cfd-check"><input type="checkbox" data-val="' + r + '"' + (checked ? ' checked' : '') + '> ' + r + '</label>';
+      }
+      html += '</div>';
+    } else if (col === 'action') {
+      var opts = getActionOptionsForTradition(tradition);
+      var labels = { '1-action': '1-action (◆)', '2-action': '2-action (◆◆)', '3-action': '3-action (◆◆◆)', 'Reaction': 'Reaction (◈)', 'Sustained': 'Sustained', 'Free': 'Free' };
+      html += '<div class="cfd-controls"><button type="button" class="cfd-btn" data-action="select-all">Select All</button><button type="button" class="cfd-btn" data-action="clear-all">Clear All</button></div>';
+      html += '<div class="cfd-checks">';
+      var selectedA = f.columnActionFilter;
+      for (var i = 0; i < opts.length; i++) {
+        var v = opts[i];
+        var c = !selectedA || selectedA.indexOf(v) !== -1;
+        html += '<label class="cfd-check"><input type="checkbox" data-val="' + v + '"' + (c ? ' checked' : '') + '> ' + labels[v] + '</label>';
+      }
+      html += '</div>';
+    }
+
+    dropdown.innerHTML = html;
+    document.body.appendChild(dropdown);
+    openDropdownEl = dropdown;
+
+    // Position
+    var rect = anchorEl.getBoundingClientRect();
+    var ddRect = dropdown.getBoundingClientRect();
+    var left = rect.left;
+    if (left + ddRect.width > window.innerWidth - 8) {
+      left = rect.right - ddRect.width;
+    }
+    if (left < 4) left = 4;
+    dropdown.style.left = left + 'px';
+    dropdown.style.top = (rect.bottom + 4) + 'px';
+
+    // Wire interactions
+    if (col === 'name') {
+      var input = dropdown.querySelector('.cfd-name-input');
+      input.focus();
+      input.addEventListener('input', function() {
+        f.columnNameFilter = input.value;
+        reRenderCurrentView(tradition);
+      });
+    } else if (col === 'rank' || col === 'action') {
+      var checks = dropdown.querySelectorAll('input[type="checkbox"]');
+      function readChecks() {
+        var allowed = [];
+        for (var i = 0; i < checks.length; i++) {
+          if (checks[i].checked) {
+            var raw = checks[i].dataset.val;
+            allowed.push(col === 'rank' ? parseInt(raw, 10) : raw);
+          }
+        }
+        // null when all selected (= no filter)
+        var fullCount = checks.length;
+        if (allowed.length === fullCount) {
+          if (col === 'rank') f.columnRankFilter = null;
+          else f.columnActionFilter = null;
+        } else {
+          if (col === 'rank') f.columnRankFilter = allowed;
+          else f.columnActionFilter = allowed;
+        }
+        reRenderCurrentView(tradition);
+      }
+      for (var i = 0; i < checks.length; i++) {
+        checks[i].addEventListener('change', readChecks);
+      }
+      var btns = dropdown.querySelectorAll('.cfd-btn');
+      for (var b = 0; b < btns.length; b++) {
+        btns[b].addEventListener('click', function() {
+          var action = this.dataset.action;
+          for (var i = 0; i < checks.length; i++) {
+            checks[i].checked = (action === 'select-all');
+          }
+          readChecks();
+        });
+      }
+    }
+
+    // Outside-click handler
+    setTimeout(function() {
+      function outsideClick(e) {
+        if (openDropdownEl && !openDropdownEl.contains(e.target) && !e.target.closest('.col-filter-icon')) {
+          closeColumnDropdown();
+          document.removeEventListener('click', outsideClick, true);
+        }
+      }
+      document.addEventListener('click', outsideClick, true);
+    }, 0);
+  }
+
+  // Reconcile column rank filter when slot rank changes
+  function reconcileColumnRankFilter() {
+    var f = window.SpellFilters;
+    if (!f.columnRankFilter) return;
+    var slot = Planner.getSelectedSlot();
+    if (!slot) return;
+    var max = slot.rank;
+    var kept = [];
+    for (var i = 0; i < f.columnRankFilter.length; i++) {
+      if (f.columnRankFilter[i] >= 1 && f.columnRankFilter[i] <= max) kept.push(f.columnRankFilter[i]);
+    }
+    if (kept.length === 0) f.columnRankFilter = null;
+    else f.columnRankFilter = kept;
+  }
+
+  // ── Cycle 22 — Active Filter Summary Bar ──
+
+  function rarityDiff() {
+    var f = window.SpellFilters;
+    var added = [], removed = [];
+    var rarities = ['Common', 'Uncommon', 'Rare', 'Unique'];
+    for (var i = 0; i < rarities.length; i++) {
+      var r = rarities[i];
+      var def = RARITY_DEFAULT[r];
+      var cur = f.rarity[r];
+      if (cur && !def) added.push(r);
+      if (!cur && def) removed.push(r);
+    }
+    return { added: added, removed: removed };
+  }
+
+  function isAnyFilterActive() {
+    var f = window.SpellFilters;
+    var rd = rarityDiff();
+    if (rd.added.length > 0 || rd.removed.length > 0) return true;
+    if (f.showLegacy) return true;
+    if (f.coverageInclude.length > 0 || f.coverageExclude.length > 0) return true;
+    if (f.traitInclude.length > 0 || f.traitExclude.length > 0) return true;
+    if (f.columnNameFilter && f.columnNameFilter.length > 0) return true;
+    if (f.columnRankFilter && f.columnRankFilter.length > 0) return true;
+    if (f.columnActionFilter && f.columnActionFilter.length > 0) return true;
+    if (f.columnStarredOnly) return true;
+    return false;
+  }
+
+  function renderActiveFilterBar(tradition) {
+    var bar = document.getElementById('activeFilterBar-' + tradition);
+    if (!bar) return;
+
+    if (!isAnyFilterActive()) {
+      bar.style.display = 'none';
+      bar.innerHTML = '';
+      return;
+    }
+
+    var f = window.SpellFilters;
+    var inSearch = (activeTab[tradition] || 'role') === 'search';
+    var chips = [];
+
+    // Rarity
+    var rd = rarityDiff();
+    if (rd.added.length > 0 || rd.removed.length > 0) {
+      var parts = [];
+      if (rd.added.length) parts.push(rd.added.join(', '));
+      if (rd.removed.length) parts.push('no ' + rd.removed.join(', no '));
+      chips.push({ kind: 'rarity', label: 'Rarity: ' + parts.join(', '), neg: false });
+    }
+    // Legacy
+    if (f.showLegacy) {
+      chips.push({ kind: 'legacy', label: 'Legacy: shown', neg: false });
+    }
+    // Coverage
+    for (var i = 0; i < f.coverageInclude.length; i++) {
+      var e = f.coverageInclude[i];
+      chips.push({ kind: 'coverage-inc', payload: e, label: 'Coverage: ' + e.tag, neg: false });
+    }
+    for (var i = 0; i < f.coverageExclude.length; i++) {
+      var e = f.coverageExclude[i];
+      chips.push({ kind: 'coverage-exc', payload: e, label: 'Coverage: NOT ' + e.tag, neg: true });
+    }
+    // Trait
+    for (var i = 0; i < f.traitInclude.length; i++) {
+      chips.push({ kind: 'trait-inc', payload: f.traitInclude[i], label: 'Trait: ' + f.traitInclude[i], neg: false });
+    }
+    for (var i = 0; i < f.traitExclude.length; i++) {
+      chips.push({ kind: 'trait-exc', payload: f.traitExclude[i], label: 'Trait: NOT ' + f.traitExclude[i], neg: true });
+    }
+    // Column filters
+    var colChips = [];
+    if (f.columnNameFilter && f.columnNameFilter.length > 0) {
+      colChips.push({ kind: 'col-name', label: 'Name: "' + f.columnNameFilter + '"', neg: false });
+    }
+    if (f.columnRankFilter && f.columnRankFilter.length > 0) {
+      var ranks = f.columnRankFilter.slice().sort(function(a, b) { return a - b; });
+      colChips.push({ kind: 'col-rank', label: 'Rank: ' + ranks.join(', '), neg: false });
+    }
+    if (f.columnActionFilter && f.columnActionFilter.length > 0) {
+      colChips.push({ kind: 'col-action', label: 'Action: ' + f.columnActionFilter.join(', '), neg: false });
+    }
+    if (f.columnStarredOnly) {
+      colChips.push({ kind: 'col-starred', label: '★ only', neg: false });
+    }
+
+    var html = '<span class="afb-label">Active filters:</span>';
+    for (var i = 0; i < chips.length; i++) {
+      var c = chips[i];
+      var cls = 'filter-chip' + (c.neg ? ' neg' : '');
+      html += '<span class="' + cls + '" data-chip-kind="' + c.kind + '"' +
+        (typeof c.payload === 'string' ? ' data-chip-payload="' + c.payload.replace(/"/g, '&quot;') + '"' : '') +
+        (c.payload && typeof c.payload === 'object' ? ' data-chip-tag="' + c.payload.tag + '" data-chip-field="' + c.payload.field + '"' : '') +
+        '>' + c.label + ' <span class="afb-x">×</span></span>';
+    }
+    for (var i = 0; i < colChips.length; i++) {
+      var c = colChips[i];
+      var cls = 'filter-chip col-chip' + (c.neg ? ' neg' : '') + (inSearch ? ' paused' : '');
+      var label = c.label + (inSearch ? ' (paused)' : '');
+      html += '<span class="' + cls + '" data-chip-kind="' + c.kind + '">' + label + ' <span class="afb-x">×</span></span>';
+    }
+    html += '<button type="button" class="afb-clear" data-action="clear-all">Clear all</button>';
+
+    bar.innerHTML = html;
+    bar.style.display = '';
+  }
+
+  function clearChip(kind, payload, tag, field) {
+    var f = window.SpellFilters;
+    if (kind === 'rarity') {
+      f.rarity = { Common: true, Uncommon: true, Rare: false, Unique: false };
+      var btns = document.querySelectorAll('.rarity-btn');
+      for (var i = 0; i < btns.length; i++) {
+        var rar = btns[i].dataset.rarity;
+        if (f.rarity[rar]) btns[i].classList.add('active');
+        else btns[i].classList.remove('active');
+      }
+    } else if (kind === 'legacy') {
+      f.showLegacy = false;
+      var btn = document.getElementById('legacyToggle');
+      if (btn) {
+        btn.textContent = 'Show Legacy: NO';
+        btn.classList.remove('active');
+      }
+    } else if (kind === 'coverage-inc' || kind === 'coverage-exc') {
+      var arr = (kind === 'coverage-inc') ? f.coverageInclude : f.coverageExclude;
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i].tag === tag && arr[i].field === field) { arr.splice(i, 1); break; }
+      }
+      // Update sidebar pill visuals
+      var sel = '.sidebar [data-field="' + field + '"] .ctag[data-tag="' + tag + '"], .sidebar .ctag[data-tag="' + tag + '"]';
+      var pills = document.querySelectorAll(sel);
+      for (var i = 0; i < pills.length; i++) {
+        pills[i].classList.remove(kind === 'coverage-inc' ? 'filter-included' : 'filter-excluded');
+      }
+    } else if (kind === 'trait-inc') {
+      var idx = f.traitInclude.indexOf(payload);
+      if (idx !== -1) f.traitInclude.splice(idx, 1);
+      if (window.Coverage && Coverage.updateTraitPillVisuals) Coverage.updateTraitPillVisuals();
+    } else if (kind === 'trait-exc') {
+      var idx = f.traitExclude.indexOf(payload);
+      if (idx !== -1) f.traitExclude.splice(idx, 1);
+      if (window.Coverage && Coverage.updateTraitPillVisuals) Coverage.updateTraitPillVisuals();
+    } else if (kind === 'col-name') {
+      f.columnNameFilter = '';
+    } else if (kind === 'col-rank') {
+      f.columnRankFilter = null;
+    } else if (kind === 'col-action') {
+      f.columnActionFilter = null;
+    } else if (kind === 'col-starred') {
+      f.columnStarredOnly = false;
+    }
+  }
+
+  function clearAllFilterValues() {
+    var f = window.SpellFilters;
+    f.rarity = { Common: true, Uncommon: true, Rare: false, Unique: false };
+    f.showLegacy = false;
+    f.coverageInclude = [];
+    f.coverageExclude = [];
+    f.traitInclude = [];
+    f.traitExclude = [];
+    f.columnNameFilter = '';
+    f.columnRankFilter = null;
+    f.columnActionFilter = null;
+    f.columnStarredOnly = false;
+
+    // Reflect rarity buttons
+    var rb = document.querySelectorAll('.rarity-btn');
+    for (var i = 0; i < rb.length; i++) {
+      var rar = rb[i].dataset.rarity;
+      if (f.rarity[rar]) rb[i].classList.add('active'); else rb[i].classList.remove('active');
+    }
+    // Legacy button
+    var lb = document.getElementById('legacyToggle');
+    if (lb) { lb.textContent = 'Show Legacy: NO'; lb.classList.remove('active'); }
+    // Sidebar pill visuals
+    if (window.Coverage && Coverage.clearAllSidebarFilterStates) Coverage.clearAllSidebarFilterStates();
+    if (window.Coverage && Coverage.updateTraitPillVisuals) Coverage.updateTraitPillVisuals();
   }
 
   // ── Re-render current view ──
@@ -557,6 +995,8 @@
   function renderSearchResults(tradition) {
     var tableEl = document.getElementById('spellTable-' + tradition);
     if (!tableEl) return;
+
+    renderActiveFilterBar(tradition);
 
     var f = window.SpellFilters;
     var query = f.searchQuery;
@@ -666,6 +1106,10 @@
       if (!currentRole[tradition]) currentRole[tradition] = 'damage';
       if (!activeTab[tradition]) activeTab[tradition] = 'role';
 
+      // Cycle 22 — reconcile column rank filter against new slot rank
+      reconcileColumnRankFilter();
+      closeColumnDropdown();
+
       this.buildBrowserUI(tradition, level, rank);
       if (activeTab[tradition] === 'search') {
         this.showSearchUI(tradition);
@@ -693,6 +1137,9 @@
       html += '</div>';
 
       html += '<div class="browser-advice" id="advice-' + tradition + '"></div>';
+
+      // Cycle 22 — Active filter summary bar (hidden when no filters active)
+      html += '<div class="active-filter-bar" id="activeFilterBar-' + tradition + '" style="display:none;"></div>';
 
       // Search UI (hidden by default)
       html += '<div class="search-ui" id="searchUI-' + tradition + '" style="display:none;">';
@@ -726,14 +1173,41 @@
         });
       }
 
-      // Bind table clicks (spell assignment + sort headers)
+      // Bind table clicks (spell assignment + sort headers + column filters)
       var tableWrap = document.getElementById('spellTable-' + tradition);
       tableWrap.addEventListener('click', function(e) {
         if (e.target.closest('.aon-link')) return;
         if (e.target.closest('.mathfinder-star')) return;
         if (e.target.closest('.mathfinder-video-link')) return;
 
-        // Sort header click
+        // Cycle 22 — Tags column header click → tooltip popup
+        var tagsHeader = e.target.closest('th[data-col="tags"]');
+        if (tagsHeader && !e.target.closest('.col-filter-icon')) {
+          e.stopPropagation();
+          App.toast('Tag filtering is available in the sidebar. Turn on Filter Mode to use coverage tags as filters, or use Trait Filters below for PF2e spell traits.');
+          return;
+        }
+
+        // Cycle 22 — Column filter icon → open dropdown OR toggle starred
+        var filterIcon = e.target.closest('.col-filter-icon');
+        if (filterIcon) {
+          e.stopPropagation();
+          var col = filterIcon.dataset.colFilter;
+          if (col === 'starred') {
+            window.SpellFilters.columnStarredOnly = !window.SpellFilters.columnStarredOnly;
+            reRenderCurrentView(tradition);
+          } else {
+            // Toggle: clicking same icon while dropdown open closes it
+            if (openDropdownEl && openDropdownEl.dataset.col === col) {
+              closeColumnDropdown();
+            } else {
+              openColumnDropdown(tradition, col, filterIcon);
+            }
+          }
+          return;
+        }
+
+        // Sort header click (but ignore if click was on filter icon)
         var header = e.target.closest('.sortable-header');
         if (header) {
           var col = header.dataset.sortCol;
@@ -750,6 +1224,29 @@
         if (!list || !list[idx]) return;
         Browser.assignSpell(tradition, list[idx]);
       });
+
+      // Cycle 22 — Active filter bar interactions
+      var bar = document.getElementById('activeFilterBar-' + tradition);
+      if (bar) {
+        bar.addEventListener('click', function(e) {
+          var clearBtn = e.target.closest('[data-action="clear-all"]');
+          if (clearBtn) {
+            clearAllFilterValues();
+            reRenderCurrentView(tradition);
+            return;
+          }
+          var x = e.target.closest('.afb-x');
+          if (!x) return;
+          var chip = x.closest('.filter-chip');
+          if (!chip) return;
+          var kind = chip.dataset.chipKind;
+          var payload = chip.dataset.chipPayload;
+          var tag = chip.dataset.chipTag;
+          var field = chip.dataset.chipField;
+          clearChip(kind, payload, tag, field);
+          reRenderCurrentView(tradition);
+        });
+      }
     },
 
     updateRoleTabs: function(tradition) {
@@ -769,6 +1266,8 @@
       var wasSearch = activeTab[tradition] === 'search';
       currentRole[tradition] = role;
       activeTab[tradition] = 'role';
+
+      closeColumnDropdown();
 
       // Reset sort on tab switch
       window.SpellFilters.sortColumn = null;
@@ -796,6 +1295,8 @@
 
     activateSearch: function(tradition) {
       activeTab[tradition] = 'search';
+
+      closeColumnDropdown();
 
       // Reset sort on tab switch
       window.SpellFilters.sortColumn = null;
@@ -882,11 +1383,27 @@
       var tableEl = document.getElementById('spellTable-' + tradition);
       if (!tableEl) return;
 
-      var spells = filterSpells(tradition, role, rank);
+      var meta = filterSpells(tradition, role, rank, { withMeta: true });
+      var spells = meta.results;
       renderedSpells[tradition] = spells;
 
+      renderActiveFilterBar(tradition);
+
       if (spells.length === 0) {
-        tableEl.innerHTML = '<div style="padding:1rem;color:var(--text-dim);text-align:center;font-style:italic;">No spells found for this role/rank combination.</div>';
+        // Distinguish: filters cause vs base empty
+        if (meta.baseCount > 0) {
+          tableEl.innerHTML = '<div class="no-results-msg">No spells match your current filters. <a href="#" class="clear-filters-link" data-action="clear-all">Clear all filters</a></div>';
+          var link = tableEl.querySelector('.clear-filters-link');
+          if (link) {
+            link.addEventListener('click', function(ev) {
+              ev.preventDefault();
+              clearAllFilterValues();
+              reRenderCurrentView(tradition);
+            });
+          }
+        } else {
+          tableEl.innerHTML = '<div style="padding:1rem;color:var(--text-dim);text-align:center;font-style:italic;">No spells found for this role/rank combination.</div>';
+        }
         return;
       }
 
@@ -938,6 +1455,24 @@
     resetSort: function() {
       window.SpellFilters.sortColumn = null;
       window.SpellFilters.sortDirection = null;
+    },
+
+    // Cycle 22 — exposed for app.js (tradition switch) and planner.js (slot change)
+    reconcileColumnRankFilter: function() {
+      reconcileColumnRankFilter();
+      closeColumnDropdown();
+    },
+
+    // Cycle 22 — close any open column-filter dropdown (used on navigation events)
+    closeColumnDropdown: function() {
+      closeColumnDropdown();
     }
   };
+
+  // Global Escape key handler for column filter dropdown
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && openDropdownEl) {
+      closeColumnDropdown();
+    }
+  });
 })();

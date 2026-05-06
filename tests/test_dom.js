@@ -524,3 +524,172 @@ test.describe('C21b-1: Silver Bullets tab shows spells', () => {
     expect(rowCount).toBeGreaterThan(0);
   });
 });
+
+// ════════════════════════════════════════════════════════════════════
+// Cycle 22 — Advanced Filtering: trait pills, column filters, summary bar
+// ════════════════════════════════════════════════════════════════════
+
+test.describe('C22-1: Trait Filter Pills section', () => {
+  test('trait section renders with grouped pills below filter controls', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+    await page.click('[data-page="arcane"]');
+    await page.waitForTimeout(300);
+
+    const summary = await page.evaluate(() => {
+      const section = document.getElementById('traitFiltersSection');
+      if (!section) return { ok: false };
+      const groups = section.querySelectorAll('.trait-group');
+      const pills = section.querySelectorAll('.ctag.tag-trait');
+      const filterControls = document.querySelector('.filter-controls');
+      const after = filterControls && section
+        ? !!(filterControls.compareDocumentPosition(section) & Node.DOCUMENT_POSITION_FOLLOWING)
+        : false;
+      const hasInput = !!document.getElementById('traitFilterInput');
+      return { ok: true, groupCount: groups.length, pillCount: pills.length, afterFilterControls: after, hasInput };
+    });
+    expect(summary.ok).toBe(true);
+    expect(summary.groupCount).toBeGreaterThanOrEqual(8);
+    expect(summary.pillCount).toBeGreaterThan(40);
+    expect(summary.afterFilterControls).toBe(true);
+    expect(summary.hasInput).toBe(true);
+  });
+});
+
+test.describe('C22-2: Trait pill click applies include filter', () => {
+  test('clicking Fire pill narrows arcane spell table', async ({ page }) => {
+    await setupArcaneWithSpells(page);
+
+    const baseline = await page.evaluate(() =>
+      document.querySelectorAll('#spellTable-arcane tr[data-spell-idx]').length);
+
+    const result = await page.evaluate(() => {
+      const pill = document.querySelector('.ctag.tag-trait[data-trait="Fire"]');
+      ['mousedown','mouseup','click'].forEach(function(evt) {
+        pill.dispatchEvent(new MouseEvent(evt, { bubbles: true, cancelable: true, view: window }));
+      });
+      return {
+        included: pill.classList.contains('filter-included'),
+        traitInclude: window.SpellFilters.traitInclude,
+        narrowedCount: document.querySelectorAll('#spellTable-arcane tr[data-spell-idx]').length
+      };
+    });
+    expect(result.included).toBe(true);
+    expect(result.traitInclude).toContain('Fire');
+    expect(result.narrowedCount).toBeLessThan(baseline);
+    expect(result.narrowedCount).toBeGreaterThan(0);
+  });
+});
+
+test.describe('C22-3: Column rank filter dropdown', () => {
+  test('rank dropdown opens with checkboxes scoped to slot rank', async ({ page }) => {
+    await setupArcaneWithSpells(page);
+
+    const info = await page.evaluate(() => {
+      const icon = document.querySelector('#spellTable-arcane .col-filter-icon[data-col-filter="rank"]');
+      icon.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+      const dropdown = document.querySelector('.column-filter-dropdown');
+      return {
+        present: !!dropdown,
+        checkboxes: dropdown ? dropdown.querySelectorAll('input[type=checkbox]').length : 0,
+        hasInfo: !!(dropdown && dropdown.querySelector('.cfd-info')),
+        hasSelectAll: !!(dropdown && dropdown.querySelector('[data-action="select-all"]'))
+      };
+    });
+    expect(info.present).toBe(true);
+    expect(info.checkboxes).toBe(3); // level 5 → max rank 3
+    expect(info.hasInfo).toBe(true);
+    expect(info.hasSelectAll).toBe(true);
+  });
+});
+
+test.describe('C22-4: Star toggle filters to mathfinder_reviewed', () => {
+  test('clicking star icon toggles columnStarredOnly and narrows results', async ({ page }) => {
+    await setupArcaneWithSpells(page);
+
+    const result = await page.evaluate(() => {
+      const baseline = document.querySelectorAll('#spellTable-arcane tr[data-spell-idx]').length;
+      const star = document.querySelector('#spellTable-arcane .col-filter-icon.star-toggle');
+      star.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+      const after = document.querySelectorAll('#spellTable-arcane tr[data-spell-idx]').length;
+      const starredRows = document.querySelectorAll('#spellTable-arcane tr[data-spell-idx] .mathfinder-star').length;
+      return {
+        baseline: baseline,
+        afterToggle: after,
+        starActive: window.SpellFilters.columnStarredOnly,
+        allStarred: starredRows === after && after > 0
+      };
+    });
+    expect(result.starActive).toBe(true);
+    expect(result.afterToggle).toBeLessThanOrEqual(result.baseline);
+    expect(result.allStarred).toBe(true);
+  });
+});
+
+test.describe('C22-5: Active Filter Summary Bar', () => {
+  test('bar shows chip when trait active and Clear all resets state', async ({ page }) => {
+    await setupArcaneWithSpells(page);
+
+    const initialDisplay = await page.evaluate(() =>
+      document.getElementById('activeFilterBar-arcane').style.display);
+    expect(initialDisplay).toBe('none');
+
+    const afterApply = await page.evaluate(() => {
+      const pill = document.querySelector('.ctag.tag-trait[data-trait="Fire"]');
+      ['mousedown','mouseup','click'].forEach(function(evt) {
+        pill.dispatchEvent(new MouseEvent(evt, { bubbles: true, cancelable: true, view: window }));
+      });
+      const star = document.querySelector('#spellTable-arcane .col-filter-icon.star-toggle');
+      star.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+      const bar = document.getElementById('activeFilterBar-arcane');
+      return {
+        display: bar.style.display,
+        text: bar.textContent.trim(),
+        chipCount: bar.querySelectorAll('.filter-chip').length,
+        hasClearAll: !!bar.querySelector('.afb-clear')
+      };
+    });
+    expect(afterApply.display).toBe('');
+    expect(afterApply.text).toContain('Fire');
+    expect(afterApply.text).toContain('★ only');
+    expect(afterApply.chipCount).toBe(2);
+    expect(afterApply.hasClearAll).toBe(true);
+
+    const afterClear = await page.evaluate(() => {
+      document.querySelector('#activeFilterBar-arcane .afb-clear').dispatchEvent(
+        new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+      return {
+        traitInclude: window.SpellFilters.traitInclude,
+        starredOnly: window.SpellFilters.columnStarredOnly,
+        barDisplay: document.getElementById('activeFilterBar-arcane').style.display,
+        firePillCls: document.querySelector('.ctag.tag-trait[data-trait="Fire"]').className
+      };
+    });
+    expect(afterClear.traitInclude).toEqual([]);
+    expect(afterClear.starredOnly).toBe(false);
+    expect(afterClear.barDisplay).toBe('none');
+    expect(afterClear.firePillCls).not.toContain('filter-included');
+  });
+});
+
+test.describe('C22-6: Legacy toggle YES/NO labels', () => {
+  test('legacy button reads NO by default and YES when toggled on', async ({ page }) => {
+    await setupArcaneWithSpells(page);
+
+    const result = await page.evaluate(() => {
+      const btn = document.getElementById('legacyToggle');
+      const initial = btn.textContent;
+      btn.click();
+      const onText = btn.textContent;
+      const bar = document.getElementById('activeFilterBar-arcane');
+      const chipText = (bar.querySelector('.filter-chip') || {}).textContent || '';
+      btn.click();
+      const offText = btn.textContent;
+      return { initial: initial, onText: onText, chipText: chipText, offText: offText };
+    });
+    expect(result.initial).toContain('NO');
+    expect(result.onText).toContain('YES');
+    expect(result.chipText).toContain('Legacy: shown');
+    expect(result.offText).toContain('NO');
+  });
+});

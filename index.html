@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PF2e Spell Planner — Prepared Caster Edition</title>
-<link rel="stylesheet" href="css/styles.css?v=40">
+<link rel="stylesheet" href="css/styles.css?v=41">
 </head>
 <body>
 
@@ -197,15 +197,15 @@
 
     <!-- ═══ FILTER CONTROLS CLUSTER ═══ -->
     <div class="filter-controls">
-      <div class="filter-controls-label">Filter Options</div>
+      <div class="filter-controls-label">Filter Options <span class="info-bubble" title="Filters applied in this Coverage Tracker sidebar and the spell options tables are all logical AND. Selecting two options will only show those spells that meet both criteria. Long click on sidebar tags to turn them into a logical NOT (exclude options with this value). Spell rarity is an on/off toggle per rarity level.">ⓘ</span></div>
       <div class="rarity-toggles" id="rarityToggles">
         <button class="rarity-btn active" data-rarity="Common" onclick="Coverage.toggleRarity('Common',this)">Common</button>
         <button class="rarity-btn active" data-rarity="Uncommon" onclick="Coverage.toggleRarity('Uncommon',this)">Uncommon</button>
         <button class="rarity-btn" data-rarity="Rare" onclick="Coverage.toggleRarity('Rare',this)">Rare</button>
         <button class="rarity-btn" data-rarity="Unique" onclick="Coverage.toggleRarity('Unique',this)">Unique</button>
       </div>
-      <button class="filter-toggle-btn" id="legacyToggle" onclick="Coverage.toggleLegacy()">Show Legacy: OFF</button>
-      <button class="filter-toggle-btn" id="filterModeToggle" onclick="Coverage.toggleFilterMode()">Filter Mode: OFF</button>
+      <button class="filter-toggle-btn" id="legacyToggle" onclick="Coverage.toggleLegacy()" title="Spells which are Legacy only (no remaster version) are normally included in spell option tables. To exclude them, turn this toggle to NO.">Show Legacy: NO</button>
+      <button class="filter-toggle-btn" id="filterModeToggle" onclick="Coverage.toggleFilterMode()" title="This toggle turns the Coverage Tracker tags above into a filter panel. Switching modes will temporarily hide your current coverage analysis. When in filter mode, click on a tag to filter for it in the spell option tables. Multi-select functions as a logical AND. Long click to turn a tag into a NOT. Toggle off to return to coverage analysis.">Filter Mode: OFF</button>
     </div>
 
     </div>
@@ -842,10 +842,10 @@
 <script src="data/tag-definitions.js"></script>
 
 <!-- App modules -->
-<script src="js/app.js?v=42"></script>
+<script src="js/app.js?v=43"></script>
 <script src="js/planner.js?v=40"></script>
-<script src="js/browser.js?v=40"></script>
-<script src="js/coverage.js?v=41"></script>
+<script src="js/browser.js?v=41"></script>
+<script src="js/coverage.js?v=42"></script>
 <script src="js/export.js?v=40"></script>
 
 </body>

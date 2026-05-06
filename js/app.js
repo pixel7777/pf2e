@@ -114,6 +114,12 @@
       // Reset sort on tradition switch
       if (window.Browser && Browser.resetSort) Browser.resetSort();
 
+      // Cycle 22 — reconcile column rank filter to new slot, dim trait pills for tradition
+      if (page !== 'overview') {
+        if (window.Browser && Browser.reconcileColumnRankFilter) Browser.reconcileColumnRankFilter();
+        if (window.Coverage && Coverage.updateTraitDimming) Coverage.updateTraitDimming(page);
+      }
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
 

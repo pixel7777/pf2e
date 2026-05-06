@@ -33,7 +33,8 @@
                            note: 'Void + Force covers nearly everything: void hits all living creatures, force covers constructs and undead.' },
     'sub-conditions':    { body: 'Variety over repetition. Different conditions answer different tactical problems. The 11 premier conditions (above the divider) are the most impactful combat debuffs; the 5 standard conditions are also strategically valuable.' },
     'sub-weakness':      { body: 'A small number of spells degrade enemy survivability by imposing damage type weaknesses. This tracks whether you have any — and shows synergy with your damage type coverage.',
-                           note: '★ markers on damage type tags mean an assigned spell imposes weakness to that type. A ★ on Fire + a lit Fire tag = you can exploit the weakness you\'re creating.' }
+                           note: '★ markers on damage type tags mean an assigned spell imposes weakness to that type. A ★ on Fire + a lit Fire tag = you can exploit the weakness you\'re creating.' },
+    'trait-section':     { body: 'Below are additional traits (PF2e official spell traits; not derived) you can filter by at any time. Click on a trait to filter for it in the spell option tables. Multi-select functions as a logical AND. Long click to turn a tag into a NOT.' }
   };
 
   var DAMAGE_TYPE_VALUES = [
@@ -372,6 +373,303 @@
     });
   }
 
+  // ── Cycle 22 — Trait Filter Pills ──
+
+  var TRAIT_GROUPS = [
+    { label: 'Damage/Energy', traits: ['Acid','Cold','Electricity','Fire','Force','Negative','Positive','Sonic','Spirit','Vitality','Void'] },
+    { label: 'Elements', traits: ['Air','Earth','Metal','Water','Wood'] },
+    { label: 'Mechanical', traits: ['Attack','Aura','Concentrate','Contingency','Consecration','Flourish','Manipulate','Metamagic','Move','Spellshape','Stance','Subtle'] },
+    { label: 'Schools', traits: ['Abjuration','Conjuration','Divination','Enchantment','Evocation','Illusion','Necromancy','Transmutation'] },
+    { label: 'Conditions/Effects', traits: ['Curse','Darkness','Death','Disease','Emotion','Fear','Fortune','Healing','Incapacitation','Light','Mental','Misfortune','Poison','Sleep'] },
+    { label: 'Sensory', traits: ['Auditory','Linguistic','Olfactory','Visual'] },
+    { label: 'Form/Transformation', traits: ['Incarnate','Morph','Polymorph','Possession','Summon'] },
+    { label: 'Movement/Space', traits: ['Extradimensional','Teleportation'] },
+    { label: 'Detection/Information', traits: ['Detection','Prediction','Scrying'] },
+    { label: 'Alignment/Sanctification', traits: ['Chaotic','Evil','Good','Holy','Lawful','Sanctified','Unholy'] },
+    { label: 'Other', traits: [] } // populated dynamically with leftovers
+  ];
+
+  var TRAIT_EXCLUDES = {
+    // Rarity (already toggle-controlled)
+    'Uncommon':1, 'Rare':1, 'Unique':1,
+    // Traditions (already filtered by tradition tab)
+    'Arcane':1, 'Divine':1, 'Primal':1, 'Occult':1,
+    // Class traits
+    'Animist':1, 'Bard':1, 'Champion':1, 'Cleric':1, 'Druid':1, 'Magus':1, 'Monk':1,
+    'Oracle':1, 'Psychic':1, 'Ranger':1, 'Sorcerer':1, 'Summoner':1, 'Witch':1, 'Wizard':1,
+    // Meta/structural
+    'Archetype':1, 'Cantrip':1, 'Focus':1, 'Eidolon':1, 'Mythic':1
+  };
+
+  var traitInfoText = "Below are additional traits (PF2e official spell traits; not derived) you can filter by at any time. Click on a trait to filter for it in the spell option tables. Multi-select functions as a logical AND. Long click to turn a tag into a NOT.";
+
+  var traitLongPressTimer = null;
+  var traitLongPressTriggered = false;
+
+  function getAllSpellTraits() {
+    if (!window.SPELL_SCHEMA || !window.SPELL_SCHEMA.spells) return {};
+    var seen = {};
+    var spells = window.SPELL_SCHEMA.spells;
+    for (var i = 0; i < spells.length; i++) {
+      var t = spells[i].trait_raw;
+      if (!t) continue;
+      for (var j = 0; j < t.length; j++) {
+        seen[t[j]] = true;
+      }
+    }
+    return seen;
+  }
+
+  function getTraitsForTradition(tradition) {
+    if (!window.SPELL_SCHEMA || !window.SPELL_SCHEMA.spells) return {};
+    var seen = {};
+    var tradCap = tradition.charAt(0).toUpperCase() + tradition.slice(1);
+    var spells = window.SPELL_SCHEMA.spells;
+    for (var i = 0; i < spells.length; i++) {
+      if (spells[i].tradition.indexOf(tradCap) === -1) continue;
+      var t = spells[i].trait_raw;
+      if (!t) continue;
+      for (var j = 0; j < t.length; j++) {
+        seen[t[j]] = true;
+      }
+    }
+    return seen;
+  }
+
+  function buildTraitFilterSection() {
+    var sidebar = document.querySelector('.sidebar .sidebar-inner');
+    if (!sidebar) return;
+    if (document.getElementById('traitFiltersSection')) return;
+
+    var available = getAllSpellTraits();
+    // Build a set of traits already placed in named groups
+    var inNamedGroup = {};
+    for (var g = 0; g < TRAIT_GROUPS.length - 1; g++) {
+      for (var t = 0; t < TRAIT_GROUPS[g].traits.length; t++) {
+        inNamedGroup[TRAIT_GROUPS[g].traits[t]] = true;
+      }
+    }
+    // Populate "Other" group with leftovers
+    var otherTraits = [];
+    for (var trait in available) {
+      if (TRAIT_EXCLUDES[trait]) continue;
+      if (!inNamedGroup[trait]) otherTraits.push(trait);
+    }
+    otherTraits.sort();
+    TRAIT_GROUPS[TRAIT_GROUPS.length - 1].traits = otherTraits;
+
+    var html = '<div class="cov-section trait-section" id="traitFiltersSection">';
+    html += '<div class="cov-section-header">';
+    html += '<span class="cov-chevron">&#9662;</span>';
+    html += '<span class="cov-section-label">Trait Filters</span>';
+    html += '<span class="cov-info" data-info="trait-section" title="' + traitInfoText.replace(/"/g, '&quot;') + '">&#9432;</span>';
+    html += '</div>';
+    html += '<div class="cov-section-body">';
+    html += '<input type="text" class="trait-filter-input" id="traitFilterInput" placeholder="Type to filter traits...">';
+    html += '<div class="trait-empty-msg" id="traitEmptyMsg" style="display:none;">No matching traits.</div>';
+
+    for (var gi = 0; gi < TRAIT_GROUPS.length; gi++) {
+      var group = TRAIT_GROUPS[gi];
+      // Filter group traits to those present in data
+      var present = [];
+      for (var ti = 0; ti < group.traits.length; ti++) {
+        if (available[group.traits[ti]]) present.push(group.traits[ti]);
+      }
+      if (present.length === 0) continue;
+
+      html += '<div class="cov-group trait-group">';
+      html += '<div class="cov-group-header">';
+      html += '<span class="cov-group-label">' + group.label + '</span>';
+      html += '</div>';
+      html += '<div class="coverage-tags">';
+      for (var pi = 0; pi < present.length; pi++) {
+        var tname = present[pi];
+        html += '<span class="ctag tag-trait" data-trait="' + tname + '">' + tname + '</span>';
+      }
+      html += '</div>';
+      html += '</div>';
+    }
+
+    html += '</div></div>';
+
+    var section = document.createElement('div');
+    section.innerHTML = html;
+    sidebar.appendChild(section.firstChild);
+
+    bindTraitFilterEvents();
+  }
+
+  function bindTraitFilterEvents() {
+    var section = document.getElementById('traitFiltersSection');
+    if (!section) return;
+
+    // Collapsible header
+    var header = section.querySelector('.cov-section-header');
+    if (header) {
+      header.addEventListener('click', function(e) {
+        if (e.target.closest('.cov-info')) { e.stopPropagation(); return; }
+        section.classList.toggle('collapsed');
+      });
+    }
+
+    // Type-to-filter input
+    var input = document.getElementById('traitFilterInput');
+    if (input) {
+      input.addEventListener('input', function() {
+        applyTraitTypeFilter(input.value);
+      });
+    }
+
+    // Pill click + long-press (always active, NOT gated by coverageMode)
+    section.addEventListener('mousedown', function(e) {
+      var pill = e.target.closest('.ctag.tag-trait');
+      if (!pill) return;
+      traitLongPressTriggered = false;
+      traitLongPressTimer = setTimeout(function() {
+        traitLongPressTriggered = true;
+        handleTraitLongPress(pill);
+      }, 500);
+    });
+
+    section.addEventListener('mouseup', function() {
+      if (traitLongPressTimer) { clearTimeout(traitLongPressTimer); traitLongPressTimer = null; }
+    });
+
+    section.addEventListener('mouseleave', function() {
+      if (traitLongPressTimer) { clearTimeout(traitLongPressTimer); traitLongPressTimer = null; }
+    });
+
+    section.addEventListener('click', function(e) {
+      var pill = e.target.closest('.ctag.tag-trait');
+      if (!pill) return;
+      e.stopPropagation();
+      if (traitLongPressTriggered) {
+        traitLongPressTriggered = false;
+        return;
+      }
+      handleTraitClick(pill);
+    });
+
+    // Touch support
+    var touchStart = null;
+    section.addEventListener('touchstart', function(e) {
+      var pill = e.target.closest('.ctag.tag-trait');
+      if (!pill) return;
+      var touch = e.touches[0];
+      touchStart = { x: touch.clientX, y: touch.clientY };
+      traitLongPressTriggered = false;
+      traitLongPressTimer = setTimeout(function() {
+        traitLongPressTriggered = true;
+        e.preventDefault();
+        handleTraitLongPress(pill);
+      }, 500);
+    }, { passive: false });
+
+    section.addEventListener('touchmove', function(e) {
+      if (!traitLongPressTimer || !touchStart) return;
+      var touch = e.touches[0];
+      var dx = touch.clientX - touchStart.x;
+      var dy = touch.clientY - touchStart.y;
+      if (Math.sqrt(dx*dx + dy*dy) > 10) {
+        clearTimeout(traitLongPressTimer);
+        traitLongPressTimer = null;
+      }
+    });
+
+    section.addEventListener('touchend', function(e) {
+      if (traitLongPressTimer) { clearTimeout(traitLongPressTimer); traitLongPressTimer = null; }
+      var pill = e.target.closest('.ctag.tag-trait');
+      if (!pill) return;
+      if (traitLongPressTriggered) {
+        traitLongPressTriggered = false;
+        e.preventDefault();
+        return;
+      }
+      e.preventDefault();
+      handleTraitClick(pill);
+    });
+
+    updateTraitPillVisuals();
+  }
+
+  function handleTraitClick(pill) {
+    var trait = pill.dataset.trait;
+    var f = window.SpellFilters;
+    var inIdx = f.traitInclude.indexOf(trait);
+    var exIdx = f.traitExclude.indexOf(trait);
+    if (inIdx !== -1) {
+      f.traitInclude.splice(inIdx, 1);
+    } else if (exIdx !== -1) {
+      f.traitExclude.splice(exIdx, 1);
+    } else {
+      f.traitInclude.push(trait);
+    }
+    updateTraitPillVisuals();
+    if (window.Browser && Browser.onFiltersChanged) Browser.onFiltersChanged();
+  }
+
+  function handleTraitLongPress(pill) {
+    var trait = pill.dataset.trait;
+    var f = window.SpellFilters;
+    var inIdx = f.traitInclude.indexOf(trait);
+    if (inIdx !== -1) f.traitInclude.splice(inIdx, 1);
+    if (f.traitExclude.indexOf(trait) === -1) f.traitExclude.push(trait);
+    updateTraitPillVisuals();
+    if (window.Browser && Browser.onCoverageFiltersChanged) Browser.onCoverageFiltersChanged();
+  }
+
+  function updateTraitPillVisuals() {
+    var section = document.getElementById('traitFiltersSection');
+    if (!section) return;
+    var f = window.SpellFilters;
+    var pills = section.querySelectorAll('.ctag.tag-trait');
+    for (var i = 0; i < pills.length; i++) {
+      var pill = pills[i];
+      var trait = pill.dataset.trait;
+      pill.classList.remove('filter-included', 'filter-excluded');
+      if (f.traitInclude.indexOf(trait) !== -1) pill.classList.add('filter-included');
+      if (f.traitExclude.indexOf(trait) !== -1) pill.classList.add('filter-excluded');
+    }
+  }
+
+  function applyTraitTypeFilter(query) {
+    var section = document.getElementById('traitFiltersSection');
+    if (!section) return;
+    var q = (query || '').toLowerCase().trim();
+    var groups = section.querySelectorAll('.trait-group');
+    var anyVisible = false;
+
+    for (var g = 0; g < groups.length; g++) {
+      var group = groups[g];
+      var pills = group.querySelectorAll('.ctag.tag-trait');
+      var groupHasVisible = false;
+      for (var p = 0; p < pills.length; p++) {
+        var trait = pills[p].dataset.trait;
+        var match = !q || trait.toLowerCase().indexOf(q) !== -1;
+        pills[p].style.display = match ? '' : 'none';
+        if (match) { groupHasVisible = true; anyVisible = true; }
+      }
+      group.style.display = groupHasVisible ? '' : 'none';
+    }
+
+    var emptyMsg = document.getElementById('traitEmptyMsg');
+    if (emptyMsg) emptyMsg.style.display = (q && !anyVisible) ? '' : 'none';
+  }
+
+  function updateTraitDimming(tradition) {
+    var section = document.getElementById('traitFiltersSection');
+    if (!section || !tradition || tradition === 'overview') return;
+    var present = getTraitsForTradition(tradition);
+    var pills = section.querySelectorAll('.ctag.tag-trait');
+    for (var i = 0; i < pills.length; i++) {
+      if (present[pills[i].dataset.trait]) {
+        pills[i].classList.remove('trait-dimmed');
+      } else {
+        pills[i].classList.add('trait-dimmed');
+      }
+    }
+  }
+
   var bound = false;
   function ensureBindings() {
     if (bound) return;
@@ -379,6 +677,7 @@
     bindTooltips();
     bindCollapsibles();
     bindFilterMode();
+    buildTraitFilterSection();
 
     // Inject Clear Filters button in sidebar
     var filterControls = document.querySelector('.filter-controls');
@@ -451,7 +750,7 @@
       f.showLegacy = !f.showLegacy;
       var btn = document.getElementById('legacyToggle');
       if (btn) {
-        btn.textContent = 'Show Legacy: ' + (f.showLegacy ? 'ON' : 'OFF');
+        btn.textContent = 'Show Legacy: ' + (f.showLegacy ? 'YES' : 'NO');
         if (f.showLegacy) { btn.classList.add('active'); } else { btn.classList.remove('active'); }
       }
       if (window.Browser && Browser.onFiltersChanged) Browser.onFiltersChanged();
@@ -499,6 +798,22 @@
       }
 
       if (window.Browser && Browser.onCoverageFiltersChanged) Browser.onCoverageFiltersChanged();
+    },
+
+    // Cycle 22 — exposed for app.js / browser.js to refresh on tradition switch
+    updateTraitDimming: updateTraitDimming,
+    updateTraitPillVisuals: updateTraitPillVisuals,
+
+    // Cycle 22 — clear all sidebar pill filter states (coverage + trait)
+    clearAllSidebarFilterStates: function() {
+      var sidebar = document.querySelector('.sidebar');
+      if (!sidebar) return;
+      var pills = sidebar.querySelectorAll('.ctag.filter-included, .ctag.filter-excluded');
+      for (var i = 0; i < pills.length; i++) {
+        pills[i].classList.remove('filter-included', 'filter-excluded');
+      }
+      var clearBtn = document.getElementById('coverageClearFilters');
+      if (clearBtn) clearBtn.style.display = 'none';
     }
   };
 
