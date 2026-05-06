@@ -613,6 +613,9 @@
     return html;
   }
 
+  // Funnel SVG (visually distinct from sort arrows). 12x12, currentColor.
+  var FUNNEL_SVG = '<svg class="cf-funnel" viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path d="M2 3.5C2 3.22 2.22 3 2.5 3h11c.28 0 .5.22.5.5v.79c0 .27-.11.53-.3.72L10 9.21V13c0 .19-.11.36-.28.45l-2 1A.5.5 0 0 1 7 14V9.21L2.3 5.01A.99.99 0 0 1 2 4.29V3.5z" fill="currentColor"/></svg>';
+
   function colFilterIcon(col) {
     var f = window.SpellFilters;
     var active = false;
@@ -621,7 +624,7 @@
     else if (col === 'action') active = !!(f.columnActionFilter && f.columnActionFilter.length > 0);
     else if (col === 'starred') active = !!f.columnStarredOnly;
     var cls = 'col-filter-icon' + (active ? ' active' : '');
-    return ' <span class="' + cls + '" data-col-filter="' + col + '" title="Filter this column">&#9660;</span>';
+    return ' <button type="button" class="' + cls + '" data-col-filter="' + col + '" title="Filter this column" aria-label="Filter column">' + FUNNEL_SVG + '</button>';
   }
 
   function buildTableHeader(isSearch) {
@@ -633,7 +636,7 @@
       html += '<th class="sortable-header" data-sort-col="name"><span class="col-label">Spell</span>' + sortIndicator('name') + colFilterIcon('name') + ' <span class="col-filter-icon star-toggle' + starActive + '" data-col-filter="starred" title="Show only starred (Mathfinder-reviewed) spells">&#9733;</span></th>';
       html += '<th class="sortable-header" data-sort-col="rank"><span class="col-label">Rank</span>' + sortIndicator('rank') + colFilterIcon('rank') + '</th>';
       html += '<th class="sortable-header" data-sort-col="action"><span class="col-label">Action</span>' + sortIndicator('action') + colFilterIcon('action') + '</th>';
-      html += '<th data-col="tags" class="col-tags-header"><span class="col-label">Tags</span></th>';
+      html += '<th data-col="tags"><span class="col-label">Tags</span> <span class="info-bubble" title="Tag filtering is available in the sidebar. Turn on Filter Mode to use coverage tags as filters, or use Trait Filters below for PF2e spell traits.">ⓘ</span></th>';
       html += '<th data-col="notes"><span class="col-label">Notes</span></th>';
     }
     html += '</tr></thead><tbody>';
@@ -1179,14 +1182,6 @@
         if (e.target.closest('.aon-link')) return;
         if (e.target.closest('.mathfinder-star')) return;
         if (e.target.closest('.mathfinder-video-link')) return;
-
-        // Cycle 22 — Tags column header click → tooltip popup
-        var tagsHeader = e.target.closest('th[data-col="tags"]');
-        if (tagsHeader && !e.target.closest('.col-filter-icon')) {
-          e.stopPropagation();
-          App.toast('Tag filtering is available in the sidebar. Turn on Filter Mode to use coverage tags as filters, or use Trait Filters below for PF2e spell traits.');
-          return;
-        }
 
         // Cycle 22 — Column filter icon → open dropdown OR toggle starred
         var filterIcon = e.target.closest('.col-filter-icon');

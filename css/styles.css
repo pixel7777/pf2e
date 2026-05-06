@@ -2102,29 +2102,53 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
   opacity: 1;
 }
 
-/* ── Column Filter Icons ── */
+/* ── Column Filter Buttons (funnel + star) ── */
+/* Funnel button — visually distinct from sort indicators (which use ⇕▲▼).
+   Filter buttons have a clear border/background so they're obviously buttons. */
 .col-filter-icon {
-  display: inline-block;
-  font-size: 0.7rem;
-  margin-left: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-left: 0.4rem;
+  padding: 0;
+  border: 1px solid var(--border-panel);
+  border-radius: 3px;
+  background: var(--bg-card);
+  color: var(--text-tertiary);
   cursor: pointer;
-  opacity: 0.4;
-  transition: opacity 0.15s, color 0.15s;
-  user-select: none;
+  transition: all 0.15s;
+  vertical-align: middle;
+  line-height: 1;
 }
-.col-filter-icon:hover { opacity: 0.85; }
-.col-filter-icon.active {
-  opacity: 1;
+.col-filter-icon:hover {
+  border-color: var(--accent-nav-active);
   color: var(--accent-nav-active);
-  font-weight: 700;
+  background: var(--bg-inset);
 }
+.col-filter-icon.active {
+  border-color: var(--accent-header);
+  background: var(--accent-header);
+  color: #ffffff;
+}
+.col-filter-icon .cf-funnel { display: block; }
 
+/* Star toggle — sibling of funnel, uses gold when active */
 .col-filter-icon.star-toggle {
   font-size: 0.85rem;
+  color: var(--text-tertiary);
 }
 .col-filter-icon.star-toggle.active {
-  color: #b8860b;
+  background: #b8860b;
+  border-color: #b8860b;
+  color: #ffffff;
 }
+
+/* Visual separator between sort indicator and filter buttons.
+   Sort indicators (⇕▲▼) sit before filter buttons; the margin-left and
+   distinct boxed look on the filter buttons keep the two roles obvious. */
+.sortable-header .sort-indicator { margin-right: 0.05rem; }
 
 /* ── Column Filter Dropdown ── */
 .column-filter-dropdown {
@@ -2303,5 +2327,3 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
   color: var(--accent-header);
 }
 
-/* Tags column header — gets a help cursor since clicking it shows a toast */
-.col-tags-header { cursor: help; }
