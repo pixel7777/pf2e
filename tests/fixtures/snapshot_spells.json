@@ -249,6 +249,7 @@
     "heighten_pattern": "none",
     "roles": [
       "reactions",
+      "silverBullets",
       "utility"
     ],
     "defense_tags": [],
@@ -376,7 +377,8 @@
     ],
     "heighten_pattern": "none",
     "roles": [
-      "control"
+      "control",
+      "silverBullets"
     ],
     "defense_tags": [
       "Will"
@@ -698,7 +700,8 @@
     ],
     "heighten_pattern": "none",
     "roles": [
-      "debuff"
+      "debuff",
+      "silverBullets"
     ],
     "defense_tags": [
       "Will"
@@ -713,7 +716,8 @@
     ],
     "heighten_pattern": "none",
     "roles": [
-      "buff"
+      "buff",
+      "silverBullets"
     ],
     "defense_tags": [],
     "era": "remaster_core"

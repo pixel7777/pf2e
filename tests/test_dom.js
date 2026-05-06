@@ -445,3 +445,45 @@ test.describe('C21-8: Chain badge', () => {
     expect(badge.text).toMatch(/[↑↓]/);
   });
 });
+
+test.describe('C21b-1: Silver Bullets tab shows spells', () => {
+  test('Silver Bullets tab renders with >0 spells for Arcane', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+
+    await page.click('[data-page="arcane"]');
+    await page.waitForTimeout(300);
+
+    // Click level 1 tab to init
+    await page.evaluate(() => {
+      const btns = document.querySelectorAll('#levelTabBar-arcane .level-tab');
+      for (const btn of btns) {
+        if (btn.dataset.level === '1') { btn.click(); break; }
+      }
+    });
+    await page.waitForTimeout(300);
+
+    // Click an empty slot to show browser
+    await page.evaluate(() => {
+      const emptySlot = document.querySelector('.slot-empty');
+      if (emptySlot) emptySlot.closest('tr').click();
+    });
+    await page.waitForTimeout(500);
+
+    // Click Silver Bullets role tab
+    await page.evaluate(() => {
+      const tabs = document.querySelectorAll('#spellBrowser-arcane .role-tab, .role-tab');
+      for (const tab of tabs) {
+        if (tab.dataset.role === 'silverBullets') { tab.click(); break; }
+      }
+    });
+    await page.waitForTimeout(300);
+
+    const rowCount = await page.evaluate(() => {
+      const table = document.querySelector('#spellTable-arcane');
+      if (!table) return 0;
+      return table.querySelectorAll('tbody tr').length;
+    });
+    expect(rowCount).toBeGreaterThan(0);
+  });
+});

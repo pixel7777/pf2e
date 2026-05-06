@@ -111,10 +111,11 @@
   {
     "aonId": 1436,
     "name": "Acid Grip",
-    "reason": "Cycle 07 Issue 1 residual: model tags Slowed despite spell text saying '-10-foot status penalty to its Speeds' (no literal 'slowed'). Editorial override clears the false condition; conditions_by_outcome cleared to keep schema consistency rule 3 happy.",
+    "reason": "Cycle 07 Issue 1 residual: model tags Slowed despite spell text saying '-10-foot status penalty to its Speeds' (no literal 'slowed'). Editorial override clears the false condition; conditions_by_outcome cleared to keep schema consistency rule 3 happy. Cycle 21b: Added silverBullets role (Heidi-approved 2026-05-06).",
     "overrides": {
       "conditions_imposed": [],
-      "conditions_by_outcome": null
+      "conditions_by_outcome": null,
+      "roles": ["damage", "debuff", "silverBullets"]
     }
   },
   {
@@ -261,6 +262,150 @@
       "roles": ["damage", "control"],
       "reliability_tags": ["Success-effect"],
       "heighten_quality": "no-heighten"
+    }
+  },
+  {
+    "aonId": 1348,
+    "name": "Blazing Armory",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
+    "overrides": {
+      "roles": ["buff", "silverBullets"]
+    }
+  },
+  {
+    "aonId": 1574,
+    "name": "Infuse Vitality",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
+    "overrides": {
+      "roles": ["buff", "oneAction", "silverBullets"]
+    }
+  },
+  {
+    "aonId": 2344,
+    "name": "Befuddle",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
+    "overrides": {
+      "roles": ["debuff", "silverBullets"]
+    }
+  },
+  {
+    "aonId": 1458,
+    "name": "Calm",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
+    "overrides": {
+      "roles": ["control", "silverBullets"]
+    }
+  },
+  {
+    "aonId": 2345,
+    "name": "Benediction",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
+    "overrides": {
+      "roles": ["buff", "silverBullets"]
+    }
+  },
+  {
+    "aonId": 1467,
+    "name": "Cleanse Affliction",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
+    "overrides": {
+      "roles": ["healing", "utility", "silverBullets"]
+    }
+  },
+  {
+    "aonId": 1438,
+    "name": "Air Bubble",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
+    "overrides": {
+      "roles": ["reactions", "utility", "silverBullets"]
+    }
+  },
+  {
+    "aonId": 1506,
+    "name": "Earthbind",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-flying silver bullet.",
+    "overrides": {
+      "roles": ["silverBullets"]
+    }
+  },
+  {
+    "aonId": 1653,
+    "name": "Revealing Light",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-invisibility silver bullet. Preserves populator-derived debuff role.",
+    "overrides": {
+      "roles": ["debuff", "silverBullets"]
+    }
+  },
+  {
+    "aonId": 1583,
+    "name": "Laughing Fit",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet. Preserves populator-derived debuff role.",
+    "overrides": {
+      "roles": ["debuff", "silverBullets"]
+    }
+  },
+  {
+    "aonId": 1350,
+    "name": "Cinder Swarm",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet. Preserves populator-derived damage+debuff roles.",
+    "overrides": {
+      "roles": ["damage", "debuff", "silverBullets"]
+    }
+  },
+  {
+    "aonId": 1517,
+    "name": "Environmental Endurance",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
+    "overrides": {
+      "roles": ["silverBullets"]
+    }
+  },
+  {
+    "aonId": 1651,
+    "name": "Resist Energy",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
+    "overrides": {
+      "roles": ["silverBullets"]
+    }
+  },
+  {
+    "aonId": 1663,
+    "name": "See the Unseen",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-invisibility silver bullet.",
+    "overrides": {
+      "roles": ["silverBullets"]
+    }
+  },
+  {
+    "aonId": 128,
+    "name": "Freedom of Movement",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-grapple/restraint silver bullet.",
+    "overrides": {
+      "roles": ["silverBullets"]
+    }
+  },
+  {
+    "aonId": 250,
+    "name": "Remove Curse",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-curse silver bullet.",
+    "overrides": {
+      "roles": ["silverBullets"]
+    }
+  },
+  {
+    "aonId": 1534,
+    "name": "Fly",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged mobility silver bullet.",
+    "overrides": {
+      "roles": ["silverBullets"]
+    }
+  },
+  {
+    "aonId": 958,
+    "name": "Nullify",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-magic silver bullet.",
+    "overrides": {
+      "roles": ["silverBullets"]
     }
   }
 ]
