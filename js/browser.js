@@ -12,6 +12,27 @@
   // 10 roles per Decision 011, in spec order
   var roleOrder = ['damage', 'debuff', 'buff', 'control', 'utility', 'healing', 'reactions', 'oneAction', 'prebuffs', 'silverBullets'];
 
+  // Cycle 21b: silver bullet purpose notes — keyed by aonId. Rendered in Notes column.
+  var SILVER_BULLET_NOTES = {
+    1436: 'Forced movement + persistent acid; pulls flying or clinging targets and erodes them.',
+    1348: 'Armament — conjures weapons for unarmed allies or party caught without gear.',
+    1574: 'Anti-undead — adds vitality damage to weapon strikes.',
+    2344: 'Single-target Will incapacitate; daze, stun, or stupefy on a failed save.',
+    1458: 'De-escalation — suppresses hostility on emotion-driven enemies.',
+    2345: 'Save support — status bonus to saves for an aid-action moment.',
+    1467: 'Anti-affliction — counteracts a disease, curse, or poison.',
+    1438: 'Anti-suffocation — lets a creature breathe in airless or underwater environments.',
+    1506: 'Anti-flying — forces an airborne target down to the ground.',
+    1653: 'Anti-stealth — concealed and hidden creatures lose Concealed in the area.',
+    1583: 'Single-target Will incapacitate — uncontrollable laughter (slowed, prone).',
+    1350: 'Mob clearance — cone of fire-bat swarms shreds multiple weak enemies.',
+    1517: 'Environmental hazard protection — resist severe heat or cold for the day.',
+    1651: 'Energy resistance against one chosen damage type — counter for elemental enemies.',
+    1663: 'Anti-invisibility — see invisible creatures and faintly outline ethereal/incorporeal.',
+    1534: 'Mobility — vertical movement, escape terrain, engage flying enemies.',
+    958:  'Anti-magic counter — disrupts enemy spellcasting and magical effects.'
+  };
+
   var roleLabels = {
     damage: 'Damage',
     debuff: 'Debuff',
@@ -479,7 +500,7 @@
     // Tags
     html += '<td>' + renderTags(spell) + '</td>';
 
-    // Notes — video link for spells with direct Mathfinder source
+    // Notes — video link for spells with direct Mathfinder source + silver bullet purpose note
     html += '<td class="spell-notes">';
     var directSrc = null;
     if (spell.mathfinder_sources) {
@@ -492,6 +513,10 @@
     }
     if (directSrc) {
       html += '<a href="' + directSrc.url + '" target="_blank" rel="noopener" class="mathfinder-video-link">▶ ' + directSrc.name + '</a>';
+    }
+    var sbNote = SILVER_BULLET_NOTES[spell.aonId];
+    if (sbNote) {
+      html += '<div class="silver-bullet-note">' + sbNote + '</div>';
     }
     html += '</td>';
 

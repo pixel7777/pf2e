@@ -446,6 +446,48 @@ test.describe('C21-8: Chain badge', () => {
   });
 });
 
+test.describe('C21b-2: Silver bullet purpose note in Notes column', () => {
+  test('Air Bubble shows silver bullet note in Notes column', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+
+    await page.click('[data-page="arcane"]');
+    await page.waitForTimeout(300);
+
+    await page.evaluate(() => {
+      const btns = document.querySelectorAll('#levelTabBar-arcane .level-tab');
+      for (const btn of btns) {
+        if (btn.dataset.level === '1') { btn.click(); break; }
+      }
+    });
+    await page.waitForTimeout(300);
+
+    await page.evaluate(() => {
+      const emptySlot = document.querySelector('.slot-empty');
+      if (emptySlot) emptySlot.closest('tr').click();
+    });
+    await page.waitForTimeout(500);
+
+    // Switch to silverBullets role tab so Air Bubble shows
+    await page.evaluate(() => { window.Browser.setRole('arcane', 'silverBullets'); });
+    await page.waitForTimeout(300);
+
+    const noteText = await page.evaluate(() => {
+      const rows = document.querySelectorAll('#spellTable-arcane tbody tr');
+      for (const row of rows) {
+        const nameCell = row.querySelector('td');
+        if (nameCell && nameCell.textContent.includes('Air Bubble')) {
+          const note = row.querySelector('.silver-bullet-note');
+          return note ? note.textContent : null;
+        }
+      }
+      return null;
+    });
+    expect(noteText).toBeTruthy();
+    expect(noteText).toMatch(/breathe|airless|underwater|suffocation/i);
+  });
+});
+
 test.describe('C21b-1: Silver Bullets tab shows spells', () => {
   test('Silver Bullets tab renders with >0 spells for Arcane', async ({ page }) => {
     await page.goto(APP_URL);
@@ -470,13 +512,8 @@ test.describe('C21b-1: Silver Bullets tab shows spells', () => {
     });
     await page.waitForTimeout(500);
 
-    // Click Silver Bullets role tab
-    await page.evaluate(() => {
-      const tabs = document.querySelectorAll('#spellBrowser-arcane .role-tab, .role-tab');
-      for (const tab of tabs) {
-        if (tab.dataset.role === 'silverBullets') { tab.click(); break; }
-      }
-    });
+    // Switch to Silver Bullets role
+    await page.evaluate(() => { window.Browser.setRole('arcane', 'silverBullets'); });
     await page.waitForTimeout(300);
 
     const rowCount = await page.evaluate(() => {
