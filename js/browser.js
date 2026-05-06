@@ -12,25 +12,28 @@
   // 10 roles per Decision 011, in spec order
   var roleOrder = ['damage', 'debuff', 'buff', 'control', 'utility', 'healing', 'reactions', 'oneAction', 'prebuffs', 'silverBullets'];
 
-  // Cycle 21b: silver bullet purpose notes — keyed by aonId. Rendered in Notes column.
+  // Cycle 21b: silver bullet purpose notes — keyed by aonId. Verbatim from
+  // Spell Planner Feature Description.md (Heidi-approved 2026-05-06).
   var SILVER_BULLET_NOTES = {
-    1436: 'Forced movement + persistent acid; pulls flying or clinging targets and erodes them.',
-    1348: 'Armament — conjures weapons for unarmed allies or party caught without gear.',
-    1574: 'Anti-undead — adds vitality damage to weapon strikes.',
-    2344: 'Single-target Will incapacitate; daze, stun, or stupefy on a failed save.',
-    1458: 'De-escalation — suppresses hostility on emotion-driven enemies.',
-    2345: 'Save support — status bonus to saves for an aid-action moment.',
-    1467: 'Anti-affliction — counteracts a disease, curse, or poison.',
-    1438: 'Anti-suffocation — lets a creature breathe in airless or underwater environments.',
-    1506: 'Anti-flying — forces an airborne target down to the ground.',
-    1653: 'Anti-stealth — concealed and hidden creatures lose Concealed in the area.',
-    1583: 'Single-target Will incapacitate — uncontrollable laughter (slowed, prone).',
-    1350: 'Mob clearance — cone of fire-bat swarms shreds multiple weak enemies.',
-    1517: 'Environmental hazard protection — resist severe heat or cold for the day.',
-    1651: 'Energy resistance against one chosen damage type — counter for elemental enemies.',
-    1663: 'Anti-invisibility — see invisible creatures and faintly outline ethereal/incorporeal.',
-    1534: 'Mobility — vertical movement, escape terrain, engage flying enemies.',
-    958:  'Anti-magic counter — disrupts enemy spellcasting and magical effects.'
+    1436: 'Anti-grab. Forcibly moves enemy 5ft, ends grab. Emergency rescue for grabbed allies.',
+    1506: 'Anti-flying. Specialized tool for flying enemies.',
+    1653: 'Anti-invisible. Directly counters invisibility-reliant threats.',
+    1583: 'Anti-reaction. Shuts down dangerous counterattacks from reaction-heavy enemies.',
+    1348: 'Anti-regeneration. Prepared caster exploit for Hydras and regenerating enemies.',
+    1574: 'Anti-undead. Game-changing in undead encounters, one-action cast.',
+    2344: 'Anti-spellcaster. Inflicts Stupefied, undermines enemy casting.',
+    1350: 'Anti-grab (multimodal). Fire ants mode forces movement to break grabs at higher rank.',
+    1458: 'Anti-emotion effects. Counters rage, fear, and hostile emotion-based abilities.',
+    1517: 'Anti-environment. Protects from extreme temperatures, toxic atmospheres.',
+    2345: 'Anti-enemy-debuffs. Sustained protection buff for encounters needing sustained defense.',
+    1651: 'Anti-elemental damage. Prepare when expecting dragons, elementals, energy-heavy encounters.',
+    1663: 'Anti-invisible/ethereal. Longer-duration alternative to Revealing Light.',
+    128:  'Anti-immobilize/grab/restrain. Blanket immunity to movement-restriction effects.',
+    250:  'Anti-curse. Only reliable way to remove curses.',
+    1467: 'Anti-disease. Critical when facing disease-inflicting undead, oozes, or environmental threats.',
+    1534: 'Anti-ground-only. Solves vertical encounters, aerial enemies, terrain hazards.',
+    1438: 'Anti-underwater/gas. Essential for underwater encounters or inhaled poisons/gases.',
+    958:  'Anti-everything (at apex rank). Shuts down enemy abilities completely.'
   };
 
   var roleLabels = {
