@@ -169,6 +169,44 @@ def hard_rule_13(spell):
     return True, None
 
 
+VALID_HEIGHTEN_QUALITY = {
+    "scales-well", "scales-okay", "fixed-meaningful", "fixed-minor",
+    "no-heighten", "scaling-irrelevant",
+}
+
+
+def hard_rule_16(spell):
+    """Summon trait → control role must be present."""
+    if "Summon" in spell.get("trait_raw", []):
+        if "control" not in spell.get("roles", []):
+            return False, "Summon trait but no control role"
+    return True, None
+
+
+def hard_rule_17(spell):
+    """Summon trait → Action Efficiency tag must be present."""
+    if "Summon" in spell.get("trait_raw", []):
+        if "Action Efficiency" not in spell.get("action_tags", []):
+            return False, "Summon trait but no Action Efficiency tag"
+    return True, None
+
+
+def hard_rule_18(spell):
+    """heighten_quality must be a valid enum value (or null for unprocessed spells)."""
+    hq = spell.get("heighten_quality")
+    if hq is not None and hq not in VALID_HEIGHTEN_QUALITY:
+        return False, "invalid heighten_quality: %r" % hq
+    return True, None
+
+
+def hard_rule_19(spell):
+    """C23 §G / Decision 003: defense_tags empty → targeting_tags must be empty.
+    Targeting tags are Offense Evaluation outputs and only apply to offensive spells."""
+    if not spell.get("defense_tags") and spell.get("targeting_tags"):
+        return False, "no defense_tags but targeting_tags=%s (Offense Evaluation gate)" % spell["targeting_tags"]
+    return True, None
+
+
 HARD_RULES = [
     (1, "damage_types non-empty implies 'damage' role", hard_rule_1),
     (2, "conditions at success/failure imply 'debuff' role", hard_rule_2),
@@ -183,6 +221,10 @@ HARD_RULES = [
     (11, "Auto defense requires a combat role", hard_rule_11),
     (12, "weaknesses_imposed is valid array of damage types", hard_rule_12),
     (13, "no defense_tags implies no weaknesses_imposed", hard_rule_13),
+    (16, "Summon trait implies control role", hard_rule_16),
+    (17, "Summon trait implies Action Efficiency tag", hard_rule_17),
+    (18, "heighten_quality is valid enum", hard_rule_18),
+    (19, "no defense_tags implies no targeting_tags (Offense Evaluation gate)", hard_rule_19),
 ]
 
 
@@ -267,6 +309,15 @@ def soft_rule_20(spell):
     return True, None
 
 
+def soft_rule_24(spell):
+    """heighten_quality='scales-well' → heighten_pattern should be plus-type."""
+    if spell.get("heighten_quality") == "scales-well":
+        hp = spell.get("heighten_pattern", "")
+        if not hp.startswith("plus"):
+            return False, "heighten_quality=scales-well but heighten_pattern=%s" % hp
+    return True, None
+
+
 PER_SPELL_SOFT_RULES = [
     (14, "damage+condition spell should have both damage and debuff roles", soft_rule_12),
     (15, "Healing tag implies healing role", soft_rule_13),
@@ -275,6 +326,7 @@ PER_SPELL_SOFT_RULES = [
     (18, "prebuffs role implies duration ≥10 minutes (skipped — duration not in spell-data.js)", soft_rule_16),
     (19, "damage role with defense_tags should have damage_types", soft_rule_19),
     (20, "weaknesses_imposed non-empty implies debuff role", soft_rule_20),
+    (24, "scales-well implies plus-type heighten pattern", soft_rule_24),
 ]
 
 
@@ -384,6 +436,15 @@ def main():
 
     cbo_count = sum(1 for s in spells if s.get("conditions_by_outcome") is not None)
     print("Spells with conditions_by_outcome populated: %d" % cbo_count)
+
+    prebuffs_count = sum(1 for s in spells if "prebuffs" in s.get("roles", []))
+    action_eff_count = sum(1 for s in spells if "Action Efficiency" in s.get("action_tags", []))
+    print("prebuffs role: %d" % prebuffs_count)
+    print("Action Efficiency tag: %d" % action_eff_count)
+
+    legacy_types = {"Evil", "Good", "Chaotic", "Lawful"}
+    legacy_count = sum(1 for s in spells for dt in s.get("damage_types", []) if dt in legacy_types)
+    print("Legacy alignment damage types remaining: %d" % legacy_count)
 
     print()
     if hard_fail_total == 0:

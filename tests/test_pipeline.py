@@ -24,9 +24,10 @@ SNAPSHOT_PATH = os.path.join(SCRIPT_DIR, "fixtures", "snapshot_spells.json")
 EXPECTED_FIELDS = [
     "action_tags", "aonId", "basic_save", "conditions_by_outcome",
     "conditions_imposed", "curated", "damage_types", "defense_tags",
-    "era", "heighten_pattern", "heighten_quality", "heighten_ranks",
+    "duration_raw", "era", "heighten_pattern", "heighten_quality", "heighten_ranks",
     "heighten_raw", "mathfinder_observations", "mathfinder_reviewed",
-    "mathfinder_sources", "mathfinder_summary", "name", "native_rank", "rarity",
+    "mathfinder_sources", "mathfinder_summary", "name",
+    "native_rank", "rarity",
     "reliability_tags", "replaced_by", "replaces", "roles",
     "special_tags", "st_incap", "targeting_subtypes", "targeting_tags",
     "tradition", "trait_raw", "url", "weaknesses_imposed"
@@ -63,6 +64,9 @@ BOOL_FIELDS = ["basic_save", "st_incap", "curated", "mathfinder_reviewed"]
 
 # Int fields
 INT_FIELDS = ["aonId", "native_rank"]
+
+# String fields (may be empty)
+STRING_FIELDS = ["duration_raw"]
 
 # Required non-empty string fields
 REQUIRED_STRING_FIELDS = ["name"]
@@ -146,6 +150,11 @@ def test_schema_validation(spells):
         for field in INT_FIELDS:
             if field in spell and not isinstance(spell[field], int):
                 errors.append(f"  {spell_id}: '{field}' is {type(spell[field]).__name__}, expected int")
+
+        # String field checks (may be empty but must be string)
+        for field in STRING_FIELDS:
+            if field in spell and not isinstance(spell[field], str):
+                errors.append(f"  {spell_id}: '{field}' is {type(spell[field]).__name__}, expected str")
 
         # Required string checks
         for field in REQUIRED_STRING_FIELDS:
@@ -990,6 +999,93 @@ def test_bounded_caster_slots():
     return True
 
 
+# === C23 Regression Tests ===
+
+VALID_HEIGHTEN_QUALITY = {
+    "scales-well", "scales-okay", "fixed-meaningful", "fixed-minor",
+    "scaling-irrelevant", "no-heighten", None
+}
+
+LEGACY_DAMAGE_TYPES = {"Evil", "Good", "Chaotic", "Lawful", "Holy"}
+
+
+def test_c23_heighten_quality(spells):
+    """C23-3: heighten_quality is present and has valid enum value on all spells."""
+    errors = []
+    for s in spells:
+        hq = s.get("heighten_quality")
+        if hq not in VALID_HEIGHTEN_QUALITY:
+            errors.append(f"  {s['name']}: heighten_quality '{hq}' not in valid set")
+    if errors:
+        print(f"FAIL: heighten_quality enum — {len(errors)} error(s):")
+        for e in errors[:10]:
+            print(e)
+        return False
+    filled = sum(1 for s in spells if s.get("heighten_quality") is not None)
+    print(f"  PASS: heighten_quality valid on all {len(spells)} spells ({filled} non-null)")
+    return True
+
+
+def test_c23_summon_control(spells):
+    """C23-4: All spells with Summon trait have 'control' in roles."""
+    errors = []
+    for s in spells:
+        if "Summon" in (s.get("trait_raw") or []):
+            if "control" not in (s.get("roles") or []):
+                errors.append(f"  {s['name']} (aon {s['aonId']}): has Summon trait but no control role")
+    if errors:
+        print(f"FAIL: Summon->control — {len(errors)} error(s):")
+        for e in errors:
+            print(e)
+        return False
+    summon_count = sum(1 for s in spells if "Summon" in (s.get("trait_raw") or []))
+    print(f"  PASS: All {summon_count} Summon-trait spells have control role")
+    return True
+
+
+def test_c23_summon_action_efficiency(spells):
+    """C23-5: All spells with Summon trait have 'Action Efficiency' in action_tags."""
+    errors = []
+    for s in spells:
+        if "Summon" in (s.get("trait_raw") or []):
+            if "Action Efficiency" not in (s.get("action_tags") or []):
+                errors.append(f"  {s['name']} (aon {s['aonId']}): has Summon trait but no Action Efficiency tag")
+    if errors:
+        print(f"FAIL: Summon->Action Efficiency — {len(errors)} error(s):")
+        for e in errors:
+            print(e)
+        return False
+    summon_count = sum(1 for s in spells if "Summon" in (s.get("trait_raw") or []))
+    print(f"  PASS: All {summon_count} Summon-trait spells have Action Efficiency tag")
+    return True
+
+
+def test_c23_prebuffs_count(spells):
+    """C23-6: At least 20 spells have 'prebuffs' in roles."""
+    prebuffs = [s for s in spells if "prebuffs" in (s.get("roles") or [])]
+    if len(prebuffs) < 20:
+        print(f"FAIL: Only {len(prebuffs)} spells have prebuffs role (expected >= 20)")
+        return False
+    print(f"  PASS: {len(prebuffs)} spells have prebuffs role (>= 20)")
+    return True
+
+
+def test_c23_no_legacy_damage_types(spells):
+    """C23-7: No spells have legacy alignment damage types."""
+    errors = []
+    for s in spells:
+        legacy = set(s.get("damage_types") or []) & LEGACY_DAMAGE_TYPES
+        if legacy:
+            errors.append(f"  {s['name']}: has legacy damage types {legacy}")
+    if errors:
+        print(f"FAIL: legacy damage types — {len(errors)} error(s):")
+        for e in errors[:10]:
+            print(e)
+        return False
+    print(f"  PASS: No legacy alignment damage types found in any spell")
+    return True
+
+
 def main():
     if "--update-snapshot" in sys.argv:
         obj = load_spell_data()
@@ -1052,6 +1148,19 @@ def main():
     if c20_skipped and not c20_failed:
         print(f"  ({len(c20_skipped)}/{len(c20_tests)} skipped — prerequisite files not present)")
     if c20_failed:
+        passed = False
+
+    print()
+    print("=== C23: Populator Upgrade Regression ===")
+    c23_tests = [
+        test_c23_heighten_quality(spells),
+        test_c23_summon_control(spells),
+        test_c23_summon_action_efficiency(spells),
+        test_c23_prebuffs_count(spells),
+        test_c23_no_legacy_damage_types(spells),
+    ]
+    c23_failed = [r for r in c23_tests if r is False]
+    if c23_failed:
         passed = False
 
     print()

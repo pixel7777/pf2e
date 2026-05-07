@@ -170,6 +170,14 @@ def compute_special_tags(spell):
     return tags
 
 
+def compute_action_efficiency_tag(spell):
+    """Summon-trait spells get Action Efficiency tag — 1 action to command, creature gets 2."""
+    traits = spell.get("trait_raw") or []
+    if "Summon" in traits:
+        return ["Action Efficiency"]
+    return []
+
+
 def compute_reliability_tags(basic_save):
     tags = []
     if basic_save:
@@ -183,11 +191,21 @@ def build_spell_object(spell):
         return None
 
     defense_tags = compute_defense_tags(spell)
-    targeting_tags = compute_targeting_tags(spell)
-    targeting_subtypes = compute_targeting_subtypes(spell)
-    basic_save = compute_basic_save(spell)
-    st_incap = compute_st_incap(spell, targeting_tags)
-    action_tags = compute_action_tags(spell)
+    # Decision 003 / Cycle 23 §G: targeting tags (and their dependents) are
+    # Offense Evaluation outputs — only meaningful when the spell has at least
+    # one defense_tag (Fort/Ref/Will/AC/Auto). Buffs, healing, utility, and
+    # prebuffs spells must not carry ST/Multi/etc.
+    if defense_tags:
+        targeting_tags = compute_targeting_tags(spell)
+        targeting_subtypes = compute_targeting_subtypes(spell)
+        basic_save = compute_basic_save(spell)
+        st_incap = compute_st_incap(spell, targeting_tags)
+    else:
+        targeting_tags = []
+        targeting_subtypes = []
+        basic_save = compute_basic_save(spell)
+        st_incap = False
+    action_tags = compute_action_tags(spell) + compute_action_efficiency_tag(spell)
     heighten_pattern = compute_heighten_pattern(spell)
     roles = compute_roles(spell)
     special_tags = compute_special_tags(spell)
@@ -224,6 +242,7 @@ def build_spell_object(spell):
         "mathfinder_observations": None,
         "mathfinder_summary": None,
         "mathfinder_reviewed": False,
+        "duration_raw": spell.get("duration_raw") or "",
         "curated": False,
     }
 

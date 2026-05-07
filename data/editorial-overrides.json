@@ -275,7 +275,7 @@
   {
     "aonId": 1364,
     "name": "Ymeri's Mark",
-    "reason": "Cycle 07 Phase 2 skip: model emitted invalid role 'detection' (not in valid role set). Curse spell that imposes Fatigued on the target and detonates for fire damage on dismiss (basic Reflex save). Has both tracking (utility) and combat-debuff functions. Conditions imposed: Fatigued (auto, for the duration determined by Fort save).",
+    "reason": "Cycle 07 Phase 2 skip: model emitted invalid role 'detection' (not in valid role set). Curse spell that imposes Fatigued on the target and detonates for fire damage on dismiss (basic Reflex save). Has both tracking (utility) and combat-debuff functions. Conditions imposed: Fatigued (auto, for the duration determined by Fort save). | Cycle 23 / Decision 020 Category 9: Target-attached emanation — 10-foot detonation when the mark is discharged, hitting the target plus enemies. AoN structured data records target=1 creature, area_type=null. Editorial override adds Multi.",
     "overrides": {
       "damage_types": [
         "Fire"
@@ -304,7 +304,11 @@
       "reliability_tags": [
         "Success-effect"
       ],
-      "heighten_quality": "scales-okay"
+      "heighten_quality": "scales-okay",
+      "targeting_tags": [
+        "ST",
+        "Multi"
+      ]
     }
   },
   {
@@ -464,9 +468,10 @@
   {
     "aonId": 1506,
     "name": "Earthbind",
-    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-flying silver bullet.",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-flight silver bullet. Cycle 23 update (2026-05-07): override now preserves natural control role in addition to silverBullets — replacing instead of augmenting the role list lost the control classification, which is also valid for the spell.",
     "overrides": {
       "roles": [
+        "control",
         "silverBullets"
       ],
       "special_tags": [
@@ -505,7 +510,7 @@
   {
     "aonId": 1350,
     "name": "Cinder Swarm",
-    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet. Preserves populator-derived damage+debuff roles.",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet. Preserves populator-derived damage+debuff roles. | Cycle 23 / Decision 020 Category 9: Target-attached emanation — 5-foot aura around the target, sustained, hits the target plus enemies in the aura every round. AoN structured data records target=1 creature, area_type=null. Editorial override adds Multi.",
     "overrides": {
       "roles": [
         "damage",
@@ -514,15 +519,21 @@
       ],
       "special_tags": [
         "Silver Bullet"
+      ],
+      "targeting_tags": [
+        "ST",
+        "Multi"
       ]
     }
   },
   {
     "aonId": 1517,
     "name": "Environmental Endurance",
-    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet. Cycle 23 update (2026-05-07): override now preserves natural buff+prebuffs roles in addition to silverBullets — replacing instead of augmenting the role list lost the prebuff/buff classification, which is also valid for the spell.",
     "overrides": {
       "roles": [
+        "buff",
+        "prebuffs",
         "silverBullets"
       ],
       "special_tags": [
@@ -606,6 +617,192 @@
       "special_tags": [
         "Silver Bullet"
       ]
+    }
+  },
+  {
+    "aonId": 927,
+    "name": "Horizon Thunder Sphere",
+    "reason": "Cycle 23 / Decision 020 Category 9: Target-attached emanation/aura — 10-foot emanation triggers on hit/miss, hitting multiple enemies. AoN's structured data records target='1 creature' with area_type=null, so the structured pass tags ST only and misses Multi. Editorial override adds Multi. Pattern documented in Decision 020 Cat 9.",
+    "overrides": {
+      "targeting_tags": [
+        "ST",
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 2538,
+    "name": "Fateful Condemnation",
+    "reason": "Cycle 23 / Decision 020 Category 9: Target-attached aura — 10-foot aura for 1 minute, dealing mental damage and imposing status penalty on enemies in the aura. AoN's structured data records target='1 living creature' with area_type=null, so the structured pass tags ST only and misses Multi. Editorial override adds Multi. Pattern documented in Decision 020 Cat 9.",
+    "overrides": {
+      "targeting_tags": [
+        "ST",
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 1536,
+    "name": "Force Barrage",
+    "reason": "Cycle 23 prompt-tuning gap: Sonnet repeatedly missed Auto + Auto-effect detection despite explicit canonical prompt examples and the literal phrase 'It automatically hits the target' in the spell text. After 3 prompt-tuning iterations the LLM continued to output empty defense_tags_added. Force Barrage has no save and no attack roll — damage just lands. The multi-shard mechanic (up to 3 shards via 3-action mode, each targeted independently) also earns Multi. Sonnet also failed to emit damage_types because of the Auto confusion, so this override sets damage_types=['Force'] explicitly.",
+    "overrides": {
+      "defense_tags": [
+        "Auto"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
+      ],
+      "targeting_tags": [
+        "ST",
+        "Multi"
+      ],
+      "damage_types": [
+        "Force"
+      ]
+    }
+  },
+  {
+    "aonId": 1751,
+    "name": "Wall of Stone",
+    "reason": "Cycle 23 prompt-tuning gap: Sonnet repeatedly missed Auto + Auto-effect detection despite the canonical prompt example. Wall of Stone creates a stone wall on the battlefield with no save and no attack roll. control role + no save → Auto.",
+    "overrides": {
+      "defense_tags": [
+        "Auto"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1302,
+    "name": "Forge",
+    "reason": "Cycle 23: Sonnet repeatedly produced JSON parse errors for this spell (5 retries failed). Manual data entry per Heidi review. Forge deals 3d6 fire damage with a Fortitude save (non-basic — Critical Success/Success/Failure/Critical Failure each have distinct effects). On crit failure metal creatures gain weakness 2 to physical damage — physical damage is not in our weakness type rubric, so the weakness is not tracked. Heightened (+1) +2d6 damage and +2 weakness.",
+    "overrides": {
+      "damage_types": [
+        "Fire"
+      ],
+      "roles": [
+        "damage"
+      ],
+      "reliability_tags": [
+        "Success-effect"
+      ],
+      "heighten_quality": "scales-well",
+      "conditions_imposed": [],
+      "conditions_by_outcome": null,
+      "weaknesses_imposed": []
+    }
+  },
+  {
+    "aonId": 1345,
+    "name": "Weaken Earth",
+    "reason": "Cycle 23: Sonnet repeatedly produced JSON parse errors for this spell (5 retries failed). Manual data entry per Heidi review. Weaken Earth weakens hardness OR imposes weakness 3 to physical damage on a target without hardness, with a Fortitude save to negate. Per remaster, physical damage is tagged across Bludgeoning, Piercing, Slashing. Imposes weakness → debuff role per Decision 011. Also has an out-of-combat utility component (weakening structures and objects). Heightened (+2) increases hardness reduction, object size, and weakness.",
+    "overrides": {
+      "damage_types": [],
+      "weaknesses_imposed": [
+        "Bludg",
+        "Pierc",
+        "Slash"
+      ],
+      "roles": [
+        "debuff",
+        "utility"
+      ],
+      "conditions_imposed": [],
+      "conditions_by_outcome": null,
+      "heighten_quality": "fixed-meaningful"
+    }
+  },
+  {
+    "aonId": 709,
+    "name": "Quench",
+    "reason": "Cycle 23: Sonnet repeatedly produced JSON parse errors for this spell (5 retries failed). Manual data entry per Heidi review. Quench is a multi-purpose Water spell with three components: (1) extinguishes non-magical fires automatically (utility), (2) deals 4d8 damage to fire creatures with basic Fortitude save (damage role; damage type unspecified per spell text — no named type), and (3) counteracts magical fire spells/items (debuff). The structured pass missed the basic Fortitude save (saving_throw is null in spell.json) and the burst-area targeting because the offense gate cleared targeting_tags when defense_tags was empty. Override sets the offensive properties explicitly. Heightened (+1) +2d8 damage to fire creatures.",
+    "overrides": {
+      "defense_tags": [
+        "Fort"
+      ],
+      "basic_save": true,
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Unspecified"
+      ],
+      "roles": [
+        "damage",
+        "debuff",
+        "utility"
+      ],
+      "reliability_tags": [
+        "Success-effect"
+      ],
+      "conditions_imposed": [],
+      "conditions_by_outcome": null,
+      "weaknesses_imposed": [],
+      "heighten_quality": "scales-well"
+    }
+  },
+  {
+    "aonId": 2307,
+    "name": "Ibex's Harvest",
+    "reason": "Cycle 23: Sonnet repeatedly produced JSON parse errors for this spell (5 retries failed). Manual data entry per Heidi review. Ibex's Harvest is a multi-action temp-HP buff that, in 3-action mode, also deals 2d8 mental damage to one creature in a 10-ft emanation with a basic Will save. The single-target damage earns the damage role; the temp HP earns the buff role. The structured pass missed the Will defense (saving_throw is null in spell.json) — only the 3-action damage mode has a save. Targeting is single-target for offense (only one creature takes damage even in 3-action mode). Heightened (+1) +3 temp HP and +1d8 damage.",
+    "overrides": {
+      "defense_tags": [
+        "Will"
+      ],
+      "basic_save": true,
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Mental"
+      ],
+      "roles": [
+        "damage",
+        "buff"
+      ],
+      "reliability_tags": [
+        "Success-effect"
+      ],
+      "conditions_imposed": [],
+      "conditions_by_outcome": null,
+      "weaknesses_imposed": [],
+      "heighten_quality": "scales-well"
+    }
+  },
+  {
+    "aonId": 1966,
+    "name": "Bestial Curse",
+    "reason": "Cycle 23: Sonnet repeatedly emitted invalid weaknesses_imposed type Silver — silver is not in our remaster damage type rubric, and the resulting weakness is not worth changing the rubric to track. Override skips the silver weakness and adds the missing single-target tag. Bestial Curse is a Polymorph debuff with Clumsy on success/failure/crit-failure (different durations). On crit failure the duration is unlimited. Manipulate-action restriction (DC 5 flat check) at failure/crit-failure is not a tagged condition.",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [],
+      "conditions_imposed": [
+        "Clumsy"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [
+          "Clumsy"
+        ],
+        "failure": [
+          "Clumsy"
+        ],
+        "critical_failure": [
+          "Clumsy"
+        ]
+      },
+      "weaknesses_imposed": [],
+      "roles": [
+        "debuff"
+      ],
+      "reliability_tags": [
+        "Success-effect"
+      ],
+      "heighten_quality": "no-heighten"
     }
   }
 ]

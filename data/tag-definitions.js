@@ -70,10 +70,9 @@ window.TAG_DEFINITIONS = {
   "Sustain-action": "Sustain for ongoing effect. Front-load value on turn 1, then sustain for 1 action on later turns — freeing 2 actions for more offense.",
   "3-action": "Has a 3-action casting mode. Uses your entire turn — maximum tempo investment. Worth it when the payoff justifies giving up your +1 action.",
   "Free": "Free action — costs nothing to use.",
+  "Action Efficiency": "Gives you more actions than you spend. Summon spells are the classic example — 1 action to command your summon, which then gets 2 actions. Turns your 3-action turn into effectively 4+ actions of output.",
 
   // ── Special / Role Tags ──
-  "Coverage": "Good in most encounters — not embarrassing in either AoE or single-target. A safe pick when you don’t know what you’ll face.",
-  "Multimodal": "Multiple distinct modes or uses within one spell slot. A Swiss Army knife — adapts to what you encounter. Summon spells are the classic example.",
   "Silver Bullet": "Dominates a narrow situation regardless of spell rank. Revealing Light vs. invisibility. Laughing Fit vs. dangerous reactions. Acid Grip vs. grabs. Worth preparing from any rank slot and an excellent use of low tier slots.",
   "Pre-buff": "Long-duration spell cast before combat. Converts a low-rank slot into free in-combat value without spending combat actions.",
   "Healing": "Restores ally HP. “Do I have any way to keep allies alive at this rank?” Arcane casters will never fill this — that’s a known tradition limitation, not a gap to fix.",
@@ -100,7 +99,7 @@ window.TAG_DEFINITIONS = {
   "Damage": "This spell is categorized as a damage dealer — its primary purpose is dealing hit point damage to enemies.",
   "Debuff": "This spell is categorized as a debuffer — its primary purpose is imposing negative conditions or penalties on enemies.",
   "Buff": "This spell is categorized as a buff — its primary purpose is enhancing allies’ capabilities.",
-  "Control": "This spell is categorized as control — its primary purpose is restricting enemy movement or actions through terrain, walls, or zones.",
+  "Control": "This spell is categorized as control — its primary purpose is restricting enemy movement or actions through terrain, walls, or zones; or placing another actor on the battlefield (summon spells — the summoned creature blocks, tanks, flanks, and reshapes positioning).",
   "Utility": "This spell is categorized as utility — its primary purpose is solving non-combat problems or providing out-of-combat benefits.",
   "Silver Bullets": "This spell is categorized as a silver bullet — it dominates a narrow situation regardless of spell rank.",
 

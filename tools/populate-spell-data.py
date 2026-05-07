@@ -12,6 +12,7 @@ Requires environment variable: OPENROUTER_API_KEY
 import argparse
 import json
 import os
+import re
 import sys
 import time
 from collections import Counter
@@ -33,7 +34,7 @@ RESULTS_PATH = os.path.join(PROJECT_ROOT, "data", "populator-results.json")
 EDITORIAL_OVERRIDES_PATH = os.path.join(PROJECT_ROOT, "data", "editorial-overrides.json")
 GOLDEN_SET_PATH = os.path.join(SCRIPT_DIR, "golden-set.json")
 
-DEFAULT_MODEL = "anthropic/claude-haiku-4.5"
+DEFAULT_MODEL = "anthropic/claude-sonnet-4-6"
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 VALID_DAMAGE_TYPES = {
@@ -110,11 +111,130 @@ Return a JSON object with these fields:
 }}
 ```
 
+## ANTI-X RULE (READ CAREFULLY)
+
+If a spell's PURPOSE is to counter, prevent, remove, or protect against a condition or effect,
+it does NOT impose that condition. The spell is the CURE, not the DISEASE.
+
+Examples — these spells do NOT impose the listed conditions:
+- Scouring Pulse (removes concealment from area) → does NOT impose Concealed
+- Freedom of Movement (prevents immobilize/grab/restrain) → does NOT impose Immobilized, Grabbed, or Restrained
+- Remove Curse (counteracts curses) → does NOT impose any curse-related conditions
+- Calm (suppresses emotion effects) → does NOT impose any emotion conditions
+- Cleanse Affliction (treats diseases) → does NOT impose Sickened
+- See the Unseen (reveals invisible creatures) → does NOT impose Invisible or Hidden
+- Earthbind (forces flying creature down) → does NOT impose Immobilized (it reduces fly Speed to 0, a mechanical effect, not the Immobilized condition)
+
+The test: "Does this spell INFLICT this condition on an unwilling enemy as a harmful effect?"
+If the answer is no — if the spell is removing, preventing, counteracting, or suppressing — leave it out.
+
+## LITERAL TEXT RULE (REINFORCED)
+
+A condition goes in conditions_imposed ONLY if the spell text uses the EXACT condition name.
+
+YES — the spell literally says the condition:
+- "The target is slowed 1" → Slowed ✓
+- "The target becomes frightened 2" → Frightened ✓
+- "Creatures in the area are concealed" → Concealed ✓
+
+NO — mechanical effects that RESEMBLE a condition but don't name it:
+- "The target takes a -10-foot status penalty to Speed" → NOT Slowed (no "slowed" word)
+- "The area is filled with smoke, obscuring vision" → NOT Concealed (smoke/fire/obscurement language describes terrain, not the Concealed condition imposed on targets)
+- "Wall of Fire's smoke obscures sight" → NOT Concealed (terrain effect, not a condition)
+- "The target can't fly" or "fly Speed is reduced to 0" → NOT Immobilized (flight restriction, not the Immobilized condition)
+- "The target is unable to act" → NOT Stunned UNLESS "stunned" literally appears
+- "The target treats everyone as enemies" or "the target attacks its allies" → NOT Confused (behavioral override is not the Confused condition unless the word "Confused" literally appears in the spell text)
+- "The target loses its senses" / "the target is overwhelmed" → NOT a condition unless a canonical condition word appears
+- "The target is dying" or "the target dies" → NOT a condition (death is not on the canonical list)
+
+When in doubt: search the spell text for the exact condition name as a word. If it's not there, don't tag it.
+
+⚠️ ZERO TOLERANCE: If you find yourself reasoning "the spell does X which is LIKE the Y condition," STOP. The literal text rule means the rule. No paraphrasing, no inference, no "effectively this is...". Only the literal word.
+
+## REMASTER DAMAGE TYPES
+
+PF2e Remaster replaced alignment damage types. The following are INVALID and must not appear:
+- Evil → use "Spirit" instead
+- Good → use "Spirit" instead
+- Chaotic → use "Spirit" instead
+- Lawful → use "Spirit" instead
+
+If the spell text mentions "spirit damage", "vitality damage", or "void damage", use the
+remaster names (Spirit, Vitality, Void). If old text says "evil damage" or "good damage",
+emit "Spirit".
+
+## POLYMORPH / BATTLE FORM RULE
+
+Spells with the Polymorph trait that grant the caster a battle form are BUFF spells.
+The damage dealt while in the form is a consequence of the buff, not the spell's function.
+
+- Polymorph trait + "battle form" or "You gain the following statistics" → roles_added: ["buff"]
+- Do NOT add "damage" role just because the form has attack statistics.
+- The spell's damage_types should be EMPTY (the form attacks, not the spell).
+- conditions_imposed should only include conditions the SPELL imposes (transformation effects on
+  the caster's enemies), not conditions the form's attacks might inflict.
+
+Examples:
+- Dragon Form → buff (you become a dragon; the breath weapon is the form's, not the spell's)
+- Monstrosity Form → buff
+- Corrosive Body → buff
+- Insect Form → buff
+
+## WEAPON ENHANCEMENT RULE
+
+Spells that enhance a weapon (add damage types, bonus damage, special properties) are BUFF spells.
+The extra damage comes from the enhanced weapon attacks, not from the spell itself.
+
+- "target weapon" or "weapon deals additional" or "strikes with the weapon" → roles_added: ["buff"]
+- damage_types: EMPTY (the weapon deals the damage, not the spell)
+- Exception: if the spell ALSO deals instantaneous spell damage (like a burst on cast), that
+  portion earns "damage" role and its damage_types.
+
+Examples:
+- Bone Flense (adds bleed to weapon strikes) → buff
+- Runic Weapon (adds property rune effects) → buff
+- Blazing Armory (conjures fire weapons + deals fire damage to grabbers) → buff
+
+## SUMMON SPELL RULE
+
+Spells with the Summon trait place another actor on the battlefield. This is CONTROL.
+The summoned creature can tank, block, flank, and attack — but categorizing every possible
+creature action would tag the spell for every role. Instead:
+
+- Summon trait → roles_added: ["control"]
+- Do NOT add damage, debuff, buff, or utility based on what the creature MIGHT do.
+- damage_types: EMPTY (the creature deals damage, not the spell)
+- conditions_imposed: EMPTY (the creature imposes conditions, not the spell)
+- Incarnate spells (Summon Draconic Legion, Summon Elemental Herald) follow the same rule: control.
+
+Exception: If the summon spell itself (not the creature) has additional effects beyond summoning
+(e.g., an arrival burst that deals area damage), tag those effects normally in addition to control.
+
+## HEALING vs. BUFF BOUNDARY
+
+If the spell has the Healing trait:
+- Check: does the spell ALSO target enemies with damage, saves, or conditions?
+- If YES (dual-purpose): analyze offense fields normally. The Healing trait means it ALSO heals,
+  not that offense analysis is skipped. Examples: Blood-Feasting Breath, Siphon Life.
+- If NO (pure healing): skip offense analysis. Examples: Heal, Soothe, Restoration.
+
+Spells with the Healing trait that restore HP are HEALING, not buff.
+Only add "buff" if the spell grants a non-healing mechanical advantage:
+- Stat bonuses (AC, saves, attack rolls) → buff
+- New abilities (fly, see invisible, resistance) → buff
+- Temporary HP → buff (this IS a mechanical advantage beyond HP restoration)
+- Extra actions → buff
+
+Just restoring HP or removing conditions is healing, NOT buff.
+Just having a sustained duration doesn't make it buff.
+
+Examples:
+- Spirit Link (transfers HP) → healing only, NOT buff
+- Soothe (heals + gives bonus to saves vs mental) → healing + buff (the save bonus is non-healing)
+
 ## damage_types — array
 
 Valid values (18): Fire, Cold, Elec, Acid, Force, Sonic, Void, Vitality, Spirit, Mental, Poison, Bludg, Pierc, Slash, Bleed, Varies, Unspecified
-
-⚠️ Healing-trait spells: If the spell has the "Healing" trait (visible in the SPELL CONTEXT block above), the spell is editorially classified as healing. Even if the spell has a secondary undead-damage mode (e.g., Heal deals Vitality damage to undead), do NOT emit damage_types — the healing function dominates the spell's plannable purpose. damage_types = []. Same for defense_tags_added (no Auto), reliability_tags_added (no Auto-effect), roles_added (no damage role). Healing-trait spells produce empty offense analysis.
 
 Rules (Decision 005):
 1. Only tag damage dealt TO ENEMIES. "Deals 4d6 fire damage" → Fire. "Grants resistance 5 to fire" → NOT Fire. "Immune to acid" → NOT Acid.
@@ -123,11 +243,21 @@ Rules (Decision 005):
 4. Multi-damage spells: tag every type. Thunderstrike (electricity + sonic) → ["Elec", "Sonic"].
 5. Ignore resistance/immunity language and damage types appearing only as triggers or qualifiers.
 6. Ignore incidental/conditional damage that wouldn't motivate spell selection.
-7. Physical types (Bludg, Pierc, Slash) are valid when the spell deals them — polymorph attacks, summoned-creature attacks, weapon-summoning effects.
+7. Physical types (Bludg, Pierc, Slash) are valid when the spell deals them directly. But see POLYMORPH and SUMMON rules above — form/creature damage doesn't count.
 8. Use the abbreviations exactly: Elec (not Electricity), Bludg, Pierc, Slash.
 9. Excluded: Light, Darkness, Holy, Unholy, Untyped — these are qualifiers, not damage types.
 10. Spells with no damage to enemies → [].
-11. Bleed: tag "Bleed" when the spell deals persistent bleed damage. Bleed is mechanically distinct from Pierc — do not substitute one for the other. Example: Blood Vendetta deals persistent bleed → ["Bleed"].
+11. Bleed: tag "Bleed" ONLY when the spell text contains the literal phrase "persistent bleed damage" or "bleed damage". Persistent damage of OTHER types (e.g., "persistent piercing damage", "persistent fire damage", "persistent acid damage") is NOT Bleed — tag the named type. Examples:
+    - Blood Vendetta: "1d6 persistent bleed damage" → ["Bleed"] ✓
+    - Cinder Swarm: "1d6 persistent piercing damage" → ["Pierc"] (NOT Bleed)
+    - Brine Dragon Bile: "1d6 persistent acid damage" → ["Acid"] (NOT Bleed)
+    - Acid Storm: "persistent acid damage" → ["Acid"] (NOT Bleed)
+    The word "bleed" must literally appear in the damage description, not be inferred from "persistent" + "piercing/slashing".
+13. ZERO TOLERANCE for damage type hallucination: damage_types comes ONLY from explicit damage statements in the spell text — phrases like "deals 4d6 fire damage" or "[type] damage". Do NOT add a damage type because:
+    - The spell mentions a creature type (e.g., undead, fiend) — that's a target descriptor, not damage
+    - The spell mentions a trait (e.g., the Vitality trait on a healing spell) — traits are not damage statements
+    - The spell could plausibly relate to a type — only literal text counts
+    - Examples of LLM errors to avoid: tagging Vitality on Scouring Pulse (no "vitality damage" in text), tagging Void on Blood-Feasting Breath (its damage is piercing per text), tagging Bleed when text says "persistent piercing"
 12. Unspecified: tag "Unspecified" when the spell deals damage but names no damage type. The text says "the target takes Xd10 damage" with no type word. Examples: Disintegrate ("12d10 damage (no damage type)"), Power Word Kill. Do NOT tag Unspecified if any named type is present.
 
 ## conditions_imposed — array of canonical PF2e remaster condition names
@@ -148,14 +278,10 @@ Rules (Decision 006):
 3. Include conditions from persistent/lingering effects (e.g., persistent damage that imposes Sickened — Sickened is the condition, NOT "Persistent Damage").
 4. ⚠️ Use CANONICAL PF2e remaster condition names ONLY. "Persistent Damage" is NOT a condition — it's a damage state. "Dying" is a condition but only tag it if the spell explicitly imposes the Dying condition (not just "the creature dies"). If a spell's text says "the creature dies," do NOT tag any condition for that effect — death is not a condition. Drop severity numbers ("Sickened 2" → "Sickened"). "Flat-footed" → "Off-Guard". The valid condition names are: Blinded, Clumsy, Concealed, Confused, Controlled, Dazzled, Deafened, Doomed, Drained, Dying, Encumbered, Enfeebled, Fascinated, Fatigued, Fleeing, Frightened, Grabbed, Hidden, Immobilized, Invisible, Off-Guard, Paralyzed, Petrified, Prone, Quickened, Restrained, Sickened, Slowed, Stunned, Stupefied, Unconscious, Undetected, Unnoticed, Wounded. Do not invent names not on this list.
 5. Spells with no adverse conditions imposed on enemies → [].
-6. ⚠️ Conditions must be LITERALLY NAMED in the spell text. Only tag a condition when the spell text uses the condition's actual name (e.g., "the target is slowed 1", "the creature is prone"). Do NOT infer conditions from mechanical effects that resemble a condition:
-   - A speed penalty is NOT Slowed (e.g., "-5-foot status penalty to Speeds" does NOT produce a Slowed tag)
-   - Difficult terrain is NOT Slowed
-   - Forced movement is NOT Prone
-   - "Can't move" (without the word "immobilized") is NOT Immobilized
+6. ⚠️ See LITERAL TEXT RULE and ANTI-X RULE above. These take precedence for condition tagging.
 7. ⚠️ Only tag conditions imposed on the TARGET (enemies). Never tag caster-side penalties. Examples of caster-side effects to IGNORE: stunned on failed counteract, drained after casting, fatigued from overexertion. conditions_imposed tracks what happens to enemies only.
-8. ⚠️ Attitude states are NOT conditions for this tool. Friendly, Helpful, Indifferent, Unfriendly, and Hostile are NPC social attitudes (from the social encounter rules) — they are NOT mechanical combat conditions. **NEVER include "Unfriendly", "Hostile", "Friendly", "Helpful", or "Indifferent" in conditions_imposed or conditions_by_outcome under ANY circumstance.** They are not on the canonical condition list above. Canonical example — Paranoia (spell-1623): the spell says "the target becomes unfriendly to all creatures" and "believes everyone is a mortal enemy." conditions_imposed for Paranoia MUST be []. conditions_by_outcome MUST be null. The behavioral override is captured by the control role, not by a condition tag.
-9. ⚠️ Weakness, Resistance, and Immunity are NOT conditions. Never tag these in conditions_imposed. Weakness imposed on enemies goes in the separate `weaknesses_imposed` field. **Do NOT translate "weakness to X damage" into the Enfeebled condition or any other condition.** Weakness is a numeric vulnerability to a damage type; Enfeebled is a Strength-based check/melee-damage penalty. They are entirely different mechanics. Canonical example — Blood Vendetta: "the target has weakness 1 to piercing and slashing damage" → weaknesses_imposed=["Pierc","Slash"], conditions_imposed=[]. NEVER tag Enfeebled (or any other condition) for "weakness to X damage" text.
+8. ⚠️ Attitude states are NOT conditions for this tool. Friendly, Helpful, Indifferent, Unfriendly, and Hostile are NPC social attitudes (from the social encounter rules) — they are NOT mechanical combat conditions. **NEVER include "Unfriendly", "Hostile", "Friendly", "Helpful", or "Indifferent" in conditions_imposed or conditions_by_outcome under ANY circumstance.** They are not on the canonical condition list above.
+9. ⚠️ Weakness, Resistance, and Immunity are NOT conditions. Never tag these in conditions_imposed. Weakness imposed on enemies goes in the separate `weaknesses_imposed` field.
 
 ## weaknesses_imposed — array of damage type strings
 
@@ -192,47 +318,88 @@ DO NOT EMIT: healing, reactions, oneAction, silverBullets. Reasons:
 If your analysis suggests one of those four roles applies, simply do not include it in roles_added. The structured pass handles it.
 
 Definitions (Decision 011):
-- damage: spell deals meaningful HP damage to enemies as a primary or significant function. Includes instantaneous AoE damage spells (Fireball, Lightning Bolt, Eclipse Burst). The fact that damage covers an area does NOT make it control — it's still damage.
+- damage: spell deals meaningful HP damage to enemies as a primary or significant function. Includes instantaneous AoE damage spells (Fireball, Lightning Bolt, Eclipse Burst). The fact that damage covers an area does NOT make it control — it's still damage. See POLYMORPH, WEAPON ENHANCEMENT, and SUMMON rules — damage from forms/weapons/creatures doesn't qualify.
 - debuff: spell imposes adverse conditions on enemies OR imposes weakness as a primary/significant function. Weakness imposition qualifies for debuff even without condition imposition — weakness degrades enemy survivability. SAVE-OUTCOME THRESHOLD:
    * Auto-effect (no save): debuff = yes (always plannable).
    * Success: debuff = yes (~50%+ trigger rate).
    * Failure: debuff = yes IF significant function. Slow (Slowed on fail) = yes. Dehydrate (damage + Enfeebled on fail) = yes (also gets damage).
    * ⚠️ Critical Failure ONLY: debuff = NO. The condition is a "jackpot," not a plannable function. CANONICAL EXAMPLE: Eclipse Burst has Blinded on critical failure and NOTHING on failure or success. Its roles_added is exactly ["damage"] — NOT ["damage", "debuff"]. Same logic for any damage spell whose only condition is on critical failure.
    * EXCEPTION: Critical-fail-only with Incapacitation AND no other function = yes. Sleep is a debuff despite the crit-fail gate because the entire spell is the condition.
-- buff: spell targets allies and enhances capabilities (stat bonuses, new abilities, protective effects). Damage prevention/reduction = buff.
-- control: spell creates a PERSISTENT terrain effect, zone, or barrier with a duration (rounds/minutes/hours) that shapes the battlefield over time. The hallmark is duration + spatial constraint. Examples: Wall of Stone (persistent barrier — control only), Wall of Fire (persistent damage zone — control AND damage), difficult terrain hazards, zoning auras. ALSO: spells that force enemies to attack their allies or override target behavior to cause friendly fire (Paranoia, Confusion in attack-random-target mode) are control — they remove an enemy by turning them into a liability. INSTANTANEOUS AREA DAMAGE IS NOT CONTROL: Fireball, Lightning Bolt, Eclipse Burst, Cinder Swarm, Slow — none are control. They're damage and/or debuff. The "covers an area" fact alone does not make a spell control; only persistent spatial constraint or behavioral override does.
+- buff: spell targets allies and enhances capabilities (stat bonuses, new abilities, protective effects). Damage prevention/reduction = buff. Polymorph battle forms = buff (see rule above). Weapon enhancements = buff (see rule above).
+- control: spell creates a PERSISTENT terrain effect, zone, or barrier with a duration (rounds/minutes/hours) that shapes the battlefield over time. The hallmark is duration + spatial constraint. Examples: Wall of Stone (persistent barrier — control only), Wall of Fire (persistent damage zone — control AND damage). ALSO: spells that force enemies to attack their allies or override target behavior to cause friendly fire (Paranoia, Confusion) are control. ALSO: spells with the Summon trait place another actor on the battlefield — the summoned creature blocks, tanks, flanks, and reshapes positioning. INSTANTANEOUS AREA DAMAGE IS NOT CONTROL: Fireball, Lightning Bolt, Eclipse Burst — none are control.
 - utility: spell solves out-of-combat problems — movement, scouting, environmental adaptation, information. Fly = utility + buff. Invisibility = utility + buff.
-- prebuffs: long-duration (≥10 min) self/ally buff cast before combat. Mystic Armor = buff + prebuffs.
+- prebuffs: long-duration (≥10 min) self/ally buff cast before combat. Must also qualify as buff.
 
-Every spell must end up with at least one role across the populator + auto-derived sets. If a spell's only roles are auto-derived (e.g., a pure healing spell with the Healing trait), it's fine to emit roles_added=[].
+## PREBUFFS ROLE
+
+A spell qualifies for the "prebuffs" role if ALL of:
+1. Duration is 10 minutes or longer (check the Duration field — "1 hour", "10 minutes",
+   "8 hours", "until the next time you make your daily preparations")
+2. The spell benefits allies or self (buff-like effect)
+3. Casting it before combat is the intended use pattern (you wouldn't waste combat actions on it)
+
+If a spell qualifies, add BOTH "buff" AND "prebuffs" to roles_added.
+
+Common prebuffs that must be tagged (if you encounter them):
+- Mystic Armor (1 hour) → buff + prebuffs
+- False Vitality (8 hours) → buff + prebuffs
+- Darkvision (1 hour) → buff + prebuffs
+- Water Breathing (1 hour) → buff + prebuffs + utility
+- Environmental Endurance (until next daily prep) → buff + prebuffs
+- Tongues (1 hour) → buff + prebuffs + utility
+- See the Unseen (10 minutes) → buff + prebuffs + utility
+- Tailwind (8 hours) → buff + prebuffs
+- Resist Energy (1 hour or varies) → buff + prebuffs
+- Freedom of Movement (10 minutes) → buff + prebuffs + utility
+
+Watch for duration text! "10 minutes", "1 hour", "8 hours", "24 hours", "until your next daily
+preparations" all qualify. "Sustained up to 1 minute" does NOT qualify.
+
+⚠️ DURATION CUTOFF IS STRICT. Less than 10 minutes → NO prebuffs. Examples:
+- Fly: 5 minutes → NOT prebuffs (too short)
+- Haste: 1 minute → NOT prebuffs
+- Heroism: 10 minutes → IS prebuffs ✓
+- Bless: 1 minute → NOT prebuffs
+Anything 1-9 minutes is too short for the pre-combat prep pattern.
 
 ## defense_tags_added — array
 
-The populator augments defense_tags with two possible values: "AC" and "Auto".
+The populator augments defense_tags with two possible values: "AC" and "Auto". NOTHING ELSE.
 
-The structured-data pass (Cycle 03) caught Fort/Ref/Will from the saving_throw field and AC from either saving_throw="AC" or the Attack trait. But Archives of Nethys's data has gaps — many spells describe a spell attack in their text without carrying the Attack trait (especially reaction spells, where the Attack trait is never applied). The populator closes those gaps by reading the description.
+⚠️ FORBIDDEN VALUES: Fort, Ref, Will. These come from the structured pass and you MUST NOT emit them. If you find yourself about to write "Fort", "Ref", or "Will" in defense_tags_added, STOP — the only valid values are "AC" and "Auto". The validator WILL reject your response and you will be retried.
 
-Add "AC" if AND ONLY IF:
-1. The spell's existing defense_tags does NOT already include "AC" (look at the SPELL CONTEXT defense_tags value above — if "AC" is in that list, defense_tags_added MUST NOT include "AC"), AND
-2. The description text explicitly describes an attack roll. Phrases that count: "spell attack", "ranged spell attack", "melee spell attack", "make a spell attack roll", "attack roll against [the target's] AC". A spell that merely *deals damage* without rolling to hit does NOT get AC — only spells where the caster makes an attack roll.
+### MANDATORY: Add "AC" if ALL of:
+1. The spell's existing defense_tags does NOT already include "AC", AND
+2. The description text contains any of: "spell attack", "ranged spell attack", "melee spell attack", "make a spell attack roll", "attack roll against AC", "automatically hits" + creature target without save.
 
-Canonical re-emit example: Disintegrate has the Attack trait, so the structured pass already produced defense_tags=["AC","Fort"]. The populator MUST NOT emit "AC" again. defense_tags_added=[].
+⚠️ HIGH-VALUE AC additions (the structured pass MISSES these because reactions and some spells don't carry the Attack trait in spell.json):
+- **Brine Dragon Bile**: text says "Make a ranged spell attack against the triggering creature's AC" → defense_tags_added: ["AC"] ✓
+- **Acid Splash / Telekinetic Projectile**: spell attack rolls → ["AC"] ✓
 
-Add "Auto" if AND ONLY IF:
+If you see "spell attack" in the text and AC isn't already in defense_tags, you MUST emit AC. The phrase "Make a ranged spell attack" or "Make a melee spell attack" is the trigger.
+
+### MANDATORY: Add "Auto" if ALL of:
 1. The spell's existing defense_tags is empty AND you did NOT add "AC" above, AND
 2. The spell is offensive — has a combat role you're emitting (damage, debuff, or control), AND
 3. The text confirms the spell affects enemies without any save and without an attack roll.
 
-Canonical cases:
-- Force Barrage: "It automatically hits" → Auto.
-- Wall of Stone: persistent barrier, no save, offensive control → Auto.
-- Wall of Fire: persistent damage zone, creatures take damage when entering/passing through with NO save → Auto. (If the spell's text doesn't mention a Reflex/Fort/Will save against the damage, it's Auto. The presence of fire/cold/etc. damage does NOT mean there's a save — read the text carefully.)
-- Any persistent damage zone or hazard where creatures simply take damage on entry/exit/turn-end without rolling a save → Auto.
+⚠️ HIGH-VALUE Auto additions (LLM has historically missed these — DO NOT MISS THEM):
+- **Force Barrage**: text says "It **automatically hits** the target and deals 1d4+1 force damage" — literal "automatically hits" + no save + no attack → defense_tags_added: ["Auto"] ✓
+- **Wall of Stone**: creates a stone wall on the battlefield, no save, no attack roll, control role → ["Auto"] ✓
+- **Floating Flame**: places persistent flame, no save → ["Auto"] ✓
+- **Magic Missile** (legacy): auto-hit force damage → ["Auto"] ✓
 
-Important: a spell that has a Reflex save listed in its `Defense` block but ALSO has a passive "creatures who pass through take damage" clause: the save covers part of the effect, so defense_tags will already have "Ref" and you should NOT add Auto.
+The trigger phrases for Auto are: "automatically hits", "no save" with a damage/debuff effect, or a control/wall/zone spell that just exists on the battlefield without requiring a save.
+
+NOT Auto (existing defense_tags is non-empty — the structured pass already classified):
+- Fireball (basic Reflex) → defense_tags has "Ref", do NOT add Auto
+- Wall of Fire (Reflex on pass-through) → defense_tags has "Ref", do NOT add Auto
+- Fear (non-basic Will) → defense_tags has "Will", do NOT add Auto
+
+⚠️ NOT Auto for SUMMON spells: Spells with the Summon trait do NOT get "Auto" even though they have no save and no attack roll. The summon spell creates an ALLY (the summoned creature) — it does not affect enemies directly. The "control" role captures its battlefield impact. Summon Animal, Summon Construct, Summon Dragon, Summon Plant or Fungus, and all other Summon-trait spells → defense_tags_added: []
 
 Otherwise → [].
-NEVER add Fort, Ref, or Will — those are computed upstream from the saving_throw field. AC and Auto are mutually exclusive; a spell with an attack roll uses AC, never Auto.
+AC and Auto are mutually exclusive — never both.
 
 ## reliability_tags_added — array
 
@@ -240,54 +407,117 @@ Valid values: "Auto-effect", "Success-effect"
 
 Add "Auto-effect" if AND ONLY IF you added "Auto" to defense_tags_added (above).
 
-Add "Success-effect" if AND ONLY IF basic_save is FALSE AND the Success degree-of-success outcome produces a strategically meaningful effect — a condition rider, partial damage, or tactical consequence beyond "no effect".
+Add "Success-effect" if AND ONLY IF ALL of:
+1. basic_save is FALSE, AND
+2. The spell text contains an explicit "Success" entry in its degrees-of-success block, AND
+3. That Success entry describes a HARMFUL effect on the enemy (a condition like Frightened/Slowed, partial damage, a tactical consequence). "The target is unaffected" or "no effect" or absence of a Success entry means NO Success-effect.
 
-⚠️ CRITICAL: If basic_save is TRUE (you can see the value in the SPELL CONTEXT block above), DO NOT emit Success-effect under any circumstances. Basic-save Success-effect is computed by the structured pass (Cycle 03) and emitting it from the populator creates duplicates. Even if a basic-save spell has additional rider conditions on Success, the populator's reliability_tags_added MUST be []. The structured pass already covers it.
+⚠️ ABSOLUTE RULE — basic_save=TRUE: DO NOT emit Success-effect. Ever. Basic-save spells get Success-effect from the structured pass automatically. Re-emitting it is a HARD ERROR. Check basic_save FIRST in SPELL CONTEXT — if true, your reliability_tags_added list cannot contain "Success-effect".
 
-Examples (all non-basic-save):
-- Fear (non-basic Will, "Frightened 1" on success) → add Success-effect.
-- Synesthesia (non-basic Will, Clumsy 1 + Stupefied 1 on success) → add Success-effect.
-- Slow (non-basic Fort, "Slowed 1 for 1 round" on success) → add Success-effect (1-round Slowed is meaningful).
-- Phantasmal Killer (non-basic Will, "frightened 1" on success) → add Success-effect.
-- Dehydrate (BASIC Fort) → DO NOT add Success-effect, even though it has rider conditions. Basic save = upstream's job.
-- Spell where Success = "no effect" or "spell ends" → don't add.
+NEGATIVE EXAMPLES (basic_save=TRUE → NEVER emit Success-effect):
+- **Fireball** (basic Reflex) → reliability_tags_added: [] — DO NOT emit Success-effect.
+- **Chilling Spray** (basic Reflex) → reliability_tags_added: [] — DO NOT emit Success-effect (the half-damage on success is captured by the basic-save mechanic, not by this tag).
+- **Cinder Swarm** (basic Fortitude or basic Reflex) → reliability_tags_added: [] — DO NOT emit.
+- **Dehydrate** (basic Fortitude) → reliability_tags_added: [] — DO NOT emit even though Failure adds Enfeebled.
+- **Blood Vendetta** (Will, NOT basic) → may emit if Success has a meaningful rider. Check rule below.
+
+POSITIVE EXAMPLES (basic_save=FALSE AND Success has a harmful rider → DO emit):
+- **Fear** (Will, not basic) — Success = "Frightened 1" → reliability_tags_added: ["Success-effect"] ✓
+- **Slow** (Fort, not basic) — Success = "Slowed 1 for 1 round" → ["Success-effect"] ✓
+- **Vision of Death** (Will, not basic) — Success = "half damage and is frightened 1" → ["Success-effect"] ✓
+- **Synesthesia** (Will, not basic) — Success = "affected for 1 round" with conditions → ["Success-effect"] ✓
+
+NEGATIVE EXAMPLES (basic_save=FALSE but Success is "unaffected" or absent → do NOT emit):
+- **Earthbind** (Fort, not basic) — Success = "Falls safely up to 120 feet" (no debuff on success) → []
+- **Paranoia** (Will, not basic) — Critical Success = unaffected; Success = unfriendly attitude (per Decision 006, attitude states are NOT conditions; per the literal text rule, this isn't a tagged condition either) → debatable, but golden set says []
+- **Enfeeble** (Fort, not basic) — Success = "enfeebled 1 until start of your next turn" → ["Success-effect"] ✓ (note: this IS a condition on Success)
+
+DECISION TEST: open the spell's degrees-of-success block.
+- Step 1: Is basic_save TRUE? If yes → []. STOP HERE.
+- Step 2: Does the Success line name a PF2e condition, deal damage, or describe a tactical effect on the target? If yes → ["Success-effect"]. If no → [].
 
 ## targeting_tags_added — array
 
 Valid values: "ST", "Multi"
 
-⚠️ READ THIS RULE CAREFULLY. The "_added" suffix means "what THIS pass is contributing on top of what's already there." The default answer is [].
+The "_added" suffix means "what THIS pass is contributing on top of what's already there." Default is [].
 
-Look at the SPELL CONTEXT block above: `targeting_tags: [...]`. Whatever values are in that list are ALREADY computed. DO NOT re-emit them.
+### MANDATORY two-step procedure
 
-- If targeting_tags ALREADY contains "ST" → DO NOT emit "ST" in targeting_tags_added.
-- If targeting_tags ALREADY contains "Multi" → DO NOT emit "Multi" in targeting_tags_added.
+STEP 1: Read SPELL CONTEXT.targeting_tags. Note what's already there (typically "ST" or "Multi", sometimes both).
 
-You may add a value ONLY when text analysis reveals a mode the structured pass missed:
-- "ST" if existing targeting_tags lacks ST AND the spell text describes targeting a single creature/object in a way the structured rules didn't catch (rare).
-- "Multi" if existing targeting_tags lacks Multi AND the spell text shows multi-target mode that wasn't caught.
+STEP 2: Scan the spell description for evidence of an UNTAGGED targeting mode. Specifically look for:
 
-⚠️ DO add "Multi" to targeting_tags_added (when not already in existing targeting_tags) for these patterns:
-- Variable-action spells where a higher-action mode targets additional creatures. Example: Force Barrage's 2-action mode hits up to 3 creatures with 3 shards; 3-action mode hits up to 4. Multi belongs.
-- Variable-action spells where the 3-action mode is an emanation/area on top of a single-target base. Example: Heal's 3-action mode is "all living creatures within 30 feet" — Multi belongs.
-- Heightened versions that gain multi-target language. Example: Fear at heightened 3rd targets up to 5 creatures — Multi belongs.
-- "Up to N creatures" wording in target field that wasn't structurally caught.
+(a) **Heightened multi-target modes** — `**Heightened (Nth)**` text saying "up to N creatures", "all creatures in [area]", "X targets". If found AND "Multi" is not already in SPELL CONTEXT.targeting_tags → add "Multi".
 
-For 80%+ of spells, targeting_tags_added = []. The structured pass is good. If existing targeting_tags already contains the value, your output omits it. Only emit when augmentation is genuinely needed.
+(b) **Variable-action multi-target modes** — 3-action or higher mode that expands to multiple creatures (e.g., Heal's 3-action 30-ft emanation). If found AND "Multi" is not already there → add "Multi".
 
-## heighten_quality — string enum or null
+(c) **Multi-shard / multi-projectile mechanics** — Force Barrage shoots up to 3 shards "to a maximum of three shards for 3 actions" with "You choose the target for each shard individually" → add "Multi".
+
+(d) **Emanation centered on target** — spell creates an aura on the target that affects nearby enemies (e.g., "5-foot emanation around the target"). If structured area_type is null but text describes an emanation → add "Multi" (note: if the structured pass set area_type, Multi is already there).
+
+⚠️ ABSOLUTE RULE: "Do not re-emit" means do not REPEAT a tag that's already present. It does NOT mean "the spell is fully tagged, so add nothing." If the structured pass tagged "ST" because target=1 creature, and a heightened entry adds multi-targeting, you MUST add "Multi". This is the WHOLE POINT of this populator pass for these spells.
+
+### Canonical examples — MEMORIZE these
+
+These are the HIGH-VALUE Multi additions. The LLM has historically missed them. Get these right:
+
+| Spell | SPELL CONTEXT targeting_tags | Heightened text | targeting_tags_added | Why |
+|---|---|---|---|---|
+| Fear | ["ST"] | Heightened (3rd): "up to five creatures" | ["Multi"] | base ST + heightened Multi |
+| Slow | ["ST"] | Heightened (6th): "up to 10 creatures" | ["Multi"] | base ST + heightened Multi |
+| Synesthesia | ["ST"] | Heightened (7th): "up to 5 creatures" | ["Multi"] | base ST + heightened Multi |
+| Paranoia | ["ST"] | Heightened (6th): "up to 5 creatures" | ["Multi"] | base ST + heightened Multi |
+| Force Barrage | ["ST"] | "to a maximum of three shards... target for each shard individually" | ["Multi"] | multi-shard mechanic |
+| Heal | [] | 3-action: "all living and undead creatures in the burst" | ["Multi"] | variable-action multi |
+| Phantasmal Killer (legacy) | ["ST"] | (no heightened multi-mode) | [] | strictly single-target |
+
+### Re-emission errors to AVOID
+
+- Earthbind has target=1 creature → SPELL CONTEXT shows ST already. Do NOT add ST again.
+- Brine Dragon Bile has target=the creature that took damage → ST already there. Do NOT add ST.
+- Runic Weapon has target=1 weapon → ST already there. Do NOT add ST.
+- Fly has target=1 creature → ST already there. Do NOT add ST.
+
+Canonical heightened-Multi examples (the structured pass shows ST; you must add Multi):
+- Fear: Heightened (3rd) targets up to 5 creatures → add "Multi" ✓
+- Slow: Heightened (6th) targets up to 10 creatures → add "Multi" ✓
+- Synesthesia: Heightened (7th) targets up to 5 creatures → add "Multi" ✓
+- Paranoia: Heightened (6th) targets up to 5 creatures → add "Multi" ✓
+- Phantasmal Killer: targets 1 creature with no heightened multi-mode → do NOT add Multi
+
+ALSO add "Multi" when a spell has a 3-action mode (or other variable-action mode) that targets multiple creatures, even if the base mode is single-target.
+
+Canonical re-emission errors to AVOID:
+- Earthbind has target=1 creature → SPELL CONTEXT shows ST already. Do NOT add ST again.
+- Brine Dragon Bile has target=1 creature → ST already there. Do NOT add ST.
+- Runic Weapon has target=1 weapon → ST already there. Do NOT add ST.
+
+## heighten_quality (REQUIRED — never null)
 
 Valid values: scales-well, scales-okay, fixed-meaningful, fixed-minor, no-heighten, scaling-irrelevant
 
-⚠️ heighten_quality is REQUIRED for every spell. Never return null. If you are unsure, prefer "scales-okay" or "fixed-minor". The only spells with null heighten_quality are ones not yet analyzed — and you ARE analyzing this one.
+DETERMINISTIC RULE: If heighten_pattern is "none", you MUST output "no-heighten". No exceptions.
 
-Rules (Decision 014):
-- ⚠️ heighten_pattern == "none" → MUST output "no-heighten". This is deterministic. Look at the SPELL CONTEXT block: if heighten_pattern is "none", heighten_quality is "no-heighten" — period. Do not output null. Do not output anything else.
-- Pre-buff or silver-bullet style spells where rank doesn't gate the value → "scaling-irrelevant" (Mystic Armor, Revealing Light).
-- Plus-pattern with meaningful per-rank improvement that stays competitive at higher ranks → "scales-well" (Fireball +2d6/rank, Dehydrate +2d6 persistent).
-- Plus-pattern but outclassed at higher ranks (or poor scaling magnitude) → "scales-okay" (Floating Flame +1d6/rank).
-- Fixed pattern that meaningfully changes function/scope → "fixed-meaningful" (Fear at 3rd: 1 → 5 targets; Slow at 6th: 1 → 10 targets; Fly at 7th: longer duration).
-- Fixed pattern with marginal improvement only → "fixed-minor".
+Assess how well this spell scales when heightened:
+
+- "scales-well": Plus-pattern (+1, +2) with meaningful per-rank improvement. Stays competitive at higher ranks.
+   Examples: Fireball (+2d6/rank), Force Barrage (+1 missile/2 ranks), Lightning Bolt (+1d12/rank), Scouring Pulse (+1d6/rank), Wall of Fire (+2d6/rank), Eclipse Burst (+1d8/rank), Blood-Feasting Breath (+1d10/rank).
+
+- "scales-okay": Plus-pattern but improvement is marginal (e.g., +1d4/rank on a low base) OR damage scales but the spell is outclassed by higher-rank alternatives. Wall of Stone (+15 HP per wall section per +2 ranks) — modest, outclassed.
+
+- "fixed-meaningful": Fixed heightened entries that add SIGNIFICANT capability — new modes, new targets, new effects, larger bonuses, or qualitatively different durations.
+   Examples: Fear (3rd: 1→5 targets), Slow (6th: 1→10 targets), Fly (7th: 5 min → 1 hour), Haste (7th: adds Quickened to multiple), Synesthesia (7th: 1→5 targets), Mystic Armor (4th/6th/8th/10th: AC bonus +1/+2/+2/+3 and saves +1/+1/+2/+3 — significant defensive gains per heighten step), Water Breathing (3rd: 1hr→8hr; 4th: until daily prep — qualitative duration jumps), Environmental Endurance (3rd: severe both temps; 5th: severe + extreme — protection scope expands), Summon Animal (each rank summons a different creature tier — qualitatively different), Monstrosity Form (each rank unlocks new forms with new abilities).
+
+   **Prebuffs that scale meaningfully via fixed heighten entries are fixed-meaningful, NOT scaling-irrelevant.** AC/save bonuses, duration extensions, and protection-scope expansions are all meaningful gains.
+
+- "fixed-minor": Fixed heightened entries with truly marginal improvement (e.g., +5 ft range, +1 to a single check, no other change). RARE — most fixed heightening is meaningful.
+
+- "no-heighten": Spell has no heightened entry. MANDATORY if heighten_pattern is "none".
+
+- "scaling-irrelevant": The spell's primary value is independent of scaling. Pure-utility spells where the function is binary (Comprehend Language, Detect Magic, Sigil), silver bullets (Revealing Light) that work equally at any rank by design, or spells where heighten entries genuinely change nothing meaningful. **Most prebuffs are NOT scaling-irrelevant** — if the heighten entries improve the bonus, duration, or scope, use fixed-meaningful instead.
+
+CALIBRATION: Most plus-pattern damage spells are scales-well. Most prebuffs that have heighten entries are fixed-meaningful (the bonus, duration, or scope grows). Only mark a prebuff scaling-irrelevant if its heighten entries truly change nothing strategic. Most condition spells with target-count heightening are fixed-meaningful. Most polymorph/summon spells are fixed-meaningful. fixed-minor is rare — only use when scaling is genuinely trivial.
 
 # RESPONSE FORMAT
 
@@ -511,6 +741,36 @@ def parse_and_validate(content):
     return result, None
 
 
+LEGACY_DAMAGE_REMAP = {
+    'Evil': 'Spirit', 'Good': 'Spirit',
+    'Chaotic': 'Spirit', 'Lawful': 'Spirit',
+    'Holy': 'Spirit',
+}
+
+PREBUFF_DURATION_PATTERNS = [
+    r'\d+\s*hours?', r'\d+\s*days?',
+    r'(\d+)\s*minutes',
+    r'until.*(next|daily\s*prep)',
+]
+
+def likely_prebuff_duration(duration_raw):
+    """Returns True if duration_raw suggests >=10 minutes."""
+    if not duration_raw:
+        return False
+    text = duration_raw.lower()
+    if 'sustained' in text:
+        return False
+    for pattern in PREBUFF_DURATION_PATTERNS:
+        m = re.search(pattern, text)
+        if m:
+            if 'minutes' in pattern:
+                if int(m.group(1)) >= 10:
+                    return True
+            else:
+                return True
+    return False
+
+
 def post_process(result, spell_data_entry):
     """Apply deterministic cleanup rules after LLM produces a valid response.
     Catches systematic LLM errors that resist prompt instruction.
@@ -522,6 +782,17 @@ def post_process(result, spell_data_entry):
     if existing_defense and "Auto" in result.get("defense_tags_added", []):
         result["defense_tags_added"] = [v for v in result["defense_tags_added"] if v != "Auto"]
         result["reliability_tags_added"] = [v for v in result.get("reliability_tags_added", []) if v != "Auto-effect"]
+
+    # Post-process: remap legacy alignment damage types to Spirit
+    result["damage_types"] = [LEGACY_DAMAGE_REMAP.get(dt, dt) for dt in result.get("damage_types", [])]
+    result["weaknesses_imposed"] = [LEGACY_DAMAGE_REMAP.get(w, w) for w in result.get("weaknesses_imposed", [])]
+
+    trait_raw = spell_data_entry.get("trait_raw") or []
+
+    # Summon trait → control role
+    if 'Summon' in trait_raw:
+        if 'control' not in result.get('roles_added', []):
+            result['roles_added'] = result.get('roles_added', []) + ['control']
 
     return result
 
@@ -631,6 +902,18 @@ def _apply_consistency_rules(spell):
         spell["roles"] = sorted(set(spell.get("roles", []) + ["debuff"]))
         fixes.append("added debuff role (weaknesses_imposed non-empty)")
 
+    # Rule: Summon trait → control role
+    if 'Summon' in spell.get('trait_raw', []):
+        if 'control' not in spell.get('roles', []):
+            spell['roles'] = sorted(set(spell.get('roles', []) + ['control']))
+            fixes.append("added control role (Summon trait)")
+
+    # Rule: prebuffs heuristic safety net — long-duration buff spells get prebuffs
+    if likely_prebuff_duration(spell.get('duration_raw', '')) and 'buff' in spell.get('roles', []):
+        if 'prebuffs' not in spell.get('roles', []):
+            spell['roles'] = sorted(set(spell.get('roles', []) + ['prebuffs']))
+            fixes.append("added prebuffs role (heuristic: duration=%s)" % spell.get('duration_raw', ''))
+
     # Rule: every spell must have at least one role. If empty, default to utility.
     if not spell.get("roles"):
         spell["roles"] = ["utility"]
@@ -683,12 +966,17 @@ def merge_into_spell_data():
         spell["targeting_tags"] = sorted(set(spell.get("targeting_tags", []) + list(populated.get("targeting_tags_added", []))))
 
         # Offense Evaluation gate: if defense_tags ended up empty, clear offense fields.
+        # C23 §G: targeting_tags + targeting_subtypes + st_incap are Offense Evaluation
+        # outputs too — buffs/utility/healing must not carry ST/Multi.
         if not spell["defense_tags"]:
             spell["damage_types"] = []
             spell["conditions_imposed"] = []
             spell["conditions_by_outcome"] = None
             spell["weaknesses_imposed"] = []
             spell["reliability_tags"] = [t for t in spell["reliability_tags"] if t == "Auto-effect"]
+            spell["targeting_tags"] = []
+            spell["targeting_subtypes"] = []
+            spell["st_incap"] = False
 
         merged_count += 1
 
