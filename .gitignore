@@ -25,3 +25,4 @@ playwright-report/
 
 # Claude tooling (local dev)
 .claude/
+_Work/
