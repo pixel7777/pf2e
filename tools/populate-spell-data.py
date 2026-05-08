@@ -850,8 +850,9 @@ def _apply_consistency_rules(spell):
     """
     fixes = []
 
-    # Rule: heighten_pattern=none implies heighten_quality=no-heighten.
-    if spell.get("heighten_pattern") == "none" and spell.get("heighten_quality") != "no-heighten":
+    # Rule: heighten_pattern=none implies heighten_quality=no-heighten
+    # (except scaling-irrelevant, which is valid for no-heighten spells via editorial override).
+    if spell.get("heighten_pattern") == "none" and spell.get("heighten_quality") not in ("no-heighten", "scaling-irrelevant"):
         spell["heighten_quality"] = "no-heighten"
         fixes.append("forced heighten_quality=no-heighten")
 

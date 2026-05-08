@@ -1086,6 +1086,128 @@ def test_c23_no_legacy_damage_types(spells):
     return True
 
 
+# === C24 Regression Tests ===
+
+C24_SCALING_IRRELEVANT_AON_IDS = {2344, 1458, 2345, 1438, 1506, 1653, 1583, 958}
+
+C24_EDITORIAL_OBSERVATION_AON_IDS = {927, 1721, 1653, 928}
+
+C24_CHAIN_AON_IDS = {
+    1533, 1350, 2341, 1677, 1981, 1451, 1555, 1724, 1720,
+    1457, 1530, 1462, 1508, 1329, 1559, 1524, 665,
+    2, 1436, 1503, 1665, 1466, 1661, 1742, 2449,
+}
+
+
+def test_c24_scaling_irrelevant(spells):
+    """C24-A1: 8 silver bullet spells reclassified to scaling-irrelevant."""
+    errors = []
+    by_aon = {s["aonId"]: s for s in spells}
+    for aon_id in sorted(C24_SCALING_IRRELEVANT_AON_IDS):
+        spell = by_aon.get(aon_id)
+        if not spell:
+            errors.append(f"  aon_id {aon_id}: not found in spell data")
+            continue
+        hq = spell.get("heighten_quality")
+        if hq != "scaling-irrelevant":
+            errors.append(f"  {spell['name']} (aon {aon_id}): heighten_quality is '{hq}', expected 'scaling-irrelevant'")
+    if errors:
+        print(f"FAIL: scaling-irrelevant overrides — {len(errors)} error(s):")
+        for e in errors:
+            print(e)
+        return False
+    print(f"  PASS: All {len(C24_SCALING_IRRELEVANT_AON_IDS)} silver bullet spells have scaling-irrelevant")
+    return True
+
+
+def test_c24_advisory_text(spells):
+    """C24-A3: All chain entries with advisory_text map keys have non-empty advisory_text."""
+    if not os.path.exists(CHAIN_REGISTRY_PATH):
+        print("  SKIP: chain_registry.json not found")
+        return None
+
+    with open(CHAIN_REGISTRY_PATH, encoding="utf-8") as f:
+        registry = json.load(f)
+
+    adv_replaced = registry.get("advisory_text", {}).get("replaced_by", {})
+    adv_replaces = registry.get("advisory_text", {}).get("replaces", {})
+
+    errors = []
+    by_aon = {s["aonId"]: s for s in spells}
+
+    for spell in spells:
+        for entry in spell.get("replaced_by", []):
+            key = f"{spell['aonId']}:{entry['aon_id']}"
+            if key in adv_replaced:
+                text = entry.get("advisory_text", "")
+                if not text:
+                    errors.append(f"  {spell['name']} replaced_by {entry['spell']}: advisory_text empty but key {key} exists in registry")
+        for entry in spell.get("replaces", []):
+            key = f"{spell['aonId']}:{entry['aon_id']}"
+            if key in adv_replaces:
+                text = entry.get("advisory_text", "")
+                if not text:
+                    errors.append(f"  {spell['name']} replaces {entry['spell']}: advisory_text empty but key {key} exists in registry")
+
+    total_keys = len(adv_replaced) + len(adv_replaces)
+    if errors:
+        print(f"FAIL: advisory_text population — {len(errors)} error(s):")
+        for e in errors:
+            print(e)
+        return False
+    print(f"  PASS: All {total_keys} advisory_text entries populated on chain spells")
+    return True
+
+
+def test_c24_editorial_observations(spells):
+    """C24-A5: 4 competitive pair spells have editorial observations."""
+    errors = []
+    by_aon = {s["aonId"]: s for s in spells}
+    for aon_id in sorted(C24_EDITORIAL_OBSERVATION_AON_IDS):
+        spell = by_aon.get(aon_id)
+        if not spell:
+            errors.append(f"  aon_id {aon_id}: not found in spell data")
+            continue
+        obs = spell.get("mathfinder_observations", [])
+        editorial = [o for o in obs if "Editorial" in (o.get("source", "") if isinstance(o, dict) else o)]
+        if not editorial:
+            errors.append(f"  {spell['name']} (aon {aon_id}): no editorial observation found")
+    if errors:
+        print(f"FAIL: editorial observations — {len(errors)} error(s):")
+        for e in errors:
+            print(e)
+        return False
+    print(f"  PASS: All {len(C24_EDITORIAL_OBSERVATION_AON_IDS)} competitive pair spells have editorial observations")
+    return True
+
+
+def test_c24_chain_entry_structure(spells):
+    """C24-A3b: Chain entries have at_rank field and complete structure."""
+    errors = []
+    by_aon = {s["aonId"]: s for s in spells}
+    chain_spells = [s for s in spells if s["aonId"] in C24_CHAIN_AON_IDS]
+
+    for spell in chain_spells:
+        for entry in spell.get("replaced_by", []):
+            if "at_rank" not in entry:
+                errors.append(f"  {spell['name']} replaced_by {entry.get('spell', '?')}: missing at_rank")
+            if "advisory_text" not in entry:
+                errors.append(f"  {spell['name']} replaced_by {entry.get('spell', '?')}: missing advisory_text field")
+        for entry in spell.get("replaces", []):
+            if "at_rank" not in entry:
+                errors.append(f"  {spell['name']} replaces {entry.get('spell', '?')}: missing at_rank")
+            if "advisory_text" not in entry:
+                errors.append(f"  {spell['name']} replaces {entry.get('spell', '?')}: missing advisory_text field")
+
+    if errors:
+        print(f"FAIL: chain entry structure — {len(errors)} error(s):")
+        for e in errors[:10]:
+            print(e)
+        return False
+    print(f"  PASS: All chain entries on {len(chain_spells)} spells have at_rank and advisory_text fields")
+    return True
+
+
 def main():
     if "--update-snapshot" in sys.argv:
         obj = load_spell_data()
@@ -1161,6 +1283,18 @@ def main():
     ]
     c23_failed = [r for r in c23_tests if r is False]
     if c23_failed:
+        passed = False
+
+    print()
+    print("=== C24: Heightening Display & Data QA ===")
+    c24_tests = [
+        test_c24_scaling_irrelevant(spells),
+        test_c24_advisory_text(spells),
+        test_c24_editorial_observations(spells),
+        test_c24_chain_entry_structure(spells),
+    ]
+    c24_failed = [r for r in c24_tests if r is False]
+    if c24_failed:
         passed = False
 
     print()

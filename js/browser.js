@@ -67,7 +67,10 @@
     columnNameFilter: '',
     columnRankFilter: null,    // null = all, or array of allowed ranks
     columnActionFilter: null,  // null = all, or array of allowed action labels
-    columnStarredOnly: false
+    columnStarredOnly: false,
+    // Cycle 24 — heightening display filters
+    hideParked: false,
+    indicatorFilter: null      // null = all, 'green', 'orange', 'grey'
   };
 
   // Defaults snapshot for "is filter active?" comparisons (Feature 3)
@@ -544,13 +547,79 @@
   function formatActions(actionTags) { return App.formatActions(actionTags); }
   function renderTags(spell) { return App.renderTags(spell); }
 
+  // ── Cycle 24 — Heightening display helpers ──
+
+  function formatHeightenRanks(ranks, nativeRank) {
+    var filtered = [];
+    for (var i = 0; i < ranks.length; i++) {
+      if (ranks[i] !== nativeRank) filtered.push(ranks[i]);
+    }
+    if (filtered.length === 0) return '';
+    filtered.sort(function(a, b) { return a - b; });
+    // Collapse consecutive sequences into ranges
+    var parts = [];
+    var start = filtered[0], end = filtered[0];
+    for (var i = 1; i < filtered.length; i++) {
+      if (filtered[i] === end + 1) {
+        end = filtered[i];
+      } else {
+        parts.push(start === end ? '' + start : start + '–' + end);
+        start = end = filtered[i];
+      }
+    }
+    parts.push(start === end ? '' + start : start + '–' + end);
+    return parts.join(', ');
+  }
+
+  function evaluateChartA(spell, slotRank) {
+    var ranks = spell.heighten_ranks || [];
+    var native = spell.native_rank;
+    var content = formatHeightenRanks(ranks, native);
+    if (!content) content = '—';
+    var isParked = (slotRank !== native) && (ranks.indexOf(slotRank) === -1);
+    return { content: content, parked: isParked };
+  }
+
+  function evaluateChartB(spell) {
+    var q = spell.heighten_quality;
+    if (q === 'scales-well') return { indicator: 'green', tooltip: 'Scales well — gains power at every heightened rank' };
+    if (q === 'fixed-meaningful') return { indicator: 'green', tooltip: 'Has meaningful breakpoints — see Heightens At column for specific ranks' };
+    if (q === 'no-heighten') return { indicator: 'grey', tooltip: "This spell doesn’t heighten — consider whether this slot is the best use" };
+    return { indicator: null, tooltip: null };
+  }
+
+  function evaluateChartC(spell, slotRank) {
+    var orangeNotes = [];
+    var greenNotes = [];
+    if (spell.replaced_by) {
+      for (var i = 0; i < spell.replaced_by.length; i++) {
+        var entry = spell.replaced_by[i];
+        if (entry.at_rank != null && entry.at_rank <= slotRank) {
+          orangeNotes.push(entry.advisory_text || '');
+        }
+      }
+    }
+    if (spell.replaces) {
+      for (var i = 0; i < spell.replaces.length; i++) {
+        var entry = spell.replaces[i];
+        if (entry.at_rank != null && entry.at_rank <= slotRank) {
+          greenNotes.push(entry.advisory_text || '');
+        }
+      }
+    }
+    return { orangeNotes: orangeNotes, greenNotes: greenNotes };
+  }
+
   // ── Render helpers ──
 
   function renderSpellRow(spell, idx, opts) {
     opts = opts || {};
+    var slotRank = opts.slotRank || null;
     var isLegacy = spell.era === 'legacy_core';
+    var chartA = slotRank ? evaluateChartA(spell, slotRank) : null;
     var rowCls = isLegacy ? ' legacy-row' : '';
     if (spell.mathfinder_reviewed) rowCls += ' mathfinder-row';
+    if (chartA && chartA.parked) rowCls += ' parked-row';
     var html = '<tr data-spell-idx="' + idx + '" style="cursor:pointer;" class="' + rowCls + '">';
 
     // Spell name with star/spacer
@@ -565,14 +634,6 @@
     if (spell.aonId) {
       html += '<a href="' + App.aonUrl(spell.aonId) + '" target="_blank" class="aon-link" title="Open on Archives of Nethys">↗</a>';
     }
-    // Chain badges
-    if (spell.replaces && spell.replaces.length > 0) {
-      var rep = spell.replaces[0];
-      html += '<span class="chain-badge chain-replaces">↑ Replaces ' + rep.spell + '</span>';
-    } else if (spell.replaced_by && spell.replaced_by.length > 0) {
-      var rb = spell.replaced_by[0];
-      html += '<span class="chain-badge chain-replaced-by">↓ See ' + rb.spell + ' at rank ' + rb.at_rank + '</span>';
-    }
     if (opts.warnings) {
       for (var w = 0; w < opts.warnings.length; w++) {
         html += '<span class="search-warning-badge">' + opts.warnings[w] + '</span>';
@@ -580,8 +641,14 @@
     }
     html += '</td>';
 
-    // Rank
+    // Native Rank
     html += '<td>' + spell.native_rank + '</td>';
+
+    // Heightens At (only in role view with slot context)
+    if (slotRank) {
+      var haCls = (chartA && chartA.parked) ? ' class="heighten-cell parked"' : ' class="heighten-cell"';
+      html += '<td' + haCls + '>' + (chartA ? chartA.content : '—') + '</td>';
+    }
 
     // Action
     html += '<td>' + formatActions(spell.action_tags) + '</td>';
@@ -589,7 +656,19 @@
     // Tags
     html += '<td>' + renderTags(spell) + '</td>';
 
-    // Notes — video link for spells with direct Mathfinder source + silver bullet purpose note
+    // Indicators (Chart B + Chart C)
+    if (slotRank) {
+      var chartB = evaluateChartB(spell);
+      html += '<td class="indicator-cell">';
+      if (chartB.indicator === 'green') {
+        html += '<span class="indicator-icon indicator-green" title="' + chartB.tooltip + '">▲</span>';
+      } else if (chartB.indicator === 'grey') {
+        html += '<span class="indicator-icon indicator-grey" title="' + chartB.tooltip + '">△</span>';
+      }
+      html += '</td>';
+    }
+
+    // Notes — video link + silver bullet + Chart C advisory text
     html += '<td class="spell-notes">';
     var directSrc = null;
     if (spell.mathfinder_sources) {
@@ -606,6 +685,24 @@
     var sbNote = SILVER_BULLET_NOTES[spell.aonId];
     if (sbNote) {
       html += '<div class="silver-bullet-note">' + sbNote + '</div>';
+    }
+    // Chart C — replacement chain advisory notes
+    if (slotRank) {
+      var chartC = evaluateChartC(spell, slotRank);
+      for (var n = 0; n < chartC.orangeNotes.length; n++) {
+        if (chartC.orangeNotes[n]) {
+          html += '<div class="chain-note chain-note-orange" title="A stronger option exists at this rank — see notes">';
+          html += '<span class="chain-note-icon">◆</span> ' + chartC.orangeNotes[n];
+          html += '</div>';
+        }
+      }
+      for (var n = 0; n < chartC.greenNotes.length; n++) {
+        if (chartC.greenNotes[n]) {
+          html += '<div class="chain-note chain-note-green" title="This spell upgrades a lower-rank option — see notes">';
+          html += '<span class="chain-note-icon">◆</span> ' + chartC.greenNotes[n];
+          html += '</div>';
+        }
+      }
     }
     html += '</td>';
 
@@ -630,13 +727,15 @@
   function buildTableHeader(isSearch) {
     var html = '<table class="spell-table"><thead><tr>';
     if (isSearch) {
-      html += '<th>Spell</th><th>Rank</th><th>Action</th><th>Tags</th><th>Notes</th>';
+      html += '<th>Spell</th><th>Native Rank</th><th>Action</th><th>Tags</th><th>Notes</th>';
     } else {
       var starActive = window.SpellFilters.columnStarredOnly ? ' active' : '';
       html += '<th class="sortable-header" data-sort-col="name"><span class="col-label">Spell</span>' + sortIndicator('name') + colFilterIcon('name') + ' <span class="col-filter-icon star-toggle' + starActive + '" data-col-filter="starred" title="Show only starred (Mathfinder-reviewed) spells">&#9733;</span></th>';
-      html += '<th class="sortable-header" data-sort-col="rank"><span class="col-label">Rank</span>' + sortIndicator('rank') + colFilterIcon('rank') + '</th>';
+      html += '<th class="sortable-header" data-sort-col="rank"><span class="col-label">Native Rank</span>' + sortIndicator('rank') + colFilterIcon('rank') + '</th>';
+      html += '<th data-col="heighten"><span class="col-label">Heightens At</span></th>';
       html += '<th class="sortable-header" data-sort-col="action"><span class="col-label">Action</span>' + sortIndicator('action') + colFilterIcon('action') + '</th>';
       html += '<th data-col="tags"><span class="col-label">Tags</span> <span class="info-bubble" title="Tag filtering is available in the sidebar. Turn on Filter Mode to use coverage tags as filters, or use Trait Filters below for PF2e spell traits.">ⓘ</span></th>';
+      html += '<th data-col="indicators"><span class="col-label">Quality</span></th>';
       html += '<th data-col="notes"><span class="col-label">Notes</span></th>';
     }
     html += '</tr></thead><tbody>';
@@ -826,6 +925,8 @@
     if (f.columnRankFilter && f.columnRankFilter.length > 0) return true;
     if (f.columnActionFilter && f.columnActionFilter.length > 0) return true;
     if (f.columnStarredOnly) return true;
+    if (f.hideParked) return true;
+    if (f.indicatorFilter) return true;
     return false;
   }
 
@@ -885,6 +986,13 @@
     }
     if (f.columnStarredOnly) {
       colChips.push({ kind: 'col-starred', label: '★ only', neg: false });
+    }
+    if (f.hideParked) {
+      colChips.push({ kind: 'hide-parked', label: 'Hiding parked spells', neg: false });
+    }
+    if (f.indicatorFilter) {
+      var iLabels = { green: '▲ Green only', orange: '◆ Orange only', grey: '△ Grey only' };
+      colChips.push({ kind: 'indicator', label: iLabels[f.indicatorFilter] || f.indicatorFilter, neg: false });
     }
 
     var html = '<span class="afb-label">Active filters:</span>';
@@ -952,6 +1060,16 @@
       f.columnActionFilter = null;
     } else if (kind === 'col-starred') {
       f.columnStarredOnly = false;
+    } else if (kind === 'hide-parked') {
+      f.hideParked = false;
+      var btns = document.querySelectorAll('.hf-btn[data-hf="parked"]');
+      for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+    } else if (kind === 'indicator') {
+      f.indicatorFilter = null;
+      var btns = document.querySelectorAll('.hf-btn');
+      for (var i = 0; i < btns.length; i++) {
+        if (btns[i].dataset.hf !== 'parked') btns[i].classList.remove('active');
+      }
     }
   }
 
@@ -967,6 +1085,8 @@
     f.columnRankFilter = null;
     f.columnActionFilter = null;
     f.columnStarredOnly = false;
+    f.hideParked = false;
+    f.indicatorFilter = null;
 
     // Reflect rarity buttons
     var rb = document.querySelectorAll('.rarity-btn');
@@ -980,6 +1100,9 @@
     // Sidebar pill visuals
     if (window.Coverage && Coverage.clearAllSidebarFilterStates) Coverage.clearAllSidebarFilterStates();
     if (window.Coverage && Coverage.updateTraitPillVisuals) Coverage.updateTraitPillVisuals();
+    // Heighten filter buttons
+    var hfBtns = document.querySelectorAll('.hf-btn');
+    for (var i = 0; i < hfBtns.length; i++) hfBtns[i].classList.remove('active');
   }
 
   // ── Re-render current view ──
@@ -1129,7 +1252,9 @@
       }
       browser.dataset.built = 'true';
 
-      var html = '<div class="browser-role-tabs" id="roleTabs-' + tradition + '">';
+      // B2 — Slot context header
+      var html = '<div class="slot-context-header" id="slotHeader-' + tradition + '" style="display:none;"></div>';
+      html += '<div class="browser-role-tabs" id="roleTabs-' + tradition + '">';
       for (var i = 0; i < roleOrder.length; i++) {
         var role = roleOrder[i];
         var active = role === currentRole[tradition] ? ' active' : '';
@@ -1143,6 +1268,15 @@
 
       // Cycle 22 — Active filter summary bar (hidden when no filters active)
       html += '<div class="active-filter-bar" id="activeFilterBar-' + tradition + '" style="display:none;"></div>';
+
+      // B9 — Heightening display filters
+      html += '<div class="heighten-filters" id="heightenFilters-' + tradition + '">';
+      html += '<span class="hf-label">Show:</span>';
+      html += '<button type="button" class="hf-btn" data-hf="green" title="Show only spells with green indicators (scales well / upgrade from)">▲ Green</button>';
+      html += '<button type="button" class="hf-btn" data-hf="orange" title="Show only spells with orange indicators (stronger option exists)">◆ Orange</button>';
+      html += '<button type="button" class="hf-btn" data-hf="grey" title="Show only spells with grey indicators (no heightening)">△ Grey</button>';
+      html += '<button type="button" class="hf-btn" data-hf="parked" title="Hide spells parked above their native rank">Hide Parked</button>';
+      html += '</div>';
 
       // Search UI (hidden by default)
       html += '<div class="search-ui" id="searchUI-' + tradition + '" style="display:none;">';
@@ -1220,6 +1354,34 @@
         Browser.assignSpell(tradition, list[idx]);
       });
 
+      // Cycle 24 — Heightening filter buttons
+      var hfBar = document.getElementById('heightenFilters-' + tradition);
+      if (hfBar) {
+        hfBar.addEventListener('click', function(e) {
+          var btn = e.target.closest('.hf-btn');
+          if (!btn) return;
+          var hf = btn.dataset.hf;
+          var f = window.SpellFilters;
+          if (hf === 'parked') {
+            f.hideParked = !f.hideParked;
+            btn.classList.toggle('active', f.hideParked);
+          } else {
+            if (f.indicatorFilter === hf) {
+              f.indicatorFilter = null;
+              btn.classList.remove('active');
+            } else {
+              f.indicatorFilter = hf;
+              var sibs = hfBar.querySelectorAll('.hf-btn');
+              for (var i = 0; i < sibs.length; i++) {
+                if (sibs[i].dataset.hf !== 'parked') sibs[i].classList.remove('active');
+              }
+              btn.classList.add('active');
+            }
+          }
+          reRenderCurrentView(tradition);
+        });
+      }
+
       // Cycle 22 — Active filter bar interactions
       var bar = document.getElementById('activeFilterBar-' + tradition);
       if (bar) {
@@ -1270,12 +1432,14 @@
 
       this.updateRoleTabs(tradition);
 
-      // Hide search UI, show advice
+      // Hide search UI, show advice + heighten filters
       var searchUI = document.getElementById('searchUI-' + tradition);
       if (searchUI) searchUI.style.display = 'none';
       hideFilterNotice(tradition);
       var adviceEl = document.getElementById('advice-' + tradition);
       if (adviceEl) adviceEl.style.display = '';
+      var hfEl = document.getElementById('heightenFilters-' + tradition);
+      if (hfEl) hfEl.style.display = '';
 
       // Reset search state when leaving search tab
       if (wasSearch) {
@@ -1297,6 +1461,12 @@
       window.SpellFilters.sortColumn = null;
       window.SpellFilters.sortDirection = null;
       window.SpellFilters.searchFiltersDisabled = false;
+
+      // Hide slot header + heighten filters
+      var slotHeaderEl = document.getElementById('slotHeader-' + tradition);
+      if (slotHeaderEl) slotHeaderEl.style.display = 'none';
+      var hfEl = document.getElementById('heightenFilters-' + tradition);
+      if (hfEl) hfEl.style.display = 'none';
 
       this.updateRoleTabs(tradition);
 
@@ -1352,6 +1522,17 @@
 
     renderSpells: function(tradition, level, rank) {
       var role = currentRole[tradition] || 'damage';
+
+      // B2 — Slot context header
+      var slotHeaderEl = document.getElementById('slotHeader-' + tradition);
+      if (slotHeaderEl) {
+        var tier = App.getTier(level, rank);
+        var tierLabel = tier.charAt(0).toUpperCase() + tier.slice(1);
+        var tradLabel = tradition.charAt(0).toUpperCase() + tradition.slice(1);
+        slotHeaderEl.textContent = 'Spell Options for ' + tradLabel + ' Rank ' + rank + ' ' + tierLabel + ' Tier Slot';
+        slotHeaderEl.style.display = '';
+      }
+
       var adviceEl = document.getElementById('advice-' + tradition);
       if (adviceEl) {
         adviceEl.style.display = '';
@@ -1380,12 +1561,43 @@
 
       var meta = filterSpells(tradition, role, rank, { withMeta: true });
       var spells = meta.results;
+
+      // B9 — Apply heightening filters
+      var f = window.SpellFilters;
+      if (f.hideParked || f.indicatorFilter) {
+        var filtered = [];
+        for (var i = 0; i < spells.length; i++) {
+          var sp = spells[i];
+          if (f.hideParked) {
+            var ca = evaluateChartA(sp, rank);
+            if (ca.parked) continue;
+          }
+          if (f.indicatorFilter) {
+            var match = false;
+            if (f.indicatorFilter === 'green') {
+              var cb = evaluateChartB(sp);
+              if (cb.indicator === 'green') match = true;
+              var cc = evaluateChartC(sp, rank);
+              if (cc.greenNotes.length > 0) match = true;
+            } else if (f.indicatorFilter === 'orange') {
+              var cc = evaluateChartC(sp, rank);
+              if (cc.orangeNotes.length > 0) match = true;
+            } else if (f.indicatorFilter === 'grey') {
+              var cb = evaluateChartB(sp);
+              if (cb.indicator === 'grey') match = true;
+            }
+            if (!match) continue;
+          }
+          filtered.push(sp);
+        }
+        spells = filtered;
+      }
+
       renderedSpells[tradition] = spells;
 
       renderActiveFilterBar(tradition);
 
       if (spells.length === 0) {
-        // Distinguish: filters cause vs base empty
         if (meta.baseCount > 0) {
           tableEl.innerHTML = '<div class="no-results-msg">No spells match your current filters. <a href="#" class="clear-filters-link" data-action="clear-all">Clear all filters</a></div>';
           var link = tableEl.querySelector('.clear-filters-link');
@@ -1405,7 +1617,7 @@
       var html = buildTableHeader(false);
 
       for (var i = 0; i < spells.length; i++) {
-        html += renderSpellRow(spells[i], i);
+        html += renderSpellRow(spells[i], i, { slotRank: rank });
       }
 
       html += '</tbody></table>';

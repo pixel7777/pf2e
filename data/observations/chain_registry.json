@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "generated": "2026-05-05",
   "chain_count": 7,
-  "pair_count": 7,
+  "pair_count": 4,
   "chains": {
     "sustained_damage": {
       "function": "Sustained single-target fire damage",
@@ -44,6 +44,12 @@
           "spell": "Slow",
           "aon_id": 1677,
           "from_rank": 3,
+          "to_rank": null
+        },
+        {
+          "spell": "Containment",
+          "aon_id": 1981,
+          "from_rank": 4,
           "to_rank": null
         }
       ]
@@ -100,9 +106,21 @@
       "source": "Elemental Sorcerer Blaster Guide.md",
       "progression": [
         {
+          "spell": "Breathe Fire",
+          "aon_id": 1457,
+          "from_rank": 1,
+          "to_rank": 3
+        },
+        {
           "spell": "Fireball",
           "aon_id": 1530,
           "from_rank": 3,
+          "to_rank": 6
+        },
+        {
+          "spell": "Chain Lightning",
+          "aon_id": 1462,
+          "from_rank": 6,
           "to_rank": 7
         },
         {
@@ -120,6 +138,12 @@
       ],
       "source": "Elemental Sorcerer Blaster Guide.md",
       "progression": [
+        {
+          "spell": "Breathe Fire",
+          "aon_id": 1457,
+          "from_rank": 1,
+          "to_rank": 3
+        },
         {
           "spell": "Cave Fangs",
           "aon_id": 1329,
@@ -205,36 +229,70 @@
       "at_rank": 6,
       "source": "How to Blast GOOD in Pathfinder 2e.md",
       "reason": "Missed Cue is a higher-rank Will-targeting blast upgrade."
+    }
+  ],
+  "advisory_text": {
+    "replaced_by": {
+      "2341:1677": "Slow delivers Slowed 1 (Fort) at R3 with multi target at R6, outperforming heightened Agitate for action denial.",
+      "1451:1555": "Heroism at R3+ gives more bonuses and heightens for a single target. Bless doesn't heighten, but covers more party members.",
+      "1457:1530": "Fireball at R3 delivers equal damage (6d6) in a 20-ft burst vs Breathe Fire's 15-ft cone. Better area, same scaling.",
+      "1457:1329": "Cave Fangs at R3 delivers 6d6 piercing in a 20-ft burst with difficult terrain, vs Breathe Fire's 15-ft cone fire. Better area and terrain control.",
+      "1329:1559": "Howling Blizzard at R5 delivers stronger AoE burst damage (Reflex) in the Primal tradition.",
+      "1462:1508": "Eclipse Burst delivers stronger burst damage at R7+ with mental+fire damage and a Blinded rider on crit fail.",
+      "1466:1661": "Scouting Eye at R5 provides mobile scrying — you can move the sensor, unlike Clairvoyance's fixed point.",
+      "1503:1665": "Sending at R5 provides instant cross-planar communication vs Dream Message's overnight delay.",
+      "1524:665": "For single targets, Agonizing Despair is stronger at R3+. But, Fear becomes multi-target at R3 (doesn't scale beyond R3).",
+      "1530:1462": "Chain Lightning at R6 deals 8d12 electricity to chained targets — higher average damage than heightened Fireball with flexible multi-target selection.",
+      "1533:1350": "Cinder Swarm at R4+ scales better for sustained fire damage and adds Dazzled/Blinded riders (Fort).",
+      "1559:1508": "Eclipse Burst delivers stronger burst damage at R7+ with a Blinded rider on crit fail.",
+      "1677:1981": "Containment at R4+ offers Reflex-targeting action denial for a single target. Slow becomes multitarget at R6. Consider both for Fort/Will and ST/Multi defense targeting variety.",
+      "1724:1720": "Teleport provides superior range at R6+.",
+      "1742:2449": "Missed Cue (Rare) is a stronger Will-targeting blast at R6+, adding Slowed alongside Frightened.",
+      "2:1436": "Acid Grip (remaster) at R2+ targets Reflex instead of AC and adds forced movement alongside sustained acid damage."
+    },
+    "replaces": {
+      "1677:2341": "Upgrade from Agitate — native Slow outperforms heightened Agitate for action denial. Great at R6 for Multi targeting.",
+      "1555:1451": "Upgrade from Bless — broader status bonus package for a single target (+1 to attacks, Perception, saves, skills).",
+      "1530:1457": "Upgrade from Breathe Fire — 20-ft burst replaces 15-ft cone at equal damage and scaling.",
+      "1329:1457": "Upgrade from Breathe Fire — 20-ft burst with difficult terrain replaces 15-ft cone at equal damage scaling.",
+      "1559:1329": "Upgrade from Cave Fangs — stronger AoE burst in the Primal tradition.",
+      "1462:1530": "Upgrade from Fireball — higher damage ceiling (8d12) with chain targeting instead of a fixed burst area.",
+      "1661:1466": "Upgrade from Clairvoyance — mobile scrying sensor.",
+      "1665:1503": "Upgrade from Dream Message — instant communication, no overnight delay.",
+      "665:1524": "Upgrade from Fear for single targets and adds heightening damage to the debuff — but consider Fear at R6 for Multi target.",
+      "1508:1462": "Upgrade from Chain Lightning — mental+fire damage with Blinded rider on crit fail.",
+      "1508:1559": "Upgrade from Howling Blizzard — stronger burst damage with Blinded rider.",
+      "1350:1533": "Upgrade from Floating Flame — better sustained damage scaling with Dazzled/Blinded riders.",
+      "1981:1677": "Upgrade from Slow — Reflex-targeting action denial. But consider Slow at R6 for Multi targeting.",
+      "1720:1724": "Upgrade from Translocate — removes range limitations for long-distance travel.",
+      "2449:1742": "Upgrade from Vision of Death — stronger Will blast, adds Slowed to Frightened.",
+      "1436:2": "Remaster replacement for Acid Arrow — Reflex targeting with forced movement."
+    }
+  },
+  "editorial_observations": [
+    {
+      "aon_id": 927,
+      "name": "Horizon Thunder Sphere",
+      "source": "Editorial (C24)",
+      "observation": "Both R1 electricity spells. HTS deals more raw damage but requires an attack roll; Thunderstrike uses a Reflex save. Choose based on your accuracy vs reliability preference."
     },
     {
-      "spell_a": "Revealing Light",
-      "spell_a_aon_id": 1653,
-      "spell_b": "Ignite Fireworks",
-      "spell_b_aon_id": 928,
-      "relationship": "competes_with",
-      "at_rank": null,
-      "source": "Mathfinders Blaster Caster RUBRIC.md",
-      "reason": "Competing rank 2 options for Dazzled delivery -- different damage types and AoE shapes."
+      "aon_id": 1721,
+      "name": "Thunderstrike",
+      "source": "Editorial (C24)",
+      "observation": "Both R1 electricity spells. HTS deals more raw damage but requires an attack roll; Thunderstrike uses a Reflex save. Choose based on your accuracy vs reliability preference."
     },
     {
-      "spell_a": "Thunderstrike",
-      "spell_a_aon_id": 1721,
-      "spell_b": "Horizon Thunder Sphere",
-      "spell_b_aon_id": 927,
-      "relationship": "competes_with",
-      "at_rank": null,
-      "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
-      "reason": "Both rank 1 electricity spells. HTS outclasses Thunderstrike on raw damage but requires attack roll vs save."
+      "aon_id": 1653,
+      "name": "Revealing Light",
+      "source": "Editorial (C24)",
+      "observation": "Both R2 Dazzled delivery, but Revealing Light doesn't scale (keep in low rank to reveal invisible enemies). Ignite Fireworks adds scaling & persistent damage at the expense of duration & not revealing invisible enemies."
     },
     {
-      "spell_a": "Slow",
-      "spell_a_aon_id": 1677,
-      "spell_b": "Containment",
-      "spell_b_aon_id": 1981,
-      "relationship": "outclassed_by",
-      "at_rank": 4,
-      "source": "Pathfinder 2e Spellcaster MYTHS - ALWAYS Assume Enemies Will Succeed.md",
-      "reason": "Containment is better than Slow in multi-target contexts, but both are kept for defense variety (Fort vs Ref)."
+      "aon_id": 928,
+      "name": "Ignite Fireworks",
+      "source": "Editorial (C24)",
+      "observation": "Both R2 Dazzled delivery, but Revealing Light doesn't scale (keep in low rank to reveal invisible enemies). Ignite Fireworks adds scaling & persistent damage at the expense of duration & not revealing invisible enemies."
     }
   ]
 }

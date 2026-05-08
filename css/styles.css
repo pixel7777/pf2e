@@ -2334,3 +2334,111 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
   color: var(--accent-header);
 }
 
+/* ═══════════════════════════════════════════════════════════
+   Cycle 24 — Heightening Display
+   ═══════════════════════════════════════════════════════════ */
+
+/* B2 — Slot context header */
+.slot-context-header {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent-header);
+  letter-spacing: 0.08em;
+  text-align: center;
+  padding: 0.5rem 0 0.2rem;
+}
+
+/* B4 — Heightens At column */
+.heighten-cell {
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+.heighten-cell.parked {
+  color: var(--text-tertiary);
+  opacity: 0.55;
+}
+
+/* Parked row — subtle grey-out */
+.parked-row td {
+  opacity: 0.6;
+}
+.parked-row:hover td {
+  opacity: 0.85;
+}
+
+/* B6/B10 — Quality indicators */
+.indicator-cell {
+  text-align: center;
+  width: 2.5rem;
+}
+.indicator-icon {
+  font-size: 14px;
+  cursor: help;
+}
+.indicator-green {
+  color: #1a7a3a;
+}
+.indicator-grey {
+  color: #999;
+}
+
+/* B7/B8 — Chain advisory notes in Notes column */
+.chain-note {
+  font-size: 0.82rem;
+  line-height: 1.35;
+  margin-top: 3px;
+  padding: 2px 0;
+}
+.chain-note-icon {
+  font-size: 10px;
+}
+.chain-note-orange {
+  color: #b05a1a;
+}
+.chain-note-orange .chain-note-icon {
+  color: #d47a2a;
+}
+.chain-note-green {
+  color: #0f6e56;
+}
+.chain-note-green .chain-note-icon {
+  color: #1a9a6a;
+}
+
+/* B9 — Heightening filter bar */
+.heighten-filters {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0;
+  margin-bottom: 0.2rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+}
+.hf-label {
+  color: var(--text-tertiary);
+  font-size: 11px;
+  margin-right: 0.2rem;
+}
+.hf-btn {
+  border: 1px solid var(--border-panel);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  border-radius: 4px;
+  padding: 2px 8px;
+  cursor: pointer;
+  font-size: 11px;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.15s, border-color 0.15s;
+}
+.hf-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-nav-active);
+}
+.hf-btn.active {
+  background: var(--accent-nav-active);
+  color: #fff;
+  border-color: var(--accent-nav-active);
+}
+

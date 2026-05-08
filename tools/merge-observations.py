@@ -157,6 +157,19 @@ def build_chain_data(chain_registry):
                 "reason": reason,
             })
 
+    # Stamp advisory_text onto entries (Cycle 24)
+    adv = chain_registry.get("advisory_text", {})
+    replaced_by_text = adv.get("replaced_by", {})
+    replaces_text = adv.get("replaces", {})
+
+    for sid, data in result.items():
+        for entry in data["replaced_by"]:
+            key = f"{sid}:{entry['aon_id']}"
+            entry["advisory_text"] = replaced_by_text.get(key, "")
+        for entry in data["replaces"]:
+            key = f"{sid}:{entry['aon_id']}"
+            entry["advisory_text"] = replaces_text.get(key, "")
+
     return result
 
 
@@ -279,6 +292,26 @@ def main():
         else:
             spell["replaced_by"] = []
             spell["replaces"] = []
+
+    # Append editorial observations from chain registry (Cycle 24 — A3)
+    editorial_obs = []
+    if chain_registry:
+        editorial_obs = chain_registry.get("editorial_observations", [])
+    if editorial_obs:
+        eo_applied = 0
+        for eo in editorial_obs:
+            eo_aon = str(eo["aon_id"])
+            for spell in spells:
+                if str(spell["aonId"]) == eo_aon:
+                    if not spell["mathfinder_observations"]:
+                        spell["mathfinder_observations"] = []
+                    spell["mathfinder_observations"].append({
+                        "source": eo["source"],
+                        "observation": eo["observation"],
+                    })
+                    eo_applied += 1
+                    break
+        print(f"  Editorial observations appended: {eo_applied}")
 
     # Write
     write_spell_data(args.spell_data, schema)

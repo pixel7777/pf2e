@@ -395,7 +395,7 @@
   {
     "aonId": 2344,
     "name": "Befuddle",
-    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet. | Cycle 24 (A1): Reclassified from no-heighten to scaling-irrelevant — silver bullet value is situation-solving, not scaling.",
     "overrides": {
       "roles": [
         "debuff",
@@ -403,13 +403,14 @@
       ],
       "special_tags": [
         "Silver Bullet"
-      ]
+      ],
+      "heighten_quality": "scaling-irrelevant"
     }
   },
   {
     "aonId": 1458,
     "name": "Calm",
-    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet. | Cycle 24 (A1): Reclassified from no-heighten to scaling-irrelevant — silver bullet value is situation-solving, not scaling.",
     "overrides": {
       "roles": [
         "control",
@@ -417,13 +418,14 @@
       ],
       "special_tags": [
         "Silver Bullet"
-      ]
+      ],
+      "heighten_quality": "scaling-irrelevant"
     }
   },
   {
     "aonId": 2345,
     "name": "Benediction",
-    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet. | Cycle 24 (A1): Reclassified from no-heighten to scaling-irrelevant — silver bullet value is situation-solving, not scaling.",
     "overrides": {
       "roles": [
         "buff",
@@ -431,7 +433,8 @@
       ],
       "special_tags": [
         "Silver Bullet"
-      ]
+      ],
+      "heighten_quality": "scaling-irrelevant"
     }
   },
   {
@@ -453,7 +456,7 @@
   {
     "aonId": 1438,
     "name": "Air Bubble",
-    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet. | Cycle 24 (A1): Reclassified from no-heighten to scaling-irrelevant — silver bullet value is situation-solving, not scaling.",
     "overrides": {
       "roles": [
         "reactions",
@@ -462,13 +465,14 @@
       ],
       "special_tags": [
         "Silver Bullet"
-      ]
+      ],
+      "heighten_quality": "scaling-irrelevant"
     }
   },
   {
     "aonId": 1506,
     "name": "Earthbind",
-    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-flight silver bullet. Cycle 23 update (2026-05-07): override now preserves natural control role in addition to silverBullets — replacing instead of augmenting the role list lost the control classification, which is also valid for the spell.",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-flight silver bullet. Cycle 23 update (2026-05-07): override now preserves natural control role in addition to silverBullets — replacing instead of augmenting the role list lost the control classification, which is also valid for the spell. | Cycle 24 (A1): Reclassified from no-heighten to scaling-irrelevant — silver bullet value is situation-solving, not scaling.",
     "overrides": {
       "roles": [
         "control",
@@ -476,13 +480,14 @@
       ],
       "special_tags": [
         "Silver Bullet"
-      ]
+      ],
+      "heighten_quality": "scaling-irrelevant"
     }
   },
   {
     "aonId": 1653,
     "name": "Revealing Light",
-    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-invisibility silver bullet. Preserves populator-derived debuff role.",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-invisibility silver bullet. Preserves populator-derived debuff role. | Cycle 24 (A1): Reclassified from no-heighten to scaling-irrelevant — silver bullet value is situation-solving, not scaling.",
     "overrides": {
       "roles": [
         "debuff",
@@ -490,13 +495,14 @@
       ],
       "special_tags": [
         "Silver Bullet"
-      ]
+      ],
+      "heighten_quality": "scaling-irrelevant"
     }
   },
   {
     "aonId": 1583,
     "name": "Laughing Fit",
-    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet. Preserves populator-derived debuff role.",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet. Preserves populator-derived debuff role. | Cycle 24 (A1): Reclassified from no-heighten to scaling-irrelevant — silver bullet value is situation-solving, not scaling.",
     "overrides": {
       "roles": [
         "debuff",
@@ -504,7 +510,8 @@
       ],
       "special_tags": [
         "Silver Bullet"
-      ]
+      ],
+      "heighten_quality": "scaling-irrelevant"
     }
   },
   {
@@ -609,14 +616,15 @@
   {
     "aonId": 958,
     "name": "Nullify",
-    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-magic silver bullet.",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-magic silver bullet. | Cycle 24 (A1): Reclassified from no-heighten to scaling-irrelevant — silver bullet value is situation-solving, not scaling.",
     "overrides": {
       "roles": [
         "silverBullets"
       ],
       "special_tags": [
         "Silver Bullet"
-      ]
+      ],
+      "heighten_quality": "scaling-irrelevant"
     }
   },
   {
@@ -803,6 +811,61 @@
         "Success-effect"
       ],
       "heighten_quality": "no-heighten"
+    }
+  },
+  {
+    "aonId": 866,
+    "name": "Bandit's Doom",
+    "reason": "Cycle 24 (A2): D020 Category 8 spot-check fix. Missing targeting_tags, defense_tags, damage_types, reliability_tags.",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "defense_tags": [
+        "Will"
+      ],
+      "damage_types": [
+        "Mental"
+      ],
+      "reliability_tags": [
+        "basic_save",
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 694,
+    "name": "Heat Metal",
+    "reason": "Cycle 24 (A2): D020 Category 8 spot-check fix. Missing damage role alongside debuff.",
+    "overrides": {
+      "roles": [
+        "damage",
+        "debuff"
+      ]
+    }
+  },
+  {
+    "aonId": 1595,
+    "name": "Mask of Terror",
+    "reason": "Cycle 24 (A2): D020 Category 8 spot-check fix. Missing targeting_tags, defense_tags, conditions fields.",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "defense_tags": [
+        "Will"
+      ],
+      "conditions_imposed": [
+        "Frightened"
+      ],
+      "conditions_by_outcome": {
+        "failure": [
+          "Frightened"
+        ],
+        "critical_failure": [
+          "Frightened"
+        ]
+      }
     }
   }
 ]
