@@ -619,7 +619,6 @@
     var chartA = slotRank ? evaluateChartA(spell, slotRank) : null;
     var rowCls = isLegacy ? ' legacy-row' : '';
     if (spell.mathfinder_reviewed) rowCls += ' mathfinder-row';
-    if (chartA && chartA.parked) rowCls += ' parked-row';
     var html = '<tr data-spell-idx="' + idx + '" style="cursor:pointer;" class="' + rowCls + '">';
 
     // Spell name with star/spacer
@@ -644,10 +643,18 @@
     // Native Rank
     html += '<td>' + spell.native_rank + '</td>';
 
-    // Heightens At (only in role view with slot context)
+    // Heightens At + quality indicator (only in role view with slot context)
     if (slotRank) {
       var haCls = (chartA && chartA.parked) ? ' class="heighten-cell parked"' : ' class="heighten-cell"';
-      html += '<td' + haCls + '>' + (chartA ? chartA.content : '—') + '</td>';
+      var haContent = chartA ? chartA.content : '—';
+      var chartB = evaluateChartB(spell);
+      var indicatorHtml = '';
+      if (chartB.indicator === 'green') {
+        indicatorHtml = ' <span class="indicator-icon indicator-green" title="' + chartB.tooltip + '">▲</span>';
+      } else if (chartB.indicator === 'grey') {
+        indicatorHtml = ' <span class="indicator-icon indicator-grey" title="' + chartB.tooltip + '">△</span>';
+      }
+      html += '<td' + haCls + '>' + haContent + indicatorHtml + '</td>';
     }
 
     // Action
@@ -655,18 +662,6 @@
 
     // Tags
     html += '<td>' + renderTags(spell) + '</td>';
-
-    // Indicators (Chart B + Chart C)
-    if (slotRank) {
-      var chartB = evaluateChartB(spell);
-      html += '<td class="indicator-cell">';
-      if (chartB.indicator === 'green') {
-        html += '<span class="indicator-icon indicator-green" title="' + chartB.tooltip + '">▲</span>';
-      } else if (chartB.indicator === 'grey') {
-        html += '<span class="indicator-icon indicator-grey" title="' + chartB.tooltip + '">△</span>';
-      }
-      html += '</td>';
-    }
 
     // Notes — video link + silver bullet + Chart C advisory text
     html += '<td class="spell-notes">';
@@ -720,6 +715,7 @@
     else if (col === 'rank') active = !!(f.columnRankFilter && f.columnRankFilter.length > 0);
     else if (col === 'action') active = !!(f.columnActionFilter && f.columnActionFilter.length > 0);
     else if (col === 'starred') active = !!f.columnStarredOnly;
+    else if (col === 'heighten') active = !!(f.hideParked || f.indicatorFilter);
     var cls = 'col-filter-icon' + (active ? ' active' : '');
     return ' <button type="button" class="' + cls + '" data-col-filter="' + col + '" title="Filter this column" aria-label="Filter column">' + FUNNEL_SVG + '</button>';
   }
@@ -732,10 +728,9 @@
       var starActive = window.SpellFilters.columnStarredOnly ? ' active' : '';
       html += '<th class="sortable-header" data-sort-col="name"><span class="col-label">Spell</span>' + sortIndicator('name') + colFilterIcon('name') + ' <span class="col-filter-icon star-toggle' + starActive + '" data-col-filter="starred" title="Show only starred (Mathfinder-reviewed) spells">&#9733;</span></th>';
       html += '<th class="sortable-header" data-sort-col="rank"><span class="col-label">Native Rank</span>' + sortIndicator('rank') + colFilterIcon('rank') + '</th>';
-      html += '<th data-col="heighten"><span class="col-label">Heightens At</span></th>';
+      html += '<th data-col="heighten"><span class="col-label">Heightens At</span>' + colFilterIcon('heighten') + '</th>';
       html += '<th class="sortable-header" data-sort-col="action"><span class="col-label">Action</span>' + sortIndicator('action') + colFilterIcon('action') + '</th>';
       html += '<th data-col="tags"><span class="col-label">Tags</span> <span class="info-bubble" title="Tag filtering is available in the sidebar. Turn on Filter Mode to use coverage tags as filters, or use Trait Filters below for PF2e spell traits.">ⓘ</span></th>';
-      html += '<th data-col="indicators"><span class="col-label">Quality</span></th>';
       html += '<th data-col="notes"><span class="col-label">Notes</span></th>';
     }
     html += '</tr></thead><tbody>';
@@ -810,6 +805,23 @@
         html += '<label class="cfd-check"><input type="checkbox" data-val="' + v + '"' + (c ? ' checked' : '') + '> ' + labels[v] + '</label>';
       }
       html += '</div>';
+    } else if (col === 'heighten') {
+      var hOpts = [
+        { val: 'green', label: '▲ Scales well / breakpoints', checked: f.indicatorFilter === 'green' },
+        { val: 'orange', label: '◆ Stronger option exists', checked: f.indicatorFilter === 'orange' },
+        { val: 'grey', label: '△ No heightening', checked: f.indicatorFilter === 'grey' }
+      ];
+      html += '<div class="cfd-info">Filter by heightening quality or hide parked spells.</div>';
+      html += '<div class="cfd-checks">';
+      for (var i = 0; i < hOpts.length; i++) {
+        html += '<label class="cfd-check"><input type="radio" name="hf-indicator" data-val="' + hOpts[i].val + '"' + (hOpts[i].checked ? ' checked' : '') + '> ' + hOpts[i].label + '</label>';
+      }
+      html += '<label class="cfd-check"><input type="radio" name="hf-indicator" data-val="none"' + (!f.indicatorFilter ? ' checked' : '') + '> Show all</label>';
+      html += '</div>';
+      html += '<hr class="cfd-divider">';
+      html += '<div class="cfd-checks">';
+      html += '<label class="cfd-check"><input type="checkbox" data-val="hideParked"' + (f.hideParked ? ' checked' : '') + '> Hide parked spells</label>';
+      html += '</div>';
     }
 
     dropdown.innerHTML = html;
@@ -867,6 +879,22 @@
             checks[i].checked = (action === 'select-all');
           }
           readChecks();
+        });
+      }
+    } else if (col === 'heighten') {
+      var radios = dropdown.querySelectorAll('input[name="hf-indicator"]');
+      for (var i = 0; i < radios.length; i++) {
+        radios[i].addEventListener('change', function() {
+          var val = this.dataset.val;
+          f.indicatorFilter = (val === 'none') ? null : val;
+          reRenderCurrentView(tradition);
+        });
+      }
+      var parkedCheck = dropdown.querySelector('input[data-val="hideParked"]');
+      if (parkedCheck) {
+        parkedCheck.addEventListener('change', function() {
+          f.hideParked = this.checked;
+          reRenderCurrentView(tradition);
         });
       }
     }
@@ -1062,14 +1090,8 @@
       f.columnStarredOnly = false;
     } else if (kind === 'hide-parked') {
       f.hideParked = false;
-      var btns = document.querySelectorAll('.hf-btn[data-hf="parked"]');
-      for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
     } else if (kind === 'indicator') {
       f.indicatorFilter = null;
-      var btns = document.querySelectorAll('.hf-btn');
-      for (var i = 0; i < btns.length; i++) {
-        if (btns[i].dataset.hf !== 'parked') btns[i].classList.remove('active');
-      }
     }
   }
 
@@ -1100,9 +1122,6 @@
     // Sidebar pill visuals
     if (window.Coverage && Coverage.clearAllSidebarFilterStates) Coverage.clearAllSidebarFilterStates();
     if (window.Coverage && Coverage.updateTraitPillVisuals) Coverage.updateTraitPillVisuals();
-    // Heighten filter buttons
-    var hfBtns = document.querySelectorAll('.hf-btn');
-    for (var i = 0; i < hfBtns.length; i++) hfBtns[i].classList.remove('active');
   }
 
   // ── Re-render current view ──
@@ -1269,15 +1288,6 @@
       // Cycle 22 — Active filter summary bar (hidden when no filters active)
       html += '<div class="active-filter-bar" id="activeFilterBar-' + tradition + '" style="display:none;"></div>';
 
-      // B9 — Heightening display filters
-      html += '<div class="heighten-filters" id="heightenFilters-' + tradition + '">';
-      html += '<span class="hf-label">Show:</span>';
-      html += '<button type="button" class="hf-btn" data-hf="green" title="Show only spells with green indicators (scales well / upgrade from)">▲ Green</button>';
-      html += '<button type="button" class="hf-btn" data-hf="orange" title="Show only spells with orange indicators (stronger option exists)">◆ Orange</button>';
-      html += '<button type="button" class="hf-btn" data-hf="grey" title="Show only spells with grey indicators (no heightening)">△ Grey</button>';
-      html += '<button type="button" class="hf-btn" data-hf="parked" title="Hide spells parked above their native rank">Hide Parked</button>';
-      html += '</div>';
-
       // Search UI (hidden by default)
       html += '<div class="search-ui" id="searchUI-' + tradition + '" style="display:none;">';
       html += '<input type="text" class="search-input" id="searchInput-' + tradition + '" placeholder="Search spells by name, description, traits...">';
@@ -1354,34 +1364,6 @@
         Browser.assignSpell(tradition, list[idx]);
       });
 
-      // Cycle 24 — Heightening filter buttons
-      var hfBar = document.getElementById('heightenFilters-' + tradition);
-      if (hfBar) {
-        hfBar.addEventListener('click', function(e) {
-          var btn = e.target.closest('.hf-btn');
-          if (!btn) return;
-          var hf = btn.dataset.hf;
-          var f = window.SpellFilters;
-          if (hf === 'parked') {
-            f.hideParked = !f.hideParked;
-            btn.classList.toggle('active', f.hideParked);
-          } else {
-            if (f.indicatorFilter === hf) {
-              f.indicatorFilter = null;
-              btn.classList.remove('active');
-            } else {
-              f.indicatorFilter = hf;
-              var sibs = hfBar.querySelectorAll('.hf-btn');
-              for (var i = 0; i < sibs.length; i++) {
-                if (sibs[i].dataset.hf !== 'parked') sibs[i].classList.remove('active');
-              }
-              btn.classList.add('active');
-            }
-          }
-          reRenderCurrentView(tradition);
-        });
-      }
-
       // Cycle 22 — Active filter bar interactions
       var bar = document.getElementById('activeFilterBar-' + tradition);
       if (bar) {
@@ -1432,14 +1414,12 @@
 
       this.updateRoleTabs(tradition);
 
-      // Hide search UI, show advice + heighten filters
+      // Hide search UI, show advice
       var searchUI = document.getElementById('searchUI-' + tradition);
       if (searchUI) searchUI.style.display = 'none';
       hideFilterNotice(tradition);
       var adviceEl = document.getElementById('advice-' + tradition);
       if (adviceEl) adviceEl.style.display = '';
-      var hfEl = document.getElementById('heightenFilters-' + tradition);
-      if (hfEl) hfEl.style.display = '';
 
       // Reset search state when leaving search tab
       if (wasSearch) {
@@ -1462,11 +1442,9 @@
       window.SpellFilters.sortDirection = null;
       window.SpellFilters.searchFiltersDisabled = false;
 
-      // Hide slot header + heighten filters
+      // Hide slot header
       var slotHeaderEl = document.getElementById('slotHeader-' + tradition);
       if (slotHeaderEl) slotHeaderEl.style.display = 'none';
-      var hfEl = document.getElementById('heightenFilters-' + tradition);
-      if (hfEl) hfEl.style.display = 'none';
 
       this.updateRoleTabs(tradition);
 

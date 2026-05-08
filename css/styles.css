@@ -1280,13 +1280,7 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
   font-style: italic;
 }
 
-.spell-table tr.parked-row td {
-  opacity: 0.65;
-}
-
-.spell-table tr.parked-row .spell-name-link {
-  color: var(--text-secondary);
-}
+/* (parked-row styles removed in C24 feedback — only Heightens At cell is greyed) */
 
 /* ── BROWSER ADVICE ── */
 .browser-advice {
@@ -2359,28 +2353,25 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
   opacity: 0.55;
 }
 
-/* Parked row — subtle grey-out */
-.parked-row td {
-  opacity: 0.6;
-}
-.parked-row:hover td {
-  opacity: 0.85;
-}
-
-/* B6/B10 — Quality indicators */
-.indicator-cell {
-  text-align: center;
-  width: 2.5rem;
-}
+/* B6/B10 — Quality indicators (inline in Heightens At cell) */
 .indicator-icon {
-  font-size: 14px;
+  font-size: 13px;
   cursor: help;
+  margin-left: 4px;
+  vertical-align: middle;
 }
 .indicator-green {
   color: #1a7a3a;
 }
 .indicator-grey {
   color: #999;
+}
+
+/* Dropdown divider for heighten filter */
+.cfd-divider {
+  border: none;
+  border-top: 1px solid var(--border-panel);
+  margin: 6px 0;
 }
 
 /* B7/B8 — Chain advisory notes in Notes column */
@@ -2406,39 +2397,5 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
   color: #1a9a6a;
 }
 
-/* B9 — Heightening filter bar */
-.heighten-filters {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.3rem 0;
-  margin-bottom: 0.2rem;
-  font-family: 'Inter', sans-serif;
-  font-size: 12px;
-}
-.hf-label {
-  color: var(--text-tertiary);
-  font-size: 11px;
-  margin-right: 0.2rem;
-}
-.hf-btn {
-  border: 1px solid var(--border-panel);
-  background: var(--bg-card);
-  color: var(--text-secondary);
-  border-radius: 4px;
-  padding: 2px 8px;
-  cursor: pointer;
-  font-size: 11px;
-  font-family: 'Inter', sans-serif;
-  transition: background 0.15s, border-color 0.15s;
-}
-.hf-btn:hover {
-  background: var(--bg-hover);
-  border-color: var(--accent-nav-active);
-}
-.hf-btn.active {
-  background: var(--accent-nav-active);
-  color: #fff;
-  border-color: var(--accent-nav-active);
-}
+/* (B9 heightening filter bar removed — filters moved to column dropdown) */
 
