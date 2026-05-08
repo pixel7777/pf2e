@@ -588,17 +588,6 @@
     return { indicator: null, tooltip: null };
   }
 
-  // Lazy aon_id → spell lookup for chain-aware suppression
-  var _spellByAon = null;
-  function getSpellByAon(aonId) {
-    if (!_spellByAon) {
-      _spellByAon = {};
-      var all = getSpellSchemaSpells();
-      for (var i = 0; i < all.length; i++) _spellByAon[all[i].aonId] = all[i];
-    }
-    return _spellByAon[aonId] || null;
-  }
-
   function evaluateChartC(spell, slotRank) {
     var orangeNotes = [];
     var greenNotes = [];
@@ -606,18 +595,6 @@
       for (var i = 0; i < spell.replaced_by.length; i++) {
         var entry = spell.replaced_by[i];
         if (entry.at_rank != null && entry.at_rank <= slotRank) {
-          // Chain-aware suppression: skip if the replacement is itself replaced at this rank
-          var repl = getSpellByAon(entry.aon_id);
-          if (repl && repl.replaced_by) {
-            var suppressed = false;
-            for (var j = 0; j < repl.replaced_by.length; j++) {
-              if (repl.replaced_by[j].at_rank != null && repl.replaced_by[j].at_rank <= slotRank) {
-                suppressed = true;
-                break;
-              }
-            }
-            if (suppressed) continue;
-          }
           orangeNotes.push(entry.advisory_text || '');
         }
       }
