@@ -70,7 +70,7 @@
     columnStarredOnly: false,
     // Cycle 24 — heightening display filters
     hideParked: false,
-    indicatorFilter: null      // null = all, 'green', 'orange', 'grey'
+    indicatorFilter: null      // null = all, or array of allowed types: ['green','orange','grey']
   };
 
   // Defaults snapshot for "is filter active?" comparisons (Feature 3)
@@ -588,6 +588,17 @@
     return { indicator: null, tooltip: null };
   }
 
+  // Lazy aon_id → spell lookup for chain-aware suppression
+  var _spellByAon = null;
+  function getSpellByAon(aonId) {
+    if (!_spellByAon) {
+      _spellByAon = {};
+      var all = getSpellSchemaSpells();
+      for (var i = 0; i < all.length; i++) _spellByAon[all[i].aonId] = all[i];
+    }
+    return _spellByAon[aonId] || null;
+  }
+
   function evaluateChartC(spell, slotRank) {
     var orangeNotes = [];
     var greenNotes = [];
@@ -595,6 +606,18 @@
       for (var i = 0; i < spell.replaced_by.length; i++) {
         var entry = spell.replaced_by[i];
         if (entry.at_rank != null && entry.at_rank <= slotRank) {
+          // Chain-aware suppression: skip if the replacement is itself replaced at this rank
+          var repl = getSpellByAon(entry.aon_id);
+          if (repl && repl.replaced_by) {
+            var suppressed = false;
+            for (var j = 0; j < repl.replaced_by.length; j++) {
+              if (repl.replaced_by[j].at_rank != null && repl.replaced_by[j].at_rank <= slotRank) {
+                suppressed = true;
+                break;
+              }
+            }
+            if (suppressed) continue;
+          }
           orangeNotes.push(entry.advisory_text || '');
         }
       }
@@ -807,16 +830,18 @@
       html += '</div>';
     } else if (col === 'heighten') {
       var hOpts = [
-        { val: 'green', label: '▲ Scales well / breakpoints', checked: f.indicatorFilter === 'green' },
-        { val: 'orange', label: '◆ Stronger option exists', checked: f.indicatorFilter === 'orange' },
-        { val: 'grey', label: '△ No heightening', checked: f.indicatorFilter === 'grey' }
+        { val: 'green', label: '▲ Scales well / breakpoints' },
+        { val: 'orange', label: '◆ Stronger option exists' },
+        { val: 'grey', label: '△ No heightening' }
       ];
+      var selectedH = f.indicatorFilter;
       html += '<div class="cfd-info">Filter by heightening quality or hide parked spells.</div>';
+      html += '<div class="cfd-controls"><button type="button" class="cfd-btn" data-action="select-all">Select All</button><button type="button" class="cfd-btn" data-action="clear-all">Clear All</button></div>';
       html += '<div class="cfd-checks">';
       for (var i = 0; i < hOpts.length; i++) {
-        html += '<label class="cfd-check"><input type="radio" name="hf-indicator" data-val="' + hOpts[i].val + '"' + (hOpts[i].checked ? ' checked' : '') + '> ' + hOpts[i].label + '</label>';
+        var hChecked = !selectedH || selectedH.indexOf(hOpts[i].val) !== -1;
+        html += '<label class="cfd-check"><input type="checkbox" data-val="' + hOpts[i].val + '"' + (hChecked ? ' checked' : '') + '> ' + hOpts[i].label + '</label>';
       }
-      html += '<label class="cfd-check"><input type="radio" name="hf-indicator" data-val="none"' + (!f.indicatorFilter ? ' checked' : '') + '> Show all</label>';
       html += '</div>';
       html += '<hr class="cfd-divider">';
       html += '<div class="cfd-checks">';
@@ -882,12 +907,26 @@
         });
       }
     } else if (col === 'heighten') {
-      var radios = dropdown.querySelectorAll('input[name="hf-indicator"]');
-      for (var i = 0; i < radios.length; i++) {
-        radios[i].addEventListener('change', function() {
-          var val = this.dataset.val;
-          f.indicatorFilter = (val === 'none') ? null : val;
-          reRenderCurrentView(tradition);
+      var hChecks = dropdown.querySelectorAll('input[type="checkbox"]:not([data-val="hideParked"])');
+      function readHChecks() {
+        var allowed = [];
+        for (var i = 0; i < hChecks.length; i++) {
+          if (hChecks[i].checked) allowed.push(hChecks[i].dataset.val);
+        }
+        f.indicatorFilter = (allowed.length === hChecks.length) ? null : allowed;
+        reRenderCurrentView(tradition);
+      }
+      for (var i = 0; i < hChecks.length; i++) {
+        hChecks[i].addEventListener('change', readHChecks);
+      }
+      var hBtns = dropdown.querySelectorAll('.cfd-btn');
+      for (var b = 0; b < hBtns.length; b++) {
+        hBtns[b].addEventListener('click', function() {
+          var action = this.dataset.action;
+          for (var i = 0; i < hChecks.length; i++) {
+            hChecks[i].checked = (action === 'select-all');
+          }
+          readHChecks();
         });
       }
       var parkedCheck = dropdown.querySelector('input[data-val="hideParked"]');
@@ -1019,8 +1058,12 @@
       colChips.push({ kind: 'hide-parked', label: 'Hiding parked spells', neg: false });
     }
     if (f.indicatorFilter) {
-      var iLabels = { green: '▲ Green only', orange: '◆ Orange only', grey: '△ Grey only' };
-      colChips.push({ kind: 'indicator', label: iLabels[f.indicatorFilter] || f.indicatorFilter, neg: false });
+      var iLabels = { green: '▲ Green', orange: '◆ Orange', grey: '△ Grey' };
+      var iParts = [];
+      for (var ii = 0; ii < f.indicatorFilter.length; ii++) {
+        iParts.push(iLabels[f.indicatorFilter[ii]] || f.indicatorFilter[ii]);
+      }
+      colChips.push({ kind: 'indicator', label: iParts.join(' + '), neg: false });
     }
 
     var html = '<span class="afb-label">Active filters:</span>';
@@ -1552,17 +1595,19 @@
           }
           if (f.indicatorFilter) {
             var match = false;
-            if (f.indicatorFilter === 'green') {
+            if (f.indicatorFilter.indexOf('green') !== -1) {
               var cb = evaluateChartB(sp);
               if (cb.indicator === 'green') match = true;
               var cc = evaluateChartC(sp, rank);
               if (cc.greenNotes.length > 0) match = true;
-            } else if (f.indicatorFilter === 'orange') {
-              var cc = evaluateChartC(sp, rank);
-              if (cc.orangeNotes.length > 0) match = true;
-            } else if (f.indicatorFilter === 'grey') {
-              var cb = evaluateChartB(sp);
-              if (cb.indicator === 'grey') match = true;
+            }
+            if (f.indicatorFilter.indexOf('orange') !== -1) {
+              var cc2 = evaluateChartC(sp, rank);
+              if (cc2.orangeNotes.length > 0) match = true;
+            }
+            if (f.indicatorFilter.indexOf('grey') !== -1) {
+              var cb2 = evaluateChartB(sp);
+              if (cb2.indicator === 'grey') match = true;
             }
             if (!match) continue;
           }
