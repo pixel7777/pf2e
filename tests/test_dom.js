@@ -746,6 +746,129 @@ test.describe('C25-2: About page loads', () => {
   });
 });
 
+test.describe('C28: Copy Previous ghost slot prevention for bounded casters', () => {
+  test('Magus Copy Previous skips ranks the class lacks at target level', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+
+    await page.click('[data-page="arcane"]');
+    await page.waitForTimeout(300);
+
+    // Switch to Magus
+    await page.evaluate(() => {
+      const select = document.getElementById('classSelect-arcane');
+      select.value = 'magus';
+      select.dispatchEvent(new Event('change'));
+    });
+    await page.waitForTimeout(300);
+
+    // Go to level 6 (Magus slots: {2:2, 3:2}) and assign a spell at rank 2
+    await page.evaluate(() => {
+      const btns = document.querySelectorAll('#levelTabBar-arcane .level-tab');
+      for (const btn of btns) {
+        if (btn.dataset.level === '6') { btn.click(); break; }
+      }
+    });
+    await page.waitForTimeout(300);
+
+    // Manually place a fake spell in rank 2 at level 6
+    await page.evaluate(() => {
+      const state = window.Planner.getState();
+      state.arcane[6][2][0] = { name: 'TestSpell', aonId: 999, action_tags: ['2-action'], roles: ['damage'], defense_tags: [], targeting_tags: [], damage_types: [], conditions_imposed: [], reliability_tags: [], special_tags: [], weaknesses_imposed: [], mathfinder_reviewed: false };
+    });
+
+    // Go to level 7 (Magus slots: {3:2, 4:2} — NO rank 2)
+    await page.evaluate(() => {
+      const btns = document.querySelectorAll('#levelTabBar-arcane .level-tab');
+      for (const btn of btns) {
+        if (btn.dataset.level === '7') { btn.click(); break; }
+      }
+    });
+    await page.waitForTimeout(300);
+
+    // Copy Previous
+    await page.evaluate(() => {
+      window.Planner.copyPrevious('arcane', 7);
+    });
+    await page.waitForTimeout(300);
+
+    const result = await page.evaluate(() => {
+      const state = window.Planner.getState();
+      const rank2 = state.arcane[7][2];
+      const hasGhostSpells = rank2 && rank2.some(s => s !== null);
+      const rankRowHidden = document.getElementById('rank-row-arcane-7-2');
+      return {
+        rank2Length: rank2 ? rank2.length : 0,
+        hasGhostSpells: hasGhostSpells,
+        rankRowIsHidden: rankRowHidden ? rankRowHidden.classList.contains('rank-row-hidden') : null
+      };
+    });
+
+    // Rank 2 should NOT have ghost spells from Copy Previous
+    expect(result.hasGhostSpells).toBe(false);
+    // Rank 2 row should be hidden for Magus at level 7
+    expect(result.rankRowIsHidden).toBe(true);
+  });
+
+  test('Manual mode Copy Previous still copies all ranks', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+
+    await page.click('[data-page="arcane"]');
+    await page.waitForTimeout(300);
+
+    // Switch to Manual mode
+    await page.evaluate(() => {
+      const select = document.getElementById('classSelect-arcane');
+      select.value = '';
+      select.dispatchEvent(new Event('change'));
+    });
+    await page.waitForTimeout(300);
+
+    // Go to level 6, add a slot at rank 2, assign a spell
+    await page.evaluate(() => {
+      const btns = document.querySelectorAll('#levelTabBar-arcane .level-tab');
+      for (const btn of btns) {
+        if (btn.dataset.level === '6') { btn.click(); break; }
+      }
+    });
+    await page.waitForTimeout(300);
+
+    await page.evaluate(() => {
+      window.Planner.addSlot('arcane', 6, 2);
+      const state = window.Planner.getState();
+      state.arcane[6][2][0] = { name: 'ManualSpell', aonId: 998, action_tags: ['2-action'], roles: ['buff'], defense_tags: [], targeting_tags: [], damage_types: [], conditions_imposed: [], reliability_tags: [], special_tags: [], weaknesses_imposed: [], mathfinder_reviewed: false };
+    });
+
+    // Go to level 7, Copy Previous
+    await page.evaluate(() => {
+      const btns = document.querySelectorAll('#levelTabBar-arcane .level-tab');
+      for (const btn of btns) {
+        if (btn.dataset.level === '7') { btn.click(); break; }
+      }
+    });
+    await page.waitForTimeout(300);
+
+    await page.evaluate(() => {
+      window.Planner.copyPrevious('arcane', 7);
+    });
+    await page.waitForTimeout(300);
+
+    const result = await page.evaluate(() => {
+      const state = window.Planner.getState();
+      const rank2 = state.arcane[7][2];
+      return {
+        hasSpell: rank2 && rank2.some(s => s !== null),
+        spellName: rank2 && rank2[0] ? rank2[0].name : null
+      };
+    });
+
+    // Manual mode should copy all ranks including rank 2
+    expect(result.hasSpell).toBe(true);
+    expect(result.spellName).toBe('ManualSpell');
+  });
+});
+
 test.describe('C26-1: Version indicator on About page', () => {
   test('About page shows version indicator at the bottom', async ({ page }) => {
     await page.goto(APP_URL);

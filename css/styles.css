@@ -979,6 +979,7 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
   border-radius: var(--radius);
   padding: 0.55rem 0.8rem;
 }
+.rank-row-hidden { display: none; }
 
 .rank-row-header {
   display: flex;
