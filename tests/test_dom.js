@@ -696,7 +696,7 @@ test.describe('C22-6: Legacy toggle YES/NO labels', () => {
 
 test.describe('C25-1: Header utility links', () => {
   test('About, Feedback, and Support Me links are present in header', async ({ page }) => {
-    await page.goto('http://localhost:8765');
+    await page.goto(APP_URL);
     await page.waitForSelector('.header-utility-links');
     const result = await page.evaluate(() => {
       var container = document.querySelector('.header-utility-links');
@@ -717,7 +717,7 @@ test.describe('C25-1: Header utility links', () => {
 
 test.describe('C25-2: About page loads', () => {
   test('clicking About link shows about page with TOC and content sections', async ({ page }) => {
-    await page.goto('http://localhost:8765');
+    await page.goto(APP_URL);
     await page.waitForSelector('.header-utility-links');
     const result = await page.evaluate(() => {
       App.switchTab('about');
@@ -743,5 +743,31 @@ test.describe('C25-2: About page loads', () => {
     expect(result.firstSectionId).toBe('about-what');
     expect(result.firstSectionHeading).toBe('What Is This Tool?');
     expect(result.sidebarHidden).toBe(true);
+  });
+});
+
+test.describe('C26-1: Version indicator on About page', () => {
+  test('About page shows version indicator at the bottom', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+
+    await page.evaluate(() => App.switchTab('about'));
+    await page.waitForTimeout(300);
+
+    const result = await page.evaluate(() => {
+      const version = document.querySelector('#page-about .app-version');
+      if (!version) return { exists: false };
+      const style = window.getComputedStyle(version);
+      return {
+        exists: true,
+        text: version.textContent.trim(),
+        textAlign: style.textAlign,
+        opacity: parseFloat(style.opacity)
+      };
+    });
+    expect(result.exists).toBe(true);
+    expect(result.text).toBe('v1.0.0');
+    expect(result.textAlign).toBe('center');
+    expect(result.opacity).toBeLessThan(1);
   });
 });
