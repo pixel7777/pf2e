@@ -693,3 +693,55 @@ test.describe('C22-6: Legacy toggle YES/NO labels', () => {
     expect(result.offText).toContain('NO');
   });
 });
+
+test.describe('C25-1: Header utility links', () => {
+  test('About, Feedback, and Support Me links are present in header', async ({ page }) => {
+    await page.goto('http://localhost:8765');
+    await page.waitForSelector('.header-utility-links');
+    const result = await page.evaluate(() => {
+      var container = document.querySelector('.header-utility-links');
+      var about = container.querySelector('a[href="#page-about"]');
+      var feedback = container.querySelector('a[target="_blank"]');
+      var support = container.querySelector('.utility-link-inert');
+      return {
+        aboutText: about ? about.textContent.trim() : null,
+        feedbackText: feedback ? feedback.textContent.trim() : null,
+        supportText: support ? support.textContent.trim() : null
+      };
+    });
+    expect(result.aboutText).toBe('About');
+    expect(result.feedbackText).toContain('Feedback');
+    expect(result.supportText).toBe('Support Me');
+  });
+});
+
+test.describe('C25-2: About page loads', () => {
+  test('clicking About link shows about page with TOC and content sections', async ({ page }) => {
+    await page.goto('http://localhost:8765');
+    await page.waitForSelector('.header-utility-links');
+    const result = await page.evaluate(() => {
+      App.switchTab('about');
+      var aboutPage = document.getElementById('page-about');
+      var toc = aboutPage.querySelector('.about-toc');
+      var tocLinks = toc.querySelectorAll('.about-toc-link');
+      var sections = aboutPage.querySelectorAll('.overview-section[id]');
+      var firstSection = sections[0];
+      return {
+        pageActive: aboutPage.classList.contains('active'),
+        tocExists: !!toc,
+        tocLinkCount: tocLinks.length,
+        sectionCount: sections.length,
+        firstSectionId: firstSection ? firstSection.id : null,
+        firstSectionHeading: firstSection ? firstSection.querySelector('h2').textContent : null,
+        sidebarHidden: document.querySelector('.sidebar').style.display === 'none'
+      };
+    });
+    expect(result.pageActive).toBe(true);
+    expect(result.tocExists).toBe(true);
+    expect(result.tocLinkCount).toBe(14);
+    expect(result.sectionCount).toBe(14);
+    expect(result.firstSectionId).toBe('about-what');
+    expect(result.firstSectionHeading).toBe('What Is This Tool?');
+    expect(result.sidebarHidden).toBe(true);
+  });
+});

@@ -15,6 +15,7 @@
       this.markFramedPanels();
       this.injectCornerOrnaments();
       this.initSidebarResize();
+      this.initAboutToc();
       this.initPopover();
     },
 
@@ -104,10 +105,20 @@
 
       var sidebar = document.querySelector('.sidebar');
       if (sidebar) {
-        sidebar.style.display = (page === 'overview') ? 'none' : '';
+        sidebar.style.display = (page === 'overview' || page === 'about') ? 'none' : '';
       }
 
-      if (page !== 'overview') {
+      // Update About utility link active state
+      var aboutLink = document.querySelector('.header-utility-links a[href="#page-about"]');
+      if (aboutLink) {
+        if (page === 'about') {
+          aboutLink.classList.add('active');
+        } else {
+          aboutLink.classList.remove('active');
+        }
+      }
+
+      if (page !== 'overview' && page !== 'about') {
         Planner.initTradition(page);
       }
 
@@ -115,7 +126,7 @@
       if (window.Browser && Browser.resetSort) Browser.resetSort();
 
       // Cycle 22 — reconcile column rank filter to new slot, dim trait pills for tradition
-      if (page !== 'overview') {
+      if (page !== 'overview' && page !== 'about') {
         if (window.Browser && Browser.reconcileColumnRankFilter) Browser.reconcileColumnRankFilter();
         if (window.Coverage && Coverage.updateTraitDimming) Coverage.updateTraitDimming(page);
       }
@@ -333,6 +344,48 @@
           img.alt = '';
           framed[i].appendChild(img);
         }
+      }
+    },
+
+    initAboutToc: function() {
+      var tocLinks = document.querySelectorAll('.about-toc-link');
+      if (!tocLinks.length) return;
+
+      // Smooth scroll on TOC link click
+      for (var i = 0; i < tocLinks.length; i++) {
+        (function(link) {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            var targetId = link.getAttribute('href').replace('#', '');
+            var target = document.getElementById(targetId);
+            if (target) {
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          });
+        })(tocLinks[i]);
+      }
+
+      // Intersection Observer for active section highlighting
+      var sections = document.querySelectorAll('#page-about .overview-section[id]');
+      if (!sections.length) return;
+
+      var observer = new IntersectionObserver(function(entries) {
+        if (currentTradition !== 'about') return;
+        for (var j = 0; j < entries.length; j++) {
+          if (entries[j].isIntersecting) {
+            var id = entries[j].target.id;
+            for (var k = 0; k < tocLinks.length; k++) {
+              tocLinks[k].classList.remove('active');
+              if (tocLinks[k].getAttribute('href') === '#' + id) {
+                tocLinks[k].classList.add('active');
+              }
+            }
+          }
+        }
+      }, { rootMargin: '-20% 0px -60% 0px' });
+
+      for (var i = 0; i < sections.length; i++) {
+        observer.observe(sections[i]);
       }
     },
 

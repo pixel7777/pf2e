@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PF2e Spell Planner — Prepared Caster Edition</title>
-<link rel="stylesheet" href="css/styles.css?v=43">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="stylesheet" href="css/styles.css?v=44">
 </head>
 <body>
 
@@ -17,6 +19,11 @@
       <span class="brand-tagline">Prepared Caster Edition</span>
     </div>
     <div class="site-mark" aria-hidden="true">🪄</div>
+    <div class="header-utility-links">
+      <a href="#page-about" onclick="App.switchTab('about'); return false;">About</a>
+      <a href="https://pixelspf2espellplanner.featurebase.app/" target="_blank" rel="noopener noreferrer">Feedback <span class="external-indicator">↗</span></a>
+      <span class="utility-link-inert" title="Coming soon">Support Me</span>
+    </div>
   </div>
   <nav class="tab-bar">
     <button class="tab-btn active" data-page="overview">Overview</button>
@@ -112,8 +119,10 @@
             </div>
             <div class="coverage-tags cov-conditions-premier">
               <span class="ctag tag-condition" data-tag="Blinded">Blinded</span>
+              <span class="ctag tag-condition" data-tag="Confused">Confused</span>
               <span class="ctag tag-condition" data-tag="Dazzled">Dazzled</span>
               <span class="ctag tag-condition" data-tag="Frightened">Frightened</span>
+              <span class="ctag tag-condition" data-tag="Immobilized">Immobilized</span>
               <span class="ctag tag-condition" data-tag="Off-Guard">Off-Guard</span>
               <span class="ctag tag-condition" data-tag="Paralyzed">Paralyzed</span>
               <span class="ctag tag-condition" data-tag="Prone">Prone</span>
@@ -127,9 +136,7 @@
             <div class="coverage-tags cov-conditions-standard">
               <span class="ctag tag-condition" data-tag="Clumsy">Clumsy</span>
               <span class="ctag tag-condition" data-tag="Enfeebled">Enfeebled</span>
-              <span class="ctag tag-condition" data-tag="Confused">Confused</span>
               <span class="ctag tag-condition" data-tag="Stupefied">Stupefied</span>
-              <span class="ctag tag-condition" data-tag="Immobilized">Immobilized</span>
             </div>
           </div>
 
@@ -290,7 +297,7 @@
 
           <div class="wg-tier-label top">&#9670; Top</div>
           <div class="wg-cell">Best native-rank blasts + heightened spells that scale well. Your combat core.</div>
-          <div class="wg-cell"><strong>Always native rank</strong> — higher-rank spells have more "permission." Top-rank control spells outclass anything heightened.</div>
+          <div class="wg-cell"><strong>Prefer native rank</strong> — higher-rank spells have more "permission." Top-rank control spells outclass anything heightened.</div>
           <div class="wg-cell">Heighten key buffs to max rank. Duration and effect scale with rank.</div>
 
           <div class="wg-tier-label mid">&#9671; Mid</div>
@@ -311,43 +318,78 @@
 
         <!-- DECISION FLOW -->
         <section class="overview-section">
-        <h2 class="section-label">Condensed Decision Flow</h2>
-        <p class="section-intro">Work through these five steps when building your prepared list. Top to bottom, every time you level up or re-prepare.</p>
+        <h2 class="section-label">Decision Layer Order</h2>
+        <p class="section-intro">Work through these layers in sequence when building your prepared list. Each layer narrows your search.</p>
 
         <div class="flow-steps">
           <div class="flow-step">
             <div class="flow-connector"><div class="flow-number">1</div><div class="flow-line"></div></div>
             <div class="flow-content">
               <h4>Pick Your Role Emphasis</h4>
-              <p>Damage? Debuff/Control? Buff/Support? A blend? Your tradition's strengths should guide this — check the tradition page ratings.</p>
+              <p>Damage? Debuff/Control? Buff/Support? A blend? This is the biggest filter.</p>
             </div>
           </div>
           <div class="flow-step">
             <div class="flow-connector"><div class="flow-number">2</div><div class="flow-line"></div></div>
             <div class="flow-content">
-              <h4>Fill Top-Tier Slots by Role</h4>
-              <p>These are your most impactful spells. Native-rank spells and strong heightened options both belong here.</p>
+              <h4>Consider Your Tradition</h4>
+              <p>Which spell list supports your role? Check the tradition page ratings for your role.</p>
             </div>
           </div>
           <div class="flow-step">
             <div class="flow-connector"><div class="flow-number">3</div><div class="flow-line"></div></div>
             <div class="flow-content">
-              <h4>Fill Mid-Tier Slots</h4>
-              <p>Heightened spells that still compete at this rank, plus any transition-rank native spells that offer new capabilities.</p>
+              <h4>Check Defense Coverage</h4>
+              <p>Target AC + at least 2 of 3 saving throws. See the Defense Coverage checklist below.</p>
             </div>
           </div>
           <div class="flow-step">
             <div class="flow-connector"><div class="flow-number">4</div><div class="flow-line"></div></div>
             <div class="flow-content">
-              <h4>Fill Low-Tier Slots</h4>
-              <p>Silver bullets, reaction spells, 1-action options for action efficiency, pre-combat buffs, and out-of-combat utility.</p>
+              <h4>Diversify Damage Types &amp; Traits</h4>
+              <p>Carry at least 2 damage types and/or traits to avoid immunities.</p>
             </div>
           </div>
           <div class="flow-step">
             <div class="flow-connector"><div class="flow-number">5</div><div class="flow-line"></div></div>
             <div class="flow-content">
-              <h4>Run the Coverage Checklists</h4>
-              <p>Check your defense spread, effect variety, reliability, and action efficiency. Gaps are swap candidates. Then check the Campaign-Specific Gotchas below.</p>
+              <h4>Evaluate Reliability</h4>
+              <p>Auto-effects, success effects, avoid single-target Incapacitation. See Reliability checklist.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-connector"><div class="flow-number">6</div><div class="flow-line"></div></div>
+            <div class="flow-content">
+              <h4>Vary Your Effects</h4>
+              <p>Don't just target different defenses with the same type of effect. Mix outcomes: damage, conditions, positioning.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-connector"><div class="flow-number">7</div><div class="flow-line"></div></div>
+            <div class="flow-content">
+              <h4>Heighten vs. Native Rank</h4>
+              <p>Debuff/control: prefer native rank (higher rank = more "permission"). Buffs: heighten key spells to max rank. Damage: varies by spell.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-connector"><div class="flow-number">8</div><div class="flow-line"></div></div>
+            <div class="flow-content">
+              <h4>Allocate Low-Rank Slots</h4>
+              <p>Silver bullets, reactions, 1-action spells, pre-combat buffs, out-of-combat utility. Never evergreen damage.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-connector"><div class="flow-number">9</div><div class="flow-line"></div></div>
+            <div class="flow-content">
+              <h4>Optimize Your Third Action</h4>
+              <p>Recall Knowledge, Demoralize, 1-action spells, cantrips (Shield, Guidance), sustain actions. Your +1 shapes spell synergy.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-connector"><div class="flow-number">10</div><div class="flow-line"></div></div>
+            <div class="flow-content">
+              <h4>Apply Thematics (Last)</h4>
+              <p>Start with mechanics, reflavor to fit your fantasy. ~95% of themes naturally fill the fundamentals.</p>
             </div>
           </div>
         </div>
@@ -367,13 +409,13 @@
               <li><strong>Reflex</strong> — Availability varies by tradition</li>
               <li><strong>Will</strong> — Availability varies sharply by tradition</li>
             </ul>
-            <p class="cl-advice">Aim to cover at least 3 of 4 defenses in your top-tier slots. Prioritize <em>avoiding the target's highest defense</em> over chasing their lowest.</p>
+            <p class="cl-advice">Aim to target AC + at least 2 of 3 saving throws in your top-tier slots. Prioritize <em>avoiding the target's highest defense</em> over chasing their lowest.</p>
           </div>
 
           <div class="checklist-card effect">
             <h4><span class="cl-icon">&#10039;</span> Effect Variety</h4>
             <ul class="cl-items">
-              <li><strong>Damage types covered</strong> — Aim for 3+ in top-tier slots</li>
+              <li><strong>Damage types covered</strong> — Aim for at least 2 in top-tier slots</li>
               <li><strong>Conditions imposed</strong> — Variety over repetition</li>
               <li><strong>AoE options</strong> — For mobs or whole-party support</li>
               <li><strong>Single-target options</strong> — For bosses and focus fire</li>
@@ -386,7 +428,7 @@
             <ul class="cl-items">
               <li><strong>Auto-hit/auto-effect</strong> — Always does something</li>
               <li><strong>Success effects</strong> — Meaningful on enemy save success</li>
-              <li><strong>No single-target Incapacitation</strong> — Bosses auto-upgrade saves</li>
+              <li><strong>Beware single-target Incapacitation</strong> — Bosses auto-upgrade saves</li>
             </ul>
             <p class="cl-advice">Your list should never have turns where you might do literally nothing. Mix auto-effects with save-based options for consistent output.</p>
           </div>
@@ -505,7 +547,7 @@
               <tr class="star-row"><td><strong>Damage</strong></td><td>&#9733;&#9733;&#9733;&#9733; Best</td><td>All defense targets, all damage types, best rider effects</td></tr>
               <tr class="star-row"><td><strong>Debuffing</strong></td><td>&#9733;&#9733;&#9733;&#9733; Best</td><td>Will-targeting blasts (Agonizing Despair, Vision of Death, Phantasmal Calamity) that other traditions lack</td></tr>
               <tr class="star-row"><td><strong>Battlefield Control</strong></td><td>&#9733;&#9733;&#9733;&#9733; Best</td><td>Walls, terrain, zoning — deepest toolkit</td></tr>
-              <tr><td><strong>Buffing</strong></td><td>&#9733;&#9733;&#9733; Good</td><td>Haste, Fly, Blur, Invisibility, True Target — no Bless/Heroism</td></tr>
+              <tr class="star-row"><td><strong>Buffing</strong></td><td>&#9733;&#9733;&#9733;&#9733; Strong</td><td>9/10 — Haste, Fly, Blur, Invisibility, True Target. No Bless/Heroism, but the speed + stealth + accuracy suite is excellent</td></tr>
               <tr><td><strong>Mitigation</strong></td><td>&#9733;&#9733;&#9733; Good</td><td>False Vitality, Resist Energy, Fire Shield, reactions</td></tr>
               <tr class="cannot-row"><td><strong>Healing</strong></td><td>&#10007; Cannot</td><td>No Heal, no Soothe. Let the party handle it</td></tr>
             </tbody>
@@ -591,7 +633,7 @@
               <tr><td><strong>Damage</strong></td><td>&#9733;&#9733; Workable</td><td>Limited without class features (Flames Oracle makes it work). Hardest-to-resist damage types (void, vitality, spirit)</td></tr>
               <tr><td><strong>Debuffing</strong></td><td>&#9733;&#9733; Workable</td><td>Fort/Will covered, Reflex weak. Fear, Command, Agonizing Despair available</td></tr>
               <tr><td><strong>Battlefield Control</strong></td><td>&#9733;&#9733; Workable</td><td>At higher ranks — no Walls until Eclipse Burst R7, limited terrain options</td></tr>
-              <tr class="star-row"><td><strong>Buffing</strong></td><td>&#9733;&#9733;&#9733;&#9733; Best</td><td>9/10, tied close with Occult — Bless, Heroism, Benediction, Zealous Conviction</td></tr>
+              <tr class="star-row"><td><strong>Buffing</strong></td><td>&#9733;&#9733;&#9733;&#9733; Best</td><td>9/10, second only to Occult's 10/10 — Bless, Heroism, Benediction, Zealous Conviction</td></tr>
               <tr><td><strong>Mitigation</strong></td><td>&#9733;&#9733;&#9733; Good</td><td>Resist Energy, Shield Other, Sanctuary, Breath of Life</td></tr>
               <tr class="star-row"><td><strong>Healing</strong></td><td>&#9733;&#9733;&#9733;&#9733; Best</td><td>Tied with Primal — Heal, Restoration, Remove Disease, Breath of Life, Regenerate</td></tr>
             </tbody>
@@ -625,9 +667,9 @@
             <li>Heroism instead of Haste. Condition-stacking debuffs instead of Slow. Sanctuary instead of Invisibility.</li>
           </ul>
           <br>
-          <h4>No Walls Until R7</h4>
+          <h4>No Walls or Terrain Control</h4>
           <ul>
-            <li>No Wall of Stone, Wall of Fire, Wall of Force. Eclipse Burst at R7 is your first real area denial.</li>
+            <li>No Wall of Stone, Wall of Fire, Wall of Force, no Entangling Flora. Divine lacks battlefield shaping at every rank — your control comes from debuffs and conditions, not terrain.</li>
           </ul>
           <br>
           <h4>Reflex Targeting Is Weak</h4>
@@ -708,7 +750,7 @@
           <h4>Limited Blast Damage</h4>
           <ul>
             <li>Mostly Mental (useless vs mindless/constructs). Force Barrage at every rank for reliable non-Mental damage.</li>
-            <li>Spirit Blast at R6 for Fort-targeting force damage — non-Mental!</li>
+            <li>Spirit Blast at R6 for Fort-targeting spirit damage — non-Mental! (16d6 spirit, basic Fort. Decent but one-dimensional for a rank 6 slot.)</li>
             <li>Let the party handle damage while you multiply them via buffs+debuffs.</li>
           </ul>
           <br>
@@ -773,7 +815,7 @@
               <tr class="star-row"><td><strong>Damage</strong></td><td>&#9733;&#9733;&#9733;&#9733; Best</td><td>Great AoE, good sustained, all physical+energy damage types. Tied with Arcane</td></tr>
               <tr><td><strong>Debuffing</strong></td><td>&#9733;&#9733; Workable</td><td>Will-targeting is WEAK — only Fear and Lose the Path. Fort debuffs are strong</td></tr>
               <tr class="star-row"><td><strong>Battlefield Control</strong></td><td>&#9733;&#9733;&#9733;&#9733; Best</td><td>Walls, terrain, zoning — tied with Arcane</td></tr>
-              <tr><td><strong>Buffing</strong></td><td>&#9733;&#9733; Workable</td><td>Haste, Fly, Barkskin, Stoneskin — no Bless/Heroism</td></tr>
+              <tr><td><strong>Buffing</strong></td><td>&#9733;&#9733;&#9733; Decent</td><td>Haste, Fly, Barkskin, Stoneskin, Moon Frenzy — no Bless/Heroism. Speed, defense, and transformation buffs</td></tr>
               <tr><td><strong>Mitigation</strong></td><td>&#9733;&#9733;&#9733; Good</td><td>Reactions, Resist Energy, Fire Shield, Stoneskin</td></tr>
               <tr class="star-row"><td><strong>Healing</strong></td><td>&#9733;&#9733;&#9733;&#9733; Best</td><td>Has Heal, Regenerate, Moment of Renewal. Tied with Divine</td></tr>
             </tbody>
@@ -782,7 +824,7 @@
 
         <div class="section-label">Primal's Superpower</div>
         <div class="superpower-box">
-          Strongest combined damage+control+healing tradition. The ONLY tradition that can blast AND heal from the same list. You are the most self-sufficient caster in the game.
+          Strongest combined damage+control+healing tradition. The strongest combined damage + control + healing tradition. No other tradition is rated Best at both blasting and healing. The most self-sufficient caster in the game.
         </div>
 
         <div class="section-label">Defense Coverage</div>
@@ -818,7 +860,7 @@
         <div class="section-label">Items Reminder</div>
         <div class="items-box">
           <ul>
-            <li><strong>Staves</strong> — ESPECIALLY valuable on Primal casters (per Mathfinder). Budget for a fully upgraded staff.</li>
+            <li><strong>Staves</strong> — Your best friend as a prepared caster. Primal's breadth across damage, control, and healing makes staff flexibility especially impactful. Budget for a fully upgraded staff.</li>
             <li><strong>Scrolls</strong> — Will-targeting scrolls from other traditions if your class allows.</li>
             <li><strong>Wands</strong> — Repeatable low-rank buffs: Longstrider, Resist Energy, Barkskin.</li>
           </ul>
@@ -827,6 +869,324 @@
 
       <div id="levelPanels-primal"></div>
       <div class="spell-browser browser-hidden framed" id="browser-primal"></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- ABOUT PAGE -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="tradition-page" id="page-about">
+      <div class="guide-page about-layout">
+
+        <!-- TOC Sidebar -->
+        <nav class="about-toc">
+          <a href="#about-what" class="about-toc-link active">What Is This Tool?</a>
+          <a href="#about-how" class="about-toc-link">How Do I Use It</a>
+          <a href="#about-roles" class="about-toc-link">The Role System</a>
+          <a href="#about-tiers" class="about-toc-link">The Tier System</a>
+          <a href="#about-tags" class="about-toc-link">Tags &amp; Properties</a>
+          <a href="#about-filtering" class="about-toc-link">Filtering</a>
+          <a href="#about-mathfinder" class="about-toc-link">Mathfinder References</a>
+          <a href="#about-data" class="about-toc-link">Data Derivation</a>
+          <a href="#about-remaster" class="about-toc-link">Remaster Status</a>
+          <a href="#about-credits" class="about-toc-link">Credits &amp; Legal</a>
+          <a href="#about-privacy" class="about-toc-link">Privacy</a>
+          <a href="#about-who" class="about-toc-link">Who Am I?</a>
+          <a href="#about-contact" class="about-toc-link">Contact / Report Issues</a>
+          <a href="#about-support" class="about-toc-link">Support</a>
+        </nav>
+
+        <!-- About Content -->
+        <div class="about-content">
+
+          <!-- Section: What Is This Tool? -->
+          <section class="overview-section" id="about-what">
+            <h2 class="section-label">What Is This Tool?</h2>
+            <div class="about-body">
+              <p><strong>The pitch:</strong> a spell selection <em>planner</em> for PF2e prepared casters, not a spell database. You already have Archives of Nethys (AoN) for looking up spell text. The problem is that the AoN filters are based on the spell's tags and official properties. These were designed for rules adjudication, not spell choice, and there are a lot of ways that this mismatch of purpose will result in a frustrating search experience for the prepared caster just looking to populate their spell list. Picking spells requires understanding not just each spell's purpose and strengths/weakness but also how a spell list as a whole is functioning. You need more than traits to get there.</p>
+              <p>Think of it like being a chef where all your ingredients are described by the chemical compounds they contain vs a chef whose ingredients are labeled by the flavors they impart ("Hot", "Smoky", "Sharp", "Warm", "Sweet", "Earthy", "Fresh", "Savory"). Your end goal is a tasty recipe. That second chef is going to have a much easier time getting there.</p>
+              <p>This tool helps you decide which spells to prepare at each level by organizing the full catalog into roles, showing you what each slot rank is good for, and surfacing properties (damage types, conditions, saves targeted) that help you compare options.</p>
+              <p><strong>Who it's for:</strong> players running prepared casters who want to be more deliberate about spell selection instead of defaulting to the same picks every level. Fans of Mathfinder's methods for choosing spells who want an aid to help identify spells quickly to follow the processes he discusses. Or at least my interpretation of that process.</p>
+              <p><strong>What it isn't:</strong> not official Paizo content, not a character sheet (see Pathbuilder), not a replacement for reading spell descriptions on AoN. Doesn't cover spontaneous casting. No focus spells, no cantrips. Just spell slots for prepared casters. And it's opinionated. It's driven by derived properties in support of a specific process. If you're looking for a neutral approach, this likely isn't it.</p>
+            </div>
+          </section>
+
+          <!-- Section: How Do I Use It -->
+          <section class="overview-section" id="about-how">
+            <h2 class="section-label">How Do I Use It</h2>
+            <div class="about-body">
+              <ol>
+                <li>Read the Overview page and decide if this method is your jam. If it is - Yay! Proceed. If not, apologies.</li>
+                <li>Go to a tradition tab to start picking.</li>
+              </ol>
+              <div class="callout"><strong>IMPORTANT:</strong> Your picks as you are working in a session will be saved across all tradition tabs and all levels. But if you refresh the page or close and reopen, they will be lost unless you save. There's a save button on every tradition page and it saves across ALL the tradition pages. Use it wisely.</div>
+              <ol start="3">
+                <li>Read the tradition Overview page to get an idea of strengths and weaknesses you may want to consider in your plan.</li>
+                <li>Set up your slots at all the levels you want to plan your spell picks. You can auto-populate them for a class using the drop down class picker. But if you're playing something custom or you want to use this for a class dedication, you can add and delete slots willy nilly until you're happy.</li>
+                <li>Select the first level you want to plan. If you're going to do more than one, it's more efficient to start with the lowest level if you'd like to use the Copy Previous capability to start the next higher level with the spells from the next lower level and edit from there.</li>
+                <li>Click in a slot you want to assign a spell to. Scroll down. Beneath your spell slot lists you'll see a table of all the spells for the tradition which can be assigned to that slot for a specific role. What's a role? See The Role System below. You'll see the Damage role by default. Pick the role you want, then start looking for a good spell. This is where the meat of the spell selection happens: interacting between Role tabs to see spell option tables; filtering, sorting, and searching to find the spell you want using various criteria.
+                  <ul>
+                    <li>There's some text advice just above the table derived from Mathfinder's videos that might help you pick. This is specific to the tier of the slot you picked and can include tradition-specific tips.</li>
+                    <li>Some spells also got reviews by Mathfinder, and those have a star you can click on to see what he had to say about that spell (well, a summary. Or my attempt at one. There's a link in the notes to the video if you want the real deal).</li>
+                    <li>Filtering is your friend. See <a href="#about-filtering" style="color:var(--accent-nav-active)">How to Use the Filtering System</a> for more.</li>
+                  </ul>
+                  When you find a spell that feels like The One, click on it and it will populate the slot you had selected.
+                </li>
+                <li>Scroll back up and take a look at the Coverage Tracker. Tags will have lit up to show what you added to your arsenal by picking that spell. You can drag to expand the tracker to see more at a glance.</li>
+                <li>Repeat, filling your slots and using Coverage Tracker to help you get a feel for the overall effectiveness of your choices.
+                  <ul>
+                    <li>It's not possible to get full coverage, and the kind of coverage you want depends on your character concept. But the tracker should help you get a useful overview of key properties of your spell list at each level you plan.</li>
+                    <li>If you've filled up all or most of your slots and are seeing a gap, you can change the Coverage Tracker to filter mode to help you find a spell to fill it.</li>
+                    <li>Need to swap a spell? Just click on the slot you want to override and select a new spell.</li>
+                    <li>Want to start over? Clear all will wipe all the spells in a level.</li>
+                  </ul>
+                </li>
+                <li>You can plan across multiple levels too! If you want to copy spells from a previous level into the next level, there's a button to do that in the higher level's tab.</li>
+                <li>When you're done, make sure to save and/or export your selections in the formats that are useful to you. The picker won't remember anything after you leave the page or if you refresh the page.
+                  <ul>
+                    <li>You can come back and pick up where you left off by using the save and reload feature.</li>
+                    <li>You can also share your picks with others using the clipboard or markdown export versions.</li>
+                  </ul>
+                </li>
+              </ol>
+            </div>
+          </section>
+
+          <!-- Section: The Role System -->
+          <section class="overview-section" id="about-roles">
+            <h2 class="section-label">The Role System</h2>
+            <div class="about-body">
+              <p>PF2e spell slots are a limited resource. Every slot you prepare is a slot you're <em>not</em> preparing something else in. So it helps to think about what job each slot is doing for you. That's what roles are.</p>
+              <p>Are you bringing damage? Debuffing enemies? Buffing allies? Controlling the battlefield? Healing? Doing something weird and situational that doesn't fit neatly anywhere else? Each of those is a role, and every spell in the planner is tagged with the role (or roles) it can fill.</p>
+              <p>The core roles are: <strong>Damage</strong>, <strong>Debuff</strong>, <strong>Buff</strong>, <strong>Control</strong>, <strong>Utility</strong>, and <strong>Healing</strong>. These cover the main jobs a spell slot can do for a prepared caster.</p>
+              <p>On top of those, there are four specialty tables: <strong>Reactions</strong>, <strong>1-Action</strong>, <strong>Pre-Buffs</strong>, and <strong>Silver Bullets</strong>. These aren't roles exactly — they're cross-cutting lists of spells you'll often want quick access to. Reactions and 1-action spells are great for action economy. Pre-buffs are the things you cast before initiative. Silver bullets are the niche picks that are devastating when the situation calls for them. These tend to shine in your lower-tier slots where you have room to get specific.</p>
+              <p>Spells can (and often do) have multiple roles. Wall of Fire is both Damage and Control. A spell that debuffs <em>and</em> does damage shows up in both tabs. This is by design — when you're browsing the Damage table, you should see everything that does damage, even if it's also doing something else.</p>
+              <p>Why these specific categories? They emerged from how prepared casters actually use their slots in practice — heavily informed by Mathfinder's analysis of spell selection strategy and how the community thinks about spells and classes. They're not official PF2e categories. You won't find them in any Paizo book. They exist because they're useful for the specific problem this tool solves: figuring out what to prepare.</p>
+              <p>Here is how each role was derived from the spell's text and traits:</p>
+              <ul>
+                <li><strong>Damage</strong> means the spell deals meaningful HP damage as a primary function. Even spells where damage isn't the <em>main</em> event can still get the role if the damage is real — Acid Grip is primarily a forced-movement silver bullet, but it deals enough damage to earn the tag too. I made a judgment call about what amount of damage is meaningful.</li>
+                <li><strong>Debuff</strong> means you'd plan around the condition the spell imposes. Fear earns it because Frightened on a success is reliable. Eclipse Burst's Blinded on a critical failure doesn't — that's a jackpot, not a plan. I looked at whether a condition was imposed on an enemy and under what circumstances.
+                  <ul>
+                    <li>The line is roughly: if the condition only shows up on a crit fail, the spell is probably here for something else. These spells weren't classified as Debuff. Fight me over it.</li>
+                    <li>Exception: if the condition IS the entire spell (Sleep), it's a debuff even though the gate is crit fail. There's nothing else Sleep does.</li>
+                    <li>Weakness imposition counts as a debuff. Making an enemy take more damage from a type is a plannable tactical move.</li>
+                  </ul>
+                </li>
+                <li><strong>Control</strong> means the spell shapes the battlefield — terrain, zones, barriers, movement denial. Fireball is not control even though it hits an area; it's instant and gone. Wall of Fire is control because the zone persists and creatures have to respect it. Spells that force enemies to attack their allies (Paranoia, Confusion) also count — that's behavioral control. To earn a Control role, a spell requires one of two things:
+                  <ul>
+                    <li><strong>Persistent spatial constraint</strong>: the spell creates terrain, a zone, or a barrier with a duration (rounds/minutes/hours) that shapes the battlefield over time. The hallmark is duration + spatial constraint.</li>
+                    <li><strong>Behavioral override</strong>: the spell forces enemies to attack their allies or overrides target behavior to cause friendly fire.</li>
+                  </ul>
+                </li>
+                <li><strong>Buff</strong> enhances allies. I looked for spells that targeted allies (or self) and enhanced their capabilities such as stat bonuses, new abilities, damage prevention, and other defensive boosts.</li>
+                <li><strong>Healing</strong> restores HP or removes harmful conditions. It was assigned based on the spell trait. It's its own role, separate from Buff.</li>
+                <li><strong>Utility</strong> solves out-of-combat problems: scouting, movement, adaptation. Intentionally broad, because what's useful depends on your campaign.</li>
+                <li><strong>Reactions</strong> and <strong>1-Action</strong> are auto-detected from the spell's casting time. Simple.</li>
+                <li><strong>Pre-Buffs</strong> are long-duration buff spells (10+ minutes) you cast before initiative.</li>
+                <li><strong>Silver Bullets</strong> are hand-picked. These are spells that dominate a narrow situation regardless of rank — Revealing Light vs. invisibility, Earthbind vs. flyers. No algorithm can identify these; they come from Mathfinder's recommendations and play experience.</li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- Section: The Tier System -->
+          <section class="overview-section" id="about-tiers">
+            <h2 class="section-label">The Tier System</h2>
+            <div class="about-body">
+              <p>Not all spell slots are equal. A Rank 5 slot at level 10 is one of your best — at level 20, it's filler. The tier system captures this. It's a relative ranking based on your character level, not the spell rank alone, and it tells you what kind of job each slot should be doing.</p>
+              <p>There are three tiers:</p>
+              <ul>
+                <li><strong>Top Tier</strong> — your max rank and one below. This is where your heavy hitters go: your best damage, your strongest debuffs, the spells you're planning your combat rounds around.</li>
+                <li><strong>Mid Tier</strong> — the transition zone just below top. These slots are still combat-relevant but you're not getting peak value from big-ticket spells here. Good place for solid utility-in-combat picks, secondary debuffs, or spells that don't need to scale hard.</li>
+                <li><strong>Low Tier</strong> — everything below mid. This is silver bullet territory: reactions, pre-buffs, 1-action economy spells, and niche picks that are devastating when the situation calls for them regardless of rank.</li>
+              </ul>
+              <p>The tier map on the Overview page shows exactly which ranks fall into which tier at every character level. It also widens at level 15+ — mid tier expands from one rank to two, because higher-level play gives you more room to get value from lower-rank slots.</p>
+              <p>This framework comes from Mathfinder's spell selection philosophy and is the main inspiration behind this whole tool. His <a href="https://www.youtube.com/watch?v=TzoLnFWB770" target="_blank" rel="noopener noreferrer" style="color:var(--accent-nav-active)">Spell Selection Basics</a> video is the best deep dive if you want the full reasoning.</p>
+            </div>
+          </section>
+
+          <!-- Section: Tags & Properties -->
+          <section class="overview-section" id="about-tags">
+            <h2 class="section-label">Tags &amp; Properties</h2>
+            <div class="about-body">
+              <p>These are opinionated aspects of spells you can use to help filter better and evaluate your spell list as a whole. Almost all of them needed to be derived. Now, I know what you're thinking.</p>
+              <blockquote>"But mysterious developer person, there's a fire trait! Doesn't that filter for all fire damage spells?"<br>"No."<br>"Really? It misses spells that do fire damage? Huh. Weird. Ok, well what about searching for the word 'fire?'"<br>"Still no. You'll get fire resistance spells."<br>"Oh I guess that makes sense, but FML when it comes to filtering!"<br>"Yeah, you and me both, buddy."</blockquote>
+              <p>Even seemingly simple things like identifying the type of damage a spell does required analyzing the spell text. Not fun. But I took a stab at it! Below is an explanation of the approach and any rules used to populate these. You can see quick definitions in the hover/click text in the app's user interface.</p>
+              <ul>
+                <li><strong>Defense Coverage:</strong> Fort/Ref/Will are directly populated from AoN's saving throw field. But AC needed a second pass. Many spells describe a spell attack against AC without the spell carrying the Attack trait, so text analysis was required to find everything that was defended by AC. The Auto tag means the spell has a combat role but bypasses saves and AC entirely.</li>
+                <li><strong>Targeting:</strong> Applies only to spells targeting enemies. ST = Single Target ("1 creature" or "the triggering creature"). Multi = anything targeting more than one creature, whether via AoE, emanation, or genuine multi-targeting.</li>
+                <li><strong>Damage Types:</strong> All 18 types are derived from the text, not from AoN's traits. AoN's trait data is unreliable for damage — 242 damage-dealing spells lack damage traits, and all physical types are invisible to traits entirely. Varies = caster picks the type. Unspecified = damage without a named type (e.g. Disintegrate).</li>
+                <li><strong>Conditions Imposed:</strong> Pulled from text with context analysis to understand if a condition was actually inflicted on an enemy target under what circumstances. The intent was to identify spells that inflict that condition on an enemy.</li>
+                <li><strong>Weaknesses:</strong> Text analysis. No traits available to help find these. In the Coverage Tracker, you'll see the "Imposes Weakness" tag light up, and stars appear on the damage types to which it applies.</li>
+                <li><strong>Reliability:</strong> Limited to offensive spells. Success-Effect = meaningful outcome even when an enemy succeeds on a saving throw. Auto-Effect = bypasses all defenses entirely (e.g., persistent damage zones).</li>
+                <li><strong>Action Tags:</strong> Directly from existing trait and field data. (Sus) = the spell can be sustained.</li>
+                <li><strong>Special Coverage:</strong> Silver Bullet is hand-picked. Healing is the official trait. Pre-Buff is explained in the Role System.</li>
+                <li><strong>ST-Incap:</strong> Displayed on spells that are both single target and have the Incapacitation trait. A warning — using these against bosses is a bad idea.</li>
+                <li><strong>Basic:</strong> Displayed on spells that utilize a basic save. These contribute to the Success Effect tag under Reliability.</li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- Section: Filtering -->
+          <section class="overview-section" id="about-filtering">
+            <h2 class="section-label">Filtering</h2>
+            <div class="about-body">
+              <p>Filtering is accessed in four ways:</p>
+              <ol>
+                <li>Spell option table columns</li>
+                <li>Sidebar: Turning the Coverage Tracker into a filter</li>
+                <li>Sidebar: Trait Filters</li>
+                <li>Sidebar: Filter Options</li>
+              </ol>
+
+              <h3>Spell Source</h3>
+              <img src="assets/about/filter-options.png" alt="Filter options panel showing rarity toggles (Common, Uncommon, Rare, Unique) and legacy toggle" class="about-screenshot">
+              <p>Filter options let you add or find rare spells or spells that are legacy only (not in the remaster). By default, rarity is set to Common and Uncommon, and legacy-only spells are not shown, but you can adjust these by toggling them. Rarities function as a logical OR. Rarity and Legacy-Only are a logical AND.</p>
+
+              <h3>Spell Property Filtering</h3>
+              <p>Table column filters, Coverage Tracker filters, and Trait filters work together to help you find spells with a specific combination of properties. All three interact as a logical AND. Sidebar filters (both Coverage Tracker tags and Trait Filters) can be long clicked to become a logical NOT. Example of a multifilter:</p>
+              <p>1. Filter for NOT mental trait (Under Trait Filters, long click on Mental)</p>
+              <img src="assets/about/filter-not-mental.png" alt="Trait filter showing Mental trait excluded with red highlight" class="about-screenshot">
+              <p>2. Filter for targeting: Multi (turning the Coverage Tracker's Filter Mode to On and clicking on Multi)</p>
+              <img src="assets/about/filter-coverage-multi-on.png" alt="Coverage Tracker in filter mode with Multi tag selected" class="about-screenshot">
+              <img src="assets/about/filter-coverage-multi-applied.png" alt="Multi tag filter applied showing filtered results" class="about-screenshot">
+              <p>3. Filter for spell rank 5 (click on the filter funnel by the Rank column, and select only rank 5)</p>
+              <img src="assets/about/filter-rank-column.png" alt="Column filter dropdown for Rank showing checkboxes for each rank" class="about-screenshot">
+              <p>This will show spells for that spell slot, role and tradition that are rank 5 AND Multi, AND NOT Mental. There is no logical OR, with the exception of the column filters that allow for a multi-select.</p>
+              <p>As you apply filters, you'll see the ones that are active above the spell options table:</p>
+              <img src="assets/about/filter-active-bar.png" alt="Active filter summary bar showing applied filter chips with clear buttons" class="about-screenshot">
+              <p>The Trait filters are plentiful, so there's a search option to help you find the one you want.</p>
+              <p>You can also search for a spell by name in the spell option's table. That search will apply your filters and will be limited to spells that are of the right tradition, role, and spell-slot.</p>
+
+              <h3>Clearing Filters</h3>
+              <ul>
+                <li>You can turn off filters where you set them.</li>
+                <li>Filters can be cleared individually using the x button in the Active Filters display.</li>
+                <li>There's a clear all option on the Active Filters display.</li>
+                <li>There's a Clear Coverage Filters that will turn off only Coverage Tracker filters.</li>
+                <li>If you turn off Filter Mode, all Coverage Tracker filters will clear themselves.</li>
+              </ul>
+
+              <h3>Filter Persistence</h3>
+              <p>Filters largely persist when you change contexts. Sidebar filters are NOT cleared on tradition or role change. Column filters are partially preserved — sort order resets and the rank filter gets reconciled (values exceeding the new max rank are pruned). Name filter, action filter, and starred filter all persist through tradition and spell slot changes.</p>
+
+              <h3>Special Case: Search</h3>
+              <img src="assets/about/search-button.png" alt="Search button next to role tabs for cross-tradition spell search" class="about-screenshot">
+              <p>There is a special search button next to the role options. This search ignores Tradition, Role, and Spell Slot limitations. If you are looking for a spell and can't figure out why it's not showing up, then this is your best friend. This search's results will tell you if this spell is not in your tradition or eligible for the spell slot you're currently filling. The only filters that apply to this search are the Legacy-only and spell rarity options, and you can temporarily ignore those by clicking the "Show them" button.</p>
+            </div>
+          </section>
+
+          <!-- Section: Mathfinder References -->
+          <section class="overview-section" id="about-mathfinder">
+            <h2 class="section-label">Mathfinder References</h2>
+            <div class="about-body">
+              <p>I'm a fan! His <a href="https://www.youtube.com/@Mathfinder-aaa" target="_blank" rel="noopener noreferrer" style="color:var(--accent-nav-active)">YouTube videos</a> inspired the creation of this tool. Mathfinder makes videos about a lot of Pathfinder topics (often with math to back it up), and I particularly liked the ones about spells and spell selection. I wanted to follow his advice but found the spell selection process to be very time consuming using just Archives of Nethys and Pathbuilder. So I made this as a little helper tool.</p>
+              <p>This isn't affiliated with or endorsed by Mathfinder - just inspired by.</p>
+              <p>There are links in many places to the original videos so you can follow to get the <em>real</em> real. I cannot claim this tool accurately summarizes or follows his advice, but I think a lot of the gist of it is there. You'll see gold stars on spells that have a paraphrased summary of Mathfinder analysis available on click, and you can filter by those stars to focus on the spells you'll hear about in his videos.</p>
+            </div>
+          </section>
+
+          <!-- Section: Data Derivation -->
+          <section class="overview-section" id="about-data">
+            <h2 class="section-label">Data Derivation</h2>
+            <div class="about-body">
+              <p>Most of this depends on what data you're interested in. For the rules for specific concepts, see:</p>
+              <ul>
+                <li><a href="#about-roles" style="color:var(--accent-nav-active)">The Role System</a></li>
+                <li><a href="#about-tags" style="color:var(--accent-nav-active)">Tags &amp; Properties</a></li>
+              </ul>
+              <p>The first step was to determine scope. No cantrips, no Focus Spells, and no spells that were replaced by the remaster brought the set down to almost 1100 spells.</p>
+              <p>Once I had a "short" list?</p>
+              <p>The overall approach was to attempt to use the structured data where possible and analyze text where it was not. Sometimes structured fields with logical operators could be used to deterministically calculate fields, but, frankly (and I know this will shock exactly no one) PF2e's tricksy legalese combined with the mismatch of intent between traits and spell picking properties (see <a href="#about-what" style="color:var(--accent-nav-active)">What Is This Tool?</a>) made this a rare exception.</p>
+              <p>Almost everything required text analysis. I tried LLM work for a first draft, and then many many iterations when it turned out that worked really poorly, but it seems even AI has a hard time parsing how PF2e spells are written. What fun! We all get to be rules lawyers. Really adds to the gameplay experience.</p>
+              <p>(On a side note, this whole experience makes me worry a lot about people asking chatbots for actual legal advice. Maybe the legal code is less confusing than PF2e, and it will all be fine? &#128556;)</p>
+              <p>So, nearly everything requires an ongoing, gradual, human QA process. And by human I mean me. One person. The data is currently good but not perfect. I am doing my best! If you find any errors, I'd appreciate another human giving me a hand by reporting it.</p>
+            </div>
+          </section>
+
+          <!-- Section: Remaster Status -->
+          <section class="overview-section" id="about-remaster">
+            <h2 class="section-label">Remaster Status</h2>
+            <div class="about-body">
+              <p>The tool targets remaster content. The original list of leveled spells contained both pre-remaster and remaster versions of many spells — about 45% of the raw data was duplicates. These were cleaned up in multiple passes:</p>
+              <ol>
+                <li><strong>Era deduplication:</strong> When the same spell name exists in both legacy and remaster sources, the remaster version wins. This dropped 347 duplicates.</li>
+                <li><strong>Rename mapping:</strong> A 130-entry rename map (sourced from the Foundry VTT PF2e remaster wiki) identified spells that were renamed in the remaster — like Magic Missile &rarr; Force Barrage or Calm Emotions &rarr; Calm. The old-name entries were dropped. This removed another 93 spells.</li>
+                <li><strong>Normalization pass:</strong> A health audit caught edge cases like curly vs. straight apostrophe variants creating false duplicates (e.g., two entries for Familiar's Face).</li>
+              </ol>
+              <p>After all three passes, the dataset sits at <strong>1,079 spells</strong> for initial release. Of those, 562 are remaster-era, 224 are legacy-core spells with no remaster equivalent (confirmed legitimate — they weren't renamed or removed, they just haven't been reprinted yet), and 293 are from other sources like Adventure Paths and Lost Omens books. These numbers will change if new spellbooks are released!</p>
+              <p>If a spell you're looking for has a different name than expected, it was probably renamed in the remaster. The tool uses the remaster name. By default, legacy-only spells are hidden, but you can toggle them on in the filter options (see <a href="#about-filtering" style="color:var(--accent-nav-active)">Filtering</a>).</p>
+            </div>
+          </section>
+
+          <!-- Section: Credits & Legal -->
+          <section class="overview-section" id="about-credits">
+            <h2 class="section-label">Credits &amp; Legal</h2>
+            <div class="about-body">
+              <h3>Acknowledgments</h3>
+              <p><strong>Mathfinder</strong><br>Thanks to <a href="https://www.youtube.com/@Mathfinder-aaa" target="_blank" rel="noopener noreferrer" style="color:var(--accent-nav-active)">Mathfinder</a> for the inspiration for the project, the amazing videos, and for helping me find the fun in PF2e. This tool is not affiliated with or endorsed by Mathfinder — it's a fan project built by someone who found his approach to spell selection genuinely useful and wanted a tool to help apply it.</p>
+              <p><strong>Archives of Nethys</strong><br>Thanks to the <a href="https://2e.aonprd.com/" target="_blank" rel="noopener noreferrer" style="color:var(--accent-nav-active)">Archives of Nethys</a> for the amazing service you provide. I know I whinged a lot to justify why I built my little tool, but I used yours daily to double check what mine was doing right and wrong while building, and I use it every gaming session, at least once to look something up. You are the gold standard for official material.</p>
+
+              <h3>Visual Asset Credits</h3>
+              <p><strong>Parchment texture:</strong> Photo by <a href="https://unsplash.com/@kiwihug" target="_blank" rel="noopener noreferrer" style="color:var(--accent-nav-active)">Kiwihug</a> on <a href="https://unsplash.com/photos/cqhXfrRHCPo" target="_blank" rel="noopener noreferrer" style="color:var(--accent-nav-active)">Unsplash</a>. Used under the Unsplash License (free for commercial and non-commercial use, no attribution required, but credited voluntarily).</p>
+
+              <h3>ORC License Notice</h3>
+              <p>This product is licensed under the ORC License located at the Library of Congress at TX 9-307-067 and available online at various locations including <a href="https://paizo.com/orclicense" target="_blank" rel="noopener noreferrer" style="color:var(--accent-nav-active)">paizo.com/orclicense</a> and others. All warranties are disclaimed as set forth therein.</p>
+
+              <h3>Attribution</h3>
+              <p>This product is based on the following Licensed Material:</p>
+              <p><strong>Rulebooks</strong><br>Pathfinder Player Core &copy; 2023 Paizo Inc.; Pathfinder Player Core 2 &copy; 2024 Paizo Inc.; Pathfinder Secrets of Magic &copy; 2021 Paizo Inc.; Pathfinder Rage of Elements &copy; 2023 Paizo Inc.; Pathfinder Core Rulebook (Second Edition) &copy; 2019 Paizo Inc.; Pathfinder Dark Archive (Remastered) &copy; 2026 Paizo Inc.; Pathfinder Battlecry! &copy; 2025 Paizo Inc.; Pathfinder Howl of the Wild &copy; 2024 Paizo Inc.; War of Immortals &copy; 2024 Paizo Inc.; Pathfinder Advanced Player's Guide &copy; 2020 Paizo Inc.; Pathfinder NPC Core &copy; 2025 Paizo Inc.</p>
+              <p><strong>Lost Omens</strong><br>Pathfinder Lost Omens Divine Mysteries &copy; 2024 Paizo Inc.; Pathfinder Lost Omens Rival Academies &copy; 2025 Paizo Inc.; Pathfinder Lost Omens Shining Kingdoms &copy; 2025 Paizo Inc.; Pathfinder Lost Omens Firebrands &copy; 2023 Paizo Inc.; Pathfinder Lost Omens Knights of Lastwall &copy; 2022 Paizo Inc.; Pathfinder Lost Omens Draconic Codex &copy; 2025 Paizo Inc.; Pathfinder Lost Omens Legends &copy; 2020 Paizo Inc.; Pathfinder Lost Omens Gods &amp; Magic (Second Edition) &copy; 2020 Paizo Inc.; Pathfinder Lost Omens: Impossible Lands &copy; 2022 Paizo Inc.; Pathfinder Lost Omens Monsters of Myth &copy; 2021 Paizo Inc.; Pathfinder Lost Omens Highhelm &copy; 2023 Paizo Inc.; Pathfinder Lost Omens World Guide (Second Edition) &copy; 2019 Paizo Inc.; Pathfinder Lost Omens Pathfinder Society Guide &copy; 2020 Paizo Inc.</p>
+              <p><strong>Adventure Paths and Adventures</strong><br>Pathfinder Kingmaker Companion Guide &copy; 2022 Paizo Inc.; Pathfinder Season of Ghosts Adventure Path &copy; 2026 Paizo Inc.; Prey for Death &copy; 2024 Paizo Inc.; Pathfinder Adventure Path: Gatewalkers &copy; 2025 Paizo Inc.; The Enmity Cycle &copy; 2023 Paizo Inc.; Threshold of Knowledge &copy; 2021 Paizo Inc.; Malevolence &copy; 2021 Paizo Inc.; Abomination Vaults Adventure Path &copy; 2022 Paizo Inc.; and individual issues of the Pathfinder Adventure Path series (#147, #151&ndash;156, #158, #160, #162&ndash;166, #169, #171, #173, #175&ndash;177, #181&ndash;186, #194&ndash;195, #201, #203, #205, #209, #211&ndash;212, #216) &copy; 2019&ndash;2025 Paizo Inc.</p>
+              <p><strong>Other</strong><br>Wake the Dead #1, #3, #4 &copy; 2023 Paizo Inc.</p>
+              <p>All of the above are authored, designed, and published by Paizo Inc. and its contributors. Full per-source author credits are available in the source books and at <a href="https://2e.aonprd.com/Licenses.aspx" target="_blank" rel="noopener noreferrer" style="color:var(--accent-nav-active)">Archives of Nethys</a>.</p>
+              <p>If you use our Licensed Material in your own published works, please credit us as follows:<br>Pixel's PF2e Spell Planner, &copy; 2026.</p>
+
+              <h3>Reserved Material</h3>
+              <p>Reserved Material elements in this product include, but may not be limited to: all Mathfinder video summaries and commentary; editorial tier ratings and tactical notes; the role classification methodology documentation; silver bullet designations; and the application's code, user interface design, and visual presentation.</p>
+
+              <h3>Expressly Designated Licensed Material</h3>
+              <p>None.</p>
+            </div>
+          </section>
+
+          <!-- Section: Privacy -->
+          <section class="overview-section" id="about-privacy">
+            <h2 class="section-label">Privacy</h2>
+            <div class="about-body">
+              <p>This app collects no personal data. Your spell picker data is your own to download and use as you wish. Cloudflare provides hosting and may collect standard web traffic data per their privacy policy. I have no idea who you are or what shenanigans you perpetrated while you were here.</p>
+              <p>If you'd like to help me out with feedback or a bug report, Featurebase's privacy policy manages your data on their platform. If you're super kind and want to leave a tip, Ko-fi's privacy policy manages your data on their platform.</p>
+            </div>
+          </section>
+
+          <!-- Section: Who Am I? -->
+          <section class="overview-section" id="about-who">
+            <h2 class="section-label">Who Am I?</h2>
+            <div class="about-body">
+              <p>A weirdo on the internet! You can call me Pixel. I started playing TTRPGs in 2012 with PF1e: organized play and an amazing home game. Later we switched to 5e. I moved and started running a 5e game, kept a great gaming group for years, and lived through the Great OGL Debacle of 2023. Like most people, I started looking for a system that wasn't run by asshats. So did my friend who runs the weekly online game in which I was a player. She landed on PF2e. I moved again, and so the online game is now my only game. Which means PF2e is now my system.</p>
+              <p>Not gonna lie, PF2e isn't my favorite. No one will ever convince me that "it's not that complicated" or "it's almost impossible to build a character that doesn't work" are true. I wasn't having fun. I think it would serve PF2e to admit what it is (deeply technical, tactical, and difficult) and help people play that game well, rather than pretending it's just better-balanced 5e run by more ethical people.</p>
+              <p>But I love that gaming group, and IMO the person who runs the game picks the system (I know exactly how much work running a game is).</p>
+              <p>So, to try to have fun, I started digging more into the rules and mechanics and trying to build better characters. That led me to the Mathfinder videos, and that's helped me find some fun again!</p>
+              <p>I'm a geek. An engineer by trade. A TTRPG player. A painter of minis. A reader. A BG3 enthusiast. A lover of BG3 fanfiction. And, of late, a creator of a community gaming tool.</p>
+            </div>
+          </section>
+
+          <!-- Section: Contact / Report Issues -->
+          <section class="overview-section" id="about-contact">
+            <h2 class="section-label">Contact / Report Issues</h2>
+            <div class="about-body">
+              <p>This is a community tool built by one person. I welcome feedback, bug reports, and inaccurate data reports. I can't promise to fulfill feature requests (this is a hobby project), but if you have a cool one, send it along. I'll consider it. You can reach out via Featurebase: <a href="https://pixelspf2espellplanner.featurebase.app/" target="_blank" rel="noopener noreferrer" style="color:var(--accent-nav-active)">pixelspf2espellplanner.featurebase.app</a></p>
+            </div>
+          </section>
+
+          <!-- Section: Support -->
+          <section class="overview-section" id="about-support">
+            <h2 class="section-label">Support</h2>
+            <div class="about-body">
+              <p>Coming soon. When this tool is ready for wider sharing, there will be a way to leave a tip here if you'd like.</p>
+            </div>
+          </section>
+
+        </div>
+      </div>
     </div>
 
   </main>
@@ -840,8 +1200,8 @@
 <script src="data/tag-definitions.js"></script>
 
 <!-- App modules -->
-<script src="js/app.js?v=43"></script>
-<script src="js/planner.js?v=40"></script>
+<script src="js/app.js?v=44"></script>
+<script src="js/planner.js?v=41"></script>
 <script src="js/browser.js?v=44"></script>
 <script src="js/coverage.js?v=42"></script>
 <script src="js/export.js?v=40"></script>

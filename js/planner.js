@@ -346,6 +346,14 @@
       selectedSlot = { tradition: tradition, level: level, rank: rank, slotIndex: slotIndex };
       this.renderSlots(tradition, level);
       Browser.show(tradition, level, rank);
+
+      var browserEl = document.getElementById('browser-' + tradition);
+      if (browserEl) {
+        var rect = browserEl.getBoundingClientRect();
+        if (rect.top > window.innerHeight) {
+          browserEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
     },
 
     clearSpell: function(tradition, level, rank, slotIndex, e) {
