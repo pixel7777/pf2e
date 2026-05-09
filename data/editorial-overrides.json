@@ -2,10 +2,11 @@
   {
     "aonId": 1331,
     "name": "Exploding Earth",
-    "reason": "Cycle 07 spot-check (Heidi sample 1): Spell uses an attack roll for the primary effect. The Fortitude save and Prone condition are a double-jackpot rider — they only fire if (a) the attack roll critically hits AND (b) the target then fails the Fort save. Same spirit as Decision 011's crit-fail-only rule (jackpot riders don't drive debuff role and shouldn't populate normal save-outcome buckets). Clear conditions; keep damage role.",
+    "reason": "Cycle 07 spot-check (Heidi sample 1): Spell uses an attack roll for the primary effect. The Fortitude save and Prone condition are a double-jackpot rider — they only fire if (a) the attack roll critically hits AND (b) the target then fails the Fort save. Same spirit as Decision 011's crit-fail-only rule (jackpot riders don't drive debuff role and shouldn't populate normal save-outcome buckets). Clear conditions; keep damage role. | Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay.",
     "overrides": {
       "conditions_imposed": [],
-      "conditions_by_outcome": null
+      "conditions_by_outcome": null,
+      "heighten_quality": "scales-okay"
     }
   },
   {
@@ -866,6 +867,62 @@
           "Frightened"
         ]
       }
+    }
+  },
+  {
+    "aonId": 2,
+    "name": "Acid Arrow",
+    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors.",
+    "overrides": {
+      "heighten_quality": "scales-okay"
+    }
+  },
+  {
+    "aonId": 872,
+    "name": "Blink Charge",
+    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors.",
+    "overrides": {
+      "heighten_quality": "scales-okay"
+    }
+  },
+  {
+    "aonId": 2481,
+    "name": "Echo Jump",
+    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors.",
+    "overrides": {
+      "heighten_quality": "scales-okay"
+    }
+  },
+  {
+    "aonId": 1292,
+    "name": "Percussive Impact",
+    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors.",
+    "overrides": {
+      "heighten_quality": "scales-okay"
+    }
+  },
+  {
+    "aonId": 1687,
+    "name": "Spiritual Armament",
+    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors.",
+    "overrides": {
+      "heighten_quality": "scales-okay"
+    }
+  },
+  {
+    "aonId": 306,
+    "name": "Spiritual Weapon",
+    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors.",
+    "overrides": {
+      "heighten_quality": "scales-okay"
+    }
+  },
+  {
+    "aonId": 1410,
+    "name": "Splinter Volley",
+    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors.",
+    "overrides": {
+      "heighten_quality": "scales-okay"
     }
   }
 ]

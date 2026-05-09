@@ -1208,6 +1208,48 @@ def test_c24_chain_entry_structure(spells):
     return True
 
 
+C27_DAMAGE_ONLY_PLUS2_AONIDS = {2, 872, 2481, 1331, 1292, 1687, 306, 1410}
+
+def test_c27_damage_only_plus2(spells):
+    """C27: Damage-only spells with +2 heighten pattern must be scales-okay, not scales-well."""
+    by_aon = {s["aonId"]: s for s in spells}
+    errors = []
+
+    # Check the 8 known spells are scales-okay
+    for aon_id in sorted(C27_DAMAGE_ONLY_PLUS2_AONIDS):
+        spell = by_aon.get(aon_id)
+        if spell is None:
+            errors.append(f"  aonId {aon_id}: not found in spell data")
+            continue
+        if spell.get("heighten_quality") != "scales-okay":
+            errors.append(f"  {spell['name']} (aonId {aon_id}): heighten_quality={spell.get('heighten_quality')!r}, expected 'scales-okay'")
+
+    # Verify multi-role damage+X spells with +2 are NOT affected (e.g., Dehydrate, Force Barrage)
+    exempt_names = {"Dehydrate", "Force Barrage"}
+    for spell in spells:
+        if spell["name"] in exempt_names:
+            if spell.get("heighten_quality") == "scales-okay":
+                non_auto_roles = set(spell.get("roles", [])) - {"healing", "reactions", "oneAction", "silverBullets", "prebuffs"}
+                if non_auto_roles != {"damage"}:
+                    errors.append(f"  {spell['name']}: multi-role spell incorrectly capped to scales-okay")
+
+    # Broad check: no damage-only +2 spell should be scales-well
+    for spell in spells:
+        populator_roles = set(spell.get("roles", [])) - {"healing", "reactions", "oneAction", "silverBullets", "prebuffs"}
+        if (spell.get("heighten_pattern") == "plus_2"
+                and spell.get("heighten_quality") == "scales-well"
+                and populator_roles == {"damage"}):
+            errors.append(f"  {spell['name']} (aonId {spell['aonId']}): damage-only +2 spell still rated scales-well")
+
+    if errors:
+        print(f"FAIL: damage-only +2 rule — {len(errors)} error(s):")
+        for e in errors[:10]:
+            print(e)
+        return False
+    print(f"  PASS: All {len(C27_DAMAGE_ONLY_PLUS2_AONIDS)} damage-only +2 spells are scales-okay; multi-role exemptions preserved")
+    return True
+
+
 def main():
     if "--update-snapshot" in sys.argv:
         obj = load_spell_data()
@@ -1295,6 +1337,15 @@ def main():
     ]
     c24_failed = [r for r in c24_tests if r is False]
     if c24_failed:
+        passed = False
+
+    print()
+    print("=== C27: Damage-Only H+2 Rule ===")
+    c27_tests = [
+        test_c27_damage_only_plus2(spells),
+    ]
+    c27_failed = [r for r in c27_tests if r is False]
+    if c27_failed:
         passed = False
 
     print()
