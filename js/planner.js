@@ -336,6 +336,14 @@
 
     addSlot: function(tradition, level, rank) {
       ensureState(tradition);
+      var cls = currentClass[tradition];
+      if (cls && window.CLASS_DATA && window.CLASS_DATA[cls]) {
+        var classSlots = window.CLASS_DATA[cls].slots[level];
+        if (!classSlots || !classSlots[rank]) {
+          App.toast("This class doesn't have rank " + rank + " slots at this level");
+          return;
+        }
+      }
       planState[tradition][level][rank].push(null);
       this.renderSlots(tradition, level);
       var newIdx = planState[tradition][level][rank].length - 1;
@@ -445,8 +453,15 @@
       var curMaxRank = Math.ceil(level / 2);
       var minMaxRank = Math.min(prevMaxRank, curMaxRank);
 
+      var cls = currentClass[tradition];
+      var classSlots = null;
+      if (cls && window.CLASS_DATA && window.CLASS_DATA[cls]) {
+        classSlots = window.CLASS_DATA[cls].slots[level];
+      }
+
       var overwriteCount = 0;
       for (var r = 1; r <= minMaxRank; r++) {
+        if (classSlots && !classSlots[r]) continue;
         if (!prevState[r]) continue;
         for (var i = 0; i < prevState[r].length; i++) {
           if (prevState[r][i] && curState[r] && i < curState[r].length && curState[r][i]) {
@@ -460,8 +475,15 @@
       }
 
       var copiedCount = 0;
+      var skippedCount = 0;
       for (var r = 1; r <= minMaxRank; r++) {
         if (!prevState[r]) continue;
+        if (classSlots && !classSlots[r]) {
+          for (var i = 0; i < prevState[r].length; i++) {
+            if (prevState[r][i]) skippedCount++;
+          }
+          continue;
+        }
         if (!curState[r]) curState[r] = [];
         for (var i = 0; i < prevState[r].length; i++) {
           if (prevState[r][i]) {
@@ -477,7 +499,9 @@
       this.renderSlots(tradition, level);
       Coverage.update(tradition, level);
       this.updateLevelTabIndicators(tradition);
-      App.toast('Copied ' + copiedCount + ' spell(s) from Level ' + prevLevel);
+      var msg = 'Copied ' + copiedCount + ' spell(s) from Level ' + prevLevel;
+      if (skippedCount > 0) msg += ' (' + skippedCount + ' skipped — rank not available)';
+      App.toast(msg);
     },
 
     rebuildSlotsForClass: function(tradition, level) {
@@ -512,7 +536,22 @@
 
     renderSlots: function(tradition, level) {
       var maxRank = Math.ceil(level / 2);
+      var cls = currentClass[tradition];
+      var classSlots = null;
+      if (cls && window.CLASS_DATA && window.CLASS_DATA[cls]) {
+        classSlots = window.CLASS_DATA[cls].slots[level];
+      }
+
       for (var r = maxRank; r >= 1; r--) {
+        var rankRow = document.getElementById('rank-row-' + tradition + '-' + level + '-' + r);
+        if (rankRow) {
+          if (classSlots && !classSlots[r]) {
+            rankRow.classList.add('rank-row-hidden');
+          } else {
+            rankRow.classList.remove('rank-row-hidden');
+          }
+        }
+
         var container = document.getElementById('slots-' + tradition + '-' + level + '-' + r);
         if (!container) continue;
         var slots = planState[tradition][level][r];

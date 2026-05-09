@@ -924,7 +924,7 @@ def test_bounded_caster_slots():
     import re
     errors = []
 
-    # Magus L20 should have only 3 ranks (7,8,9) with 2 slots each = 6 total
+    # Magus L20 should have only 2 ranks (8,9) with 2 slots each = 4 total
     # Full casters L20 should have ranks 1-9 with 3 each + rank 10 with 1 = 28 total
     # Summoner L20 should have 2 ranks (8,9) with 2 each = 4 total
 
@@ -951,11 +951,11 @@ def test_bounded_caster_slots():
     if magus is None:
         errors.append("Could not parse Magus slots from classes.js")
     else:
-        # Magus L20: should be {7:2, 8:2, 9:2}
+        # Magus L20: should be {8:2, 9:2}
         m20 = magus.get(20, {})
         m20_total = sum(m20.values())
         if m20_total > 10:
-            errors.append(f"Magus L20 total slots = {m20_total} (expected ~6, bounded caster)")
+            errors.append(f"Magus L20 total slots = {m20_total} (expected ~4, bounded caster)")
         if max(m20.keys(), default=0) > 9:
             errors.append(f"Magus L20 has rank 10 slot (bounded casters cap at rank 9)")
         # Magus should NOT have rank 1 slots at L20
