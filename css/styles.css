@@ -69,6 +69,7 @@ body {
   justify-content: flex-start;
   gap: 0.7rem;
   padding: 0.85rem 0 0.4rem;
+  position: relative;
 }
 
 .brand-pf2e {
@@ -128,7 +129,10 @@ body {
   flex-direction: column;
   align-items: flex-end;
   justify-content: center;
-  margin-left: auto;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
   text-align: right;
   line-height: 1.8;
 }
