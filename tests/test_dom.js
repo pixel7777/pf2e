@@ -869,6 +869,182 @@ test.describe('C28: Copy Previous ghost slot prevention for bounded casters', ()
   });
 });
 
+// Helper: setup Arcane Damage at a given level with spells showing
+async function setupArcaneAtLevel(page, level) {
+  await page.goto(APP_URL);
+  await page.waitForLoadState('domcontentloaded');
+
+  await page.click('[data-page="arcane"]');
+  await page.waitForTimeout(300);
+
+  await page.evaluate((lvl) => {
+    const btns = document.querySelectorAll('#levelTabBar-arcane .level-tab');
+    for (const btn of btns) {
+      if (btn.dataset.level === String(lvl)) { btn.click(); break; }
+    }
+  }, level);
+  await page.waitForTimeout(300);
+
+  await page.evaluate(() => {
+    const emptySlot = document.querySelector('.slot-empty');
+    if (emptySlot) emptySlot.closest('tr').click();
+  });
+  await page.waitForTimeout(500);
+}
+
+test.describe('C29-1: Three-group default sort order', () => {
+  test('G1 spell appears before G2 spell, G2 before G3 at high-rank slot', async ({ page }) => {
+    await setupArcaneAtLevel(page, 13);
+
+    const order = await page.evaluate(() => {
+      // Find spells and classify by group using the same logic as applySortOrder
+      const rows = document.querySelectorAll('#spellTable-arcane tr[data-spell-idx]');
+      var sel = window.Planner ? window.Planner.getSelectedSlot() : null;
+      const slotRank = sel ? sel.rank : 7;
+      let g1Index = -1, g2Index = -1, g3Index = -1;
+
+      for (let i = 0; i < rows.length; i++) {
+        const nameEl = rows[i].querySelector('.spell-name-link');
+        if (!nameEl) continue;
+        const name = nameEl.textContent;
+        const hasStar = !!rows[i].querySelector('.mathfinder-star');
+        const rankText = rows[i].children[1] ? rows[i].children[1].textContent.trim() : '';
+        const rank = parseInt(rankText, 10);
+
+        // G1: native rank == slotRank AND starred
+        if (rank === slotRank && hasStar && g1Index === -1) g1Index = i;
+        // G3: unstarred native spell (not MF reviewed) — guaranteed G3
+        if (rank === slotRank && !hasStar && g3Index === -1) g3Index = i;
+      }
+
+      // Find a G2 spell: starred, non-native rank, should be between G1 and G3
+      for (let i = 0; i < rows.length; i++) {
+        const hasStar = !!rows[i].querySelector('.mathfinder-star');
+        const rankText = rows[i].children[1] ? rows[i].children[1].textContent.trim() : '';
+        const rank = parseInt(rankText, 10);
+        if (hasStar && rank < slotRank && g2Index === -1) { g2Index = i; break; }
+      }
+
+      return { g1Index, g2Index, g3Index };
+    });
+
+    // G1 should come before G2, G2 before G3
+    if (order.g1Index >= 0 && order.g2Index >= 0) {
+      expect(order.g1Index).toBeLessThan(order.g2Index);
+    }
+    if (order.g2Index >= 0 && order.g3Index >= 0) {
+      expect(order.g2Index).toBeLessThan(order.g3Index);
+    }
+    // At least G1 and G2 should exist
+    expect(order.g1Index).toBeGreaterThanOrEqual(0);
+    expect(order.g2Index).toBeGreaterThanOrEqual(0);
+  });
+});
+
+test.describe('C29-2: Column sort suppresses three-group logic', () => {
+  test('Name header click produces flat alphabetical order', async ({ page }) => {
+    await setupArcaneAtLevel(page, 13);
+
+    const result = await page.evaluate(() => {
+      const header = document.querySelector('#spellTable-arcane .sortable-header[data-sort-col="name"]');
+      if (header) header.click();
+      const rows = document.querySelectorAll('#spellTable-arcane tr[data-spell-idx]');
+      const names = [];
+      for (let i = 0; i < Math.min(20, rows.length); i++) {
+        const el = rows[i].querySelector('.spell-name-link');
+        if (el) names.push(el.textContent);
+      }
+      // Check that a G3 spell with early alphabet sorts before a G1 spell with late alphabet
+      let isAlphabetical = true;
+      for (let i = 1; i < names.length; i++) {
+        if (names[i].localeCompare(names[i-1]) < 0) { isAlphabetical = false; break; }
+      }
+      return { isAlphabetical, count: names.length };
+    });
+
+    expect(result.isAlphabetical).toBe(true);
+    expect(result.count).toBeGreaterThan(5);
+  });
+});
+
+test.describe('C29-3: Default sort restoration after column sort cycle', () => {
+  test('cycling Name header asc→desc→default restores three-group sort', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+
+    await page.click('[data-page="arcane"]');
+    await page.waitForTimeout(300);
+
+    // Select level 13
+    await page.evaluate(() => {
+      const btns = document.querySelectorAll('#levelTabBar-arcane .level-tab');
+      for (const btn of btns) {
+        if (btn.dataset.level === '13') { btn.click(); break; }
+      }
+    });
+    await page.waitForTimeout(300);
+
+    // Click a slot at the highest rank (rank 7) to get a high slot rank
+    await page.evaluate(() => {
+      const rows = document.querySelectorAll('.slot-row');
+      for (const row of rows) {
+        const rankLabel = row.closest('.rank-row');
+        if (rankLabel) {
+          const label = rankLabel.querySelector('.rank-label');
+          if (label && label.textContent.includes('7')) {
+            const emptySlot = row.querySelector('.slot-empty');
+            if (emptySlot) { row.click(); return; }
+          }
+        }
+      }
+      // Fallback: click any empty slot
+      const any = document.querySelector('.slot-empty');
+      if (any) any.closest('tr').click();
+    });
+    await page.waitForTimeout(500);
+
+    // Cycle sort: asc → desc → default (separate clicks with re-render time)
+    await page.evaluate(() => {
+      document.querySelector('#spellTable-arcane .sortable-header[data-sort-col="name"]').click();
+    });
+    await page.waitForTimeout(200);
+    await page.evaluate(() => {
+      document.querySelector('#spellTable-arcane .sortable-header[data-sort-col="name"]').click();
+    });
+    await page.waitForTimeout(200);
+    await page.evaluate(() => {
+      document.querySelector('#spellTable-arcane .sortable-header[data-sort-col="name"]').click();
+    });
+    await page.waitForTimeout(300);
+
+    const result = await page.evaluate(() => {
+      const rows = document.querySelectorAll('#spellTable-arcane tr[data-spell-idx]');
+      var sel = window.Planner ? window.Planner.getSelectedSlot() : null;
+      var slotRank = sel ? sel.rank : 7;
+
+      // After restoring default, G1 (starred + native) should precede G2 (starred + non-native scalers)
+      let firstG1Idx = -1;
+      let firstNonNativeStarredIdx = -1;
+
+      for (let i = 0; i < rows.length; i++) {
+        const hasStar = !!rows[i].querySelector('.mathfinder-star');
+        const rankText = rows[i].children[1] ? rows[i].children[1].textContent.trim() : '';
+        const rank = parseInt(rankText, 10);
+        if (hasStar && rank === slotRank && firstG1Idx === -1) firstG1Idx = i;
+        if (hasStar && rank < slotRank && firstNonNativeStarredIdx === -1) firstNonNativeStarredIdx = i;
+      }
+
+      return { firstG1Idx, firstNonNativeStarredIdx, slotRank };
+    });
+
+    // G1 native starred should appear before any non-native starred
+    if (result.firstG1Idx >= 0 && result.firstNonNativeStarredIdx >= 0) {
+      expect(result.firstG1Idx).toBeLessThan(result.firstNonNativeStarredIdx);
+    }
+    expect(result.firstG1Idx).toBeGreaterThanOrEqual(0);
+  });
+});
+
 test.describe('C26-1: Version indicator on About page', () => {
   test('About page shows version indicator at the bottom', async ({ page }) => {
     await page.goto(APP_URL);
