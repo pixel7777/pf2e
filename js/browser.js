@@ -365,7 +365,7 @@
       results.push(s);
     }
 
-    var sorted = applySortOrder(results);
+    var sorted = applySortOrder(results, slotRank);
     if (opts.withMeta) return { results: sorted, baseCount: baseCount };
     return sorted;
   }
@@ -390,14 +390,55 @@
     return lowest;
   }
 
-  function applySortOrder(results) {
+  function isParked(spell, slotRank) {
+    if (spell.native_rank === slotRank) return false;
+    return (spell.heighten_ranks || []).indexOf(slotRank) === -1;
+  }
+
+  function isReplacedAt(spell, slotRank) {
+    var rb = spell.replaced_by || [];
+    for (var i = 0; i < rb.length; i++) {
+      if (rb[i].at_rank <= slotRank) return true;
+    }
+    return false;
+  }
+
+  function getSortGroup(spell, slotRank) {
+    if (spell.native_rank === slotRank && spell.mathfinder_reviewed) return 1;
+    if (spell.mathfinder_reviewed
+        && (spell.heighten_quality === 'scales-well' || spell.heighten_quality === 'fixed-meaningful')
+        && !isParked(spell, slotRank)
+        && !isReplacedAt(spell, slotRank)) return 2;
+    return 3;
+  }
+
+  function applySortOrder(results, slotRank) {
     var f = window.SpellFilters;
     if (!f.sortColumn || !f.sortDirection) {
       results.sort(function(a, b) {
+        var ga = getSortGroup(a, slotRank);
+        var gb = getSortGroup(b, slotRank);
+        if (ga !== gb) return ga - gb;
+
+        if (ga === 1) {
+          return a.name.localeCompare(b.name);
+        }
+
+        if (ga === 2) {
+          if (b.native_rank !== a.native_rank) return b.native_rank - a.native_rank;
+          return a.name.localeCompare(b.name);
+        }
+
+        // Group 3: native-first, then starred-first within non-native, then rank DESC, then name ASC
+        var aNative = a.native_rank === slotRank ? 0 : 1;
+        var bNative = b.native_rank === slotRank ? 0 : 1;
+        if (aNative !== bNative) return aNative - bNative;
+        if (aNative === 1) {
+          var aStarred = a.mathfinder_reviewed ? 0 : 1;
+          var bStarred = b.mathfinder_reviewed ? 0 : 1;
+          if (aStarred !== bStarred) return aStarred - bStarred;
+        }
         if (b.native_rank !== a.native_rank) return b.native_rank - a.native_rank;
-        var aStarred = a.mathfinder_reviewed ? 1 : 0;
-        var bStarred = b.mathfinder_reviewed ? 1 : 0;
-        if (aStarred !== bStarred) return bStarred - aStarred;
         return a.name.localeCompare(b.name);
       });
       return results;
