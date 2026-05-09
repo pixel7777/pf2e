@@ -1574,11 +1574,16 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
   border: 2px solid;
 }
 
-.flow-step:nth-child(1) .flow-number { background: rgba(163,45,45,0.08);  border-color: #a32d2d; color: #a32d2d; }
-.flow-step:nth-child(2) .flow-number { background: rgba(184,92,20,0.08);  border-color: #b85c14; color: #b85c14; }
-.flow-step:nth-child(3) .flow-number { background: rgba(26,122,66,0.08);  border-color: #1a7a42; color: #1a7a42; }
-.flow-step:nth-child(4) .flow-number { background: rgba(45,90,138,0.08);  border-color: #2d5a8a; color: #2d5a8a; }
-.flow-step:nth-child(5) .flow-number { background: rgba(92,74,130,0.08);  border-color: #5c4a82; color: #5c4a82; }
+.flow-step:nth-child(1)  .flow-number { background: rgba(163,45,45,0.08);  border-color: #a32d2d; color: #a32d2d; }
+.flow-step:nth-child(2)  .flow-number { background: rgba(184,92,20,0.08);  border-color: #b85c14; color: #b85c14; }
+.flow-step:nth-child(3)  .flow-number { background: rgba(184,150,20,0.08); border-color: #b89614; color: #9a7e10; }
+.flow-step:nth-child(4)  .flow-number { background: rgba(26,122,66,0.08);  border-color: #1a7a42; color: #1a7a42; }
+.flow-step:nth-child(5)  .flow-number { background: rgba(20,140,140,0.08); border-color: #148c8c; color: #148c8c; }
+.flow-step:nth-child(6)  .flow-number { background: rgba(45,90,138,0.08);  border-color: #2d5a8a; color: #2d5a8a; }
+.flow-step:nth-child(7)  .flow-number { background: rgba(60,60,160,0.08);  border-color: #3c3ca0; color: #3c3ca0; }
+.flow-step:nth-child(8)  .flow-number { background: rgba(92,74,130,0.08);  border-color: #5c4a82; color: #5c4a82; }
+.flow-step:nth-child(9)  .flow-number { background: rgba(130,50,130,0.08); border-color: #823282; color: #823282; }
+.flow-step:nth-child(10) .flow-number { background: rgba(160,50,100,0.08); border-color: #a03264; color: #a03264; }
 
 .flow-line { width: 2px; flex: 1; min-height: 12px; background: var(--border-panel); }
 .flow-step:last-child .flow-line { display: none; }
@@ -2455,12 +2460,14 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
   width: 240px;
   min-width: 240px;
   position: sticky;
-  top: 20px;
+  top: 150px;
   align-self: flex-start;
   display: flex;
   flex-direction: column;
   gap: 2px;
   padding: 16px 0;
+  max-height: calc(100vh - 170px);
+  overflow-y: auto;
 }
 
 .about-toc-link {
