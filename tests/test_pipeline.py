@@ -1224,17 +1224,19 @@ def test_c27_damage_only_plus2(spells):
         if spell.get("heighten_quality") != "scales-okay":
             errors.append(f"  {spell['name']} (aonId {aon_id}): heighten_quality={spell.get('heighten_quality')!r}, expected 'scales-okay'")
 
-    # Verify multi-role damage+X spells with +2 are NOT affected (e.g., Dehydrate, Force Barrage)
-    exempt_names = {"Dehydrate", "Force Barrage"}
+    # Verify exempt spells keep scales-well (Dehydrate: multi-role; Force Barrage: editorial override)
+    exempt_spells = {"Dehydrate": "scales-well", "Force Barrage": "scales-well"}
     for spell in spells:
-        if spell["name"] in exempt_names:
-            if spell.get("heighten_quality") == "scales-okay":
-                non_auto_roles = set(spell.get("roles", [])) - {"healing", "reactions", "oneAction", "silverBullets", "prebuffs"}
-                if non_auto_roles != {"damage"}:
-                    errors.append(f"  {spell['name']}: multi-role spell incorrectly capped to scales-okay")
+        if spell["name"] in exempt_spells:
+            expected = exempt_spells[spell["name"]]
+            if spell.get("heighten_quality") != expected:
+                errors.append(f"  {spell['name']}: expected {expected}, got {spell.get('heighten_quality')!r}")
 
-    # Broad check: no damage-only +2 spell should be scales-well
+    # Broad check: no damage-only +2 spell should be scales-well (except editorial exemptions)
+    editorial_exempt = set(exempt_spells.keys())
     for spell in spells:
+        if spell["name"] in editorial_exempt:
+            continue
         populator_roles = set(spell.get("roles", [])) - {"healing", "reactions", "oneAction", "silverBullets", "prebuffs"}
         if (spell.get("heighten_pattern") == "plus_2"
                 and spell.get("heighten_quality") == "scales-well"

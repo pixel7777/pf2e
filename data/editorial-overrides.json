@@ -653,7 +653,7 @@
   {
     "aonId": 1536,
     "name": "Force Barrage",
-    "reason": "Cycle 23 prompt-tuning gap: Sonnet repeatedly missed Auto + Auto-effect detection despite explicit canonical prompt examples and the literal phrase 'It automatically hits the target' in the spell text. After 3 prompt-tuning iterations the LLM continued to output empty defense_tags_added. Force Barrage has no save and no attack roll — damage just lands. The multi-shard mechanic (up to 3 shards via 3-action mode, each targeted independently) also earns Multi. Sonnet also failed to emit damage_types because of the Auto confusion, so this override sets damage_types=['Force'] explicitly.",
+    "reason": "Cycle 23 prompt-tuning gap: Sonnet repeatedly missed Auto + Auto-effect detection despite explicit canonical prompt examples and the literal phrase 'It automatically hits the target' in the spell text. After 3 prompt-tuning iterations the LLM continued to output empty defense_tags_added. Force Barrage has no save and no attack roll — damage just lands. The multi-shard mechanic (up to 3 shards via 3-action mode, each targeted independently) also earns Multi. Sonnet also failed to emit damage_types because of the Auto confusion, so this override sets damage_types=['Force'] explicitly. | Cycle 27: Force Barrage keeps scales-well despite damage-only +2 rule — multi-shard targeting provides control-like value independent of the damage curve (Heidi decision).",
     "overrides": {
       "defense_tags": [
         "Auto"
@@ -667,7 +667,8 @@
       ],
       "damage_types": [
         "Force"
-      ]
+      ],
+      "heighten_quality": "scales-well"
     }
   },
   {

@@ -1018,8 +1018,17 @@ def merge_into_spell_data():
         for f in fixes:
             fix_counter[f] += 1
 
-        # Re-apply offense gate: consistency rules may have stripped Auto, leaving
-        # defense_tags empty. In that case, offense fields must be cleared per Decision 016.
+    # Re-apply editorial heighten_quality overrides — editorial judgment wins over
+    # consistency rules (e.g., Force Barrage keeps scales-well per Heidi decision).
+    for aon_id, entry in overrides.items():
+        if "heighten_quality" in entry.get("overrides", {}):
+            spell = by_aon.get(aon_id)
+            if spell and spell["heighten_quality"] != entry["overrides"]["heighten_quality"]:
+                spell["heighten_quality"] = entry["overrides"]["heighten_quality"]
+
+    # Re-apply offense gate: consistency rules may have stripped Auto, leaving
+    # defense_tags empty. In that case, offense fields must be cleared per Decision 016.
+    for spell in spell_data["spells"]:
         if not spell.get("defense_tags"):
             if spell.get("damage_types") or spell.get("conditions_imposed") or spell.get("conditions_by_outcome") or spell.get("weaknesses_imposed"):
                 spell["damage_types"] = []
