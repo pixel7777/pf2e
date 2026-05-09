@@ -173,7 +173,9 @@
       "debuff",
       "oneAction"
     ],
-    "defense_tags": [],
+    "defense_tags": [
+      "AC"
+    ],
     "era": "other"
   },
   {
@@ -776,7 +778,9 @@
       "buff",
       "damage"
     ],
-    "defense_tags": [],
+    "defense_tags": [
+      "Auto"
+    ],
     "era": "other"
   },
   {

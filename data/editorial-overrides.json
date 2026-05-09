@@ -89,19 +89,39 @@
   {
     "aonId": 1385,
     "name": "Dancing Fountain",
-    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern. Clear false positive.",
+    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern. Clear false positive. | Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"Ref\"]",
     "overrides": {
       "conditions_imposed": [],
-      "conditions_by_outcome": null
+      "conditions_by_outcome": null,
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Bludg"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
     }
   },
   {
     "aonId": 1759,
     "name": "Wrathful Storm",
-    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern (driving snow conceals everything in or beneath the cloud). Clear false positive but keep the multi-damage and other effects intact.",
+    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern (driving snow conceals everything in or beneath the cloud). Clear false positive but keep the multi-damage and other effects intact. | Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Cold\", \"Elec\"]; defense_tags: [] -> [\"Ref\", \"Fort\"]. Blizzard: no save. Lightning: basic Reflex. Hail: basic Fortitude.",
     "overrides": {
       "conditions_imposed": [],
-      "conditions_by_outcome": null
+      "conditions_by_outcome": null,
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Cold",
+        "Elec"
+      ],
+      "defense_tags": [
+        "Ref",
+        "Fort"
+      ]
     }
   },
   {
@@ -172,7 +192,7 @@
   {
     "aonId": 724,
     "name": "Transmute Rock and Mud",
-    "reason": "Cycle 07 Phase 2 skip: model tried to add 'Ref' to defense_tags_added (rule violation). spell.json's saving_throw field is null even though spell text describes a basic Reflex save for the mud-to-rock catch — so structured pass missed it. Editorial override sets defense_tags=['Ref'] so offense-eval gate doesn't strip our offense fields. Spell creates difficult terrain (control), can deal Bludgeoning if cast on a ceiling, and impose Prone/Grabbed when mud-to-rock catches creatures. heighten_quality scales-okay (heighten_pattern=plus_2).",
+    "reason": "Cycle 07 Phase 2 skip: model tried to add 'Ref' to defense_tags_added (rule violation). spell.json's saving_throw field is null even though spell text describes a basic Reflex save for the mud-to-rock catch — so structured pass missed it. Editorial override sets defense_tags=['Ref'] so offense-eval gate doesn't strip our offense fields. Spell creates difficult terrain (control), can deal Bludgeoning if cast on a ceiling, and impose Prone/Grabbed when mud-to-rock catches creatures. heighten_quality scales-okay (heighten_pattern=plus_2). | Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]",
     "overrides": {
       "defense_tags": [
         "Ref"
@@ -203,7 +223,10 @@
         "debuff"
       ],
       "reliability_tags": [],
-      "heighten_quality": "scales-okay"
+      "heighten_quality": "scales-okay",
+      "targeting_tags": [
+        "Multi"
+      ]
     }
   },
   {
@@ -315,7 +338,7 @@
   {
     "aonId": 2127,
     "name": "Sawtooth Terrain",
-    "reason": "Cycle 07 Phase 2 skip: model tried to add 'Ref' to defense_tags_added (rule violation). spell.json's saving_throw is null even though spell text says 'basic Reflex save' — structured pass missed it. Editorial override sets defense_tags=['Ref'] AND basic_save=true so offense gate retains our values and Success-effect rule applies. Difficult terrain + slashing + persistent bleed + speed penalty. Speed penalty is NOT Slowed (literal text says '-10-foot circumstance penalty to their Speed').",
+    "reason": "Cycle 07 Phase 2 skip: model tried to add 'Ref' to defense_tags_added (rule violation). spell.json's saving_throw is null even though spell text says 'basic Reflex save' — structured pass missed it. Editorial override sets defense_tags=['Ref'] AND basic_save=true so offense gate retains our values and Success-effect rule applies. Difficult terrain + slashing + persistent bleed + speed penalty. Speed penalty is NOT Slowed (literal text says '-10-foot circumstance penalty to their Speed'). | Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]",
     "overrides": {
       "defense_tags": [
         "Ref"
@@ -335,7 +358,10 @@
       "reliability_tags": [
         "Success-effect"
       ],
-      "heighten_quality": "scales-well"
+      "heighten_quality": "scales-well",
+      "targeting_tags": [
+        "Multi"
+      ]
     }
   },
   {
@@ -838,11 +864,20 @@
   {
     "aonId": 694,
     "name": "Heat Metal",
-    "reason": "Cycle 24 (A2): D020 Category 8 spot-check fix. Missing damage role alongside debuff.",
+    "reason": "Cycle 24 (A2): D020 Category 8 spot-check fix. Missing damage role alongside debuff. | Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Fire\"]; defense_tags: [] -> [\"Ref\"]. Reflex saving throw for damage; can Release item to improve degree",
     "overrides": {
       "roles": [
         "damage",
         "debuff"
+      ],
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Fire"
+      ],
+      "defense_tags": [
+        "Ref"
       ]
     }
   },
@@ -881,9 +916,12 @@
   {
     "aonId": 872,
     "name": "Blink Charge",
-    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors.",
+    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors. | Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
     "overrides": {
-      "heighten_quality": "scales-okay"
+      "heighten_quality": "scales-okay",
+      "targeting_tags": [
+        "ST"
+      ]
     }
   },
   {
@@ -897,33 +935,1743 @@
   {
     "aonId": 1292,
     "name": "Percussive Impact",
-    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors.",
+    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors. | Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Bludg\", \"Sonic\"]; defense_tags: [] -> [\"AC\"]. Spell attack roll against target",
     "overrides": {
-      "heighten_quality": "scales-okay"
+      "heighten_quality": "scales-okay",
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Bludg",
+        "Sonic"
+      ],
+      "defense_tags": [
+        "AC"
+      ]
     }
   },
   {
     "aonId": 1687,
     "name": "Spiritual Armament",
-    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors.",
+    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors. | Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
     "overrides": {
-      "heighten_quality": "scales-okay"
+      "heighten_quality": "scales-okay",
+      "targeting_tags": [
+        "ST"
+      ]
     }
   },
   {
     "aonId": 306,
     "name": "Spiritual Weapon",
-    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors.",
+    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors. | Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Force\"]; defense_tags: [] -> [\"AC\"]. Melee spell attacks against single targets",
     "overrides": {
-      "heighten_quality": "scales-okay"
+      "heighten_quality": "scales-okay",
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Force"
+      ],
+      "defense_tags": [
+        "AC"
+      ]
     }
   },
   {
     "aonId": 1410,
     "name": "Splinter Volley",
-    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors.",
+    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors. | Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\", \"Multi\"]",
     "overrides": {
-      "heighten_quality": "scales-okay"
+      "heighten_quality": "scales-okay",
+      "targeting_tags": [
+        "ST",
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 2342,
+    "name": "Animus Mine",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]. Triggers against one creature that attempts mental manipulation; deals damage to 'the triggering creature' (singular)",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 1236,
+    "name": "Aqueous Blast",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"AC\"]. Ranged spell attack roll against one target; deals bludgeoning damage on hit",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Bludg"
+      ],
+      "defense_tags": [
+        "AC"
+      ]
+    }
+  },
+  {
+    "aonId": 2524,
+    "name": "Armor of Thorn and Claw",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Bleed\", \"Pierc\"]; defense_tags: [] -> [\"Auto\"]. Reactive damage to creatures that touch/hit you; no save, no attack roll; affects one attacker at a time",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Bleed",
+        "Pierc"
+      ],
+      "defense_tags": [
+        "Auto"
+      ]
+    }
+  },
+  {
+    "aonId": 2461,
+    "name": "Avenging Wildwood",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]. Tree makes a Strike against a single creature within 15 feet",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 2153,
+    "name": "Beseech Arcanotheign",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Elec\", \"Sonic\"]; defense_tags: [] -> [\"Ref\"]. Incarnate spell; 60-foot emanation hits all enemies",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Elec",
+        "Sonic"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 24,
+    "name": "Blade Barrier",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Force\"]; defense_tags: [] -> [\"Ref\"]. Wall deals damage to each creature in its space; basic Reflex save",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Force"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 1450,
+    "name": "Blazing Bolt",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\", \"Multi\"]",
+    "overrides": {
+      "targeting_tags": [
+        "ST",
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 869,
+    "name": "Blazing Dive",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]. 10-foot emanation affects all creatures in area",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 651,
+    "name": "Blightburn Blast",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 1279,
+    "name": "Blinding Foam",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 648,
+    "name": "Blood Feast",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Bleed\", \"Pierc\"]; defense_tags: [] -> [\"AC\"]. Spell attack roll (melee touch attack); no saving throw mentioned",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Bleed",
+        "Pierc"
+      ],
+      "defense_tags": [
+        "AC"
+      ]
+    }
+  },
+  {
+    "aonId": 1908,
+    "name": "Bonewall Bulwark",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"AC\"]. Attacks a single creature using spell attack modifier",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Bludg"
+      ],
+      "defense_tags": [
+        "AC"
+      ]
+    }
+  },
+  {
+    "aonId": 2443,
+    "name": "Boomerang Shot",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"AC\"]. Spell attack roll against target's AC; deals bludgeoning damage",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Bludg"
+      ],
+      "defense_tags": [
+        "AC"
+      ]
+    }
+  },
+  {
+    "aonId": 1262,
+    "name": "Bound in Death",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 1382,
+    "name": "Brine Dragon Bile",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 1462,
+    "name": "Chain Lightning",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [\"ST\"] -> [\"ST\", \"Multi\"]",
+    "overrides": {
+      "targeting_tags": [
+        "ST",
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 882,
+    "name": "Chromatic Image",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Acid\", \"Elec\", \"Fire\", \"Mental\", \"Poison\"]; defense_tags: [] -> [\"Auto\"]. Reactive damage when a foe destroys an image; no save for the damage; affects one attacker",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Acid",
+        "Elec",
+        "Fire",
+        "Mental",
+        "Poison"
+      ],
+      "defense_tags": [
+        "Auto"
+      ]
+    }
+  },
+  {
+    "aonId": 37,
+    "name": "Chromatic Wall",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Ref\", \"Fort\", \"Will\"]. Wall; damage type varies by random color. Red/Orange/Yellow require Reflex, Green requires Fortitude, Indigo/Violet require Will.",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Varies"
+      ],
+      "defense_tags": [
+        "Ref",
+        "Fort",
+        "Will"
+      ]
+    }
+  },
+  {
+    "aonId": 2346,
+    "name": "Cloak of Light",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Vitality\"]; defense_tags: [] -> [\"Fort\"]. Affects all undead creatures that begin turn adjacent; basic Fortitude save",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Vitality"
+      ],
+      "defense_tags": [
+        "Fort"
+      ]
+    }
+  },
+  {
+    "aonId": 1979,
+    "name": "Concordant Choir",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\", \"Multi\"]",
+    "overrides": {
+      "targeting_tags": [
+        "ST",
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 2497,
+    "name": "Conquering Soldiers",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Mental\"]; defense_tags: [] -> [\"Will\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Mental"
+      ],
+      "defense_tags": [
+        "Will"
+      ]
+    }
+  },
+  {
+    "aonId": 1110,
+    "name": "Consecrate Flesh",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]. Reactive damage against creature that touches or damages you; one attacker at a time",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 652,
+    "name": "Control Sand",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Slash\"]; defense_tags: [] -> [\"Ref\"]. Deals slashing damage; basic Reflex save",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Slash"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 1982,
+    "name": "Corrosive Muck",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Acid\"]; defense_tags: [] -> [\"Ref\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Acid"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 1301,
+    "name": "Cyclone Rondo",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Unspecified\"]; defense_tags: [] -> [\"Ref\"]. Deals '4d6 damage' with no type specified; basic Reflex save; also Reflex to avoid prone",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Unspecified"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 2468,
+    "name": "Defended By Spirits",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Spirit\"]; defense_tags: [] -> [\"Auto\"]. Enemy takes spirit damage automatically when attacking the ally; no save or attack roll",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Spirit"
+      ],
+      "defense_tags": [
+        "Auto"
+      ]
+    }
+  },
+  {
+    "aonId": 892,
+    "name": "Deity's Strike",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Force\"]; defense_tags: [] -> [\"AC\", \"Ref\"]. Primary attack uses spell attack roll (AC); secondary area effect requires basic Reflex save",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Force"
+      ],
+      "defense_tags": [
+        "AC",
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 656,
+    "name": "Deluge",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"Ref\"]. Creatures take bludgeoning damage equal to feet fallen; Reflex save to avoid being pushed",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Bludg"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 1484,
+    "name": "Desiccate",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 2327,
+    "name": "Devouring Void",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Void\"]; defense_tags: [] -> [\"Fort\", \"Ref\"]. Basic Fortitude save for void damage; Reflex save to avoid move disruption",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Void"
+      ],
+      "defense_tags": [
+        "Fort",
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 2163,
+    "name": "Diadem of Divine Radiance",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Spirit\"]; defense_tags: [] -> [\"AC\"]. Ranged spell attack against one target; deals spirit damage",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Spirit"
+      ],
+      "defense_tags": [
+        "AC"
+      ]
+    }
+  },
+  {
+    "aonId": 2528,
+    "name": "Divine Dragon's Watch",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Spirit\"]; defense_tags: [] -> [\"Ref\"]. Dragon's retributive breath has basic Reflex save",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Spirit"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 2529,
+    "name": "Dragon Turret",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Ref\"]. Damage type depends on tradition used: arcane=force, divine=spirit, occult=mental, primal=fire. 'Varies' because it changes per caster.",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Varies"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 1507,
+    "name": "Earthquake",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"Ref\"]. Collapse deals bludgeoning damage; basic Reflex save; Reflex to avoid fissures",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Bludg"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 901,
+    "name": "Elemental Absorption",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Ref\"]. Caster chooses element; damage type varies by element chosen; releases to one enemy; basic Reflex save",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Varies"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 903,
+    "name": "Elemental Confluence",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 2570,
+    "name": "Falling Sky",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"Fort\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Bludg"
+      ],
+      "defense_tags": [
+        "Fort"
+      ]
+    }
+  },
+  {
+    "aonId": 1526,
+    "name": "Field of Life",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 2155,
+    "name": "Final Fate of The Locust Host",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Pierc\", \"Poison\"]; defense_tags: [] -> [\"Fort\", \"Ref\"]. Depart deals 5d8 piercing + 5d8 poison damage (fixed types, not a choice). Fort save for Arrive sickened; Reflex save for Depart damage.",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Pierc",
+        "Poison"
+      ],
+      "defense_tags": [
+        "Fort",
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 117,
+    "name": "Fire Seeds",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]. Seeds explode in 5-foot bursts affecting multiple creatures",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 1529,
+    "name": "Fire Shield",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]. Reactive damage to attacker when Shield Blocking melee; affects one creature at a time",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 912,
+    "name": "Flame Wisp",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Fire\"]; defense_tags: [] -> [\"Auto\"]. Wisp hits creature you Struck; no additional save or attack roll for the wisp damage",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Fire"
+      ],
+      "defense_tags": [
+        "Auto"
+      ]
+    }
+  },
+  {
+    "aonId": 913,
+    "name": "Flammable Fumes",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Fire\", \"Poison\"]; defense_tags: [] -> [\"Ref\"]. Poison damage has no save, but explosion deals fire damage with basic Reflex save. Reflex is the key defensive interaction.",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Fire",
+        "Poison"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 1265,
+    "name": "Flense",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Bleed\", \"Slash\"]; defense_tags: [] -> [\"AC\"]. Spell attack roll against living creatures",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Bleed",
+        "Slash"
+      ],
+      "defense_tags": [
+        "AC"
+      ]
+    }
+  },
+  {
+    "aonId": 914,
+    "name": "Flowing Strike",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"AC\"]. Uses a Strike (attack roll); wave damage is automatic on hit but triggered by the Strike",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Bludg"
+      ],
+      "defense_tags": [
+        "AC"
+      ]
+    }
+  },
+  {
+    "aonId": 2352,
+    "name": "Fungal Hyphae",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 2156,
+    "name": "Garden Of The Green Man's Growth",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\", \"Slash\"]; defense_tags: [] -> [\"Ref\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Bludg",
+        "Slash"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 1998,
+    "name": "Grisly Growths",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 1552,
+    "name": "Harm",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\", \"Multi\"]; damage_types: [] -> [\"Void\"]; defense_tags: [] -> [\"Fort\"]. 1-action: touch, single target (ST). 3-action: 30-foot emanation (Multi). Basic Fortitude save.",
+    "overrides": {
+      "targeting_tags": [
+        "ST",
+        "Multi"
+      ],
+      "damage_types": [
+        "Void"
+      ],
+      "defense_tags": [
+        "Fort"
+      ]
+    }
+  },
+  {
+    "aonId": 2508,
+    "name": "Holy Host",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"AC\"]. Incarnate summon with multiple army choices (Agathions=fire, Angels=spirit, Archons=sonic). Caster chooses which army. 'Varies' is appropriate.",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Varies"
+      ],
+      "defense_tags": [
+        "AC"
+      ]
+    }
+  },
+  {
+    "aonId": 1090,
+    "name": "Hypnopompic Terrors",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 1567,
+    "name": "Illusory Creature",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]. Creature makes attacks against single targets using spell attack modifier",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 2572,
+    "name": "Implement of Destruction",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 1572,
+    "name": "Implosion",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 1102,
+    "name": "Incendiary Fog",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Fire\"]; defense_tags: [] -> [\"Ref\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Fire"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 931,
+    "name": "Inexhaustible Cynicism",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 1229,
+    "name": "Inkshot",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Poison\"]; defense_tags: [] -> [\"AC\"]. Spell attack roll against one target",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Poison"
+      ],
+      "defense_tags": [
+        "AC"
+      ]
+    }
+  },
+  {
+    "aonId": 2509,
+    "name": "Instant Minefield",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Fire\", \"Pierc\"]; defense_tags: [] -> [\"Ref\"]. Mines explode in 5-foot emanation; basic Reflex save; can affect multiple creatures",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Fire",
+        "Pierc"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 2510,
+    "name": "Jassim's Allegiance",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Fire\", \"Pierc\", \"Slash\"]; defense_tags: [] -> [\"Fort\", \"Ref\"]. Fixed damage types: Arrive deals fire+piercing, Depart deals slashing. All three always apply.",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Fire",
+        "Pierc",
+        "Slash"
+      ],
+      "defense_tags": [
+        "Fort",
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 2536,
+    "name": "Lashing Rope",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]. Melee spell attack Strikes against individual creatures",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 2540,
+    "name": "Life's Flowing River",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]. River affects creatures that enter or are in it; can affect multiple",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 947,
+    "name": "Mantle of the Magma Heart",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Bludg\", \"Fire\"]; defense_tags: [] -> [\"Auto\"]. Heart of Fire: reactive damage to one creature that touches/hits you, no save. Lava fist: unarmed Strike. Both target single creatures.",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Bludg",
+        "Fire"
+      ],
+      "defense_tags": [
+        "Auto"
+      ]
+    }
+  },
+  {
+    "aonId": 1374,
+    "name": "Mercurial Stride",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]. Moves through creatures; each creature in path must save (Fortitude)",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 1078,
+    "name": "Mirecloak",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 650,
+    "name": "Necrotic Radiation",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Void\"]; defense_tags: [] -> [\"Ref\"]. Can affect any creature ending turn holding object or in area; Reflex save when cast on attended object. Multi because area version affects all creatures ending turn there.",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Void"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 1093,
+    "name": "Nettleskin",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Pierc\"]; defense_tags: [] -> [\"Auto\"]. Thorns deal piercing damage to adjacent creatures that hit you with melee; no save; one attacker at a time",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Pierc"
+      ],
+      "defense_tags": [
+        "Auto"
+      ]
+    }
+  },
+  {
+    "aonId": 960,
+    "name": "One with the Land",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Slash\", \"Varies\"]; defense_tags: [] -> [\"AC\"]. Strikes target single creatures, though can target any creature within 60 feet",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Slash",
+        "Varies"
+      ],
+      "defense_tags": [
+        "AC"
+      ]
+    }
+  },
+  {
+    "aonId": 963,
+    "name": "Organsight",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Unspecified\"]; defense_tags: [] -> [\"Auto\"]. Grants precision damage on next Strike/spell; the precision damage itself has no type (it adds to the Strike's existing damage). No save for the extra damage. Defense comes from the Strike/spell itself.",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Unspecified"
+      ],
+      "defense_tags": [
+        "Auto"
+      ]
+    }
+  },
+  {
+    "aonId": 965,
+    "name": "Pernicious Poltergeist",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Force\", \"Void\"]; defense_tags: [] -> [\"Fort\", \"Ref\", \"Will\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Force",
+        "Void"
+      ],
+      "defense_tags": [
+        "Fort",
+        "Ref",
+        "Will"
+      ]
+    }
+  },
+  {
+    "aonId": 2512,
+    "name": "Pest Swarm",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Fort\", \"Ref\"]. Auto-override: Incarnate summon with multiple pest choices (Cockroaches=pierc, Mosquitoes=pierc, Rats=slash, etc). Caster chooses which pest. 'Varies' is appropriate.",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Varies"
+      ],
+      "defense_tags": [
+        "Fort",
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 967,
+    "name": "Petal Storm",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Slash\"]; defense_tags: [] -> [\"Ref\"]. Deals slashing damage; basic Reflex save",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Slash"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 1629,
+    "name": "Phantasmagoria",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 1230,
+    "name": "Phantasmal Protagonist",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Mental\"]; defense_tags: [] -> [\"AC\", \"Will\"]. Melee Strike uses spell attack roll (AC); also has Will save for flat-footed/slowed effect",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Mental"
+      ],
+      "defense_tags": [
+        "AC",
+        "Will"
+      ]
+    }
+  },
+  {
+    "aonId": 1317,
+    "name": "Phantom Orchestra",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]. 10-foot burst explosions affect multiple creatures",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 1407,
+    "name": "Pollen Pods",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Poison\"]; defense_tags: [] -> [\"Fort\"]. Deals poison damage; Fortitude save",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Poison"
+      ],
+      "defense_tags": [
+        "Fort"
+      ]
+    }
+  },
+  {
+    "aonId": 972,
+    "name": "Positive Attunement",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 227,
+    "name": "Power Word Kill",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Mental\"]; defense_tags: [] -> [\"Auto\"]. No save, no attack roll; effect is automatic based on target's level",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Mental"
+      ],
+      "defense_tags": [
+        "Auto"
+      ]
+    }
+  },
+  {
+    "aonId": 233,
+    "name": "Prismatic Spray",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Acid\", \"Elec\", \"Fire\", \"Poison\"]; defense_tags: [] -> [\"Ref\", \"Fort\", \"Will\"]. Different beams require different saves: red/orange/yellow = Reflex, green/blue = Fortitude, indigo/violet = Will",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Acid",
+        "Elec",
+        "Fire",
+        "Poison"
+      ],
+      "defense_tags": [
+        "Ref",
+        "Fort",
+        "Will"
+      ]
+    }
+  },
+  {
+    "aonId": 2520,
+    "name": "Pyrefowl Rebuke",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]. Deals fire damage to the triggering creature (singular)",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 645,
+    "name": "Pyrotechnics",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 647,
+    "name": "Ravening Maw",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]. Targets one living creature with Will save",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 1266,
+    "name": "Ravenous Darkness",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 2458,
+    "name": "Ray of Corruption",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]. Spell attack against one creature or object",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 813,
+    "name": "Rebounding Barrier",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Auto\"]. Reaction; deals same type as triggering physical attack (bludgeoning/piercing/slashing varies); auto-damage to attacker, no save",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Varies"
+      ],
+      "defense_tags": [
+        "Auto"
+      ]
+    }
+  },
+  {
+    "aonId": 2362,
+    "name": "Reflective Scales",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Ref\"]. Caster chooses acid/cold/fire/electricity/poison; explodes in 20-foot emanation; basic Reflex save",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Varies"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 711,
+    "name": "Rusting Grasp",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Unspecified\"]; defense_tags: [] -> [\"Fort\", \"Ref\"]. Damage has no named type (it's rust damage); Fortitude save for metal creatures, Reflex save for items",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Unspecified"
+      ],
+      "defense_tags": [
+        "Fort",
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 1237,
+    "name": "Scorching Blast",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Fire\"]; defense_tags: [] -> [\"AC\"]. Ranged spell attack roll; targets one creature",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Fire"
+      ],
+      "defense_tags": [
+        "AC"
+      ]
+    }
+  },
+  {
+    "aonId": 638,
+    "name": "Sea Surge",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"Fort\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Bludg"
+      ],
+      "defense_tags": [
+        "Fort"
+      ]
+    }
+  },
+  {
+    "aonId": 2161,
+    "name": "Seize Identity",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 1666,
+    "name": "Shadow Blast",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Ref\", \"Will\"]. Caster chooses damage type from long list; area spell (cone/burst/line); target chooses Reflex or Will save",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Varies"
+      ],
+      "defense_tags": [
+        "Ref",
+        "Will"
+      ]
+    }
+  },
+  {
+    "aonId": 1670,
+    "name": "Shatter",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Sonic\"]; defense_tags: [] -> [\"Auto\"]. Targets unattended object; no save, no attack roll; sonic damage to object",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Sonic"
+      ],
+      "defense_tags": [
+        "Auto"
+      ]
+    }
+  },
+  {
+    "aonId": 2364,
+    "name": "Shattering Gem",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Slash\"]; defense_tags: [] -> [\"Ref\"]",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "damage_types": [
+        "Slash"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 1362,
+    "name": "Signal Skyrocket",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Fire\", \"Sonic\"]; defense_tags: [] -> [\"Ref\"]. Reflex save when exploding in enclosed space",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Fire",
+        "Sonic"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 2515,
+    "name": "Skeleton Army",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bleed\", \"Pierc\", \"Slash\"]; defense_tags: [] -> [\"Ref\"]. Incarnate spell; 20-foot emanation affects all enemies",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Bleed",
+        "Pierc",
+        "Slash"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 717,
+    "name": "Spike Stones",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Pierc\"]; defense_tags: [] -> [\"Auto\"]. Piercing damage per square moved; no save mentioned",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Pierc"
+      ],
+      "defense_tags": [
+        "Auto"
+      ]
+    }
+  },
+  {
+    "aonId": 1688,
+    "name": "Spiritual Guardian",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]. Makes melee spell attack against an adjacent creature (single target)",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 313,
+    "name": "Storm of Vengeance",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Elec\"]; defense_tags: [] -> [\"Ref\", \"Fort\"]. Acid rain: no save. Lightning: basic Reflex. Hail: basic Fortitude. Multiple save types across rounds.",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Elec"
+      ],
+      "defense_tags": [
+        "Ref",
+        "Fort"
+      ]
+    }
+  },
+  {
+    "aonId": 1256,
+    "name": "Summon Ancient Fleshforged",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"AC\"]. Caster chooses which Fleshforged to summon; each deals different damage types. 'Varies' is appropriate.",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Varies"
+      ],
+      "defense_tags": [
+        "AC"
+      ]
+    }
+  },
+  {
+    "aonId": 1005,
+    "name": "Summon Archmage",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Force\"]; defense_tags: [] -> [\"Will\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Force"
+      ],
+      "defense_tags": [
+        "Will"
+      ]
+    }
+  },
+  {
+    "aonId": 1008,
+    "name": "Summon Draconic Legion",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Slash\", \"Varies\"]; defense_tags: [] -> [\"Ref\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Slash",
+        "Varies"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 1423,
+    "name": "Summon Elemental Herald",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bleed\", \"Bludg\", \"Cold\", \"Elec\", \"Fire\", \"Pierc\", \"Slash\", \"Sonic\"]; defense_tags: [] -> [\"Fort\", \"Ref\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Bleed",
+        "Bludg",
+        "Cold",
+        "Elec",
+        "Fire",
+        "Pierc",
+        "Slash",
+        "Sonic"
+      ],
+      "defense_tags": [
+        "Fort",
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 2162,
+    "name": "Summon Oliphaunt Of Jandelay",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\", \"Force\"]; defense_tags: [] -> [\"Fort\", \"Ref\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Bludg",
+        "Force"
+      ],
+      "defense_tags": [
+        "Fort",
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 1209,
+    "name": "Swallow Light",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Cold\", \"Void\"]; defense_tags: [] -> [\"Ref\"]. Breath weapon is 15-foot cone (Multi); primary target is a light effect but damage delivery is AoE",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Cold",
+        "Void"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 1018,
+    "name": "Thundering Dominance",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Mental\"]; defense_tags: [] -> [\"Will\"]. 10-foot emanation from companion/eidolon affects all enemies; basic Will save",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Mental"
+      ],
+      "defense_tags": [
+        "Will"
+      ]
+    }
+  },
+  {
+    "aonId": 1725,
+    "name": "Tree of Seasons",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Ref\"]. Each pod explodes in 5-foot burst; damage type varies by season chosen (electricity/fire/poison/cold); basic Reflex save",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Varies"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 2460,
+    "name": "Trim the Blight",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]. Cone area; affects multiple creatures",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 2518,
+    "name": "Unholy Army",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Fort\", \"Ref\", \"Will\"]. Auto-override: Incarnate summon with multiple army choices (Asuras=slash/bludg, Daemons=varies, Demons=fire, Devils=spirit). Caster chooses army. 'Varies' is appropriate.",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Varies"
+      ],
+      "defense_tags": [
+        "Fort",
+        "Ref",
+        "Will"
+      ]
+    }
+  },
+  {
+    "aonId": 640,
+    "name": "Unseasonable Squall",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"Fort\"]. Fortitude saving throw for push/prone effects",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Bludg"
+      ],
+      "defense_tags": [
+        "Fort"
+      ]
+    }
+  },
+  {
+    "aonId": 660,
+    "name": "Upheaval",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"Ref\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Bludg"
+      ],
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 1748,
+    "name": "Wall of Fire",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Fire\"]; defense_tags: [] -> [\"Auto\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Fire"
+      ],
+      "defense_tags": [
+        "Auto"
+      ]
+    }
+  },
+  {
+    "aonId": 2042,
+    "name": "Wall of Flesh",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Pierc\"]; defense_tags: [] -> [\"AC\", \"Ref\"]. Mouths use spell attack modifier (AC) for Strikes; Arms variant has Reflex save",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Pierc"
+      ],
+      "defense_tags": [
+        "AC",
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 2546,
+    "name": "Wall of Mirrors",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Mental\"]; defense_tags: [] -> [\"Will\"]. Deals mental damage to creatures that Strike it; basic Will save",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Mental"
+      ],
+      "defense_tags": [
+        "Will"
+      ]
+    }
+  },
+  {
+    "aonId": 1752,
+    "name": "Wall of Thorns",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Pierc\"]; defense_tags: [] -> [\"Auto\"]. Piercing damage for moving through; no save mentioned for the damage",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Pierc"
+      ],
+      "defense_tags": [
+        "Auto"
+      ]
+    }
+  },
+  {
+    "aonId": 1127,
+    "name": "Wall of Virtue",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Spirit\", \"Vitality\"]; defense_tags: [] -> [\"Auto\"]. Legacy \"good\" damage = Spirit in remaster schema; positive = Vitality. No save for wall damage = Auto.",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Spirit",
+        "Vitality"
+      ],
+      "defense_tags": [
+        "Auto"
+      ]
+    }
+  },
+  {
+    "aonId": 2044,
+    "name": "Weapon of Judgment",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 375,
+    "name": "Weird",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 839,
+    "name": "Worm's Repast",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
     }
   }
 ]
