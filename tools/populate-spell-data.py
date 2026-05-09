@@ -519,6 +519,8 @@ Assess how well this spell scales when heightened:
 
 CALIBRATION: Most plus-pattern damage spells are scales-well. Most prebuffs that have heighten entries are fixed-meaningful (the bonus, duration, or scope grows). Only mark a prebuff scaling-irrelevant if its heighten entries truly change nothing strategic. Most condition spells with target-count heightening are fixed-meaningful. Most polymorph/summon spells are fixed-meaningful. fixed-minor is rare — only use when scaling is genuinely trivial.
 
+DAMAGE-ONLY H+2 RULE: If the spell's only combat role is damage (ignore prebuffs — that's a timing classification, not a combat function) AND heighten_pattern is +2, output "scales-okay" — not "scales-well". Damage has a tight power curve; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors. This does NOT apply to multi-role spells (damage + debuff, damage + control, etc.) — those provide value independent of the damage curve, and the LLM should assess them on their full merit.
+
 # RESPONSE FORMAT
 
 Return ONLY a single JSON object. No surrounding text. No markdown code fences. No commentary.
@@ -856,6 +858,16 @@ def _apply_consistency_rules(spell):
         spell["heighten_quality"] = "no-heighten"
         fixes.append("forced heighten_quality=no-heighten")
 
+    # Rule: Damage-only spells with +2 heighten pattern cap at scales-okay.
+    # Damage has a tight power curve — +2 scaling leaves dead levels.
+    # Multi-role spells are exempt (other roles provide non-damage value).
+    populator_roles = set(spell.get("roles", [])) - {"healing", "reactions", "oneAction", "silverBullets", "prebuffs"}
+    if (spell.get("heighten_pattern") == "plus_2"
+            and spell.get("heighten_quality") == "scales-well"
+            and populator_roles == {"damage"}):
+        spell["heighten_quality"] = "scales-okay"
+        fixes.append("capped heighten_quality=scales-okay (damage-only +2 rule)")
+
     # Rule: Auto defense tag requires a combat role. Otherwise strip Auto + Auto-effect.
     combat_roles = {"damage", "debuff", "control"}
     has_combat = any(r in combat_roles for r in spell.get("roles", []))
@@ -1006,8 +1018,17 @@ def merge_into_spell_data():
         for f in fixes:
             fix_counter[f] += 1
 
-        # Re-apply offense gate: consistency rules may have stripped Auto, leaving
-        # defense_tags empty. In that case, offense fields must be cleared per Decision 016.
+    # Re-apply editorial heighten_quality overrides — editorial judgment wins over
+    # consistency rules (e.g., Force Barrage keeps scales-well per Heidi decision).
+    for aon_id, entry in overrides.items():
+        if "heighten_quality" in entry.get("overrides", {}):
+            spell = by_aon.get(aon_id)
+            if spell and spell["heighten_quality"] != entry["overrides"]["heighten_quality"]:
+                spell["heighten_quality"] = entry["overrides"]["heighten_quality"]
+
+    # Re-apply offense gate: consistency rules may have stripped Auto, leaving
+    # defense_tags empty. In that case, offense fields must be cleared per Decision 016.
+    for spell in spell_data["spells"]:
         if not spell.get("defense_tags"):
             if spell.get("damage_types") or spell.get("conditions_imposed") or spell.get("conditions_by_outcome") or spell.get("weaknesses_imposed"):
                 spell["damage_types"] = []

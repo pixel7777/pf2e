@@ -2,10 +2,11 @@
   {
     "aonId": 1331,
     "name": "Exploding Earth",
-    "reason": "Cycle 07 spot-check (Heidi sample 1): Spell uses an attack roll for the primary effect. The Fortitude save and Prone condition are a double-jackpot rider — they only fire if (a) the attack roll critically hits AND (b) the target then fails the Fort save. Same spirit as Decision 011's crit-fail-only rule (jackpot riders don't drive debuff role and shouldn't populate normal save-outcome buckets). Clear conditions; keep damage role.",
+    "reason": "Cycle 07 spot-check (Heidi sample 1): Spell uses an attack roll for the primary effect. The Fortitude save and Prone condition are a double-jackpot rider — they only fire if (a) the attack roll critically hits AND (b) the target then fails the Fort save. Same spirit as Decision 011's crit-fail-only rule (jackpot riders don't drive debuff role and shouldn't populate normal save-outcome buckets). Clear conditions; keep damage role. | Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay.",
     "overrides": {
       "conditions_imposed": [],
-      "conditions_by_outcome": null
+      "conditions_by_outcome": null,
+      "heighten_quality": "scales-okay"
     }
   },
   {
@@ -652,7 +653,7 @@
   {
     "aonId": 1536,
     "name": "Force Barrage",
-    "reason": "Cycle 23 prompt-tuning gap: Sonnet repeatedly missed Auto + Auto-effect detection despite explicit canonical prompt examples and the literal phrase 'It automatically hits the target' in the spell text. After 3 prompt-tuning iterations the LLM continued to output empty defense_tags_added. Force Barrage has no save and no attack roll — damage just lands. The multi-shard mechanic (up to 3 shards via 3-action mode, each targeted independently) also earns Multi. Sonnet also failed to emit damage_types because of the Auto confusion, so this override sets damage_types=['Force'] explicitly.",
+    "reason": "Cycle 23 prompt-tuning gap: Sonnet repeatedly missed Auto + Auto-effect detection despite explicit canonical prompt examples and the literal phrase 'It automatically hits the target' in the spell text. After 3 prompt-tuning iterations the LLM continued to output empty defense_tags_added. Force Barrage has no save and no attack roll — damage just lands. The multi-shard mechanic (up to 3 shards via 3-action mode, each targeted independently) also earns Multi. Sonnet also failed to emit damage_types because of the Auto confusion, so this override sets damage_types=['Force'] explicitly. | Cycle 27: Force Barrage keeps scales-well despite damage-only +2 rule — multi-shard targeting provides control-like value independent of the damage curve (Heidi decision).",
     "overrides": {
       "defense_tags": [
         "Auto"
@@ -666,7 +667,8 @@
       ],
       "damage_types": [
         "Force"
-      ]
+      ],
+      "heighten_quality": "scales-well"
     }
   },
   {
@@ -866,6 +868,62 @@
           "Frightened"
         ]
       }
+    }
+  },
+  {
+    "aonId": 2,
+    "name": "Acid Arrow",
+    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors.",
+    "overrides": {
+      "heighten_quality": "scales-okay"
+    }
+  },
+  {
+    "aonId": 872,
+    "name": "Blink Charge",
+    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors.",
+    "overrides": {
+      "heighten_quality": "scales-okay"
+    }
+  },
+  {
+    "aonId": 2481,
+    "name": "Echo Jump",
+    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors.",
+    "overrides": {
+      "heighten_quality": "scales-okay"
+    }
+  },
+  {
+    "aonId": 1292,
+    "name": "Percussive Impact",
+    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors.",
+    "overrides": {
+      "heighten_quality": "scales-okay"
+    }
+  },
+  {
+    "aonId": 1687,
+    "name": "Spiritual Armament",
+    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors.",
+    "overrides": {
+      "heighten_quality": "scales-okay"
+    }
+  },
+  {
+    "aonId": 306,
+    "name": "Spiritual Weapon",
+    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors.",
+    "overrides": {
+      "heighten_quality": "scales-okay"
+    }
+  },
+  {
+    "aonId": 1410,
+    "name": "Splinter Volley",
+    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors.",
+    "overrides": {
+      "heighten_quality": "scales-okay"
     }
   }
 ]
