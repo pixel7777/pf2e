@@ -1,16 +1,8 @@
 {
   "version": "1.0.0",
   "generated": "2026-05-05",
-  "count": 19,
+  "count": 18,
   "signals": [
-    {
-      "spell_a": "Acid Arrow",
-      "spell_b": "Acid Grip",
-      "spell_a_aon_id": 2,
-      "spell_b_aon_id": 1436,
-      "relationship": "replaces",
-      "source": "Acid Grip is UNDERRATED.md"
-    },
     {
       "spell_a": "Dream Message",
       "spell_b": "Sending",

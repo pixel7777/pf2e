@@ -142,8 +142,29 @@ def filter_rank_spells(all_spells):
     ]
 
 
+def apply_remaster_id_filter(rank_spells, all_spells):
+    """Drop spells whose source entry has a non-empty remaster_id array.
+    This means the spell has a remaster equivalent and should not appear in the app.
+    Returns (kept, dropped_count)."""
+    remaster_ids_by_id = {}
+    for s in all_spells:
+        rid = s.get("remaster_id")
+        if rid and isinstance(rid, list) and len(rid) > 0:
+            remaster_ids_by_id[s.get("id", "")] = rid
+
+    kept = []
+    dropped = 0
+    for spell in rank_spells:
+        spell_id = spell.get("id", "")
+        if spell_id in remaster_ids_by_id:
+            dropped += 1
+        else:
+            kept.append(spell)
+    return kept, dropped
+
+
 def load_and_filter_spells(spell_json_path, legacy_renames_path, verbose=False):
-    """Full pipeline: load spell.json, filter rank spells, apply rename filter, era dedupe.
+    """Full pipeline: load spell.json, filter rank spells, remaster_id filter, rename filter, era dedupe.
     Returns the final list of filtered spell dicts.
     """
     with open(spell_json_path, "r", encoding="utf-8") as f:
@@ -155,6 +176,12 @@ def load_and_filter_spells(spell_json_path, legacy_renames_path, verbose=False):
     rank_spells = filter_rank_spells(all_spells)
     if verbose:
         print("  %d rank spells after filtering (spell_type='Spell', level>=1)" % len(rank_spells))
+
+    pre_remaster_count = len(rank_spells)
+    rank_spells, remaster_dropped = apply_remaster_id_filter(rank_spells, all_spells)
+    if verbose:
+        print("  %d -> %d after remaster_id filter (%d legacy spells with remaster equivalents dropped)" % (
+            pre_remaster_count, len(rank_spells), remaster_dropped))
 
     rename_map, rename_entries = load_rename_map(legacy_renames_path)
     if verbose:

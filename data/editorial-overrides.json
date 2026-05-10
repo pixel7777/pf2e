@@ -906,14 +906,6 @@
     }
   },
   {
-    "aonId": 2,
-    "name": "Acid Arrow",
-    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors.",
-    "overrides": {
-      "heighten_quality": "scales-okay"
-    }
-  },
-  {
     "aonId": 872,
     "name": "Blink Charge",
     "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors. | Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
@@ -958,23 +950,6 @@
       "heighten_quality": "scales-okay",
       "targeting_tags": [
         "ST"
-      ]
-    }
-  },
-  {
-    "aonId": 306,
-    "name": "Spiritual Weapon",
-    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors. | Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Force\"]; defense_tags: [] -> [\"AC\"]. Melee spell attacks against single targets",
-    "overrides": {
-      "heighten_quality": "scales-okay",
-      "targeting_tags": [
-        "ST"
-      ],
-      "damage_types": [
-        "Force"
-      ],
-      "defense_tags": [
-        "AC"
       ]
     }
   },
@@ -1054,22 +1029,6 @@
       "damage_types": [
         "Elec",
         "Sonic"
-      ],
-      "defense_tags": [
-        "Ref"
-      ]
-    }
-  },
-  {
-    "aonId": 24,
-    "name": "Blade Barrier",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Force\"]; defense_tags: [] -> [\"Ref\"]. Wall deals damage to each creature in its space; basic Reflex save",
-    "overrides": {
-      "targeting_tags": [
-        "Multi"
-      ],
-      "damage_types": [
-        "Force"
       ],
       "defense_tags": [
         "Ref"
@@ -1543,16 +1502,6 @@
       "defense_tags": [
         "Fort",
         "Ref"
-      ]
-    }
-  },
-  {
-    "aonId": 117,
-    "name": "Fire Seeds",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]. Seeds explode in 5-foot bursts affecting multiple creatures",
-    "overrides": {
-      "targeting_tags": [
-        "Multi"
       ]
     }
   },
@@ -2346,23 +2295,6 @@
     }
   },
   {
-    "aonId": 313,
-    "name": "Storm of Vengeance",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Elec\"]; defense_tags: [] -> [\"Ref\", \"Fort\"]. Acid rain: no save. Lightning: basic Reflex. Hail: basic Fortitude. Multiple save types across rounds.",
-    "overrides": {
-      "targeting_tags": [
-        "Multi"
-      ],
-      "damage_types": [
-        "Elec"
-      ],
-      "defense_tags": [
-        "Ref",
-        "Fort"
-      ]
-    }
-  },
-  {
     "aonId": 1256,
     "name": "Summon Ancient Fleshforged",
     "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"AC\"]. Caster chooses which Fleshforged to summon; each deals different damage types. 'Varies' is appropriate.",
@@ -2651,16 +2583,6 @@
     "overrides": {
       "targeting_tags": [
         "ST"
-      ]
-    }
-  },
-  {
-    "aonId": 375,
-    "name": "Weird",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]",
-    "overrides": {
-      "targeting_tags": [
-        "Multi"
       ]
     }
   },

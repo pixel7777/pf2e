@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "generated": "2026-05-05",
   "chain_count": 7,
-  "pair_count": 4,
+  "pair_count": 3,
   "chains": {
     "sustained_damage": {
       "function": "Sustained single-target fire damage",
@@ -191,16 +191,6 @@
   },
   "standalone_pairs": [
     {
-      "spell_a": "Acid Arrow",
-      "spell_a_aon_id": 2,
-      "spell_b": "Acid Grip",
-      "spell_b_aon_id": 1436,
-      "relationship": "replaces",
-      "at_rank": 2,
-      "source": "Acid Grip is UNDERRATED.md",
-      "reason": "Acid Grip replaced Acid Arrow in the remaster. Different utility (force movement vs sustained acid damage)."
-    },
-    {
       "spell_a": "Dream Message",
       "spell_a_aon_id": 1503,
       "spell_b": "Sending",
@@ -247,8 +237,7 @@
       "1559:1508": "Eclipse Burst delivers stronger burst damage at R7+ with a Blinded rider on crit fail.",
       "1677:1981": "Containment at R4+ offers Reflex-targeting action denial for a single target. Slow becomes multitarget at R6. Consider both for Fort/Will and ST/Multi defense targeting variety.",
       "1724:1720": "Teleport provides superior range at R6+.",
-      "1742:2449": "Missed Cue (Rare) is a stronger Will-targeting blast at R6+, adding Slowed alongside Frightened.",
-      "2:1436": "Acid Grip (remaster) at R2+ targets Reflex instead of AC and adds forced movement alongside sustained acid damage."
+      "1742:2449": "Missed Cue (Rare) is a stronger Will-targeting blast at R6+, adding Slowed alongside Frightened."
     },
     "replaces": {
       "1677:2341": "Upgrade from Agitate — native Slow outperforms heightened Agitate for action denial. Great at R6 for Multi targeting.",
@@ -265,8 +254,7 @@
       "1350:1533": "Upgrade from Floating Flame — better sustained damage scaling with Dazzled/Blinded riders.",
       "1981:1677": "Upgrade from Slow — Reflex-targeting action denial. But consider Slow at R6 for Multi targeting.",
       "1720:1724": "Upgrade from Translocate — removes range limitations for long-distance travel.",
-      "2449:1742": "Upgrade from Vision of Death — stronger Will blast, adds Slowed to Frightened.",
-      "1436:2": "Remaster replacement for Acid Arrow — Reflex targeting with forced movement."
+      "2449:1742": "Upgrade from Vision of Death — stronger Will blast, adds Slowed to Frightened."
     }
   },
   "editorial_observations": [

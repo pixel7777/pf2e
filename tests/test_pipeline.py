@@ -1095,7 +1095,7 @@ C24_EDITORIAL_OBSERVATION_AON_IDS = {927, 1721, 1653, 928}
 C24_CHAIN_AON_IDS = {
     1533, 1350, 2341, 1677, 1981, 1451, 1555, 1724, 1720,
     1457, 1530, 1462, 1508, 1329, 1559, 1524, 665,
-    2, 1436, 1503, 1665, 1466, 1661, 1742, 2449,
+    1436, 1503, 1665, 1466, 1661, 1742, 2449,
 }
 
 
@@ -1208,7 +1208,7 @@ def test_c24_chain_entry_structure(spells):
     return True
 
 
-C27_DAMAGE_ONLY_PLUS2_AONIDS = {2, 872, 2481, 1331, 1292, 1687, 306, 1410}
+C27_DAMAGE_ONLY_PLUS2_AONIDS = {872, 2481, 1331, 1292, 1687, 1410}
 
 def test_c27_damage_only_plus2(spells):
     """C27: Damage-only spells with +2 heighten pattern must be scales-okay, not scales-well."""
@@ -1249,6 +1249,56 @@ def test_c27_damage_only_plus2(spells):
             print(e)
         return False
     print(f"  PASS: All {len(C27_DAMAGE_ONLY_PLUS2_AONIDS)} damage-only +2 spells are scales-okay; multi-role exemptions preserved")
+    return True
+
+
+SPELL_JSON_PATH = os.path.join(PROJECT_ROOT, "source", "spell.json")
+
+C31_DELETED_AON_IDS = {2,8,23,24,47,687,107,117,120,138,196,219,221,970,224,231,255,264,716,283,297,306,313,344,375,377}
+
+
+def test_c31_no_remaster_id_in_output(spells):
+    """C31: No spell in output has a non-empty remaster_id in source/spell.json."""
+    if not os.path.exists(SPELL_JSON_PATH):
+        print("  SKIP: source/spell.json not found")
+        return None
+
+    with open(SPELL_JSON_PATH, encoding="utf-8") as f:
+        source_spells = json.load(f)
+
+    remaster_ids_by_id = {}
+    for s in source_spells:
+        rid = s.get("remaster_id")
+        if rid and isinstance(rid, list) and len(rid) > 0:
+            remaster_ids_by_id[s.get("id", "")] = rid
+
+    errors = []
+    for spell in spells:
+        spell_id = f"spell-{spell['aonId']}"
+        if spell_id in remaster_ids_by_id:
+            errors.append(f"  {spell['name']} (aonId {spell['aonId']}): has remaster_id {remaster_ids_by_id[spell_id]} in source but is still in output")
+
+    if errors:
+        print(f"FAIL: remaster_id filter — {len(errors)} spell(s) with remaster_id still in output:")
+        for e in errors[:10]:
+            print(e)
+        return False
+
+    print(f"  PASS: No output spell has remaster_id in source (filter working correctly)")
+    return True
+
+
+def test_c31_deleted_spells_absent(spells):
+    """C31: The 26 deletion-list spells are absent from output."""
+    by_aon = {s["aonId"] for s in spells}
+    found = sorted(C31_DELETED_AON_IDS & by_aon)
+    if found:
+        names = {s["aonId"]: s["name"] for s in spells if s["aonId"] in found}
+        print(f"FAIL: {len(found)} deleted spell(s) still in output:")
+        for aid in found:
+            print(f"  aonId {aid}: {names.get(aid, '?')}")
+        return False
+    print(f"  PASS: All {len(C31_DELETED_AON_IDS)} deletion-list spells absent from output")
     return True
 
 
@@ -1348,6 +1398,16 @@ def main():
     ]
     c27_failed = [r for r in c27_tests if r is False]
     if c27_failed:
+        passed = False
+
+    print()
+    print("=== C31: Legacy Spell Removal (remaster_id filter) ===")
+    c31_tests = [
+        test_c31_no_remaster_id_in_output(spells),
+        test_c31_deleted_spells_absent(spells),
+    ]
+    c31_failed = [r for r in c31_tests if r is False]
+    if c31_failed:
         passed = False
 
     print()
