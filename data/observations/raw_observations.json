@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "generated": "2026-05-05",
   "source_file_count": 22,
-  "spell_count": 147,
+  "spell_count": 145,
   "spells": {
     "1436": {
       "name": "Acid Grip",
@@ -41,16 +41,6 @@
           "source": "Witch and Wizard Blaster Build Guides.md",
           "observation": "Always a good silver bullet to have in low-rank slots.",
           "context": "silver bullet"
-        }
-      ]
-    },
-    "2": {
-      "name": "Acid Arrow",
-      "observations": [
-        {
-          "source": "Acid Grip is UNDERRATED.md",
-          "observation": "Was a very good spell for dealing damage, largely for Maguses. Acid Grip is seen as a nerf because it replaced Acid Arrow, causing people to overlook Acid Grip's unique force movement utility.",
-          "context": "legacy context"
         }
       ]
     },
@@ -121,16 +111,6 @@
           "source": "Is Vision of Death Better than Synesthesia.md",
           "observation": "Listed as a utility option on a level 10 bard's spell list.",
           "context": "utility"
-        }
-      ]
-    },
-    "970": {
-      "name": "Pocket Library",
-      "observations": [
-        {
-          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
-          "observation": "+1 to +4 status bonus to recall knowledge (scales with heightening). Prevents critical failure misinformation. Additional value on crit success.",
-          "context": "knowledge utility"
         }
       ]
     },

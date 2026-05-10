@@ -185,7 +185,7 @@
         top: 'Best buffing tradition. Heighten Soothe, Heroism, Haste.  This is your superpower. Your buff+debuff combination is what makes Occult a party force multiplier.'
       },
       control: {
-        top: 'Control options open up at higher ranks: Black Tentacles (R5), Chromatic Wall (R5), Wall of Force (R6). Lower ranks are limited.'
+        top: 'Control options open up at higher ranks: Slither (R5), Chromatic Wall (R5), Wall of Force (R6). Lower ranks are limited.'
       },
       healing: {
         top: 'Strong options like Soothe, Restoration, Vampiric Touch/Feast. Soothe heightens well.'
@@ -557,7 +557,7 @@
     searchIndexLoading = true;
 
     var script = document.createElement('script');
-    script.src = 'data/search-index.js';
+    script.src = 'data/search-index.js?v=2';
 
     var timer = setTimeout(function() {
       if (!window.SPELL_SEARCH_INDEX) {

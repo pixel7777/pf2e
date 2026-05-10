@@ -26,6 +26,7 @@ from spell_filter import (
     normalize_name,
     load_rename_map,
     apply_rename_filter,
+    apply_remaster_id_filter,
     dedupe_by_era,
     filter_rank_spells,
 )
@@ -353,6 +354,11 @@ def main():
         sum(1 for s in all_spells if s.get("spell_type") == "Cantrip"),
         sum(1 for s in all_spells if s.get("spell_type") == "Focus"),
     ))
+
+    pre_remaster_count = len(rank_spells)
+    rank_spells, remaster_dropped = apply_remaster_id_filter(rank_spells, all_spells)
+    print("\n  %d -> %d after remaster_id filter (%d legacy spells with remaster equivalents dropped)" % (
+        pre_remaster_count, len(rank_spells), remaster_dropped))
 
     print("\nLoading data/legacy-renames.json...")
     rename_map, rename_entries = load_rename_map(LEGACY_RENAMES_JSON)
