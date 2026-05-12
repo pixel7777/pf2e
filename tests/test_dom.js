@@ -9,8 +9,16 @@ async function setupArcaneWithSpells(page) {
   await page.goto(APP_URL);
   await page.waitForLoadState('domcontentloaded');
 
-  // Click Arcane tab (initTradition auto-sets wizard class and builds level tabs)
+  // Click Arcane tab (C33: initTradition defaults to Manual — select wizard explicitly)
   await page.click('[data-page="arcane"]');
+  await page.waitForTimeout(300);
+
+  // Select wizard class to auto-populate slots
+  await page.evaluate(() => {
+    const select = document.getElementById('classSelect-arcane');
+    select.value = 'wizard';
+    select.dispatchEvent(new Event('change'));
+  });
   await page.waitForTimeout(300);
 
   // Click level 5 tab (selectLevel shows slot panel with empty slots)
@@ -454,6 +462,14 @@ test.describe('C21b-2: Silver bullet purpose note in Notes column', () => {
     await page.click('[data-page="arcane"]');
     await page.waitForTimeout(300);
 
+    // C33: select wizard to get slots
+    await page.evaluate(() => {
+      const select = document.getElementById('classSelect-arcane');
+      select.value = 'wizard';
+      select.dispatchEvent(new Event('change'));
+    });
+    await page.waitForTimeout(300);
+
     await page.evaluate(() => {
       const btns = document.querySelectorAll('#levelTabBar-arcane .level-tab');
       for (const btn of btns) {
@@ -494,6 +510,14 @@ test.describe('C21b-1: Silver Bullets tab shows spells', () => {
     await page.waitForLoadState('domcontentloaded');
 
     await page.click('[data-page="arcane"]');
+    await page.waitForTimeout(300);
+
+    // C33: select wizard to get slots
+    await page.evaluate(() => {
+      const select = document.getElementById('classSelect-arcane');
+      select.value = 'wizard';
+      select.dispatchEvent(new Event('change'));
+    });
     await page.waitForTimeout(300);
 
     // Click level 1 tab to init
@@ -877,6 +901,14 @@ async function setupArcaneAtLevel(page, level) {
   await page.click('[data-page="arcane"]');
   await page.waitForTimeout(300);
 
+  // C33: initTradition defaults to Manual — select wizard explicitly
+  await page.evaluate(() => {
+    const select = document.getElementById('classSelect-arcane');
+    select.value = 'wizard';
+    select.dispatchEvent(new Event('change'));
+  });
+  await page.waitForTimeout(300);
+
   await page.evaluate((lvl) => {
     const btns = document.querySelectorAll('#levelTabBar-arcane .level-tab');
     for (const btn of btns) {
@@ -975,6 +1007,14 @@ test.describe('C29-3: Default sort restoration after column sort cycle', () => {
     await page.click('[data-page="arcane"]');
     await page.waitForTimeout(300);
 
+    // C33: select wizard to get slots
+    await page.evaluate(() => {
+      const select = document.getElementById('classSelect-arcane');
+      select.value = 'wizard';
+      select.dispatchEvent(new Event('change'));
+    });
+    await page.waitForTimeout(300);
+
     // Select level 13
     await page.evaluate(() => {
       const btns = document.querySelectorAll('#levelTabBar-arcane .level-tab');
@@ -1068,5 +1108,99 @@ test.describe('C26-1: Version indicator on About page', () => {
     expect(result.text).toBe('v1.0.0');
     expect(result.textAlign).toBe('center');
     expect(result.opacity).toBeLessThan(1);
+  });
+});
+
+// ════════════════════════════════════════════════════════════════════
+// Cycle 33 — Default tradition pages to Manual mode
+// ════════════════════════════════════════════════════════════════════
+
+const fs = require('fs');
+
+test.describe('C33-1: Load plan with Manual slots preserves slot count', () => {
+  test('loading a saved plan with null class keeps manual slot layout', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+
+    // Click Arcane tab to init it
+    await page.click('[data-page="arcane"]');
+    await page.waitForTimeout(300);
+
+    // Load the fixture plan via Planner.loadPlan
+    const fixturePath = path.resolve(__dirname, 'fixtures', 'manual-slots-plan.json');
+    const fixtureData = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
+
+    await page.evaluate((data) => {
+      window.Planner.loadPlan(data.plan, data.classes);
+    }, fixtureData);
+    await page.waitForTimeout(300);
+
+    // Navigate to arcane level 3
+    await page.evaluate(() => {
+      const btns = document.querySelectorAll('#levelTabBar-arcane .level-tab');
+      for (const btn of btns) {
+        if (btn.dataset.level === '3') { btn.click(); break; }
+      }
+    });
+    await page.waitForTimeout(300);
+
+    const result = await page.evaluate(() => {
+      const state = window.Planner.getState();
+      const rank1Slots = state.arcane[3][1];
+      const classSelect = document.getElementById('classSelect-arcane');
+      return {
+        slotCount: rank1Slots ? rank1Slots.length : 0,
+        firstSpellName: rank1Slots && rank1Slots[0] ? rank1Slots[0].name : null,
+        secondSpellName: rank1Slots && rank1Slots[1] ? rank1Slots[1].name : null,
+        classValue: classSelect ? classSelect.value : 'MISSING'
+      };
+    });
+
+    // Manual slots preserved: exactly 2 slots, not expanded by a class progression
+    expect(result.slotCount).toBe(2);
+    expect(result.firstSpellName).toBe('TestSpellA');
+    expect(result.secondSpellName).toBe('TestSpellB');
+    expect(result.classValue).toBe('');
+  });
+});
+
+test.describe('C33-2: Cross-tab init stays Manual', () => {
+  test('setting class on one tradition does not auto-assign class on another', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+
+    // Init Arcane — should default to Manual
+    await page.click('[data-page="arcane"]');
+    await page.waitForTimeout(300);
+
+    // Select wizard on Arcane
+    await page.evaluate(() => {
+      const select = document.getElementById('classSelect-arcane');
+      select.value = 'wizard';
+      select.dispatchEvent(new Event('change'));
+    });
+    await page.waitForTimeout(300);
+
+    // Switch to Divine tab (first visit — triggers initTradition)
+    await page.click('[data-page="divine"]');
+    await page.waitForTimeout(300);
+
+    const result = await page.evaluate(() => {
+      const divineSelect = document.getElementById('classSelect-divine');
+      const classes = window.Planner.getClasses();
+      // Check level 1 rank 1 slots — Manual mode means no auto-populated slots
+      const state = window.Planner.getState();
+      const rank1Slots = state.divine && state.divine[1] && state.divine[1][1] ? state.divine[1][1] : [];
+      return {
+        divineClassValue: divineSelect ? divineSelect.value : 'MISSING',
+        divineClassState: classes.divine,
+        slotCount: rank1Slots.length
+      };
+    });
+
+    // Divine should be in Manual mode — no class auto-assigned, no slots auto-populated
+    expect(result.divineClassValue).toBe('');
+    expect(result.divineClassState).toBeNull();
+    expect(result.slotCount).toBe(0);
   });
 });
