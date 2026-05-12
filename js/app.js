@@ -120,6 +120,10 @@
 
       if (page !== 'overview' && page !== 'about') {
         Planner.initTradition(page);
+        var level = Planner.getCurrentLevel(page);
+        if (level > 0 && window.Coverage && Coverage.update) {
+          Coverage.update(page, level);
+        }
       }
 
       // Reset sort on tradition switch
