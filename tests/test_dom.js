@@ -1204,3 +1204,55 @@ test.describe('C33-2: Cross-tab init stays Manual', () => {
     expect(result.slotCount).toBe(0);
   });
 });
+
+test.describe('C34: Coverage Refresh on Tab Switch', () => {
+  test('C34-1: coverage pills refresh when returning to a tradition tab with assigned spells', async ({ page }) => {
+    await setupArcaneWithSpells(page);
+
+    // Assign a spell with known tags via the API
+    const litCountBefore = await page.evaluate(() => {
+      const list = window.Browser._getRenderedSpells('arcane');
+      const spell = list.find(s => s.defense_tags && s.defense_tags.length > 0);
+      if (!spell) return -1;
+      window.Browser.assignSpell('arcane', spell);
+      return document.querySelectorAll('.sidebar .ctag.lit').length;
+    });
+    expect(litCountBefore).toBeGreaterThan(0);
+
+    // Switch to Divine
+    await page.click('[data-page="divine"]');
+    await page.waitForTimeout(300);
+
+    // Switch back to Arcane
+    await page.click('[data-page="arcane"]');
+    await page.waitForTimeout(300);
+
+    // Coverage pills should be lit again
+    const litCountAfter = await page.evaluate(() => {
+      return document.querySelectorAll('.sidebar .ctag.lit').length;
+    });
+    expect(litCountAfter).toBe(litCountBefore);
+  });
+
+  test('C34-2: switching to tradition with no level selected does not cause errors', async ({ page }) => {
+    const errors = [];
+    page.on('pageerror', err => errors.push(err.message));
+
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+
+    // Visit Arcane (no class, no level selected — level 0)
+    await page.click('[data-page="arcane"]');
+    await page.waitForTimeout(300);
+
+    // Switch to Divine
+    await page.click('[data-page="divine"]');
+    await page.waitForTimeout(300);
+
+    // Switch back to Arcane (level 0 — Coverage.update should NOT be called)
+    await page.click('[data-page="arcane"]');
+    await page.waitForTimeout(300);
+
+    expect(errors).toHaveLength(0);
+  });
+});
