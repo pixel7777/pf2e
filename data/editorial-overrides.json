@@ -192,7 +192,7 @@
   {
     "aonId": 724,
     "name": "Transmute Rock and Mud",
-    "reason": "Cycle 07 Phase 2 skip: model tried to add 'Ref' to defense_tags_added (rule violation). spell.json's saving_throw field is null even though spell text describes a basic Reflex save for the mud-to-rock catch — so structured pass missed it. Editorial override sets defense_tags=['Ref'] so offense-eval gate doesn't strip our offense fields. Spell creates difficult terrain (control), can deal Bludgeoning if cast on a ceiling, and impose Prone/Grabbed when mud-to-rock catches creatures. heighten_quality scales-okay (heighten_pattern=plus_2). | Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]",
+    "reason": "Cycle 07 Phase 2 skip: model tried to add 'Ref' to defense_tags_added (rule violation). spell.json's saving_throw field is null even though spell text describes a basic Reflex save for the mud-to-rock catch — so structured pass missed it. Editorial override sets defense_tags=['Ref'] so offense-eval gate doesn't strip our offense fields. Spell creates difficult terrain (control), can deal Bludgeoning if cast on a ceiling, and impose Prone/Grabbed when mud-to-rock catches creatures. heighten_quality scales-okay (heighten_pattern=plus_2). | Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"] | Audit 2026-05-11: conditions_by_outcome shows Prone on success. Falling prone on a successful save is a meaningful tactical consequence. Merges with existing override (updates reliability_tags).",
     "overrides": {
       "defense_tags": [
         "Ref"
@@ -222,7 +222,9 @@
         "damage",
         "debuff"
       ],
-      "reliability_tags": [],
+      "reliability_tags": [
+        "Success-effect"
+      ],
       "heighten_quality": "scales-okay",
       "targeting_tags": [
         "Multi"
@@ -753,7 +755,7 @@
   {
     "aonId": 709,
     "name": "Quench",
-    "reason": "Cycle 23: Sonnet repeatedly produced JSON parse errors for this spell (5 retries failed). Manual data entry per Heidi review. Quench is a multi-purpose Water spell with three components: (1) extinguishes non-magical fires automatically (utility), (2) deals 4d8 damage to fire creatures with basic Fortitude save (damage role; damage type unspecified per spell text — no named type), and (3) counteracts magical fire spells/items (debuff). The structured pass missed the basic Fortitude save (saving_throw is null in spell.json) and the burst-area targeting because the offense gate cleared targeting_tags when defense_tags was empty. Override sets the offensive properties explicitly. Heightened (+1) +2d8 damage to fire creatures.",
+    "reason": "Cycle 23: Sonnet repeatedly produced JSON parse errors for this spell (5 retries failed). Manual data entry per Heidi review. Quench is a multi-purpose Water spell with three components: (1) extinguishes non-magical fires automatically (utility), (2) deals 4d8 damage to fire creatures with basic Fortitude save (damage role; damage type unspecified per spell text — no named type), and (3) counteracts magical fire spells/items (debuff). The structured pass missed the basic Fortitude save (saving_throw is null in spell.json) and the burst-area targeting because the offense gate cleared targeting_tags when defense_tags was empty. Override sets the offensive properties explicitly. Heightened (+1) +2d8 damage to fire creatures. | Audit 2026-05-11 Silver Bullet: Extremely effective against fire creatures/fire elementals. Heidi concurs: 'silver bullet for putting fires out in general.' Merges with existing override (adds silverBullets to roles, Silver Bullet to special_tags).",
     "overrides": {
       "defense_tags": [
         "Fort"
@@ -768,7 +770,8 @@
       "roles": [
         "damage",
         "debuff",
-        "utility"
+        "utility",
+        "silverBullets"
       ],
       "reliability_tags": [
         "Success-effect"
@@ -776,7 +779,10 @@
       "conditions_imposed": [],
       "conditions_by_outcome": null,
       "weaknesses_imposed": [],
-      "heighten_quality": "scales-well"
+      "heighten_quality": "scales-well",
+      "special_tags": [
+        "Silver Bullet"
+      ]
     }
   },
   {
@@ -844,7 +850,7 @@
   {
     "aonId": 866,
     "name": "Bandit's Doom",
-    "reason": "Cycle 24 (A2): D020 Category 8 spot-check fix. Missing targeting_tags, defense_tags, damage_types, reliability_tags.",
+    "reason": "Cycle 24 (A2): D020 Category 8 spot-check fix. Missing targeting_tags, defense_tags, damage_types, reliability_tags. | Audit 2026-05-12: 'basic_save' is not a valid reliability_tags entry (pipeline bug — basic_save boolean leaked into reliability_tags as a string). Success effect confirmed: half damage and doomed 1. Merges with existing override (updates reliability_tags).",
     "overrides": {
       "targeting_tags": [
         "ST"
@@ -856,7 +862,6 @@
         "Mental"
       ],
       "reliability_tags": [
-        "basic_save",
         "Success-effect"
       ]
     }
@@ -864,7 +869,7 @@
   {
     "aonId": 694,
     "name": "Heat Metal",
-    "reason": "Cycle 24 (A2): D020 Category 8 spot-check fix. Missing damage role alongside debuff. | Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Fire\"]; defense_tags: [] -> [\"Ref\"]. Reflex saving throw for damage; can Release item to improve degree",
+    "reason": "Cycle 24 (A2): D020 Category 8 spot-check fix. Missing damage role alongside debuff. | Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Fire\"]; defense_tags: [] -> [\"Ref\"]. Reflex saving throw for damage; can Release item to improve degree | Audit 2026-05-10 Run 3: Successful Reflex save = half damage and no persistent fire damage. Half of 4d6 fire on success is a real tactical consequence. Merges with existing override (adds reliability_tags).",
     "overrides": {
       "roles": [
         "damage",
@@ -878,6 +883,9 @@
       ],
       "defense_tags": [
         "Ref"
+      ],
+      "reliability_tags": [
+        "Success-effect"
       ]
     }
   },
@@ -1159,7 +1167,7 @@
   {
     "aonId": 882,
     "name": "Chromatic Image",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Acid\", \"Elec\", \"Fire\", \"Mental\", \"Poison\"]; defense_tags: [] -> [\"Auto\"]. Reactive damage when a foe destroys an image; no save for the damage; affects one attacker",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Acid\", \"Elec\", \"Fire\", \"Mental\", \"Poison\"]; defense_tags: [] -> [\"Auto\"]. Reactive damage when a foe destroys an image; no save for the damage; affects one attacker | Audit 2026-05-12: defense_tags has ['Auto'] and damage_types lists multiple types, but conditions_imposed [] and conditions_by_outcome null. No conditions imposed = no debuff per FDR. Auto in defense_tags requires Auto-effect in reliability_tags.",
     "overrides": {
       "targeting_tags": [
         "ST"
@@ -1173,13 +1181,20 @@
       ],
       "defense_tags": [
         "Auto"
+      ],
+      "roles": [
+        "buff",
+        "damage"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
       ]
     }
   },
   {
     "aonId": 37,
     "name": "Chromatic Wall",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Ref\", \"Fort\", \"Will\"]. Wall; damage type varies by random color. Red/Orange/Yellow require Reflex, Green requires Fortitude, Indigo/Violet require Will.",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Ref\", \"Fort\", \"Will\"]. Wall; damage type varies by random color. Red/Orange/Yellow require Reflex, Green requires Fortitude, Indigo/Violet require Will. | Audit 2026-05-10 Run 1: Green wall imposes Enfeebled on failed Fort; heightened Violet imposes Slowed on failed Will. Red/Orange/Yellow/Green walls all use basic saves. Merges with existing override (adds conditions + basic_save + reliability).",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -1191,6 +1206,24 @@
         "Ref",
         "Fort",
         "Will"
+      ],
+      "conditions_imposed": [
+        "Enfeebled",
+        "Slowed"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Enfeebled"
+        ],
+        "critical_failure": [
+          "Enfeebled"
+        ]
+      },
+      "basic_save": true,
+      "reliability_tags": [
+        "Success-effect"
       ]
     }
   },
@@ -1250,7 +1283,7 @@
   {
     "aonId": 652,
     "name": "Control Sand",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Slash\"]; defense_tags: [] -> [\"Ref\"]. Deals slashing damage; basic Reflex save",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Slash\"]; defense_tags: [] -> [\"Ref\"]. Deals slashing damage; basic Reflex save | Audit 2026-05-10 Run 3: Persistent dazzling aura requires Fort save (add Fort alongside existing Ref). Sandblast/Sandstorm modes use basic Reflex save. Merges with existing override (updates defense_tags, adds conditions + basic_save + reliability).",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -1259,8 +1292,26 @@
         "Slash"
       ],
       "defense_tags": [
-        "Ref"
-      ]
+        "Ref",
+        "Fort"
+      ],
+      "conditions_imposed": [
+        "Dazzled"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Dazzled"
+        ],
+        "critical_failure": [
+          "Dazzled"
+        ]
+      },
+      "reliability_tags": [
+        "Success-effect"
+      ],
+      "basic_save": true
     }
   },
   {
@@ -1331,7 +1382,7 @@
   {
     "aonId": 656,
     "name": "Deluge",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"Ref\"]. Creatures take bludgeoning damage equal to feet fallen; Reflex save to avoid being pushed",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"Ref\"]. Creatures take bludgeoning damage equal to feet fallen; Reflex save to avoid being pushed | Audit 2026-05-10 Run 3: Flying creatures forced down 50 feet with NO save (Auto), landing prone. Grounded creatures get Reflex save. Merges with existing override (updates defense_tags, adds conditions + reliability).",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -1340,7 +1391,24 @@
         "Bludg"
       ],
       "defense_tags": [
-        "Ref"
+        "Ref",
+        "Auto"
+      ],
+      "conditions_imposed": [
+        "Prone"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Prone"
+        ],
+        "critical_failure": [
+          "Prone"
+        ]
+      },
+      "reliability_tags": [
+        "Auto-effect"
       ]
     }
   },
@@ -2009,23 +2077,26 @@
   {
     "aonId": 227,
     "name": "Power Word Kill",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Mental\"]; defense_tags: [] -> [\"Auto\"]. No save, no attack roll; effect is automatic based on target's level",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Mental\"]; defense_tags: [] -> [\"Auto\"]. No save, no attack roll; effect is automatic based on target's level | Audit 2026-05-10 Run 2: Damage text says '50 damage' with no type specified. Mental trait = mental effect, not damage type. Untyped = Unspecified per FDR. defense_tags already ['Auto'] so Auto-effect needed. Merges with existing override (updates damage_types, adds reliability_tags).",
     "overrides": {
       "targeting_tags": [
         "ST"
       ],
       "damage_types": [
-        "Mental"
+        "Unspecified"
       ],
       "defense_tags": [
         "Auto"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
       ]
     }
   },
   {
     "aonId": 233,
     "name": "Prismatic Spray",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Acid\", \"Elec\", \"Fire\", \"Poison\"]; defense_tags: [] -> [\"Ref\", \"Fort\", \"Will\"]. Different beams require different saves: red/orange/yellow = Reflex, green/blue = Fortitude, indigo/violet = Will",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Acid\", \"Elec\", \"Fire\", \"Poison\"]; defense_tags: [] -> [\"Ref\", \"Fort\", \"Will\"]. Different beams require different saves: red/orange/yellow = Reflex, green/blue = Fortitude, indigo/violet = Will | Audit 2026-05-10 Run 2: Conditions by color beam: Green=enfeebled (Fort), Blue=petrified (Fort), Indigo=confused (Will), Violet=slowed (Will). Successful save negates. Merges with existing override (adds conditions).",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -2040,7 +2111,29 @@
         "Ref",
         "Fort",
         "Will"
-      ]
+      ],
+      "conditions_imposed": [
+        "Enfeebled",
+        "Petrified",
+        "Confused",
+        "Slowed"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Enfeebled",
+          "Petrified",
+          "Confused",
+          "Slowed"
+        ],
+        "critical_failure": [
+          "Enfeebled",
+          "Petrified",
+          "Confused",
+          "Slowed"
+        ]
+      }
     }
   },
   {
@@ -2056,10 +2149,10 @@
   {
     "aonId": 645,
     "name": "Pyrotechnics",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"] | Audit 2026-05-10 Run 3: Both Fireworks and Smoke Cloud modes create 20-foot-radius burst forcing Fort saves on all creatures. Multi, not ST. Replaces existing override targeting_tags.",
     "overrides": {
       "targeting_tags": [
-        "ST"
+        "Multi"
       ]
     }
   },
@@ -2096,7 +2189,7 @@
   {
     "aonId": 813,
     "name": "Rebounding Barrier",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Auto\"]. Reaction; deals same type as triggering physical attack (bludgeoning/piercing/slashing varies); auto-damage to attacker, no save",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Auto\"]. Reaction; deals same type as triggering physical attack (bludgeoning/piercing/slashing varies); auto-damage to attacker, no save | Audit 2026-05-11: defense_tags correctly includes ['Auto']. Per FDR, Auto-effect corresponds to Auto in defense_tags. Merges with existing override (adds reliability_tags).",
     "overrides": {
       "targeting_tags": [
         "ST"
@@ -2106,6 +2199,9 @@
       ],
       "defense_tags": [
         "Auto"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
       ]
     }
   },
@@ -2128,7 +2224,7 @@
   {
     "aonId": 711,
     "name": "Rusting Grasp",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Unspecified\"]; defense_tags: [] -> [\"Fort\", \"Ref\"]. Damage has no named type (it's rust damage); Fortitude save for metal creatures, Reflex save for items",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Unspecified\"]; defense_tags: [] -> [\"Fort\", \"Ref\"]. Damage has no named type (it's rust damage); Fortitude save for metal creatures, Reflex save for items | Audit 2026-05-11 Silver Bullet: Extremely effective against metal creatures and for destroying metal equipment. Heidi concurs. Merges with existing override (adds silverBullets to roles, Silver Bullet to special_tags).",
     "overrides": {
       "targeting_tags": [
         "ST"
@@ -2139,6 +2235,13 @@
       "defense_tags": [
         "Fort",
         "Ref"
+      ],
+      "roles": [
+        "damage",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
       ]
     }
   },
@@ -2161,7 +2264,7 @@
   {
     "aonId": 638,
     "name": "Sea Surge",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"Fort\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"Fort\"] | Audit 2026-05-10 Run 3: Failure = knocked prone. Crit Failure = pushed 20 feet, knocked prone, and takes 3d6 bludgeoning damage. Merges with existing override (adds conditions).",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -2171,7 +2274,20 @@
       ],
       "defense_tags": [
         "Fort"
-      ]
+      ],
+      "conditions_imposed": [
+        "Prone"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Prone"
+        ],
+        "critical_failure": [
+          "Prone"
+        ]
+      }
     }
   },
   {
@@ -2465,7 +2581,7 @@
   {
     "aonId": 640,
     "name": "Unseasonable Squall",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"Fort\"]. Fortitude saving throw for push/prone effects",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"Fort\"]. Fortitude saving throw for push/prone effects | Audit 2026-05-10 Run 3: Failure = knocked prone. Crit Failure = pushed 30 feet, knocked prone, takes 2d6 bludgeoning. Merges with existing override (adds conditions).",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -2475,13 +2591,26 @@
       ],
       "defense_tags": [
         "Fort"
-      ]
+      ],
+      "conditions_imposed": [
+        "Prone"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Prone"
+        ],
+        "critical_failure": [
+          "Prone"
+        ]
+      }
     }
   },
   {
     "aonId": 660,
     "name": "Upheaval",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"Ref\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"Ref\"] | Audit 2026-05-10 Run 3: Success = half damage + falls prone. Failure = full damage + prone. Crit Failure = full damage + restrained. Prone on Success = meaningful Success-effect. Merges with existing override (adds conditions + reliability).",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -2491,6 +2620,26 @@
       ],
       "defense_tags": [
         "Ref"
+      ],
+      "conditions_imposed": [
+        "Prone",
+        "Restrained"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [
+          "Prone"
+        ],
+        "failure": [
+          "Prone"
+        ],
+        "critical_failure": [
+          "Prone",
+          "Restrained"
+        ]
+      },
+      "reliability_tags": [
+        "Success-effect"
       ]
     }
   },
@@ -2593,6 +2742,411 @@
     "overrides": {
       "targeting_tags": [
         "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 9,
+    "name": "Anathematic Reprisal",
+    "reason": "Audit 2026-05-10 Run 1: Spell text says 'a basic Will save can reduce this damage.' basic_save should be true; basic saves guarantee half damage on success = Success-effect.",
+    "overrides": {
+      "basic_save": true,
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 56,
+    "name": "Crusade",
+    "reason": "Audit 2026-05-10 Run 1: Targets up to 4 creatures with no saving throw. Compels enemy behavior without initial save = Auto-effect offensive action. Multi for 4 targets.",
+    "overrides": {
+      "defense_tags": [
+        "Auto"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 81,
+    "name": "Divine Aura",
+    "reason": "Audit 2026-05-10 Run 1: Melee attackers of opposite alignment must succeed at a Will save or be blinded for 1 minute. Emanation area = Multi.",
+    "overrides": {
+      "defense_tags": [
+        "Will"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "conditions_imposed": [
+        "Blinded"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Blinded"
+        ],
+        "critical_failure": [
+          "Blinded"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 226,
+    "name": "Power Word Blind",
+    "reason": "Audit 2026-05-10 Run 2: No saving throw, no attack roll. Targets 1 creature. Imposes Blinded or Dazzled based on level. +1 heighten pattern increases level thresholds by 2 = scales-well.",
+    "overrides": {
+      "defense_tags": [
+        "Auto"
+      ],
+      "targeting_tags": [
+        "ST"
+      ],
+      "conditions_imposed": [
+        "Blinded",
+        "Dazzled"
+      ],
+      "heighten_quality": "scales-well"
+    }
+  },
+  {
+    "aonId": 228,
+    "name": "Power Word Stun",
+    "reason": "Audit 2026-05-10 Run 2: No saving throw, no attack roll. Targets 1 creature. Imposes Stunned. +1 heighten pattern = scales-well.",
+    "overrides": {
+      "defense_tags": [
+        "Auto"
+      ],
+      "targeting_tags": [
+        "ST"
+      ],
+      "conditions_imposed": [
+        "Stunned"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
+      ],
+      "heighten_quality": "scales-well"
+    }
+  },
+  {
+    "aonId": 234,
+    "name": "Prismatic Wall",
+    "reason": "Audit 2026-05-10 Run 2: Light effect forces Will save: dazzled on success, blinded on failure/crit failure. Dazzled on success = meaningful Success-effect.",
+    "overrides": {
+      "defense_tags": [
+        "Will"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "conditions_imposed": [
+        "Dazzled",
+        "Blinded"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [
+          "Dazzled"
+        ],
+        "failure": [
+          "Blinded"
+        ],
+        "critical_failure": [
+          "Blinded"
+        ]
+      },
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 242,
+    "name": "Purple Worm Sting",
+    "reason": "Audit 2026-05-10 Run 2: On successful Fortitude save, target takes 3d6 poison damage. Meaningful tactical effect on enemy success.",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 261,
+    "name": "Reverse Gravity",
+    "reason": "Audit 2026-05-10 Run 2: Reverses gravity in 20-foot radius cylinder with no saving throw. Creatures fall upward and take falling damage. No save/attack roll = Auto. 20-foot radius = Multi.",
+    "overrides": {
+      "defense_tags": [
+        "Auto"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 540,
+    "name": "Snowball",
+    "reason": "Audit 2026-05-10 Run 2: Attack roll spell — enemy 'succeeds' when caster misses, miss = no effect, so no Success-effect. Speed penalty is NOT the Slowed condition per FDR; not a named condition = no debuff role.",
+    "overrides": {
+      "reliability_tags": [],
+      "roles": [
+        "damage"
+      ]
+    }
+  },
+  {
+    "aonId": 549,
+    "name": "Exchange Image",
+    "reason": "Audit 2026-05-10 Run 2: Will save is for non-offensive effect (swapping appearances). No damage, no conditions, no weakness on enemies. Fails Offense Gate = defense_tags should be [].",
+    "overrides": {
+      "defense_tags": []
+    }
+  },
+  {
+    "aonId": 630,
+    "name": "Breath of Drought",
+    "reason": "Audit 2026-05-10 Run 3: 10-foot burst forces Fortitude save. Failure = sickened 1, Crit Failure = sickened 2. Offensive zone imposing named condition via Fort save.",
+    "overrides": {
+      "defense_tags": [
+        "Fort"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "conditions_imposed": [
+        "Sickened"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Sickened"
+        ],
+        "critical_failure": [
+          "Sickened"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 633,
+    "name": "Scouring Sand",
+    "reason": "Audit 2026-05-10 Run 3: 10-foot burst Reflex save. Failure = dazzled 1 minute. Crit Failure = also blinded for next action.",
+    "overrides": {
+      "defense_tags": [
+        "Ref"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "conditions_imposed": [
+        "Dazzled",
+        "Blinded"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Dazzled"
+        ],
+        "critical_failure": [
+          "Dazzled",
+          "Blinded"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 649,
+    "name": "Entrancing Eyes",
+    "reason": "Audit 2026-05-10 Run 3: 30-foot emanation forces Will saves. Failure = stupefied 2 + fascinated. Crit Failure = stupefied 4 + fascinated. Focused-eye action can impose Paralyzed.",
+    "overrides": {
+      "defense_tags": [
+        "Will"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "conditions_imposed": [
+        "Stupefied",
+        "Fascinated",
+        "Paralyzed"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Stupefied",
+          "Fascinated"
+        ],
+        "critical_failure": [
+          "Stupefied",
+          "Fascinated"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 655,
+    "name": "Astral Labyrinth",
+    "reason": "Audit 2026-05-10 Run 3: Creatures teleporting into/out of 80-foot burst attempt Will save. Success = stunned 1, Failure = stunned 1 + redirected, Crit Failure = stunned 3 + redirected. Stunned at all non-crit-success outcomes. Stunned 1 on Success = meaningful Success-effect.",
+    "overrides": {
+      "defense_tags": [
+        "Will"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "conditions_imposed": [
+        "Stunned"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [
+          "Stunned"
+        ],
+        "failure": [
+          "Stunned"
+        ],
+        "critical_failure": [
+          "Stunned"
+        ]
+      },
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 659,
+    "name": "Undermine Reality",
+    "reason": "Audit 2026-05-10 Run 3: Targets 1 creature with Will save. Severely debilitates (Strikes deal half damage, can't crit on skills, enemies get +1 degree vs their spells). Incapacitation trait. Success = quasi-real until end of next turn = meaningful Success-effect. Heidi concurs with editorial intent.",
+    "overrides": {
+      "defense_tags": [
+        "Will"
+      ],
+      "targeting_tags": [
+        "ST"
+      ],
+      "st_incap": true,
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 667,
+    "name": "Animate Rope",
+    "reason": "Audit 2026-05-10 Run 3: Bind command uses 'spell attack roll against the target's Reflex DC.' Resolves against Reflex DC, not AC. Same pattern as Black Tentacles.",
+    "overrides": {
+      "defense_tags": [
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 845,
+    "name": "Call the Blood",
+    "reason": "Audit 2026-05-11: Multi-role (buff + damage + debuff) with +1 heighten pattern. FDR cap for damage-only +2 does not apply. +1 scaling on a spell that increases void damage, sickened severity, AND temp HP = scales-well.",
+    "overrides": {
+      "heighten_quality": "scales-well"
+    }
+  },
+  {
+    "aonId": 847,
+    "name": "Aura of the Unremarkable",
+    "reason": "Audit 2026-05-11 + Heidi direction: Not an offense spell. Should be utility only. No conditions imposed, no offensive effect on enemies. Heidi: 'Not an Offense spell. Should be Utility.'",
+    "overrides": {
+      "roles": [
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 855,
+    "name": "Verminous Lure",
+    "reason": "Audit 2026-05-11: defense_tags [] and conditions_imposed []. Spell makes target attract vermin — no offensive effect on enemies. Debuff role inconsistent with non-offensive classification. Utility alone is correct.",
+    "overrides": {
+      "roles": [
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 857,
+    "name": "Airburst",
+    "reason": "Audit 2026-05-12: defense_tags [] and conditions_imposed []. Pushing = forced movement, not a named PF2e condition. Per FDR, debuff requires named conditions or weaknesses. Control is correct (shapes battlefield via forced movement). oneAction correct (1-action spell).",
+    "overrides": {
+      "roles": [
+        "control",
+        "oneAction"
+      ]
+    }
+  },
+  {
+    "aonId": 881,
+    "name": "Chromatic Armor",
+    "reason": "Audit 2026-05-12 + Heidi direction: This is a buff that scales well, not a debuff. The Will save and Dazzled condition are defensive reactions when the buffed target is attacked — the point is making the target hard to hit/damage, not offense. H+3 scaling at ranks 4/7/10 with resistance values 5/10/15 is good scaling. Heidi: 'buff spell that scales well.'",
+    "overrides": {
+      "roles": [
+        "buff"
+      ],
+      "heighten_quality": "scales-well"
+    }
+  },
+  {
+    "aonId": 1727,
+    "name": "Truesight",
+    "reason": "Transfer from deleted legacy Spell True Seeing (aonId 344). Silver Bullet: counters invisibility, illusions, polymorph disguises within 60 feet. Heidi concurs.",
+    "overrides": {
+      "roles": [
+        "buff",
+        "prebuffs",
+        "utility",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
+    }
+  },
+  {
+    "aonId": 2027,
+    "name": "Spell Riposte",
+    "reason": "Transfer from deleted legacy Spell Turning (aonId 297). Silver Bullet: reflects single-target spells in caster-vs-caster encounters. Heidi concurs.",
+    "overrides": {
+      "roles": [
+        "reactions",
+        "utility",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
+    }
+  },
+  {
+    "aonId": 1981,
+    "name": "Containment",
+    "reason": "Transfer from deleted legacy Resilient Sphere (aonId 255). Silver Bullet: removes one enemy from combat. Heidi concurs.",
+    "overrides": {
+      "roles": [
+        "control",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
       ]
     }
   }
