@@ -1,0 +1,21 @@
+{
+  "formatVersion": 1,
+  "appVersion": "pf2e-spell-planner",
+  "savedAt": "2026-05-12T00:00:00.000Z",
+  "classes": {
+    "arcane": null,
+    "divine": "cleric",
+    "occult": null,
+    "primal": null
+  },
+  "plan": {
+    "arcane": {
+      "3": {
+        "1": [
+          { "name": "TestSpellA", "aonId": 9001, "action_tags": ["2-action"], "roles": ["damage"], "defense_tags": ["AC"], "targeting_tags": ["ST"], "damage_types": ["Fire"], "conditions_imposed": [], "reliability_tags": [], "special_tags": [], "weaknesses_imposed": [], "mathfinder_reviewed": false },
+          { "name": "TestSpellB", "aonId": 9002, "action_tags": ["2-action"], "roles": ["buff"], "defense_tags": [], "targeting_tags": [], "damage_types": [], "conditions_imposed": [], "reliability_tags": [], "special_tags": [], "weaknesses_imposed": [], "mathfinder_reviewed": false }
+        ]
+      }
+    }
+  }
+}

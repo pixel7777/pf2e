@@ -22,12 +22,6 @@
     }
   }
 
-  function getDefaultClass(tradition) {
-    if (!window.CLASS_DATA) return null;
-    var map = { arcane: 'wizard', divine: 'cleric', primal: 'druid' };
-    return map[tradition] || null;
-  }
-
   window.Planner = {
     getState: function() { return planState; },
     getSelectedSlot: function() { return selectedSlot; },
@@ -120,11 +114,6 @@
       var tabBar = document.getElementById('levelTabBar-' + tradition);
       var panels = document.getElementById('levelPanels-' + tradition);
       if (!tabBar || tabBar.children.length > 1) return;
-
-      // Set default class
-      if (!currentClass[tradition]) {
-        currentClass[tradition] = getDefaultClass(tradition);
-      }
 
       // Build class selector
       var classSelect = document.getElementById('classSelect-' + tradition);
