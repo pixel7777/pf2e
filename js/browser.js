@@ -33,7 +33,12 @@
     1467: 'Anti-disease. Critical when facing disease-inflicting undead, oozes, or environmental threats.',
     1534: 'Anti-ground-only. Solves vertical encounters, aerial enemies, terrain hazards.',
     1438: 'Anti-underwater/gas. Essential for underwater encounters or inhaled poisons/gases.',
-    958:  'Anti-everything (at apex rank). Shuts down enemy abilities completely.'
+    958:  'Anti-everything (at apex rank). Shuts down enemy abilities completely.',
+    709:  'Anti-fire creatures/elementals.',
+    711:  'Anti-metal creatures/equipment.',
+    1727: 'Anti-invisibility/illusions.',
+    2027: 'Anti-caster (spell reflection).',
+    1981: 'Single-target removal.'
   };
 
   var roleLabels = {
