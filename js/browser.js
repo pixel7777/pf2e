@@ -562,7 +562,7 @@
     searchIndexLoading = true;
 
     var script = document.createElement('script');
-    script.src = 'data/search-index.js?v=2';
+    script.src = 'data/search-index.js?v=3';
 
     var timer = setTimeout(function() {
       if (!window.SPELL_SEARCH_INDEX) {

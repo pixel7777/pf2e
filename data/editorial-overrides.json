@@ -35,10 +35,14 @@
   {
     "aonId": 996,
     "name": "Shadow Raid",
-    "reason": "Cycle 07 spot-check Concealed audit: Text says 'creatures are concealed to enemies in the area' — this is an ADVANTAGE for creatures inside the area (they're harder to target), not a debuff imposed on enemies. Per Decision 006 rule 5, only tag Concealed when the primary intent is to impose it on enemies adversely. Clear false positive.",
+    "reason": "Cycle 07 spot-check Concealed audit: Text says 'creatures are concealed to enemies in the area' — this is an ADVANTAGE for creatures inside the area (they're harder to target), not a debuff imposed on enemies. Per Decision 006 rule 5, only tag Concealed when the primary intent is to impose it on enemies adversely. Clear false positive. | Data-fix C35: Audit — concealment is area effect, not targeted condition. No named conditions = no debuff.",
     "overrides": {
       "conditions_imposed": [],
-      "conditions_by_outcome": null
+      "conditions_by_outcome": null,
+      "roles": [
+        "control",
+        "damage"
+      ]
     }
   },
   {
@@ -71,19 +75,31 @@
   {
     "aonId": 989,
     "name": "Sanguine Mist",
-    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern. Spell has basic Fortitude damage component (kept) but Concealed is not enemy-imposed. Clear false positive.",
+    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern. Spell has basic Fortitude damage component (kept) but Concealed is not enemy-imposed. Clear false positive. | Data-fix C35: Audit — persistent concealment zone shapes battlefield positioning = control.",
     "overrides": {
       "conditions_imposed": [],
-      "conditions_by_outcome": null
+      "conditions_by_outcome": null,
+      "roles": [
+        "buff",
+        "control",
+        "damage"
+      ]
     }
   },
   {
     "aonId": 918,
     "name": "Geyser",
-    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern (steam concealment affects both sides). Clear false positive; keep damage analysis.",
+    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern (steam concealment affects both sides). Clear false positive; keep damage analysis. | Data-fix C35: Audit — no named conditions imposed; push is control not debuff. Half damage on success = Success-effect.",
     "overrides": {
       "conditions_imposed": [],
-      "conditions_by_outcome": null
+      "conditions_by_outcome": null,
+      "roles": [
+        "control",
+        "damage"
+      ],
+      "reliability_tags": [
+        "Success-effect"
+      ]
     }
   },
   {
@@ -268,7 +284,7 @@
   {
     "aonId": 893,
     "name": "Demon Form",
-    "reason": "Cycle 07 Phase 2 skip: model emitted invalid weakness type 'Holy' (legacy alignment qualifier; in remaster, Holy is a damage qualifier not a damage type). The 'weakness 5 to holy' is a self-imposed cost on the caster (battle form takes weakness to holy), not a weakness imposed on enemies. Self-targeting polymorph battle form → buff role only. No offense fields populate (defense_tags is empty from structured pass).",
+    "reason": "Cycle 07 Phase 2 skip: model emitted invalid weakness type 'Holy' (legacy alignment qualifier; in remaster, Holy is a damage qualifier not a damage type). The 'weakness 5 to holy' is a self-imposed cost on the caster (battle form takes weakness to holy), not a weakness imposed on enemies. Self-targeting polymorph battle form → buff role only. No offense fields populate (defense_tags is empty from structured pass). | Data-fix C35: Audit — no heightening exists; matches Daemon Form (890) and Devil Form (894)",
     "overrides": {
       "damage_types": [],
       "conditions_imposed": [],
@@ -278,24 +294,53 @@
         "buff"
       ],
       "reliability_tags": [],
-      "heighten_quality": "fixed-meaningful"
+      "heighten_quality": "no-heighten"
     }
   },
   {
     "aonId": 1009,
     "name": "Summon Kaiju",
-    "reason": "Cycle 07 Phase 2 skip: model emitted invalid damage type 'Earth' (not a PF2e damage type). Summon spell that produces a kaiju with multiple damage modes (electricity, sonic, void, bludgeoning, etc.) depending on which kaiju is chosen, plus Slowed riders. Defense_tags is empty at the spell level (kaiju attacks have their own DCs). Treat as control + utility (summon mechanic) at the spell level; per-kaiju damage isn't a per-spell field.",
+    "reason": "Cycle 07 Phase 2 skip: model emitted invalid damage type 'Earth' (not a PF2e damage type). Summon spell that produces a kaiju with multiple damage modes (electricity, sonic, void, bludgeoning, etc.) depending on which kaiju is chosen, plus Slowed riders. Defense_tags is empty at the spell level (kaiju attacks have their own DCs). Treat as control + utility (summon mechanic) at the spell level; per-kaiju damage isn't a per-spell field. | Data-fix C35: Audit — major offense omission. Agmazar void (basic Fort), Agyra electricity/sonic (basic Ref) with Slowed/Prone. Incarnate Arrive/Depart are spell effects.",
     "overrides": {
-      "damage_types": [],
-      "conditions_imposed": [],
-      "conditions_by_outcome": null,
+      "damage_types": [
+        "Void",
+        "Elec",
+        "Sonic"
+      ],
+      "conditions_imposed": [
+        "Slowed",
+        "Prone"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Slowed",
+          "Prone"
+        ],
+        "critical_failure": [
+          "Slowed",
+          "Prone"
+        ]
+      },
       "weaknesses_imposed": [],
       "roles": [
         "control",
-        "utility"
+        "damage",
+        "debuff"
       ],
-      "reliability_tags": [],
-      "heighten_quality": "no-heighten"
+      "reliability_tags": [
+        "Success-effect"
+      ],
+      "heighten_quality": "no-heighten",
+      "defense_tags": [
+        "Fort",
+        "Ref"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "basic_save": true
     }
   },
   {
@@ -1365,10 +1410,11 @@
   {
     "aonId": 892,
     "name": "Deity's Strike",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Force\"]; defense_tags: [] -> [\"AC\", \"Ref\"]. Primary attack uses spell attack roll (AC); secondary area effect requires basic Reflex save",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Force\"]; defense_tags: [] -> [\"AC\", \"Ref\"]. Primary attack uses spell attack roll (AC); secondary area effect requires basic Reflex save | Data-fix C35: Audit — shock wave area is Multi-target offensive effect alongside ST primary attack",
     "overrides": {
       "targeting_tags": [
-        "ST"
+        "ST",
+        "Multi"
       ],
       "damage_types": [
         "Force"
@@ -1506,26 +1552,45 @@
   {
     "aonId": 901,
     "name": "Elemental Absorption",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Ref\"]. Caster chooses element; damage type varies by element chosen; releases to one enemy; basic Reflex save",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Ref\"]. Caster chooses element; damage type varies by element chosen; releases to one enemy; basic Reflex save | Data-fix C35: Audit — variable-type spell tags Varies + each chooseable type per FDR; release activity has basic Reflex = Success-effect",
     "overrides": {
       "targeting_tags": [
         "ST"
       ],
       "damage_types": [
-        "Varies"
+        "Varies",
+        "Fire",
+        "Cold",
+        "Bludg",
+        "Pierc",
+        "Slash",
+        "Elec",
+        "Vitality"
       ],
       "defense_tags": [
         "Ref"
+      ],
+      "reliability_tags": [
+        "Success-effect"
       ]
     }
   },
   {
     "aonId": 903,
     "name": "Elemental Confluence",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"] | Data-fix C35: Audit — air/metal basic Reflex (Ref), fire auto damage (Auto); Auto-effect + Success-effect",
     "overrides": {
       "targeting_tags": [
         "Multi"
+      ],
+      "defense_tags": [
+        "AC",
+        "Ref",
+        "Auto"
+      ],
+      "reliability_tags": [
+        "Auto-effect",
+        "Success-effect"
       ]
     }
   },
@@ -1586,7 +1651,7 @@
   {
     "aonId": 912,
     "name": "Flame Wisp",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Fire\"]; defense_tags: [] -> [\"Auto\"]. Wisp hits creature you Struck; no additional save or attack roll for the wisp damage",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Fire\"]; defense_tags: [] -> [\"Auto\"]. Wisp hits creature you Struck; no additional save or attack roll for the wisp damage | Data-fix C35: Audit — defense_tags has Auto; Auto-effect is the corresponding reliability tag per FDR",
     "overrides": {
       "targeting_tags": [
         "ST"
@@ -1596,13 +1661,16 @@
       ],
       "defense_tags": [
         "Auto"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
       ]
     }
   },
   {
     "aonId": 913,
     "name": "Flammable Fumes",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Fire\", \"Poison\"]; defense_tags: [] -> [\"Ref\"]. Poison damage has no save, but explosion deals fire damage with basic Reflex save. Reflex is the key defensive interaction.",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Fire\", \"Poison\"]; defense_tags: [] -> [\"Ref\"]. Poison damage has no save, but explosion deals fire damage with basic Reflex save. Reflex is the key defensive interaction. | Data-fix C35: Audit — cloud auto poison (Auto) + detonation basic Reflex (Ref); Auto-effect + Success-effect",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -1612,7 +1680,12 @@
         "Poison"
       ],
       "defense_tags": [
+        "Auto",
         "Ref"
+      ],
+      "reliability_tags": [
+        "Auto-effect",
+        "Success-effect"
       ]
     }
   },
@@ -1860,17 +1933,13 @@
   {
     "aonId": 947,
     "name": "Mantle of the Magma Heart",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Bludg\", \"Fire\"]; defense_tags: [] -> [\"Auto\"]. Heart of Fire: reactive damage to one creature that touches/hits you, no save. Lava fist: unarmed Strike. Both target single creatures.",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Bludg\", \"Fire\"]; defense_tags: [] -> [\"Auto\"]. Heart of Fire: reactive damage to one creature that touches/hits you, no save. Lava fist: unarmed Strike. Both target single creatures. | Data-fix C35: Heidi override — morph = polymorph for tagging purposes. Buff spell only; form attacks and reactive damage don't count.",
     "overrides": {
-      "targeting_tags": [
-        "ST"
-      ],
-      "damage_types": [
-        "Bludg",
-        "Fire"
-      ],
-      "defense_tags": [
-        "Auto"
+      "targeting_tags": [],
+      "damage_types": [],
+      "defense_tags": [],
+      "roles": [
+        "buff"
       ]
     }
   },
@@ -1962,7 +2031,7 @@
   {
     "aonId": 965,
     "name": "Pernicious Poltergeist",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Force\", \"Void\"]; defense_tags: [] -> [\"Fort\", \"Ref\", \"Will\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Force\", \"Void\"]; defense_tags: [] -> [\"Fort\", \"Ref\", \"Will\"] | Data-fix C35: Audit — Frighten imposes Frightened 2 on failed Will. Deathly Assault/Telekinetic Storm use basic saves = Success-effect. basic_save corrected.",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -1975,7 +2044,24 @@
         "Fort",
         "Ref",
         "Will"
-      ]
+      ],
+      "conditions_imposed": [
+        "Frightened"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Frightened"
+        ],
+        "critical_failure": [
+          "Frightened"
+        ]
+      },
+      "reliability_tags": [
+        "Success-effect"
+      ],
+      "basic_save": true
     }
   },
   {
@@ -1998,7 +2084,7 @@
   {
     "aonId": 967,
     "name": "Petal Storm",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Slash\"]; defense_tags: [] -> [\"Ref\"]. Deals slashing damage; basic Reflex save",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Slash\"]; defense_tags: [] -> [\"Ref\"]. Deals slashing damage; basic Reflex save | Data-fix C35: Audit — spell text says 'basic Reflex save'. Half damage on success = Success-effect.",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -2008,6 +2094,10 @@
       ],
       "defense_tags": [
         "Ref"
+      ],
+      "basic_save": true,
+      "reliability_tags": [
+        "Success-effect"
       ]
     }
   },
@@ -2429,7 +2519,7 @@
   {
     "aonId": 1005,
     "name": "Summon Archmage",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Force\"]; defense_tags: [] -> [\"Will\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Force\"]; defense_tags: [] -> [\"Will\"] | Data-fix C35: Audit — Arrive auto force damage (Auto), Depart Will save → Stupefied. Incarnate Arrive/Depart are spell's own effects.",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -2438,24 +2528,50 @@
         "Force"
       ],
       "defense_tags": [
+        "Auto",
         "Will"
+      ],
+      "conditions_imposed": [
+        "Stupefied"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Stupefied"
+        ],
+        "critical_failure": [
+          "Stupefied"
+        ]
+      },
+      "reliability_tags": [
+        "Auto-effect"
       ]
     }
   },
   {
     "aonId": 1008,
     "name": "Summon Draconic Legion",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Slash\", \"Varies\"]; defense_tags: [] -> [\"Ref\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Slash\", \"Varies\"]; defense_tags: [] -> [\"Ref\"] | Data-fix C35: Audit — Arrive breath weapons: caster chooses type (Varies + each). Both Arrive and Depart use basic Reflex.",
     "overrides": {
       "targeting_tags": [
         "Multi"
       ],
       "damage_types": [
         "Slash",
-        "Varies"
+        "Varies",
+        "Acid",
+        "Cold",
+        "Elec",
+        "Fire",
+        "Poison"
       ],
       "defense_tags": [
         "Ref"
+      ],
+      "basic_save": true,
+      "reliability_tags": [
+        "Success-effect"
       ]
     }
   },
@@ -2521,16 +2637,33 @@
   {
     "aonId": 1018,
     "name": "Thundering Dominance",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Mental\"]; defense_tags: [] -> [\"Will\"]. 10-foot emanation from companion/eidolon affects all enemies; basic Will save",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Mental\"]; defense_tags: [] -> [\"Will\"]. 10-foot emanation from companion/eidolon affects all enemies; basic Will save | Data-fix C35: Audit — Thundering Roar deals sonic damage (not mental). Basic Will save. Frightened on failed Will.",
     "overrides": {
       "targeting_tags": [
         "Multi"
       ],
       "damage_types": [
-        "Mental"
+        "Sonic"
       ],
       "defense_tags": [
         "Will"
+      ],
+      "conditions_imposed": [
+        "Frightened"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Frightened"
+        ],
+        "critical_failure": [
+          "Frightened"
+        ]
+      },
+      "basic_save": true,
+      "reliability_tags": [
+        "Success-effect"
       ]
     }
   },
@@ -3148,6 +3281,422 @@
       "special_tags": [
         "Silver Bullet"
       ]
+    }
+  },
+  {
+    "aonId": 898,
+    "name": "Draw the Lightning",
+    "reason": "Data-fix C35: Audit — spell text says 'basic Reflex save'; half damage on success = Success-effect",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 902,
+    "name": "Elemental Annihilation Wave",
+    "reason": "Data-fix C35: Audit — Prone crit-fail-only doesn't earn debuff; 3-action mode exists in text; damage-only +2 caps at scales-okay",
+    "overrides": {
+      "roles": [
+        "damage"
+      ],
+      "action_tags": [
+        "3-action"
+      ],
+      "heighten_quality": "scales-okay"
+    }
+  },
+  {
+    "aonId": 906,
+    "name": "Envenom Companion",
+    "reason": "Data-fix C35: Heidi override — buff of companion's attacks, not offensive. Remove debuff role.",
+    "overrides": {
+      "roles": [
+        "buff"
+      ]
+    }
+  },
+  {
+    "aonId": 921,
+    "name": "Gravitational Pull",
+    "reason": "Data-fix C35: Audit — Prone crit-fail-only doesn't earn debuff. 3-action mode targets up to 5 creatures = Multi.",
+    "overrides": {
+      "roles": [
+        "control",
+        "oneAction"
+      ],
+      "targeting_tags": [
+        "ST",
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 930,
+    "name": "Inevitable Disaster",
+    "reason": "Data-fix C35: Audit — damage has no named type (GM determines); Unspecified per FDR. Basic Fortitude = Success-effect.",
+    "overrides": {
+      "damage_types": [
+        "Unspecified"
+      ],
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 933,
+    "name": "Infectious Melody",
+    "reason": "Data-fix C35: Audit — spell PREVENTS being undetected (forced singing reveals position). Undetected was tagged backwards.",
+    "overrides": {
+      "conditions_imposed": [],
+      "conditions_by_outcome": null
+    }
+  },
+  {
+    "aonId": 934,
+    "name": "Inner Radiance Torrent",
+    "reason": "Data-fix C35: Audit — +1 pattern force damage; +2 cap doesn't apply to +1 patterns. Force rarely resisted. scales-well warranted.",
+    "overrides": {
+      "heighten_quality": "scales-well"
+    }
+  },
+  {
+    "aonId": 936,
+    "name": "Invisibility Curtain",
+    "reason": "Data-fix C35: Audit — grants allies invisibility = buff, not control (no movement denial or terrain shaping)",
+    "overrides": {
+      "roles": [
+        "buff",
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 938,
+    "name": "Juvenile Companion",
+    "reason": "Data-fix C35: Audit — weakens companion for disguise/infiltration. Opposite of buff. No combat application = not prebuffs.",
+    "overrides": {
+      "roles": [
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 942,
+    "name": "Magic Mailbox",
+    "reason": "Data-fix C35: Audit — logistical object teleportation, zero combat application. Remove prebuffs.",
+    "overrides": {
+      "roles": [
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 949,
+    "name": "Mind of Menace",
+    "reason": "Data-fix C35: Audit + Heidi — Fight with Fear reaction imposes Frightened via Will save. Heidi: add reactions + prebuffs roles (24hr Contingency cast pre-combat, triggers as Reaction).",
+    "overrides": {
+      "defense_tags": [
+        "Will"
+      ],
+      "targeting_tags": [
+        "ST"
+      ],
+      "conditions_imposed": [
+        "Frightened"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Frightened"
+        ],
+        "critical_failure": [
+          "Frightened"
+        ]
+      },
+      "roles": [
+        "buff",
+        "debuff",
+        "prebuffs",
+        "reactions"
+      ],
+      "action_tags": [
+        "Reaction"
+      ]
+    }
+  },
+  {
+    "aonId": 951,
+    "name": "Mirror's Misfortune",
+    "reason": "Data-fix C35: Audit — Will save not Auto; misfortune isn't a named condition so conditions_by_outcome = null; add buff for illusory duplicate protection.",
+    "overrides": {
+      "defense_tags": [
+        "Will"
+      ],
+      "targeting_tags": [
+        "ST"
+      ],
+      "conditions_by_outcome": null,
+      "reliability_tags": [],
+      "roles": [
+        "buff",
+        "debuff",
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 953,
+    "name": "Murderous Vine",
+    "reason": "Data-fix C35: Audit — spell attack roll, not saving throw; 4-tier outcome structure doesn't apply. Only damage scales with heightening = scales-okay.",
+    "overrides": {
+      "conditions_by_outcome": null,
+      "heighten_quality": "scales-okay"
+    }
+  },
+  {
+    "aonId": 954,
+    "name": "Nature's Reprisal",
+    "reason": "Data-fix C35: Audit — hazardous terrain deals 6 poison damage automatically (no save). Auto/Multi/Poison + damage role.",
+    "overrides": {
+      "defense_tags": [
+        "Auto"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Poison"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
+      ],
+      "roles": [
+        "control",
+        "damage"
+      ]
+    }
+  },
+  {
+    "aonId": 955,
+    "name": "Necromancer's Generosity",
+    "reason": "Data-fix C35: Audit — restores 1d8+4 HP to undead minion. FDR: healing = restores ally HP.",
+    "overrides": {
+      "roles": [
+        "buff",
+        "healing"
+      ]
+    }
+  },
+  {
+    "aonId": 959,
+    "name": "Ocular Overload",
+    "reason": "Data-fix C35: Audit + Heidi — Overload Vision reaction: Fort save, Dazzled/Blinded. Incapacitation + ST = st_incap. Heidi: add reactions role (Contingency spell with combat Reaction).",
+    "overrides": {
+      "defense_tags": [
+        "Fort"
+      ],
+      "targeting_tags": [
+        "ST"
+      ],
+      "conditions_imposed": [
+        "Dazzled",
+        "Blinded"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [
+          "Dazzled"
+        ],
+        "failure": [
+          "Blinded"
+        ],
+        "critical_failure": [
+          "Blinded",
+          "Dazzled"
+        ]
+      },
+      "st_incap": true,
+      "roles": [
+        "buff",
+        "debuff",
+        "prebuffs",
+        "reactions"
+      ],
+      "action_tags": [
+        "Reaction"
+      ]
+    }
+  },
+  {
+    "aonId": 982,
+    "name": "Repelling Pulse",
+    "reason": "Data-fix C35: Audit — Prone crit-fail-only doesn't earn debuff; forced push = control. Half damage on success = Success-effect. +2 damage with minor control scaling = scales-okay.",
+    "overrides": {
+      "roles": [
+        "damage",
+        "control"
+      ],
+      "reliability_tags": [
+        "Success-effect"
+      ],
+      "heighten_quality": "scales-okay"
+    }
+  },
+  {
+    "aonId": 986,
+    "name": "Rip the Spirit",
+    "reason": "Data-fix C35: Audit — 3-action version targets all living creatures in 30-ft emanation = Multi alongside ST.",
+    "overrides": {
+      "targeting_tags": [
+        "ST",
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 987,
+    "name": "Roaring Applause",
+    "reason": "Data-fix C35: Audit — success = can't use reactions. Meaningful tactical effect on success = Success-effect.",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 994,
+    "name": "Shadow Army",
+    "reason": "Data-fix C35: Audit — success = half damage. Meaningful tactical effect = Success-effect.",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 995,
+    "name": "Shadow Projectile",
+    "reason": "Data-fix C35: Audit — multi-role (damage+debuff+reactions) exempt from +2 cap. scales-well warranted.",
+    "overrides": {
+      "heighten_quality": "scales-well"
+    }
+  },
+  {
+    "aonId": 997,
+    "name": "Shift Blame",
+    "reason": "Data-fix C35: Audit — no damage, no conditions, no weaknesses imposed. Will save resists memory alteration (social, not combat offense). Clear offense fields.",
+    "overrides": {
+      "defense_tags": [],
+      "targeting_tags": []
+    }
+  },
+  {
+    "aonId": 1003,
+    "name": "Sudden Recollection",
+    "reason": "Data-fix C35: Audit — no damage, no conditions, no weaknesses. Will save resists informational effect, not combat offense. Clear offense fields.",
+    "overrides": {
+      "defense_tags": [],
+      "targeting_tags": []
+    }
+  },
+  {
+    "aonId": 1007,
+    "name": "Summon Deific Herald",
+    "reason": "Data-fix C35: Audit — alignment variants grant allies combat reactions, freedom of movement, damage resistance = buff.",
+    "overrides": {
+      "roles": [
+        "control",
+        "buff"
+      ]
+    }
+  },
+  {
+    "aonId": 1015,
+    "name": "Tempest of Shades",
+    "reason": "Data-fix C35: Audit — Arrive Vortex of Death (Fort → Drained), Depart Howl of Eternity (Will → Frightened/Fleeing). Both produce effects on success.",
+    "overrides": {
+      "defense_tags": [
+        "Fort",
+        "Will"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "conditions_imposed": [
+        "Drained",
+        "Frightened",
+        "Fleeing"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [
+          "Drained",
+          "Frightened"
+        ],
+        "failure": [
+          "Drained",
+          "Frightened"
+        ],
+        "critical_failure": [
+          "Drained",
+          "Frightened",
+          "Fleeing"
+        ]
+      },
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1021,
+    "name": "Tortoise and the Hare",
+    "reason": "Data-fix C35: Audit — offensive component targets 1 foe (ST not Multi). Quickened is on the ally, not the enemy.",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "conditions_imposed": [
+        "Slowed"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [
+          "Slowed"
+        ],
+        "failure": [
+          "Slowed"
+        ],
+        "critical_failure": [
+          "Slowed"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 1025,
+    "name": "Unspeakable Shadow",
+    "reason": "Data-fix C35: Audit — 'as though it had the fleeing condition' is descriptive comparison, not actual Fleeing imposition per FDR.",
+    "overrides": {
+      "conditions_imposed": [
+        "Frightened"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [
+          "Frightened"
+        ],
+        "failure": [
+          "Frightened"
+        ],
+        "critical_failure": [
+          "Frightened"
+        ]
+      }
     }
   }
 ]
