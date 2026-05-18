@@ -1023,8 +1023,6 @@
 
   function isAnyFilterActive() {
     var f = window.SpellFilters;
-    var rd = rarityDiff();
-    if (rd.added.length > 0 || rd.removed.length > 0) return true;
     if (!f.showLegacy) return true;
     if (f.roleInclude.length > 0 || f.roleExclude.length > 0) return true;
     if (f.coverageInclude.length > 0 || f.coverageExclude.length > 0) return true;

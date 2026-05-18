@@ -1534,6 +1534,7 @@ test.describe('C38-1: Rarity chips removed from summary bar', () => {
     });
 
     expect(result.hasRarityChip).toBe(false);
+    expect(result.barVisible).toBe(false);
   });
 });
 
