@@ -1256,3 +1256,158 @@ test.describe('C34: Coverage Refresh on Tab Switch', () => {
     expect(errors).toHaveLength(0);
   });
 });
+
+// ── Helper: load multi-tradition plan fixture ──
+const MULTI_TRAD_FIXTURE = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, 'fixtures', 'multi-tradition-plan.json'), 'utf8')
+);
+
+async function loadMultiTraditionPlan(page) {
+  await page.goto(APP_URL);
+  await page.waitForLoadState('domcontentloaded');
+  await page.evaluate((fixture) => {
+    Planner.loadPlan(fixture.plan, fixture.classes);
+  }, MULTI_TRAD_FIXTURE);
+  await page.waitForTimeout(300);
+}
+
+test.describe('C36-1: Merged tab appears and shows combined spells', () => {
+  test('Merged tab button exists in tab bar', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+
+    const mergedBtn = await page.$('[data-page="merged"]');
+    expect(mergedBtn).not.toBeNull();
+
+    const text = await mergedBtn.textContent();
+    expect(text).toBe('Merged');
+  });
+
+  test('Merged page shows spells from multiple traditions after plan load', async ({ page }) => {
+    const errors = [];
+    page.on('pageerror', err => errors.push(err.message));
+
+    await loadMultiTraditionPlan(page);
+
+    // Switch to merged tab
+    await page.click('[data-page="merged"]');
+    await page.waitForTimeout(500);
+
+    // Page should be active
+    const isActive = await page.evaluate(() => {
+      return document.getElementById('page-merged').classList.contains('active');
+    });
+    expect(isActive).toBe(true);
+
+    // Should see spell names from both traditions
+    const spellNames = await page.evaluate(() => {
+      const cells = document.querySelectorAll('#page-merged .merged-slot-table .slot-spell-name');
+      return Array.from(cells).map(c => c.textContent.replace('★', '').replace('↗', '').trim());
+    });
+    expect(spellNames).toContain('Fireball');
+    expect(spellNames).toContain('Heal');
+
+    // Tradition badges should be present
+    const badges = await page.evaluate(() => {
+      return document.querySelectorAll('#page-merged .tradition-circle').length;
+    });
+    expect(badges).toBeGreaterThan(0);
+
+    // No JS errors
+    expect(errors).toHaveLength(0);
+  });
+});
+
+test.describe('C36-2: Merged coverage tracker shows combined tags', () => {
+  test('coverage sidebar lights up tags from multiple traditions', async ({ page }) => {
+    await loadMultiTraditionPlan(page);
+
+    await page.click('[data-page="merged"]');
+    await page.waitForTimeout(500);
+
+    // Fireball contributes Ref + Multi + Fire; Heal contributes Auto-effect + Healing
+    const litTags = await page.evaluate(() => {
+      const lit = document.querySelectorAll('.sidebar .ctag.lit');
+      return Array.from(lit).map(el => el.dataset.tag);
+    });
+    expect(litTags).toContain('Ref');
+    expect(litTags).toContain('Fire');
+    expect(litTags).toContain('Auto-effect');
+    expect(litTags).toContain('Healing');
+  });
+});
+
+test.describe('C36-3: Merged view is read-only', () => {
+  test('no clear or delete buttons on merged page slots', async ({ page }) => {
+    await loadMultiTraditionPlan(page);
+
+    await page.click('[data-page="merged"]');
+    await page.waitForTimeout(500);
+
+    const actionBtns = await page.evaluate(() => {
+      const btns = document.querySelectorAll('#page-merged .slot-clear-btn, #page-merged .slot-delete-btn');
+      return btns.length;
+    });
+    expect(actionBtns).toBe(0);
+  });
+});
+
+test.describe('C36-4: Merged level tabs only show populated levels', () => {
+  test('empty plan shows no level tabs and empty message', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+
+    await page.click('[data-page="merged"]');
+    await page.waitForTimeout(300);
+
+    const tabCount = await page.evaluate(() => {
+      return document.querySelectorAll('#levelTabBar-merged .level-tab').length;
+    });
+    expect(tabCount).toBe(0);
+
+    const emptyVisible = await page.evaluate(() => {
+      const msg = document.getElementById('merged-empty-msg');
+      return msg && msg.style.display !== 'none';
+    });
+    expect(emptyVisible).toBe(true);
+  });
+
+  test('loaded plan shows only level tabs for populated levels', async ({ page }) => {
+    await loadMultiTraditionPlan(page);
+
+    await page.click('[data-page="merged"]');
+    await page.waitForTimeout(500);
+
+    const tabLevels = await page.evaluate(() => {
+      const tabs = document.querySelectorAll('#levelTabBar-merged .level-tab');
+      return Array.from(tabs).map(t => parseInt(t.dataset.level));
+    });
+    // Fixture has spells only at level 5
+    expect(tabLevels).toEqual([5]);
+  });
+});
+
+test.describe('C36-5: Filter mode disabled on merged page', () => {
+  test('filter controls are hidden when on merged tab', async ({ page }) => {
+    await loadMultiTraditionPlan(page);
+
+    await page.click('[data-page="merged"]');
+    await page.waitForTimeout(500);
+
+    const filtersHidden = await page.evaluate(() => {
+      const sidebar = document.querySelector('.sidebar');
+      return sidebar && sidebar.classList.contains('merged-filters-hidden');
+    });
+    expect(filtersHidden).toBe(true);
+
+    // Switching back to a tradition page restores filters
+    await page.click('[data-page="arcane"]');
+    await page.waitForTimeout(300);
+
+    const filtersRestored = await page.evaluate(() => {
+      const sidebar = document.querySelector('.sidebar');
+      return sidebar && !sidebar.classList.contains('merged-filters-hidden');
+    });
+    expect(filtersRestored).toBe(true);
+  });
+});

@@ -1305,6 +1305,8 @@
   }
 
   window.Browser = {
+    SILVER_BULLET_NOTES: SILVER_BULLET_NOTES,
+
     _getRenderedSpells: function(tradition) {
       return renderedSpells[tradition] || null;
     },
@@ -1683,7 +1685,7 @@
     // Called by filter controls when rarity/legacy toggles change
     onFiltersChanged: function() {
       var tradition = App.currentTradition();
-      if (!tradition || tradition === 'overview') return;
+      if (!tradition || tradition === 'overview' || tradition === 'merged' || tradition === 'about') return;
       var tab = activeTab[tradition] || 'role';
 
       if (tab === 'search') {
@@ -1697,7 +1699,7 @@
     // Called by coverage.js when coverage filter state changes
     onCoverageFiltersChanged: function() {
       var tradition = App.currentTradition();
-      if (!tradition || tradition === 'overview') return;
+      if (!tradition || tradition === 'overview' || tradition === 'merged' || tradition === 'about') return;
       var tab = activeTab[tradition] || 'role';
       if (tab === 'role') {
         reRenderCurrentView(tradition);

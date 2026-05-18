@@ -97,6 +97,70 @@
     return '# Spell Plan\n\n' + sections.join('\n');
   }
 
+  function generateMergedMarkdown() {
+    var state = Planner.getState();
+    var level = Planner.getCurrentLevel('merged');
+    if (!level || level <= 0) {
+      return '# Merged Spell Plan\n\nNo spells assigned.\n';
+    }
+
+    var maxRank = Math.ceil(level / 2);
+    var lines = ['# Merged Spell Plan — Level ' + level, ''];
+    var hasAnyContent = false;
+
+    for (var r = maxRank; r >= 1; r--) {
+      var rankHasSlots = false;
+      for (var ti = 0; ti < TRADITIONS.length; ti++) {
+        var t = TRADITIONS[ti];
+        if (state[t] && state[t][level] && state[t][level][r] && state[t][level][r].length > 0) {
+          rankHasSlots = true;
+          break;
+        }
+      }
+      if (!rankHasSlots) continue;
+
+      var tier = App.getTier(level, r);
+      var tierStr = tier === 'top' ? '◆ Top' : tier === 'mid' ? '◇ Mid' : '○ Low';
+      lines.push('## Rank ' + r + ' (' + tierStr + ')');
+      lines.push('');
+
+      for (var ti = 0; ti < TRADITIONS.length; ti++) {
+        var t = TRADITIONS[ti];
+        if (!state[t] || !state[t][level] || !state[t][level][r]) continue;
+        var slots = state[t][level][r];
+        if (slots.length === 0) continue;
+
+        lines.push('### ' + t.charAt(0).toUpperCase() + t.slice(1));
+        for (var i = 0; i < slots.length; i++) {
+          var spell = slots[i];
+          if (spell) {
+            hasAnyContent = true;
+            var line = '- **' + spell.name + '**';
+            if (spell.heightenedFrom && spell.heightenedFrom > 0) {
+              line += ' (H⬆' + r + ')';
+            }
+            if (spell.save && spell.save !== '—') {
+              line += ' [' + spell.save + ']';
+            }
+            if (spell.aonId) {
+              line += ' — [AoN](' + App.aonUrl(spell.aonId) + ')';
+            }
+            lines.push(line);
+          } else {
+            lines.push('- _(empty slot)_');
+          }
+        }
+        lines.push('');
+      }
+    }
+
+    if (!hasAnyContent) {
+      return '# Merged Spell Plan\n\nNo spells assigned.\n';
+    }
+
+    return lines.join('\n');
+  }
+
   function countSpellsAndTraditions(state) {
     var spellCount = 0;
     var tradCount = 0;
@@ -126,7 +190,8 @@
 
   window.Export = {
     copyToClipboard: function() {
-      var md = generateAllTraditionsMarkdown();
+      var isMerged = window.App && App.currentTradition() === 'merged';
+      var md = isMerged ? generateMergedMarkdown() : generateAllTraditionsMarkdown();
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(md).then(function() {
           App.toast('Plan copied to clipboard!');
@@ -145,17 +210,19 @@
     },
 
     downloadMd: function() {
-      var md = generateAllTraditionsMarkdown();
+      var isMerged = window.App && App.currentTradition() === 'merged';
+      var md = isMerged ? generateMergedMarkdown() : generateAllTraditionsMarkdown();
+      var filename = isMerged ? 'merged-spell-plan.md' : 'spell-plan.md';
       var blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
       var url = URL.createObjectURL(blob);
       var a = document.createElement('a');
       a.href = url;
-      a.download = 'spell-plan.md';
+      a.download = filename;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      App.toast('Downloaded spell-plan.md');
+      App.toast('Downloaded ' + filename);
     },
 
     savePlan: function() {
@@ -186,7 +253,10 @@
     },
 
     loadPlan: function() {
-      var input = document.querySelector('.export-bar input[type="file"]');
+      var activePage = document.querySelector('.tradition-page.active');
+      var input = activePage
+        ? activePage.querySelector('.export-bar input[type="file"]')
+        : document.querySelector('.export-bar input[type="file"]');
       if (input) {
         input.value = '';
         input.click();

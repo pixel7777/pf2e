@@ -1,0 +1,33 @@
+{
+  "formatVersion": 1,
+  "appVersion": "pf2e-spell-planner",
+  "savedAt": "2026-05-18T00:00:00.000Z",
+  "classes": {
+    "arcane": "wizard",
+    "divine": "cleric",
+    "occult": null,
+    "primal": null
+  },
+  "plan": {
+    "arcane": {
+      "5": {
+        "3": [
+          { "name": "Fireball", "aonId": 2056, "action_tags": ["2-action"], "roles": ["damage"], "defense_tags": ["Ref"], "targeting_tags": ["Multi"], "damage_types": ["Fire"], "conditions_imposed": [], "reliability_tags": [], "special_tags": [], "weaknesses_imposed": [], "mathfinder_reviewed": true, "trait_raw": ["Arcane", "Fire", "Evocation"] }
+        ],
+        "2": [
+          { "name": "Slow", "aonId": 2266, "action_tags": ["2-action"], "roles": ["debuff"], "defense_tags": ["Fort"], "targeting_tags": ["ST"], "damage_types": [], "conditions_imposed": ["Slowed"], "reliability_tags": ["Success-effect"], "special_tags": [], "weaknesses_imposed": [], "mathfinder_reviewed": true, "trait_raw": ["Arcane", "Transmutation"] }
+        ]
+      }
+    },
+    "divine": {
+      "5": {
+        "3": [
+          { "name": "Heal", "aonId": 2090, "action_tags": ["1-action", "2-action", "3-action"], "roles": ["healing"], "defense_tags": [], "targeting_tags": ["ST", "Multi"], "damage_types": ["Vitality"], "conditions_imposed": [], "reliability_tags": ["Auto-effect"], "special_tags": ["Healing"], "weaknesses_imposed": [], "mathfinder_reviewed": true, "trait_raw": ["Divine", "Vitality", "Necromancy"] }
+        ],
+        "1": [
+          { "name": "Bless", "aonId": 2006, "action_tags": ["2-action"], "roles": ["buff"], "defense_tags": [], "targeting_tags": [], "damage_types": [], "conditions_imposed": [], "reliability_tags": ["Auto-effect"], "special_tags": ["Pre-buff"], "weaknesses_imposed": [], "mathfinder_reviewed": true, "trait_raw": ["Divine", "Aura", "Enchantment"] }
+        ]
+      }
+    }
+  }
+}

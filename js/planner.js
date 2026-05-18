@@ -103,7 +103,9 @@
       }
 
       // Step 7: Re-render current view
-      if (activeTradition && activeLevel > 0) {
+      if (activeTradition === 'merged') {
+        if (this.buildMergedView) this.buildMergedView();
+      } else if (activeTradition && activeLevel > 0) {
         this.selectLevel(activeTradition, activeLevel);
       }
     },
@@ -565,14 +567,16 @@
               html += '<a href="' + App.aonUrl(spell.aonId) + '" target="_blank" class="aon-link" title="Open on Archives of Nethys" onclick="event.stopPropagation()">↗</a>';
             }
             html += '</td>';
+            html += '<td class="slot-native-rank">' + (spell.native_rank || '') + '</td>';
             html += '<td class="slot-action">' + App.formatActions(spell.action_tags) + '</td>';
             html += '<td>' + App.renderTags(spell) + '</td>';
+            html += '<td class="spell-notes">' + App.renderNotes(spell) + '</td>';
             html += '<td class="slot-actions">';
             html += '<button class="slot-clear-btn" onclick="Planner.clearSpell(\'' + tradition + '\',' + level + ',' + r + ',' + idx + ',event)" title="Clear spell (keep slot)">⊘</button>';
             html += '<button class="slot-delete-btn" onclick="Planner.deleteSlot(\'' + tradition + '\',' + level + ',' + r + ',' + idx + ',event)" title="Delete slot">🗑</button>';
             html += '</td>';
           } else {
-            html += '<td colspan="3" class="slot-empty">Empty slot — click to browse spells</td>';
+            html += '<td colspan="5" class="slot-empty">Empty slot — click to browse spells</td>';
             html += '<td class="slot-actions">';
             html += '<button class="slot-delete-btn" onclick="Planner.deleteSlot(\'' + tradition + '\',' + level + ',' + r + ',' + idx + ',event)" title="Delete slot">🗑</button>';
             html += '</td>';
@@ -603,6 +607,154 @@
           tabs[i].classList.remove('has-data');
         }
       }
+    },
+
+    // ── Merged Spell List (Cycle 36) ──
+
+    buildMergedView: function(selectedLevel) {
+      var traditions = ['arcane', 'divine', 'occult', 'primal'];
+      var TRAD_INITIALS = { arcane: 'A', divine: 'D', occult: 'O', primal: 'P' };
+      var TRAD_LABELS = { arcane: 'Arcane', divine: 'Divine', occult: 'Occult', primal: 'Primal' };
+
+      // Find all levels with at least one spell across any tradition
+      var populatedLevels = [];
+      for (var lv = 1; lv <= 20; lv++) {
+        var hasSpell = false;
+        for (var ti = 0; ti < traditions.length; ti++) {
+          var t = traditions[ti];
+          if (!planState[t] || !planState[t][lv]) continue;
+          var ls = planState[t][lv];
+          for (var r in ls) {
+            for (var s = 0; s < ls[r].length; s++) {
+              if (ls[r][s]) { hasSpell = true; break; }
+            }
+            if (hasSpell) break;
+          }
+          if (hasSpell) break;
+        }
+        if (hasSpell) populatedLevels.push(lv);
+      }
+
+      var emptyMsg = document.getElementById('merged-empty-msg');
+      var tabBar = document.getElementById('levelTabBar-merged');
+      var panels = document.getElementById('levelPanels-merged');
+      var legend = document.getElementById('merged-legend');
+
+      if (populatedLevels.length === 0) {
+        if (emptyMsg) emptyMsg.style.display = '';
+        if (tabBar) tabBar.innerHTML = '';
+        if (panels) panels.innerHTML = '';
+        if (legend) legend.innerHTML = '';
+        currentLevel['merged'] = 0;
+        return;
+      }
+      if (emptyMsg) emptyMsg.style.display = 'none';
+
+      // Determine which level to select
+      var level = selectedLevel || currentLevel['merged'] || 0;
+      if (populatedLevels.indexOf(level) === -1) {
+        level = populatedLevels[0];
+      }
+      currentLevel['merged'] = level;
+
+      // Build level tabs
+      var tabHtml = '';
+      for (var i = 0; i < populatedLevels.length; i++) {
+        var lv = populatedLevels[i];
+        var activeClass = (lv === level) ? ' active' : '';
+        tabHtml += '<button class="level-tab' + activeClass + '" data-level="' + lv + '" data-tradition="merged" onclick="Planner.selectMergedLevel(' + lv + ')">Lv ' + lv + '</button>';
+      }
+      tabBar.innerHTML = tabHtml;
+
+      // Build legend — traditions with spells at this level
+      var legendHtml = '';
+      for (var ti = 0; ti < traditions.length; ti++) {
+        var t = traditions[ti];
+        if (!planState[t] || !planState[t][level]) continue;
+        var tradHasSpell = false;
+        var ls = planState[t][level];
+        for (var r in ls) {
+          for (var s = 0; s < ls[r].length; s++) {
+            if (ls[r][s]) { tradHasSpell = true; break; }
+          }
+          if (tradHasSpell) break;
+        }
+        if (tradHasSpell) {
+          legendHtml += '<div class="merged-legend-item">';
+          legendHtml += '<span class="tradition-circle ' + t + '">' + TRAD_INITIALS[t] + '</span>';
+          legendHtml += '<span>' + TRAD_LABELS[t] + '</span>';
+          legendHtml += '</div>';
+        }
+      }
+      legend.innerHTML = legendHtml;
+
+      // Build slot display: grouped by rank (descending) then tradition
+      var maxRank = Math.ceil(level / 2);
+      var panelHtml = '';
+
+      for (var r = maxRank; r >= 1; r--) {
+        // Check if any tradition has slots at this rank
+        var rankHasSlots = false;
+        for (var ti = 0; ti < traditions.length; ti++) {
+          var t = traditions[ti];
+          if (planState[t] && planState[t][level] && planState[t][level][r] && planState[t][level][r].length > 0) {
+            rankHasSlots = true;
+            break;
+          }
+        }
+        if (!rankHasSlots) continue;
+
+        var tier = App.getTier(level, r);
+        panelHtml += '<div class="merged-rank-header">';
+        panelHtml += '<span class="rank-label">Rank ' + r + '</span>';
+        panelHtml += '<span class="tier-badge ' + tier + '">' + App.tierLabel(tier) + '</span>';
+        panelHtml += '</div>';
+
+        for (var ti = 0; ti < traditions.length; ti++) {
+          var t = traditions[ti];
+          if (!planState[t] || !planState[t][level] || !planState[t][level][r]) continue;
+          var slots = planState[t][level][r];
+          if (slots.length === 0) continue;
+
+          panelHtml += '<table class="merged-slot-table"><tbody>';
+          for (var idx = 0; idx < slots.length; idx++) {
+            var spell = slots[idx];
+            panelHtml += '<tr>';
+            panelHtml += '<td class="slot-tradition-badge"><span class="tradition-circle ' + t + '">' + TRAD_INITIALS[t] + '</span></td>';
+            if (spell) {
+              panelHtml += '<td class="slot-spell-name">';
+              if (spell.mathfinder_reviewed) {
+                panelHtml += '<span class="mathfinder-star" style="cursor:default;" title="Mathfinder reviewed">★</span>';
+              }
+              panelHtml += spell.name;
+              if (spell.aonId) {
+                panelHtml += '<a href="' + App.aonUrl(spell.aonId) + '" target="_blank" class="aon-link" title="Open on Archives of Nethys" onclick="event.stopPropagation()">↗</a>';
+              }
+              panelHtml += '</td>';
+              panelHtml += '<td class="slot-native-rank">' + (spell.native_rank || '') + '</td>';
+              panelHtml += '<td class="slot-action">' + App.formatActions(spell.action_tags) + '</td>';
+              panelHtml += '<td>' + App.renderTags(spell) + '</td>';
+              panelHtml += '<td class="spell-notes">' + App.renderNotes(spell) + '</td>';
+            } else {
+              panelHtml += '<td colspan="5" class="slot-empty">_(empty slot)_</td>';
+            }
+            panelHtml += '</tr>';
+          }
+          panelHtml += '</tbody></table>';
+        }
+      }
+
+      panels.innerHTML = panelHtml;
+
+      // Update coverage for merged view
+      if (window.Coverage && Coverage.updateMerged) {
+        Coverage.updateMerged(level);
+      }
+    },
+
+    selectMergedLevel: function(level) {
+      currentLevel['merged'] = level;
+      this.buildMergedView(level);
     }
   };
 })();

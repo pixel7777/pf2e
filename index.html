@@ -6,7 +6,7 @@
 <title>PF2e Spell Planner — Prepared Caster Edition</title>
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
-<link rel="stylesheet" href="css/styles.css?v=45">
+<link rel="stylesheet" href="css/styles.css?v=47">
 </head>
 <body>
 
@@ -31,6 +31,7 @@
     <button class="tab-btn" data-page="divine">Divine</button>
     <button class="tab-btn" data-page="occult">Occult</button>
     <button class="tab-btn" data-page="primal">Primal</button>
+    <button class="tab-btn" data-page="merged">Merged</button>
   </nav>
 </header>
 
@@ -880,6 +881,24 @@
     </div>
 
     <!-- ═══════════════════════════════════════════════════ -->
+    <!-- MERGED SPELL LIST -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="tradition-page" id="page-merged">
+      <div class="export-bar">
+        <button class="export-btn" onclick="Export.copyToClipboard()">📋 Copy Plan</button><span class="info-bubble" title="Copies the merged spell list for the currently selected level to the clipboard as readable Markdown.">ⓘ</span>
+        <button class="export-btn" onclick="Export.downloadMd()">📄 Download .md</button><span class="info-bubble" title="Downloads the merged spell list for the currently selected level as a Markdown file.">ⓘ</span>
+        <button class="export-btn" onclick="Export.savePlan()">💾 Save Plan</button><span class="info-bubble" title="Saves your full plan (all traditions, all class selections, all spell assignments) as a .json file. You can load this file later to pick up where you left off.">ⓘ</span>
+        <button class="export-btn" onclick="Export.loadPlan()">📂 Load Plan</button><span class="info-bubble" title="Load a previously saved .json plan file. This will replace your current selections across all traditions.">ⓘ</span>
+        <input type="file" accept=".json" style="display:none" onchange="Export.handleLoadFile(this)">
+      </div>
+
+      <div class="merged-legend" id="merged-legend"></div>
+      <div class="level-tab-bar" id="levelTabBar-merged"></div>
+      <div id="merged-empty-msg" class="merged-empty-msg" style="display:none;">No spells assigned. Prepare spells on tradition pages, then return here to see your combined list.</div>
+      <div id="levelPanels-merged"></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
     <!-- ABOUT PAGE -->
     <!-- ═══════════════════════════════════════════════════ -->
     <div class="tradition-page" id="page-about">
@@ -1210,11 +1229,11 @@
 <script src="data/tag-definitions.js"></script>
 
 <!-- App modules -->
-<script src="js/app.js?v=45"></script>
-<script src="js/planner.js?v=42"></script>
-<script src="js/browser.js?v=48"></script>
-<script src="js/coverage.js?v=42"></script>
-<script src="js/export.js?v=40"></script>
+<script src="js/app.js?v=47"></script>
+<script src="js/planner.js?v=44"></script>
+<script src="js/browser.js?v=49"></script>
+<script src="js/coverage.js?v=43"></script>
+<script src="js/export.js?v=41"></script>
 
 </body>
 </html>
