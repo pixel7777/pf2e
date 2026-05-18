@@ -168,6 +168,7 @@
         if (page !== 'overview' && page !== 'about') {
           if (window.Browser && Browser.reconcileColumnRankFilter) Browser.reconcileColumnRankFilter();
           if (window.Coverage && Coverage.updateTraitDimming) Coverage.updateTraitDimming(page);
+          if (window.Coverage && Coverage.updateRolePillVisuals) Coverage.updateRolePillVisuals();
         }
       }
 
