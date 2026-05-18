@@ -118,21 +118,57 @@
         }
       }
 
-      if (page !== 'overview' && page !== 'about') {
-        Planner.initTradition(page);
-        var level = Planner.getCurrentLevel(page);
-        if (level > 0 && window.Coverage && Coverage.update) {
-          Coverage.update(page, level);
+      if (page === 'merged') {
+        // Merged page: force coverage filter mode off, hide filter controls, disable pills
+        if (window.SpellFilters && window.SpellFilters.coverageMode) {
+          window.SpellFilters.coverageMode = false;
+          var fmBtn = document.getElementById('filterModeToggle');
+          if (fmBtn) {
+            fmBtn.textContent = 'Filter Mode: OFF';
+            fmBtn.classList.remove('active');
+          }
+          var sidebar = document.querySelector('.sidebar');
+          if (sidebar) sidebar.classList.remove('coverage-filter-mode');
         }
-      }
+        // Hide rarity/legacy/filter-mode controls, disable pill clicks
+        var sidebar = document.querySelector('.sidebar');
+        if (sidebar) {
+          sidebar.classList.add('merged-filters-hidden');
+          sidebar.classList.add('merged-pills-disabled');
+        }
+        // Remove filter visual states from pills (preserve SpellFilters arrays)
+        var covPills = document.querySelectorAll('.sidebar .ctag');
+        for (var p = 0; p < covPills.length; p++) {
+          covPills[p].classList.remove('filter-included', 'filter-excluded');
+        }
+        // Build/rebuild merged view and update coverage
+        if (window.Planner && Planner.buildMergedView) {
+          Planner.buildMergedView();
+        }
+      } else {
+        // Restore sidebar state for non-merged pages
+        var sidebar = document.querySelector('.sidebar');
+        if (sidebar) {
+          sidebar.classList.remove('merged-filters-hidden');
+          sidebar.classList.remove('merged-pills-disabled');
+        }
 
-      // Reset sort on tradition switch
-      if (window.Browser && Browser.resetSort) Browser.resetSort();
+        if (page !== 'overview' && page !== 'about') {
+          Planner.initTradition(page);
+          var level = Planner.getCurrentLevel(page);
+          if (level > 0 && window.Coverage && Coverage.update) {
+            Coverage.update(page, level);
+          }
+        }
 
-      // Cycle 22 — reconcile column rank filter to new slot, dim trait pills for tradition
-      if (page !== 'overview' && page !== 'about') {
-        if (window.Browser && Browser.reconcileColumnRankFilter) Browser.reconcileColumnRankFilter();
-        if (window.Coverage && Coverage.updateTraitDimming) Coverage.updateTraitDimming(page);
+        // Reset sort on tradition switch
+        if (window.Browser && Browser.resetSort) Browser.resetSort();
+
+        // Cycle 22 — reconcile column rank filter to new slot, dim trait pills for tradition
+        if (page !== 'overview' && page !== 'about') {
+          if (window.Browser && Browser.reconcileColumnRankFilter) Browser.reconcileColumnRankFilter();
+          if (window.Coverage && Coverage.updateTraitDimming) Coverage.updateTraitDimming(page);
+        }
       }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });

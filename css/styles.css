@@ -27,6 +27,12 @@
   --tier-mid: #5c4a82;
   --tier-low: #7d6ea8;
 
+  /* Tradition colors (Cycle 36 — merged view) */
+  --tradition-arcane: #3b6bb5;
+  --tradition-divine: #b8922f;
+  --tradition-occult: #7b4ea3;
+  --tradition-primal: #3a8a4a;
+
   --radius: 8px;
   --radius-lg: 12px;
   --sidebar-width: 280px;
@@ -2650,5 +2656,146 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
     border-left-color: transparent;
     border-bottom-color: var(--accent-header);
   }
+}
+
+/* ═══════════════════════════════════════════════════ */
+/* MERGED SPELL LIST (Cycle 36)                       */
+/* ═══════════════════════════════════════════════════ */
+
+.merged-legend {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.merged-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.tradition-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.tradition-circle.arcane  { background: var(--tradition-arcane); }
+.tradition-circle.divine  { background: var(--tradition-divine); }
+.tradition-circle.occult  { background: var(--tradition-occult); }
+.tradition-circle.primal  { background: var(--tradition-primal); }
+
+.merged-empty-msg {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-tertiary);
+  font-style: italic;
+  font-size: 1.05rem;
+}
+
+/* Merged slot table */
+.merged-rank-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  margin-top: 12px;
+  border-bottom: 2px solid var(--border-panel);
+}
+
+.merged-rank-header .rank-label {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.merged-tradition-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  margin-top: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.merged-tradition-label .tradition-circle {
+  width: 18px;
+  height: 18px;
+  font-size: 0.62rem;
+}
+
+.merged-slot-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.merged-slot-table td {
+  padding: 4px 8px;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.merged-slot-table .slot-tradition-badge {
+  width: 30px;
+  text-align: center;
+}
+
+.merged-slot-table .slot-tradition-badge .tradition-circle {
+  width: 20px;
+  height: 20px;
+  font-size: 0.62rem;
+}
+
+.merged-slot-table .slot-spell-name {
+  width: 14rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.merged-slot-table .slot-action {
+  width: 5rem;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+}
+
+.merged-slot-table .slot-empty {
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+.merged-slot-table .slot-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+/* Disable pointer events on merged page sidebar pills */
+.sidebar.merged-pills-disabled .coverage-tags .ctag {
+  pointer-events: none;
+}
+
+/* Hide filter controls on merged page */
+.sidebar.merged-filters-hidden .filter-controls {
+  display: none;
 }
 

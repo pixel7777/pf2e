@@ -791,13 +791,48 @@
         if (clearBtn) clearBtn.style.display = 'none';
         // Restore coverage visualization
         var tradition = App.currentTradition();
-        if (tradition && tradition !== 'overview') {
+        if (tradition && tradition !== 'overview' && tradition !== 'about') {
           var level = Planner.getCurrentLevel(tradition);
-          this.update(tradition, level);
+          if (tradition === 'merged') {
+            this.updateMerged(level);
+          } else {
+            this.update(tradition, level);
+          }
         }
       }
 
       if (window.Browser && Browser.onCoverageFiltersChanged) Browser.onCoverageFiltersChanged();
+    },
+
+    updateMerged: function(level) {
+      ensureBindings();
+
+      var traditions = ['arcane', 'divine', 'occult', 'primal'];
+      var allSpells = [];
+      for (var i = 0; i < traditions.length; i++) {
+        var spells = collectAssignedSpells(traditions[i], level || 0);
+        for (var j = 0; j < spells.length; j++) {
+          allSpells.push(spells[j]);
+        }
+      }
+
+      var activeTags = collectActiveTags(allSpells);
+      var weaknessTypes = collectWeaknessTypes(allSpells);
+
+      var ctags = document.querySelectorAll('.sidebar .ctag');
+      for (var i = 0; i < ctags.length; i++) {
+        var el = ctags[i];
+        var tag = el.dataset.tag;
+        if (activeTags[tag]) {
+          el.classList.add('lit');
+        } else {
+          el.classList.remove('lit');
+        }
+        el.classList.remove('has-weakness');
+        if (el.classList.contains('tag-damage') && weaknessTypes[tag]) {
+          el.classList.add('has-weakness');
+        }
+      }
     },
 
     // Cycle 22 — exposed for app.js / browser.js to refresh on tradition switch
