@@ -1141,11 +1141,10 @@
     var f = window.SpellFilters;
     if (kind === 'rarity') {
       f.rarity = { Common: true, Uncommon: true, Rare: false, Unique: false };
-      var btns = document.querySelectorAll('.rarity-btn');
-      for (var i = 0; i < btns.length; i++) {
-        var rar = btns[i].dataset.rarity;
-        if (f.rarity[rar]) btns[i].classList.add('active');
-        else btns[i].classList.remove('active');
+      var cbs = document.querySelectorAll('.rarity-checkbox input[type="checkbox"]');
+      for (var i = 0; i < cbs.length; i++) {
+        var rar = cbs[i].parentElement.dataset.rarity;
+        cbs[i].checked = !!f.rarity[rar];
       }
     } else if (kind === 'legacy') {
       f.showLegacy = true;
@@ -1214,10 +1213,10 @@
     f.indicatorFilter = null;
 
     // Reflect rarity buttons
-    var rb = document.querySelectorAll('.rarity-btn');
-    for (var i = 0; i < rb.length; i++) {
-      var rar = rb[i].dataset.rarity;
-      if (f.rarity[rar]) rb[i].classList.add('active'); else rb[i].classList.remove('active');
+    var rcbs = document.querySelectorAll('.rarity-checkbox input[type="checkbox"]');
+    for (var i = 0; i < rcbs.length; i++) {
+      var rar = rcbs[i].parentElement.dataset.rarity;
+      rcbs[i].checked = !!f.rarity[rar];
     }
     // Legacy button
     var lb = document.getElementById('legacyToggle');

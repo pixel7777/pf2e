@@ -23,7 +23,7 @@
 <title>PF2e Spell Planner — Prepared Caster Edition</title>
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
-<link rel="stylesheet" href="css/styles.css?v=48">
+<link rel="stylesheet" href="css/styles.css?v=49">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -256,10 +256,10 @@
     <div class="filter-controls">
       <div class="filter-controls-label">Filter Options <span class="info-bubble" title="Filters applied in this Coverage Tracker sidebar and the spell options tables are all logical AND. Selecting two options will only show those spells that meet both criteria. Long click on sidebar tags to turn them into a logical NOT (exclude options with this value). Spell rarity is an on/off toggle per rarity level.">ⓘ</span></div>
       <div class="rarity-toggles" id="rarityToggles">
-        <button class="rarity-btn active" data-rarity="Common" onclick="Coverage.toggleRarity('Common',this)">Common</button>
-        <button class="rarity-btn active" data-rarity="Uncommon" onclick="Coverage.toggleRarity('Uncommon',this)">Uncommon</button>
-        <button class="rarity-btn" data-rarity="Rare" onclick="Coverage.toggleRarity('Rare',this)">Rare</button>
-        <button class="rarity-btn" data-rarity="Unique" onclick="Coverage.toggleRarity('Unique',this)">Unique</button>
+        <label class="rarity-checkbox" data-rarity="Common"><input type="checkbox" checked onchange="Coverage.toggleRarity('Common',this.parentElement)"> Common</label>
+        <label class="rarity-checkbox" data-rarity="Uncommon"><input type="checkbox" checked onchange="Coverage.toggleRarity('Uncommon',this.parentElement)"> Uncommon</label>
+        <label class="rarity-checkbox" data-rarity="Rare"><input type="checkbox" onchange="Coverage.toggleRarity('Rare',this.parentElement)"> Rare</label>
+        <label class="rarity-checkbox" data-rarity="Unique"><input type="checkbox" onchange="Coverage.toggleRarity('Unique',this.parentElement)"> Unique</label>
       </div>
       <button class="filter-toggle-btn active" id="legacyToggle" onclick="Coverage.toggleLegacy()" title="Spells which are Legacy only (no remaster version) are included by default. To exclude them, turn this toggle to NO.">Show Legacy: YES</button>
       <div class="role-filter-section" id="roleFilterSection">
@@ -1296,8 +1296,8 @@
 <!-- App modules -->
 <script src="js/app.js?v=48"></script>
 <script src="js/planner.js?v=44"></script>
-<script src="js/browser.js?v=51"></script>
-<script src="js/coverage.js?v=44"></script>
+<script src="js/browser.js?v=52"></script>
+<script src="js/coverage.js?v=45"></script>
 <script src="js/export.js?v=41"></script>
 
 </body>

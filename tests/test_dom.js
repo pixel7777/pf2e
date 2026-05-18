@@ -1516,8 +1516,8 @@ test.describe('C38-1: Rarity chips removed from summary bar', () => {
     const result = await page.evaluate(() => {
       // Toggle Rare on (non-default)
       window.SpellFilters.rarity.Rare = true;
-      const btn = document.querySelector('.rarity-btn[data-rarity="Rare"]');
-      if (btn) btn.classList.add('active');
+      const cb = document.querySelector('.rarity-checkbox[data-rarity="Rare"] input[type="checkbox"]');
+      if (cb) cb.checked = true;
       // Trigger re-render
       if (window.Browser && Browser.onFiltersChanged) Browser.onFiltersChanged();
 

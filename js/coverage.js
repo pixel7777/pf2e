@@ -903,15 +903,11 @@
       }
     },
 
-    toggleRarity: function(rarity, btn) {
+    toggleRarity: function(rarity, label) {
       ensureBindings();
       var f = window.SpellFilters;
-      f.rarity[rarity] = !f.rarity[rarity];
-      if (f.rarity[rarity]) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
+      var cb = label.querySelector('input[type="checkbox"]');
+      f.rarity[rarity] = cb ? cb.checked : !f.rarity[rarity];
       if (window.Browser && Browser.onFiltersChanged) Browser.onFiltersChanged();
     },
 
