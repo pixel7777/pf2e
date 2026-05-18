@@ -371,6 +371,27 @@
       return html;
     },
 
+    renderNotes: function(spell) {
+      var html = '';
+      var directSrc = null;
+      if (spell.mathfinder_sources) {
+        for (var s = 0; s < spell.mathfinder_sources.length; s++) {
+          if (spell.mathfinder_sources[s].source_type === 'direct') {
+            directSrc = spell.mathfinder_sources[s];
+            break;
+          }
+        }
+      }
+      if (directSrc) {
+        html += '<a href="' + directSrc.url + '" target="_blank" rel="noopener" class="mathfinder-video-link" onclick="event.stopPropagation()">▶ ' + directSrc.name + '</a>';
+      }
+      var sbNotes = window.Browser && window.Browser.SILVER_BULLET_NOTES;
+      if (sbNotes && sbNotes[spell.aonId]) {
+        html += '<div class="silver-bullet-note">' + sbNotes[spell.aonId] + '</div>';
+      }
+      return html;
+    },
+
     injectCornerOrnaments: function() {
       var framed = document.querySelectorAll('.framed');
       for (var i = 0; i < framed.length; i++) {

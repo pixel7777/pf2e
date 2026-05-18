@@ -567,14 +567,16 @@
               html += '<a href="' + App.aonUrl(spell.aonId) + '" target="_blank" class="aon-link" title="Open on Archives of Nethys" onclick="event.stopPropagation()">↗</a>';
             }
             html += '</td>';
+            html += '<td class="slot-native-rank">' + (spell.native_rank || '') + '</td>';
             html += '<td class="slot-action">' + App.formatActions(spell.action_tags) + '</td>';
             html += '<td>' + App.renderTags(spell) + '</td>';
+            html += '<td class="spell-notes">' + App.renderNotes(spell) + '</td>';
             html += '<td class="slot-actions">';
             html += '<button class="slot-clear-btn" onclick="Planner.clearSpell(\'' + tradition + '\',' + level + ',' + r + ',' + idx + ',event)" title="Clear spell (keep slot)">⊘</button>';
             html += '<button class="slot-delete-btn" onclick="Planner.deleteSlot(\'' + tradition + '\',' + level + ',' + r + ',' + idx + ',event)" title="Delete slot">🗑</button>';
             html += '</td>';
           } else {
-            html += '<td colspan="3" class="slot-empty">Empty slot — click to browse spells</td>';
+            html += '<td colspan="5" class="slot-empty">Empty slot — click to browse spells</td>';
             html += '<td class="slot-actions">';
             html += '<button class="slot-delete-btn" onclick="Planner.deleteSlot(\'' + tradition + '\',' + level + ',' + r + ',' + idx + ',event)" title="Delete slot">🗑</button>';
             html += '</td>';
@@ -714,11 +716,6 @@
           var slots = planState[t][level][r];
           if (slots.length === 0) continue;
 
-          panelHtml += '<div class="merged-tradition-label">';
-          panelHtml += '<span class="tradition-circle ' + t + '">' + TRAD_INITIALS[t] + '</span>';
-          panelHtml += '<span>' + TRAD_LABELS[t] + '</span>';
-          panelHtml += '</div>';
-
           panelHtml += '<table class="merged-slot-table"><tbody>';
           for (var idx = 0; idx < slots.length; idx++) {
             var spell = slots[idx];
@@ -734,10 +731,12 @@
                 panelHtml += '<a href="' + App.aonUrl(spell.aonId) + '" target="_blank" class="aon-link" title="Open on Archives of Nethys" onclick="event.stopPropagation()">↗</a>';
               }
               panelHtml += '</td>';
+              panelHtml += '<td class="slot-native-rank">' + (spell.native_rank || '') + '</td>';
               panelHtml += '<td class="slot-action">' + App.formatActions(spell.action_tags) + '</td>';
               panelHtml += '<td>' + App.renderTags(spell) + '</td>';
+              panelHtml += '<td class="spell-notes">' + App.renderNotes(spell) + '</td>';
             } else {
-              panelHtml += '<td colspan="3" class="slot-empty">_(empty slot)_</td>';
+              panelHtml += '<td colspan="5" class="slot-empty">_(empty slot)_</td>';
             }
             panelHtml += '</tr>';
           }

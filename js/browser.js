@@ -1305,6 +1305,8 @@
   }
 
   window.Browser = {
+    SILVER_BULLET_NOTES: SILVER_BULLET_NOTES,
+
     _getRenderedSpells: function(tradition) {
       return renderedSpells[tradition] || null;
     },
