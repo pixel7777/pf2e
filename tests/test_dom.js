@@ -1411,3 +1411,96 @@ test.describe('C36-5: Filter mode disabled on merged page', () => {
     expect(filtersRestored).toBe(true);
   });
 });
+
+// ════════════════════════════════════════════════════════════════════
+// Cycle 37 — SEO/AEO metadata and structured data
+// ════════════════════════════════════════════════════════════════════
+
+test.describe('C37-1: SEO meta tags present in head', () => {
+  test('meta description, canonical, OG, and Twitter tags exist', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+
+    const meta = await page.evaluate(() => {
+      const get = (sel) => {
+        const el = document.querySelector(sel);
+        return el ? (el.getAttribute('content') || el.getAttribute('href') || '') : null;
+      };
+      return {
+        description: get('meta[name="description"]'),
+        canonical: get('link[rel="canonical"]'),
+        ogTitle: get('meta[property="og:title"]'),
+        ogDesc: get('meta[property="og:description"]'),
+        ogType: get('meta[property="og:type"]'),
+        ogUrl: get('meta[property="og:url"]'),
+        ogImage: get('meta[property="og:image"]'),
+        ogSiteName: get('meta[property="og:site_name"]'),
+        twitterCard: get('meta[name="twitter:card"]'),
+        twitterTitle: get('meta[name="twitter:title"]'),
+        twitterImage: get('meta[name="twitter:image"]'),
+        themeColor: get('meta[name="theme-color"]'),
+        appName: get('meta[name="application-name"]')
+      };
+    });
+
+    expect(meta.description).toBeTruthy();
+    expect(meta.description.length).toBeLessThanOrEqual(160);
+    expect(meta.description).toContain('Pathfinder 2e');
+    expect(meta.canonical).toBe('https://pf2e-spell-planner.pages.dev/');
+    expect(meta.ogTitle).toContain('PF2e Spell Planner');
+    expect(meta.ogDesc).toBeTruthy();
+    expect(meta.ogType).toBe('website');
+    expect(meta.ogUrl).toBe('https://pf2e-spell-planner.pages.dev/');
+    expect(meta.ogImage).toContain('og-image.png');
+    expect(meta.ogSiteName).toBe('PF2e Spell Planner');
+    expect(meta.twitterCard).toBe('summary_large_image');
+    expect(meta.twitterTitle).toContain('PF2e Spell Planner');
+    expect(meta.twitterImage).toContain('og-image.png');
+    expect(meta.themeColor).toBe('#1a1625');
+    expect(meta.appName).toBe('PF2e Spell Planner');
+  });
+});
+
+test.describe('C37-2: JSON-LD structured data', () => {
+  test('WebApplication schema with required fields exists in head', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+
+    const jsonLd = await page.evaluate(() => {
+      const script = document.querySelector('script[type="application/ld+json"]');
+      if (!script) return null;
+      try { return JSON.parse(script.textContent); } catch { return null; }
+    });
+
+    expect(jsonLd).not.toBeNull();
+    expect(jsonLd['@type']).toBe('WebApplication');
+    expect(jsonLd.name).toBe('PF2e Spell Planner');
+    expect(jsonLd.url).toBe('https://pf2e-spell-planner.pages.dev/');
+    expect(jsonLd.applicationCategory).toBe('GameApplication');
+    expect(jsonLd.isAccessibleForFree).toBe(true);
+    expect(jsonLd.offers.price).toBe('0');
+    expect(jsonLd.featureList.length).toBeGreaterThanOrEqual(5);
+    expect(jsonLd.about.name).toContain('Pathfinder');
+  });
+});
+
+test.describe('C37-3: Semantic HTML — heading hierarchy and nav label', () => {
+  test('single h1 and nav has aria-label', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+
+    const result = await page.evaluate(() => {
+      const h1s = document.querySelectorAll('h1');
+      const nav = document.querySelector('nav.tab-bar');
+      return {
+        h1Count: h1s.length,
+        navAriaLabel: nav ? nav.getAttribute('aria-label') : null,
+        htmlLang: document.documentElement.getAttribute('lang')
+      };
+    });
+
+    expect(result.h1Count).toBe(1);
+    expect(result.navAriaLabel).toBeTruthy();
+    expect(result.htmlLang).toBe('en');
+  });
+});

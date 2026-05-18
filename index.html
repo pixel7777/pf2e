@@ -3,10 +3,60 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Free Pathfinder 2e spell planner for prepared casters. Plan spells by level with tier ratings, role tags, and coverage tracking for all traditions.">
+<link rel="canonical" href="https://pf2e-spell-planner.pages.dev/">
+<meta property="og:title" content="PF2e Spell Planner — Prepared Caster Edition">
+<meta property="og:description" content="Free spell planner for Pathfinder 2e prepared casters. Plan spell selections by level with curated tier ratings, role tags, and coverage tracking.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://pf2e-spell-planner.pages.dev/">
+<meta property="og:image" content="https://pf2e-spell-planner.pages.dev/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="PF2e Spell Planner">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PF2e Spell Planner — Prepared Caster Edition">
+<meta name="twitter:description" content="Free spell planner for Pathfinder 2e prepared casters. Plan spell selections by level with curated tier ratings, role tags, and coverage tracking.">
+<meta name="twitter:image" content="https://pf2e-spell-planner.pages.dev/assets/og-image.png">
+<meta name="theme-color" content="#1a1625">
+<meta name="application-name" content="PF2e Spell Planner">
 <title>PF2e Spell Planner — Prepared Caster Edition</title>
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
 <link rel="stylesheet" href="css/styles.css?v=47">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "PF2e Spell Planner",
+  "alternateName": "Pathfinder 2e Spell Planner",
+  "description": "Free spell planner for Pathfinder 2e prepared casters. Plan spell selections at every character level with curated tier ratings from Mathfinder, role-based tagging, and coverage tracking across Arcane, Divine, Occult, and Primal traditions.",
+  "url": "https://pf2e-spell-planner.pages.dev/",
+  "applicationCategory": "GameApplication",
+  "operatingSystem": "Web browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Spell slot management for levels 1-20",
+    "Tier-based spell ratings (Top, Mid, Low)",
+    "Role tagging (Damage, Debuff, Buff, Control, Utility, Healing, Reactions, 1-Action, Pre-Buffs, Silver Bullets)",
+    "Coverage tracking for spell selection gaps",
+    "Support for Arcane, Divine, Occult, and Primal traditions",
+    "Merged cross-tradition analysis view",
+    "Export to markdown",
+    "Save and load spell plans"
+  ],
+  "about": {
+    "@type": "Game",
+    "name": "Pathfinder Second Edition",
+    "alternateName": "PF2e"
+  },
+  "isAccessibleForFree": true,
+  "browserRequirements": "Requires JavaScript"
+}
+</script>
 </head>
 <body>
 
@@ -25,7 +75,7 @@
       <span class="utility-link-inert" title="Coming soon">Support Me</span>
     </div>
   </div>
-  <nav class="tab-bar">
+  <nav class="tab-bar" aria-label="Tradition navigation">
     <button class="tab-btn active" data-page="overview">Overview</button>
     <button class="tab-btn" data-page="arcane">Arcane</button>
     <button class="tab-btn" data-page="divine">Divine</button>
@@ -544,7 +594,7 @@
 
       <div id="overview-arcane">
         <div class="overview-hero">
-          <h1>Arcane Tradition</h1>
+          <h2>Arcane Tradition</h2>
           <p>Prepared Caster Spell Planner</p>
         </div>
 
@@ -630,7 +680,7 @@
 
       <div id="overview-divine">
         <div class="overview-hero">
-          <h1>Divine Tradition</h1>
+          <h2>Divine Tradition</h2>
           <p>Prepared Caster Spell Planner</p>
         </div>
 
@@ -724,7 +774,7 @@
 
       <div id="overview-occult">
         <div class="overview-hero">
-          <h1>Occult Tradition</h1>
+          <h2>Occult Tradition</h2>
           <p>Prepared Caster Spell Planner</p>
         </div>
 
@@ -812,7 +862,7 @@
 
       <div id="overview-primal">
         <div class="overview-hero">
-          <h1>Primal Tradition</h1>
+          <h2>Primal Tradition</h2>
           <p>Prepared Caster Spell Planner</p>
         </div>
 
