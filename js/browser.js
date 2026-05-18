@@ -57,7 +57,7 @@
   // ── Global filter state (session-scoped, no localStorage) ──
   window.SpellFilters = {
     rarity: { Common: true, Uncommon: true, Rare: false, Unique: false },
-    showLegacy: false,
+    showLegacy: true,
     coverageMode: false,
     coverageInclude: [],
     coverageExclude: [],
@@ -65,6 +65,9 @@
     sortDirection: null,
     searchQuery: '',
     searchFiltersDisabled: false,
+    // Cycle 38 — role filters (gated by coverageMode)
+    roleInclude: [],    // AND — spell must have ALL of these roles
+    roleExclude: [],    // AND-NOT — spell must have NONE of these roles
     // Cycle 22 — trait filters (always active, not gated by coverageMode)
     traitInclude: [],   // ["Fire", ...] — spell must have ALL
     traitExclude: [],   // ["Mental", ...] — spell must have NONE
@@ -262,6 +265,19 @@
     return true;
   }
 
+  // ── Role filter check (Cycle 38 — gated by coverageMode) ──
+  function passesRoleFilters(spell) {
+    if (!SpellFilters.coverageMode) return true;
+    var roles = spell.roles || [];
+    for (var i = 0; i < SpellFilters.roleInclude.length; i++) {
+      if (roles.indexOf(SpellFilters.roleInclude[i]) === -1) return false;
+    }
+    for (var i = 0; i < SpellFilters.roleExclude.length; i++) {
+      if (roles.indexOf(SpellFilters.roleExclude[i]) !== -1) return false;
+    }
+    return true;
+  }
+
   // ── Coverage filter check ──
   function passesCoverageFilters(spell) {
     var f = window.SpellFilters;
@@ -364,6 +380,7 @@
       if (s.native_rank > slotRank) continue;
       baseCount++;
       if (!passesRarityLegacy(s)) continue;
+      if (!passesRoleFilters(s)) continue;
       if (!passesCoverageFilters(s)) continue;
       if (!passesTraitFilters(s)) continue;
       if (!passesColumnFilters(s, tradition)) continue;
@@ -1008,7 +1025,8 @@
     var f = window.SpellFilters;
     var rd = rarityDiff();
     if (rd.added.length > 0 || rd.removed.length > 0) return true;
-    if (f.showLegacy) return true;
+    if (!f.showLegacy) return true;
+    if (f.roleInclude.length > 0 || f.roleExclude.length > 0) return true;
     if (f.coverageInclude.length > 0 || f.coverageExclude.length > 0) return true;
     if (f.traitInclude.length > 0 || f.traitExclude.length > 0) return true;
     if (f.columnNameFilter && f.columnNameFilter.length > 0) return true;
@@ -1034,17 +1052,27 @@
     var inSearch = (activeTab[tradition] || 'role') === 'search';
     var chips = [];
 
-    // Rarity
-    var rd = rarityDiff();
-    if (rd.added.length > 0 || rd.removed.length > 0) {
-      var parts = [];
-      if (rd.added.length) parts.push(rd.added.join(', '));
-      if (rd.removed.length) parts.push('no ' + rd.removed.join(', no '));
-      chips.push({ kind: 'rarity', label: 'Rarity: ' + parts.join(', '), neg: false });
+    // Rarity — no chips (Cycle 38: sidebar toggles are the sole indicator)
+
+    // Legacy — chip only when showLegacy is false (non-default)
+    if (!f.showLegacy) {
+      chips.push({ kind: 'legacy', label: '−Legacy', neg: true });
     }
-    // Legacy
-    if (f.showLegacy) {
-      chips.push({ kind: 'legacy', label: 'Legacy: shown', neg: false });
+    // Role filters (Cycle 38)
+    if (f.coverageMode) {
+      var roleLabelsMap = { damage: 'Damage', debuff: 'Debuff', buff: 'Buff', control: 'Control', healing: 'Healing', utility: 'Utility', silverBullets: 'Silver Bullet' };
+      for (var i = 0; i < f.roleInclude.length; i++) {
+        var rl = roleLabelsMap[f.roleInclude[i]] || f.roleInclude[i];
+        var chipObj = { kind: 'role-inc', payload: f.roleInclude[i], label: 'Role: +' + rl, neg: false };
+        if (inSearch) { chipObj.paused = true; }
+        chips.push(chipObj);
+      }
+      for (var i = 0; i < f.roleExclude.length; i++) {
+        var rl = roleLabelsMap[f.roleExclude[i]] || f.roleExclude[i];
+        var chipObj = { kind: 'role-exc', payload: f.roleExclude[i], label: 'Role: −' + rl, neg: true };
+        if (inSearch) { chipObj.paused = true; }
+        chips.push(chipObj);
+      }
     }
     // Coverage
     for (var i = 0; i < f.coverageInclude.length; i++) {
@@ -1092,11 +1120,12 @@
     var html = '<span class="afb-label">Active filters:</span>';
     for (var i = 0; i < chips.length; i++) {
       var c = chips[i];
-      var cls = 'filter-chip' + (c.neg ? ' neg' : '');
+      var cls = 'filter-chip' + (c.neg ? ' neg' : '') + (c.paused ? ' paused' : '');
+      var chipLabel = c.label + (c.paused ? ' (paused)' : '');
       html += '<span class="' + cls + '" data-chip-kind="' + c.kind + '"' +
         (typeof c.payload === 'string' ? ' data-chip-payload="' + c.payload.replace(/"/g, '&quot;') + '"' : '') +
         (c.payload && typeof c.payload === 'object' ? ' data-chip-tag="' + c.payload.tag + '" data-chip-field="' + c.payload.field + '"' : '') +
-        '>' + c.label + ' <span class="afb-x">×</span></span>';
+        '>' + chipLabel + ' <span class="afb-x">×</span></span>';
     }
     for (var i = 0; i < colChips.length; i++) {
       var c = colChips[i];
@@ -1121,11 +1150,11 @@
         else btns[i].classList.remove('active');
       }
     } else if (kind === 'legacy') {
-      f.showLegacy = false;
+      f.showLegacy = true;
       var btn = document.getElementById('legacyToggle');
       if (btn) {
-        btn.textContent = 'Show Legacy: NO';
-        btn.classList.remove('active');
+        btn.textContent = 'Show Legacy: YES';
+        btn.classList.add('active');
       }
     } else if (kind === 'coverage-inc' || kind === 'coverage-exc') {
       var arr = (kind === 'coverage-inc') ? f.coverageInclude : f.coverageExclude;
@@ -1138,6 +1167,14 @@
       for (var i = 0; i < pills.length; i++) {
         pills[i].classList.remove(kind === 'coverage-inc' ? 'filter-included' : 'filter-excluded');
       }
+    } else if (kind === 'role-inc') {
+      var idx = f.roleInclude.indexOf(payload);
+      if (idx !== -1) f.roleInclude.splice(idx, 1);
+      if (window.Coverage && Coverage.updateRolePillVisuals) Coverage.updateRolePillVisuals();
+    } else if (kind === 'role-exc') {
+      var idx = f.roleExclude.indexOf(payload);
+      if (idx !== -1) f.roleExclude.splice(idx, 1);
+      if (window.Coverage && Coverage.updateRolePillVisuals) Coverage.updateRolePillVisuals();
     } else if (kind === 'trait-inc') {
       var idx = f.traitInclude.indexOf(payload);
       if (idx !== -1) f.traitInclude.splice(idx, 1);
@@ -1164,7 +1201,9 @@
   function clearAllFilterValues() {
     var f = window.SpellFilters;
     f.rarity = { Common: true, Uncommon: true, Rare: false, Unique: false };
-    f.showLegacy = false;
+    f.showLegacy = true;
+    f.roleInclude = [];
+    f.roleExclude = [];
     f.coverageInclude = [];
     f.coverageExclude = [];
     f.traitInclude = [];
@@ -1184,10 +1223,11 @@
     }
     // Legacy button
     var lb = document.getElementById('legacyToggle');
-    if (lb) { lb.textContent = 'Show Legacy: NO'; lb.classList.remove('active'); }
+    if (lb) { lb.textContent = 'Show Legacy: YES'; lb.classList.add('active'); }
     // Sidebar pill visuals
     if (window.Coverage && Coverage.clearAllSidebarFilterStates) Coverage.clearAllSidebarFilterStates();
     if (window.Coverage && Coverage.updateTraitPillVisuals) Coverage.updateTraitPillVisuals();
+    if (window.Coverage && Coverage.updateRolePillVisuals) Coverage.updateRolePillVisuals();
   }
 
   // ── Re-render current view ──
@@ -1306,6 +1346,14 @@
 
   window.Browser = {
     SILVER_BULLET_NOTES: SILVER_BULLET_NOTES,
+
+    getCurrentRole: function(tradition) {
+      return currentRole[tradition] || 'damage';
+    },
+
+    getActiveTab: function(tradition) {
+      return activeTab[tradition] || 'role';
+    },
 
     _getRenderedSpells: function(tradition) {
       return renderedSpells[tradition] || null;
@@ -1479,6 +1527,14 @@
       // Reset sort on tab switch
       window.SpellFilters.sortColumn = null;
       window.SpellFilters.sortDirection = null;
+
+      // Cycle 38 — clean up role filters for the new tab's role
+      var pillRoles = ['damage','debuff','buff','control','healing','utility','silverBullets'];
+      if (pillRoles.indexOf(role) !== -1) {
+        SpellFilters.roleInclude = SpellFilters.roleInclude.filter(function(r) { return r !== role; });
+        SpellFilters.roleExclude = SpellFilters.roleExclude.filter(function(r) { return r !== role; });
+      }
+      if (window.Coverage && Coverage.updateRolePillVisuals) Coverage.updateRolePillVisuals();
 
       this.updateRoleTabs(tradition);
 

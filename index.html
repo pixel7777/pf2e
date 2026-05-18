@@ -23,7 +23,7 @@
 <title>PF2e Spell Planner — Prepared Caster Edition</title>
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
-<link rel="stylesheet" href="css/styles.css?v=47">
+<link rel="stylesheet" href="css/styles.css?v=48">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -261,7 +261,19 @@
         <button class="rarity-btn" data-rarity="Rare" onclick="Coverage.toggleRarity('Rare',this)">Rare</button>
         <button class="rarity-btn" data-rarity="Unique" onclick="Coverage.toggleRarity('Unique',this)">Unique</button>
       </div>
-      <button class="filter-toggle-btn" id="legacyToggle" onclick="Coverage.toggleLegacy()" title="Spells which are Legacy only (no remaster version) are normally included in spell option tables. To exclude them, turn this toggle to NO.">Show Legacy: NO</button>
+      <button class="filter-toggle-btn active" id="legacyToggle" onclick="Coverage.toggleLegacy()" title="Spells which are Legacy only (no remaster version) are included by default. To exclude them, turn this toggle to NO.">Show Legacy: YES</button>
+      <div class="role-filter-section" id="roleFilterSection">
+        <div class="role-filter-label">Roles</div>
+        <div class="role-filter-pills" id="roleFilterPills">
+          <span class="role-filter-pill" data-role="damage">Damage</span>
+          <span class="role-filter-pill" data-role="debuff">Debuff</span>
+          <span class="role-filter-pill" data-role="buff">Buff</span>
+          <span class="role-filter-pill" data-role="control">Control</span>
+          <span class="role-filter-pill" data-role="healing">Healing</span>
+          <span class="role-filter-pill" data-role="utility">Utility</span>
+          <span class="role-filter-pill" data-role="silverBullets">Silver Bullet</span>
+        </div>
+      </div>
       <button class="filter-toggle-btn" id="filterModeToggle" onclick="Coverage.toggleFilterMode()" title="This toggle turns the Coverage Tracker tags above into a filter panel. Switching modes will temporarily hide your current coverage analysis. When in filter mode, click on a tag to filter for it in the spell option tables. Multi-select functions as a logical AND. Long click to turn a tag into a NOT. Toggle off to return to coverage analysis.">Filter Mode: OFF</button>
     </div>
 
@@ -1117,7 +1129,8 @@
 
               <h3>Spell Source</h3>
               <img src="assets/about/filter-options.png" alt="Filter options panel showing rarity toggles (Common, Uncommon, Rare, Unique) and legacy toggle" class="about-screenshot">
-              <p>Filter options let you add or find rare spells or spells that are legacy only (not in the remaster). By default, rarity is set to Common and Uncommon, and legacy-only spells are not shown, but you can adjust these by toggling them. Rarities function as a logical OR. Rarity and Legacy-Only are a logical AND.</p>
+              <p>Filter options let you control which spells are included based on their source. By default, rarity is set to Common and Uncommon (Rare and Unique are excluded), and legacy spells are shown. You can adjust rarity using the toggle buttons in the sidebar &mdash; these function as a logical OR (show spells matching ANY checked rarity). Legacy-only spells can be hidden using the Show Legacy toggle; turning it off adds a <code>&minus;Legacy</code> chip to the active filter display above the table.</p>
+              <p>Rarity settings don't produce chips in the active filter bar. The sidebar toggles are the visual indicator of your rarity filter state. If you're searching and can't find a spell, check whether its rarity is toggled off in the sidebar.</p>
 
               <h3>Spell Property Filtering</h3>
               <p>Table column filters, Coverage Tracker filters, and Trait filters work together to help you find spells with a specific combination of properties. All three interact as a logical AND. Sidebar filters (both Coverage Tracker tags and Trait Filters) can be long clicked to become a logical NOT. Example of a multifilter:</p>
@@ -1129,6 +1142,7 @@
               <p>3. Filter for spell rank 5 (click on the filter funnel by the Rank column, and select only rank 5)</p>
               <img src="assets/about/filter-rank-column.png" alt="Column filter dropdown for Rank showing checkboxes for each rank" class="about-screenshot">
               <p>This will show spells for that spell slot, role and tradition that are rank 5 AND Multi, AND NOT Mental. There is no logical OR, with the exception of the column filters that allow for a multi-select.</p>
+              <p><strong>Role Filters:</strong> When Filter Mode is ON, role filter pills appear in the sidebar alongside the rarity and legacy controls. These let you narrow within your current role tab. For example, on the Damage tab, include Debuff to see spells that are BOTH Damage and Debuff. Long-press a role to exclude it &mdash; useful for finding pure damage spells that aren't also classified as something else. The current tab's role is shown as locked (it's already filtering by that role). Role filters clear when you turn off Filter Mode. Role filters don't apply on the Search tab.</p>
               <p>As you apply filters, you'll see the ones that are active above the spell options table:</p>
               <img src="assets/about/filter-active-bar.png" alt="Active filter summary bar showing applied filter chips with clear buttons" class="about-screenshot">
               <p>The Trait filters are plentiful, so there's a search option to help you find the one you want.</p>
@@ -1148,7 +1162,7 @@
 
               <h3>Special Case: Search</h3>
               <img src="assets/about/search-button.png" alt="Search button next to role tabs for cross-tradition spell search" class="about-screenshot">
-              <p>There is a special search button next to the role options. This search ignores Tradition, Role, and Spell Slot limitations. If you are looking for a spell and can't figure out why it's not showing up, then this is your best friend. This search's results will tell you if this spell is not in your tradition or eligible for the spell slot you're currently filling. The only filters that apply to this search are the Legacy-only and spell rarity options, and you can temporarily ignore those by clicking the "Show them" button.</p>
+              <p>There is a special search button next to the role options. This search ignores Tradition, Role, and Spell Slot limitations. If you are looking for a spell and can't figure out why it's not showing up, then this is your best friend. This search's results will tell you if this spell is not in your tradition or eligible for the spell slot you're currently filling. And it will display the tag, so you can see what role tabs it can be found in. The only filters that apply to search results are spell rarity and the legacy toggle. Coverage, role, and trait filters are paused on the Search tab. If spells are hidden by rarity or legacy settings, you can temporarily bypass those by clicking the "Show them" button.</p>
             </div>
           </section>
 
@@ -1280,10 +1294,10 @@
 <script src="data/tag-definitions.js"></script>
 
 <!-- App modules -->
-<script src="js/app.js?v=47"></script>
+<script src="js/app.js?v=48"></script>
 <script src="js/planner.js?v=44"></script>
-<script src="js/browser.js?v=49"></script>
-<script src="js/coverage.js?v=43"></script>
+<script src="js/browser.js?v=50"></script>
+<script src="js/coverage.js?v=44"></script>
 <script src="js/export.js?v=41"></script>
 
 </body>

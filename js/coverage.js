@@ -670,6 +670,176 @@
     }
   }
 
+  // ── Cycle 38 — Role Filter Pills ──
+
+  var ROLE_PILL_ROLES = ['damage','debuff','buff','control','healing','utility','silverBullets'];
+
+  var roleLongPressTimer = null;
+  var roleLongPressTriggered = false;
+
+  function updateRolePillVisuals() {
+    var pills = document.querySelectorAll('.role-filter-pill');
+    if (!pills.length) return;
+    var f = window.SpellFilters;
+    var tradition = window.App ? App.currentTradition() : null;
+    var tabRole = null;
+    var isSearch = false;
+    if (tradition && tradition !== 'overview' && tradition !== 'merged' && tradition !== 'about' && window.Browser) {
+      var tab = Browser.getActiveTab(tradition);
+      if (tab === 'search') {
+        isSearch = true;
+      } else {
+        tabRole = Browser.getCurrentRole(tradition);
+      }
+    }
+    var isTactical = tabRole && ROLE_PILL_ROLES.indexOf(tabRole) === -1;
+
+    for (var i = 0; i < pills.length; i++) {
+      var pill = pills[i];
+      var role = pill.dataset.role;
+      pill.classList.remove('filter-included', 'filter-excluded', 'role-locked', 'role-inert');
+
+      if (tradition === 'merged') continue;
+
+      if (!isSearch && !isTactical && role === tabRole) {
+        pill.classList.add('role-locked');
+        continue;
+      }
+
+      if (!f.coverageMode || isSearch) {
+        pill.classList.add('role-inert');
+      }
+
+      if (f.roleInclude.indexOf(role) !== -1) pill.classList.add('filter-included');
+      if (f.roleExclude.indexOf(role) !== -1) pill.classList.add('filter-excluded');
+    }
+  }
+
+  function handleRolePillClick(pill) {
+    var f = window.SpellFilters;
+    if (!f.coverageMode) return;
+
+    var role = pill.dataset.role;
+    var tradition = window.App ? App.currentTradition() : null;
+    if (!tradition || tradition === 'overview' || tradition === 'merged' || tradition === 'about') return;
+
+    if (window.Browser) {
+      var tab = Browser.getActiveTab(tradition);
+      if (tab === 'search') return;
+      var tabRole = Browser.getCurrentRole(tradition);
+      if (role === tabRole && ROLE_PILL_ROLES.indexOf(tabRole) !== -1) return;
+    }
+
+    var inIdx = f.roleInclude.indexOf(role);
+    var exIdx = f.roleExclude.indexOf(role);
+    if (inIdx !== -1) {
+      f.roleInclude.splice(inIdx, 1);
+    } else if (exIdx !== -1) {
+      f.roleExclude.splice(exIdx, 1);
+    } else {
+      f.roleInclude.push(role);
+    }
+    updateRolePillVisuals();
+    if (window.Browser && Browser.onCoverageFiltersChanged) Browser.onCoverageFiltersChanged();
+  }
+
+  function handleRolePillLongPress(pill) {
+    var f = window.SpellFilters;
+    if (!f.coverageMode) return;
+
+    var role = pill.dataset.role;
+    var tradition = window.App ? App.currentTradition() : null;
+    if (!tradition || tradition === 'overview' || tradition === 'merged' || tradition === 'about') return;
+
+    if (window.Browser) {
+      var tab = Browser.getActiveTab(tradition);
+      if (tab === 'search') return;
+      var tabRole = Browser.getCurrentRole(tradition);
+      if (role === tabRole && ROLE_PILL_ROLES.indexOf(tabRole) !== -1) return;
+    }
+
+    var inIdx = f.roleInclude.indexOf(role);
+    if (inIdx !== -1) f.roleInclude.splice(inIdx, 1);
+    if (f.roleExclude.indexOf(role) === -1) f.roleExclude.push(role);
+    updateRolePillVisuals();
+    if (window.Browser && Browser.onCoverageFiltersChanged) Browser.onCoverageFiltersChanged();
+  }
+
+  function bindRoleFilterPills() {
+    var section = document.getElementById('roleFilterSection');
+    if (!section) return;
+
+    section.addEventListener('mousedown', function(e) {
+      var pill = e.target.closest('.role-filter-pill');
+      if (!pill) return;
+      roleLongPressTriggered = false;
+      roleLongPressTimer = setTimeout(function() {
+        roleLongPressTriggered = true;
+        handleRolePillLongPress(pill);
+      }, 500);
+    });
+
+    section.addEventListener('mouseup', function() {
+      if (roleLongPressTimer) { clearTimeout(roleLongPressTimer); roleLongPressTimer = null; }
+    });
+
+    section.addEventListener('mouseleave', function() {
+      if (roleLongPressTimer) { clearTimeout(roleLongPressTimer); roleLongPressTimer = null; }
+    });
+
+    section.addEventListener('click', function(e) {
+      var pill = e.target.closest('.role-filter-pill');
+      if (!pill) return;
+      e.stopPropagation();
+      if (roleLongPressTriggered) {
+        roleLongPressTriggered = false;
+        return;
+      }
+      handleRolePillClick(pill);
+    });
+
+    // Touch support
+    var touchStart = null;
+    section.addEventListener('touchstart', function(e) {
+      var pill = e.target.closest('.role-filter-pill');
+      if (!pill) return;
+      var touch = e.touches[0];
+      touchStart = { x: touch.clientX, y: touch.clientY };
+      roleLongPressTriggered = false;
+      roleLongPressTimer = setTimeout(function() {
+        roleLongPressTriggered = true;
+        e.preventDefault();
+        handleRolePillLongPress(pill);
+      }, 500);
+    }, { passive: false });
+
+    section.addEventListener('touchmove', function(e) {
+      if (!roleLongPressTimer || !touchStart) return;
+      var touch = e.touches[0];
+      var dx = touch.clientX - touchStart.x;
+      var dy = touch.clientY - touchStart.y;
+      if (Math.sqrt(dx*dx + dy*dy) > 10) {
+        clearTimeout(roleLongPressTimer);
+        roleLongPressTimer = null;
+      }
+    });
+
+    section.addEventListener('touchend', function(e) {
+      if (roleLongPressTimer) { clearTimeout(roleLongPressTimer); roleLongPressTimer = null; }
+      var pill = e.target.closest('.role-filter-pill');
+      if (!pill) return;
+      if (roleLongPressTriggered) {
+        roleLongPressTriggered = false;
+        e.preventDefault();
+        return;
+      }
+      e.preventDefault();
+      handleRolePillClick(pill);
+    });
+
+    updateRolePillVisuals();
+  }
+
   var bound = false;
   function ensureBindings() {
     if (bound) return;
@@ -677,6 +847,7 @@
     bindTooltips();
     bindCollapsibles();
     bindFilterMode();
+    bindRoleFilterPills();
     buildTraitFilterSection();
 
     // Inject Clear Filters button in sidebar
@@ -777,16 +948,20 @@
         for (var i = 0; i < ctags.length; i++) {
           ctags[i].classList.remove('lit', 'has-weakness');
         }
+        updateRolePillVisuals();
       } else {
         sidebar.classList.remove('coverage-filter-mode');
-        // Clear all coverage filter selections
+        // Clear all coverage and role filter selections
         f.coverageInclude = [];
         f.coverageExclude = [];
+        f.roleInclude = [];
+        f.roleExclude = [];
         // Remove filter visual states
         var ctags = sidebar.querySelectorAll('.ctag');
         for (var i = 0; i < ctags.length; i++) {
           ctags[i].classList.remove('filter-included', 'filter-excluded');
         }
+        updateRolePillVisuals();
         var clearBtn = document.getElementById('coverageClearFilters');
         if (clearBtn) clearBtn.style.display = 'none';
         // Restore coverage visualization
@@ -838,6 +1013,9 @@
     // Cycle 22 — exposed for app.js / browser.js to refresh on tradition switch
     updateTraitDimming: updateTraitDimming,
     updateTraitPillVisuals: updateTraitPillVisuals,
+
+    // Cycle 38 — role filter pill visuals
+    updateRolePillVisuals: updateRolePillVisuals,
 
     // Cycle 22 — clear all sidebar pill filter states (coverage + trait)
     clearAllSidebarFilterStates: function() {

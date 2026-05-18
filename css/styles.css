@@ -1897,6 +1897,77 @@ body.resizing-sidebar { cursor: col-resize; user-select: none; }
   color: var(--accent-header);
 }
 
+/* ── ROLE FILTER PILLS (Cycle 38) ── */
+.role-filter-section {
+  margin-top: 0.4rem;
+  margin-bottom: 0.2rem;
+}
+.role-filter-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+.role-filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+}
+.role-filter-pill {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 0.15rem 0.4rem;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #ffffff;
+  border-width: 1.5px;
+  border-style: solid;
+  user-select: none;
+  transition: all 0.15s;
+}
+.role-filter-pill[data-role="damage"] { color: #a32d2d; border-color: #b83a3a; }
+.role-filter-pill[data-role="debuff"] { color: #b85c14; border-color: #c46a20; }
+.role-filter-pill[data-role="buff"] { color: #1a7a42; border-color: #28964e; }
+.role-filter-pill[data-role="control"] { color: #2d5a8a; border-color: #3d72a8; }
+.role-filter-pill[data-role="healing"] { color: #1a7a42; border-color: #28964e; }
+.role-filter-pill[data-role="utility"] { color: #2d5a8a; border-color: #3d72a8; }
+.role-filter-pill[data-role="silverBullets"] { color: #5a5a5a; border-color: #888888; }
+
+.role-filter-pill.filter-included {
+  background: #28964e;
+  color: #ffffff;
+  border-color: #28964e;
+}
+.role-filter-pill.filter-excluded {
+  background: #c94040;
+  color: #ffffff;
+  border-color: #c94040;
+}
+.role-filter-pill.role-locked {
+  opacity: 0.85;
+  cursor: default;
+  pointer-events: none;
+}
+.role-filter-pill[data-role="damage"].role-locked { background: #b83a3a; color: #fff; border-color: #b83a3a; }
+.role-filter-pill[data-role="debuff"].role-locked { background: #c46a20; color: #fff; border-color: #c46a20; }
+.role-filter-pill[data-role="buff"].role-locked { background: #28964e; color: #fff; border-color: #28964e; }
+.role-filter-pill[data-role="control"].role-locked { background: #3d72a8; color: #fff; border-color: #3d72a8; }
+.role-filter-pill[data-role="healing"].role-locked { background: #28964e; color: #fff; border-color: #28964e; }
+.role-filter-pill[data-role="utility"].role-locked { background: #3d72a8; color: #fff; border-color: #3d72a8; }
+.role-filter-pill[data-role="silverBullets"].role-locked { background: #888888; color: #fff; border-color: #888888; }
+
+.role-filter-pill.role-inert {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* Hide role pills on merged page */
+.sidebar.merged-filters-hidden .role-filter-section {
+  display: none;
+}
+
 /* ── SORT INDICATORS ── */
 .sortable-header {
   cursor: pointer;

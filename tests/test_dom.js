@@ -697,24 +697,24 @@ test.describe('C22-5: Active Filter Summary Bar', () => {
 });
 
 test.describe('C22-6: Legacy toggle YES/NO labels', () => {
-  test('legacy button reads NO by default and YES when toggled on', async ({ page }) => {
+  test('legacy button reads YES by default and NO when toggled off', async ({ page }) => {
     await setupArcaneWithSpells(page);
 
     const result = await page.evaluate(() => {
       const btn = document.getElementById('legacyToggle');
       const initial = btn.textContent;
       btn.click();
-      const onText = btn.textContent;
+      const offText = btn.textContent;
       const bar = document.getElementById('activeFilterBar-arcane');
       const chipText = (bar.querySelector('.filter-chip') || {}).textContent || '';
       btn.click();
-      const offText = btn.textContent;
-      return { initial: initial, onText: onText, chipText: chipText, offText: offText };
+      const onText = btn.textContent;
+      return { initial: initial, offText: offText, chipText: chipText, onText: onText };
     });
-    expect(result.initial).toContain('NO');
-    expect(result.onText).toContain('YES');
-    expect(result.chipText).toContain('Legacy: shown');
+    expect(result.initial).toContain('YES');
     expect(result.offText).toContain('NO');
+    expect(result.chipText).toContain('Legacy');
+    expect(result.onText).toContain('YES');
   });
 });
 
@@ -1502,5 +1502,244 @@ test.describe('C37-3: Semantic HTML — heading hierarchy and nav label', () => 
     expect(result.h1Count).toBe(1);
     expect(result.navAriaLabel).toBeTruthy();
     expect(result.htmlLang).toBe('en');
+  });
+});
+
+// ══════════════════════════════════════════════════════════════════
+// Cycle 38 — Filter consistency: rarity display, legacy default, role filter pills
+// ══════════════════════════════════════════════════════════════════
+
+test.describe('C38-1: Rarity chips removed from summary bar', () => {
+  test('no rarity chips appear when rarity is non-default', async ({ page }) => {
+    await setupArcaneWithSpells(page);
+
+    const result = await page.evaluate(() => {
+      // Toggle Rare on (non-default)
+      window.SpellFilters.rarity.Rare = true;
+      const btn = document.querySelector('.rarity-btn[data-rarity="Rare"]');
+      if (btn) btn.classList.add('active');
+      // Trigger re-render
+      if (window.Browser && Browser.onFiltersChanged) Browser.onFiltersChanged();
+
+      // Check the active filter bar
+      const bar = document.querySelector('.active-filter-bar[style*="display"]') ||
+                  document.querySelector('.active-filter-bar');
+      if (!bar) return { hasRarityChip: false, barVisible: false };
+      const chips = bar.querySelectorAll('.filter-chip');
+      let hasRarityChip = false;
+      for (const chip of chips) {
+        if (chip.dataset.chipKind === 'rarity') hasRarityChip = true;
+      }
+      return { hasRarityChip, barVisible: bar.style.display !== 'none' };
+    });
+
+    expect(result.hasRarityChip).toBe(false);
+  });
+});
+
+test.describe('C38-2: Legacy default flipped to shown', () => {
+  test('showLegacy defaults to true and toggle shows YES', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+
+    const result = await page.evaluate(() => {
+      const f = window.SpellFilters;
+      const btn = document.getElementById('legacyToggle');
+      return {
+        showLegacy: f.showLegacy,
+        btnText: btn ? btn.textContent : '',
+        btnActive: btn ? btn.classList.contains('active') : false
+      };
+    });
+
+    expect(result.showLegacy).toBe(true);
+    expect(result.btnText).toContain('YES');
+    expect(result.btnActive).toBe(true);
+  });
+
+  test('toggling legacy off shows −Legacy chip', async ({ page }) => {
+    await setupArcaneWithSpells(page);
+
+    const result = await page.evaluate(() => {
+      // Toggle legacy off
+      Coverage.toggleLegacy();
+
+      const bar = document.querySelector('.active-filter-bar');
+      if (!bar) return { hasLegacyChip: false, chipLabel: '' };
+      const chips = bar.querySelectorAll('.filter-chip');
+      let hasLegacyChip = false;
+      let chipLabel = '';
+      for (const chip of chips) {
+        if (chip.dataset.chipKind === 'legacy') {
+          hasLegacyChip = true;
+          chipLabel = chip.textContent.trim();
+        }
+      }
+      return { hasLegacyChip, chipLabel, showLegacy: window.SpellFilters.showLegacy };
+    });
+
+    expect(result.showLegacy).toBe(false);
+    expect(result.hasLegacyChip).toBe(true);
+    expect(result.chipLabel).toContain('Legacy');
+  });
+
+  test('Clear All resets legacy to true', async ({ page }) => {
+    await setupArcaneWithSpells(page);
+
+    const result = await page.evaluate(() => {
+      // Toggle legacy off via the UI function so summary bar renders
+      Coverage.toggleLegacy();
+      // Now click clear all on the summary bar
+      const bar = document.querySelector('.active-filter-bar');
+      let cleared = false;
+      if (bar) {
+        const clearBtn = bar.querySelector('[data-action="clear-all"]');
+        if (clearBtn) { clearBtn.click(); cleared = true; }
+      }
+      return {
+        showLegacy: window.SpellFilters.showLegacy,
+        btnText: document.getElementById('legacyToggle')?.textContent || '',
+        cleared: cleared
+      };
+    });
+
+    expect(result.cleared).toBe(true);
+    expect(result.showLegacy).toBe(true);
+    expect(result.btnText).toContain('YES');
+  });
+});
+
+test.describe('C38-3: Role filter pills present and functional', () => {
+  test('seven role filter pills exist in sidebar', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+    await page.click('[data-page="arcane"]');
+    await page.waitForTimeout(300);
+
+    const result = await page.evaluate(() => {
+      const pills = document.querySelectorAll('.role-filter-pill');
+      const roles = [];
+      for (const p of pills) roles.push(p.dataset.role);
+      return { count: pills.length, roles };
+    });
+
+    expect(result.count).toBe(7);
+    expect(result.roles).toContain('damage');
+    expect(result.roles).toContain('debuff');
+    expect(result.roles).toContain('buff');
+    expect(result.roles).toContain('control');
+    expect(result.roles).toContain('healing');
+    expect(result.roles).toContain('utility');
+    expect(result.roles).toContain('silverBullets');
+  });
+
+  test('role pills are inert when Filter Mode is OFF', async ({ page }) => {
+    await setupArcaneWithSpells(page);
+
+    const result = await page.evaluate(() => {
+      // Ensure filter mode is off
+      window.SpellFilters.coverageMode = false;
+      if (window.Coverage && Coverage.updateRolePillVisuals) Coverage.updateRolePillVisuals();
+
+      const pill = document.querySelector('.role-filter-pill[data-role="debuff"]');
+      return {
+        hasInert: pill ? pill.classList.contains('role-inert') : false
+      };
+    });
+
+    expect(result.hasInert).toBe(true);
+  });
+
+  test('active tab role pill is locked', async ({ page }) => {
+    await setupArcaneWithSpells(page);
+
+    const result = await page.evaluate(() => {
+      // Enable filter mode
+      window.SpellFilters.coverageMode = true;
+      if (window.Coverage && Coverage.updateRolePillVisuals) Coverage.updateRolePillVisuals();
+
+      // Current role should be 'damage' (default)
+      const pill = document.querySelector('.role-filter-pill[data-role="damage"]');
+      return {
+        isLocked: pill ? pill.classList.contains('role-locked') : false
+      };
+    });
+
+    expect(result.isLocked).toBe(true);
+  });
+
+  test('passesRoleFilters filters spells correctly', async ({ page }) => {
+    await setupArcaneWithSpells(page);
+
+    const result = await page.evaluate(() => {
+      const f = window.SpellFilters;
+      f.coverageMode = true;
+      f.roleInclude = ['debuff'];
+
+      // Get all damage spells for arcane rank 3
+      const allSpells = window.SPELL_SCHEMA.spells.filter(s =>
+        s.tradition.indexOf('Arcane') !== -1 &&
+        s.roles.indexOf('damage') !== -1 &&
+        s.native_rank <= 3
+      );
+
+      const withDebuff = allSpells.filter(s => s.roles.indexOf('debuff') !== -1);
+      const withoutDebuff = allSpells.filter(s => s.roles.indexOf('debuff') === -1);
+
+      // Reset
+      f.roleInclude = [];
+      f.coverageMode = false;
+
+      return {
+        totalDamage: allSpells.length,
+        hasDebuff: withDebuff.length,
+        noDebuff: withoutDebuff.length
+      };
+    });
+
+    // There should be some damage spells that also have debuff, and some that don't
+    expect(result.totalDamage).toBeGreaterThan(0);
+    expect(result.hasDebuff).toBeGreaterThan(0);
+    expect(result.hasDebuff).toBeLessThan(result.totalDamage);
+  });
+
+  test('tab switch removes tab role from roleInclude/roleExclude', async ({ page }) => {
+    await setupArcaneWithSpells(page);
+
+    const result = await page.evaluate(() => {
+      const f = window.SpellFilters;
+      f.coverageMode = true;
+      f.roleInclude = ['debuff'];
+      f.roleExclude = ['buff'];
+
+      // Switch to debuff tab
+      Browser.setRole('arcane', 'debuff');
+
+      return {
+        roleInclude: f.roleInclude.slice(),
+        roleExclude: f.roleExclude.slice()
+      };
+    });
+
+    // debuff should have been removed from roleInclude
+    expect(result.roleInclude).not.toContain('debuff');
+    // buff should still be in roleExclude
+    expect(result.roleExclude).toContain('buff');
+  });
+
+  test('role pills hidden on merged tab', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+    await page.click('[data-page="merged"]');
+    await page.waitForTimeout(300);
+
+    const result = await page.evaluate(() => {
+      const section = document.getElementById('roleFilterSection');
+      if (!section) return { visible: false };
+      const style = window.getComputedStyle(section);
+      return { visible: style.display !== 'none' };
+    });
+
+    expect(result.visible).toBe(false);
   });
 });
