@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "generated": "2026-05-05",
-  "count": 129,
+  "count": 132,
   "observations": [
     {
       "source": "Acid Grip is UNDERRATED.md",
@@ -915,6 +915,27 @@
         "custom": "Will-targeting blasts"
       },
       "observation": "Arcane casters get Will-targeting blasts from rank 3 onward (Agonizing Despair, Vision of Death, Phantasmal Calamity, Phantasmagoria), whereas Primal's Will-targeting options lean debuff rather than blast."
+    },
+    {
+      "source": "Theoretical vs Practical Utility Spells.md",
+      "applies_to": {
+        "role": "utility"
+      },
+      "observation": "Buying heuristic: scroll for once-per-adventure needs, wand for once-per-day needs. Consumable utility costs zero combat prowess."
+    },
+    {
+      "source": "Theoretical vs Practical Utility Spells.md",
+      "applies_to": {
+        "role": "utility"
+      },
+      "observation": "Past ~level 7, surplus low-rank slots make slot-cast utility nearly free — skipping it leaves power on the table."
+    },
+    {
+      "source": "Theoretical vs Practical Utility Spells.md",
+      "applies_to": {
+        "role": "utility"
+      },
+      "observation": "PF2e utility is weaker spell-for-spell than D&D's but sees more table play — opportunity cost, not raw power, drives actual usage."
     }
   ]
 }

@@ -1,8 +1,8 @@
 {
   "version": "1.0.0",
   "generated": "2026-05-05",
-  "source_file_count": 22,
-  "spell_count": 145,
+  "source_file_count": 23,
+  "spell_count": 147,
   "spells": {
     "1436": {
       "name": "Acid Grip",
@@ -76,6 +76,11 @@
           "source": "Are Utility Spells BAD in Pathfinder 2e.md",
           "observation": "+4 status bonus to thievery, free check, lets untrained attempt. The poster child of the 'Knock Problem' — requires a check because it contests a craftsman's skill. Still good, just not auto-solve.",
           "context": "skill contest"
+        },
+        {
+          "source": "Theoretical vs Practical Utility Spells.md",
+          "observation": "Counteract check can fail vs. strong locks (unlike D&D's auto-success) — but surplus slots make carrying it affordable anyway.",
+          "context": "Slot utility"
         }
       ]
     },
@@ -136,6 +141,11 @@
           "source": "How I Learned to Stop Worrying and Build a Thematic Caster.md",
           "observation": "Necessary utility tax for tiny characters (Sprites have half bulk limit — can only carry 2 bulk). Annoying but required.",
           "context": "utility"
+        },
+        {
+          "source": "Theoretical vs Practical Utility Spells.md",
+          "observation": "Wand candidate — daily carry capacity for pocket change.",
+          "context": "Wand utility"
         }
       ]
     },
@@ -146,6 +156,11 @@
           "source": "Are Utility Spells BAD in Pathfinder 2e.md",
           "observation": "Just lets you carry more stuff.",
           "context": "carrying capacity"
+        },
+        {
+          "source": "Theoretical vs Practical Utility Spells.md",
+          "observation": "Wand candidate — daily heavy hauling for pocket change. Slightly better than D&D's floating disk.",
+          "context": "Wand utility"
         }
       ]
     },
@@ -181,6 +196,11 @@
           "source": "Are Utility Spells BAD in Pathfinder 2e.md",
           "observation": "Just lets you climb — no athletics checks. At low levels (rank 2), expensive but outperforms athletics. At high levels, athletics users get quick climb or their own climb speed.",
           "context": "movement vs skills"
+        },
+        {
+          "source": "Theoretical vs Practical Utility Spells.md",
+          "observation": "Scroll insurance for time-pressured climbs; once-per-adventure frequency doesn't merit a wand.",
+          "context": "Scroll utility"
         }
       ]
     },
@@ -221,6 +241,11 @@
           "source": "Are Utility Spells BAD in Pathfinder 2e.md",
           "observation": "Just works. Does exactly what it says.",
           "context": "environmental"
+        },
+        {
+          "source": "Theoretical vs Practical Utility Spells.md",
+          "observation": "Poster-child scroll insurance — once-per-adventure need, covers the party all day, trivial gold.",
+          "context": "Scroll utility"
         }
       ]
     },
@@ -361,6 +386,11 @@
           "source": "Are Utility Spells BAD in Pathfinder 2e.md",
           "observation": "Detect invisible enemies, last all day. At highest levels, a high-perception martial with True Sight general feat actually surpasses these (auto-heightening, higher counteract modifier).",
           "context": "detection vs skills"
+        },
+        {
+          "source": "Theoretical vs Practical Utility Spells.md",
+          "observation": "Daily-cast from a spare 5th-rank slot at high level (8-hr duration) — standing answer to invisibility, doubles as scouting.",
+          "context": "High-level daily utility"
         }
       ]
     },
@@ -371,6 +401,11 @@
           "source": "Are Utility Spells BAD in Pathfinder 2e.md",
           "observation": "Detect invisible enemies, last all day. At highest levels, a high-perception martial with True Sight general feat actually surpasses these (auto-heightening, higher counteract modifier).",
           "context": "detection vs skills"
+        },
+        {
+          "source": "Theoretical vs Practical Utility Spells.md",
+          "observation": "Daily-cast from a spare high-rank slot at high level — scout through walls.",
+          "context": "High-level daily utility"
         }
       ]
     },
@@ -2446,6 +2481,26 @@
           "source": "Who are the BEST Blasters in Pathfinder 2e.md",
           "observation": "Alternative blast from Vanguard apparition for when fire is resisted.",
           "context": "damage switching"
+        }
+      ]
+    },
+    "1631": {
+      "name": "Phantasmal Minion",
+      "observations": [
+        {
+          "source": "Theoretical vs Practical Utility Spells.md",
+          "observation": "Always-on telekinesis for fetch-and-carry chores. Cheap scroll or wand pick.",
+          "context": "Consumable utility"
+        }
+      ]
+    },
+    "335": {
+      "name": "Telepathic Bond",
+      "observations": [
+        {
+          "source": "Theoretical vs Practical Utility Spells.md",
+          "observation": "All-day party telepathy — wand it, or daily-cast from a spare 5th-rank slot. Uncommon: needs GM access to buy.",
+          "context": "Wand/slot utility"
         }
       ]
     }

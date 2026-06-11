@@ -1026,6 +1026,18 @@ def merge_into_spell_data():
             if spell and spell["heighten_quality"] != entry["overrides"]["heighten_quality"]:
                 spell["heighten_quality"] = entry["overrides"]["heighten_quality"]
 
+    # Re-apply editorial roles overrides — an explicit human role correction is the
+    # final word and is NOT re-derived by the consistency pass (Cycle 39). Without
+    # this, deterministic rules like "Summon trait -> control" silently add roles back
+    # on top of a human override (e.g. Phantasmal Minion summons an *effect*, not a
+    # combatant, so it is pure utility despite carrying the Summon trait). Mirrors the
+    # heighten_quality precedent above: editorial judgment wins over consistency rules.
+    for aon_id, entry in overrides.items():
+        if "roles" in entry.get("overrides", {}):
+            spell = by_aon.get(aon_id)
+            if spell and spell["roles"] != entry["overrides"]["roles"]:
+                spell["roles"] = list(entry["overrides"]["roles"])
+
     # Re-apply offense gate: consistency rules may have stripped Auto, leaving
     # defense_tags empty. In that case, offense fields must be cleared per Decision 016.
     for spell in spell_data["spells"]:

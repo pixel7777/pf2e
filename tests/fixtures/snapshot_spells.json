@@ -285,8 +285,7 @@
     ],
     "heighten_pattern": "none",
     "roles": [
-      "buff",
-      "prebuffs"
+      "utility"
     ],
     "defense_tags": [],
     "era": "remaster_core"

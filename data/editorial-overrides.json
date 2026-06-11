@@ -638,10 +638,13 @@
   {
     "aonId": 1663,
     "name": "See the Unseen",
-    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-invisibility silver bullet.",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged anti-invisibility silver bullet. | Cycle 39 (Heidi, 2026-06-11): Added buff/prebuffs/utility — anti-invisibility is combat-relevant (buff/prebuff) and high-level daily-cast utility per the Theoretical vs Practical Utility Spells distillation.",
     "overrides": {
       "roles": [
-        "silverBullets"
+        "silverBullets",
+        "buff",
+        "prebuffs",
+        "utility"
       ],
       "special_tags": [
         "Silver Bullet"
@@ -3606,10 +3609,9 @@
   {
     "aonId": 1007,
     "name": "Summon Deific Herald",
-    "reason": "Data-fix C35: Audit — alignment variants grant allies combat reactions, freedom of movement, damage resistance = buff.",
+    "reason": "Data-fix C35: Audit — alignment variants grant allies combat reactions, freedom of movement, damage resistance = buff. | Cycle 39 (Heidi, 2026-06-11): Summons an EFFECT (no HP/actions, not a combatant), so the Summon->control rule mis-applies; effect lasts only to end of caster next turn so not a prebuff. Roles corrected to [buff] (grants buff/reaction-type effects on arrival/departure). Exception to Decision 011 \"all 14 Summon spells get control\".",
     "overrides": {
       "roles": [
-        "control",
         "buff"
       ]
     }
@@ -3697,6 +3699,26 @@
           "Frightened"
         ]
       }
+    }
+  },
+  {
+    "aonId": 1442,
+    "name": "Ant Haul",
+    "reason": "Cycle 39 (Heidi, 2026-06-11): Re-roled to utility. Buff/prebuffs imply combat relevance; daily carry-capacity is pure out-of-combat utility (Theoretical vs Practical Utility Spells distillation). Overnight audit missed this.",
+    "overrides": {
+      "roles": [
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 1631,
+    "name": "Phantasmal Minion",
+    "reason": "Cycle 39 (Heidi, 2026-06-11): Re-roled to pure utility. Summon trait triggered the Summon->control rule, but it summons an EFFECT (always-on telekinesis for fetch/carry), not a creature with HP/actions usable in combat. Decision 011 exception.",
+    "overrides": {
+      "roles": [
+        "utility"
+      ]
     }
   }
 ]

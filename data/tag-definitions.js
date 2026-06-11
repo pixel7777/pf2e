@@ -100,7 +100,7 @@ window.TAG_DEFINITIONS = {
   "Debuff": "This spell is categorized as a debuffer — its primary purpose is imposing negative conditions or penalties on enemies.",
   "Buff": "This spell is categorized as a buff — its primary purpose is enhancing allies’ capabilities.",
   "Control": "This spell is categorized as control — its primary purpose is restricting enemy movement or actions through terrain, walls, or zones; or placing another actor on the battlefield (summon spells — the summoned creature blocks, tanks, flanks, and reshapes positioning).",
-  "Utility": "This spell is categorized as utility — its primary purpose is solving non-combat problems or providing out-of-combat benefits.",
+  "Utility": "This spell is categorized as utility — its primary purpose is solving non-combat problems or providing out-of-combat benefits. Buying heuristic: get a scroll for utility you'll want about once per adventure, a wand for utility you'll want once per day — consumable utility costs gold, not combat prowess. Past about level 7, surplus low-rank slots make slot-casting utility nearly free, so skipping it leaves power on the table.",
   "Silver Bullets": "This spell is categorized as a silver bullet — it dominates a narrow situation regardless of spell rank.",
 
   // ── Legacy curated.js entries not in coverage tracker ──

@@ -441,16 +441,19 @@ test.describe('C21-7: Notes column link', () => {
 });
 
 test.describe('C21-8: Chain badge', () => {
-  test('spell with replacement chain data shows chain badge', async ({ page }) => {
+  test('spell with replacement chain data shows chain advisory note', async ({ page }) => {
     await setupArcaneWithSpells(page);
 
+    // Cycle 24 (814d30e) replaced the old .chain-badge (↑↓) rendering with the
+    // "Chart C" .chain-note advisory system (◆), driven by evaluateChartC over
+    // replaced_by/replaces. This test now asserts the current rendering.
     const badge = await page.evaluate(() => {
-      const badges = document.querySelectorAll('#spellTable-arcane .chain-badge');
+      const badges = document.querySelectorAll('#spellTable-arcane .chain-note');
       if (badges.length === 0) return { exists: false, text: '' };
       return { exists: true, text: badges[0].textContent };
     });
     expect(badge.exists).toBe(true);
-    expect(badge.text).toMatch(/[↑↓]/);
+    expect(badge.text).toMatch(/◆/);
   });
 });
 
