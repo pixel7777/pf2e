@@ -316,7 +316,7 @@
             <span class="tier-symbol">&#9675;</span>
             <h3>Low Tier</h3>
             <p class="tier-desc"><strong>Everything below mid.</strong> Silver bullets, reactions, 1-action spells, pre-buffs, utility. These slots solve specific problems, not general ones.</p>
-            <p class="tier-ranks">All remaining ranks. Don't waste these on "evergreen" damage or debuffs</p>
+            <p class="tier-ranks">All remaining ranks. Never 2-action damage spells here; evergreen debuffs/buffs are fine in moderation</p>
           </div>
         </div>
 
@@ -378,9 +378,9 @@
           <div class="wg-cell">Duration buffs, backup resistances.</div>
 
           <div class="wg-tier-label low">&#9675; Low</div>
-          <div class="wg-cell">Silver bullets, reactions, 1-action spells. <span class="wg-warning">&#9888; Never put "evergreen" damage here.</span></div>
-          <div class="wg-cell">Reactions, 1-action spells. <span class="wg-warning">&#9888; Never put rank-scaling debuffs here. They need high rank to land.</span></div>
-          <div class="wg-cell">Pre-buffs cast before combat. Out-of-combat utility.</div>
+          <div class="wg-cell">Silver bullets, reactions, 1-action spells. <span class="wg-warning">&#9888; Never put 2-action damage spells here &mdash; any of them.</span></div>
+          <div class="wg-cell">Reactions, 1-action spells. Evergreen 2-action debuffs are decent coverage &mdash; just don't fill up on them. <span class="wg-warning">&#9888; Never put rank-scaling debuffs here. They need high rank to land.</span></div>
+          <div class="wg-cell">Pre-buffs cast before combat. Out-of-combat utility. Evergreen 2-action buffs earn a slot or two &mdash; don't fill every slot with them.</div>
         </div>
 
         <div class="callout">
@@ -447,7 +447,7 @@
             <div class="flow-connector"><div class="flow-number">8</div><div class="flow-line"></div></div>
             <div class="flow-content">
               <h4>Allocate Low-Rank Slots</h4>
-              <p>Silver bullets, reactions, 1-action spells, pre-combat buffs, out-of-combat utility. Never evergreen damage.</p>
+              <p>Silver bullets, reactions, 1-action spells, pre-combat buffs, out-of-combat utility. Never 2-action damage spells; evergreen debuffs and buffs only in moderation.</p>
             </div>
           </div>
           <div class="flow-step">
@@ -976,6 +976,7 @@
           <a href="#about-tags" class="about-toc-link">What Do the Tags and Properties in the Coverage Tracker and on the Spells Mean?</a>
           <a href="#about-filtering" class="about-toc-link">How Do I Use the Filtering System?</a>
           <a href="#about-mathfinder" class="about-toc-link">What's with all the Mathfinder References?</a>
+          <a href="#about-ai" class="about-toc-link">Was AI Used to Build This?</a>
           <a href="#about-data" class="about-toc-link">How Was the Data Derived?</a>
           <a href="#about-remaster" class="about-toc-link">What is the Remaster Status of the Data?</a>
           <a href="#about-credits" class="about-toc-link">Credits, Licensing, and Legal</a>
@@ -1173,6 +1174,18 @@
               <p>I'm a fan! His <a href="https://www.youtube.com/@Mathfinder-aaa" target="_blank" rel="noopener noreferrer" style="color:var(--accent-nav-active)">YouTube videos</a> inspired the creation of this tool. Mathfinder makes videos about a lot of Pathfinder topics (often with math to back it up), and I particularly liked the ones about spells and spell selection. I wanted to follow his advice but found the spell selection process to be very time consuming using just Archives of Nethys and Pathbuilder. So I made this as a little helper tool.</p>
               <p>This isn't affiliated with or endorsed by Mathfinder - just inspired by.</p>
               <p>There are links in many places to the original videos so you can follow to get the <em>real</em> real. I cannot claim this tool accurately summarizes or follows his advice, but I think a lot of the gist of it is there. You'll see gold stars on spells that have a paraphrased summary of Mathfinder analysis available on click, and you can filter by those stars to focus on the spells you'll hear about in his videos.</p>
+            </div>
+          </section>
+
+          <!-- Section: Was AI Used to Build This? -->
+          <section class="overview-section" id="about-ai">
+            <h2 class="section-label">Was AI Used to Build This?</h2>
+            <div class="about-body">
+              <p>Yes, and I want to be upfront about where and how.</p>
+              <p><strong>The code.</strong> The app itself &mdash; the HTML, JavaScript, and CSS you're using right now &mdash; was written with AI assistance (Anthropic's Claude), with me specifying, directing, reviewing, and testing every feature. I'm a systems engineer, not a web developer. This tool wouldn't exist without that help, and pretending otherwise would be silly.</p>
+              <p><strong>The data.</strong> The spell data has a longer and more human story than you might expect &mdash; see <a href="#about-data" style="color:var(--accent-nav-active)">How Was the Data Derived?</a> Short version: I tried LLM analysis for a first draft, it handled PF2e's legalese poorly, and what shipped is the product of an ongoing, gradual, human QA process. (Still me. Still one person.)</p>
+              <p><strong>The advice.</strong> The spell selection framework is Mathfinder's, from his videos. The paraphrased video summaries you'll see on starred spells were AI-assisted distillations of his transcripts, reviewed by me, with links back to the original videos throughout &mdash; the videos are always the real source.</p>
+              <p>No generative AI art was used; visual asset credits are in <a href="#about-credits" style="color:var(--accent-nav-active)">Credits, Licensing, and Legal</a>.</p>
             </div>
           </section>
 
