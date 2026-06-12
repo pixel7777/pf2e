@@ -1359,6 +1359,8 @@ def test_c40_integrated_corrections(spells):
     check(1075, "defense_tags", ["Ref"], "Swampcall: both-source agreement")
     check(2123, "roles", ["buff"], "Bone Flense: weapon-buff convention (buff only)")
     check(1751, "defense_tags", ["Auto"], "Wall of Stone keeps Auto (canonical auto-effect control)")
+    check(1345, "heighten_quality", "scales-well", "Weaken Earth: G5 Heidi ruling — heightens well")
+    check(2010, "basic_save", True, "Nature's Enmity: G5 Heidi ruling — nested basic Reflex save is real (Foundry-side error)")
     # Sunburst still gets Success-effect via Path 2 (spelled-out half damage on success)
     s = by_aon.get(1707)
     if s and "Success-effect" not in (s.get("reliability_tags") or []):
@@ -1372,7 +1374,7 @@ def test_c40_integrated_corrections(spells):
         print("FAIL: C40 integrated corrections")
         print("\n".join(errors))
         return False
-    print("PASS: C40 integrated corrections (14 fossil-record assertions)")
+    print("PASS: C40 integrated corrections (16 fossil-record assertions)")
     return True
 
 

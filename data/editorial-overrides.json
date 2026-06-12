@@ -830,7 +830,7 @@
   {
     "aonId": 1345,
     "name": "Weaken Earth",
-    "reason": "Cycle 23: Sonnet repeatedly produced JSON parse errors for this spell (5 retries failed). Manual data entry per Heidi review. Weaken Earth weakens hardness OR imposes weakness 3 to physical damage on a target without hardness, with a Fortitude save to negate. Per remaster, physical damage is tagged across Bludgeoning, Piercing, Slashing. Imposes weakness → debuff role per Decision 011. Also has an out-of-combat utility component (weakening structures and objects). Heightened (+2) increases hardness reduction, object size, and weakness. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): heighten_quality: plus_2 pattern label fix [model]",
+    "reason": "Cycle 23: Sonnet repeatedly produced JSON parse errors for this spell (5 retries failed). Manual data entry per Heidi review. Weaken Earth weakens hardness OR imposes weakness 3 to physical damage on a target without hardness, with a Fortitude save to negate. Per remaster, physical damage is tagged across Bludgeoning, Piercing, Slashing. Imposes weakness → debuff role per Decision 011. Also has an out-of-combat utility component (weakening structures and objects). Heightened (+2) increases hardness reduction, object size, and weakness. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): heighten_quality: plus_2 pattern label fix [model] | G5 Heidi ruling 2026-06-12: heightens WELL - the +2 weakness scaling keeps spell power in line with level",
     "overrides": {
       "damage_types": [],
       "weaknesses_imposed": [
@@ -844,7 +844,7 @@
       ],
       "conditions_imposed": [],
       "conditions_by_outcome": null,
-      "heighten_quality": "scales-okay"
+      "heighten_quality": "scales-well"
     }
   },
   {
