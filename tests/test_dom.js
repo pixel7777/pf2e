@@ -765,11 +765,55 @@ test.describe('C25-2: About page loads', () => {
     });
     expect(result.pageActive).toBe(true);
     expect(result.tocExists).toBe(true);
-    expect(result.tocLinkCount).toBe(14);
-    expect(result.sectionCount).toBe(14);
+    expect(result.tocLinkCount).toBe(15);
+    expect(result.sectionCount).toBe(15);
     expect(result.firstSectionId).toBe('about-what');
     expect(result.firstSectionHeading).toBe('What Is This Tool?');
     expect(result.sidebarHidden).toBe(true);
+  });
+});
+
+test.describe('C41: AI disclosure FAQ and low-rank wording', () => {
+  test('About page has AI FAQ section with TOC link and working anchors', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForSelector('.header-utility-links');
+    const result = await page.evaluate(() => {
+      App.switchTab('about');
+      var tocLink = document.querySelector('.about-toc a[href="#about-ai"]');
+      var section = document.getElementById('about-ai');
+      var heading = section ? section.querySelector('h2').textContent : null;
+      var body = section ? section.querySelector('.about-body').textContent : '';
+      var dataLink = section ? section.querySelector('a[href="#about-data"]') : null;
+      var creditsLink = section ? section.querySelector('a[href="#about-credits"]') : null;
+      return {
+        tocLinkText: tocLink ? tocLink.textContent : null,
+        headingHasAI: heading ? heading.indexOf('AI') !== -1 : false,
+        mentionsClaude: body.indexOf('Claude') !== -1,
+        dataLinkExists: !!dataLink,
+        creditsLinkExists: !!creditsLink
+      };
+    });
+    expect(result.tocLinkText).toBe('Was AI Used to Build This?');
+    expect(result.headingHasAI).toBe(true);
+    expect(result.mentionsClaude).toBe(true);
+    expect(result.dataLinkExists).toBe(true);
+    expect(result.creditsLinkExists).toBe(true);
+  });
+
+  test('low-rank guidance uses Mathfinder corrected advice, not "evergreen damage"', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+    const result = await page.evaluate(() => {
+      var overview = document.getElementById('page-overview');
+      var text = overview ? overview.textContent : '';
+      var normalized = text.replace(/[“”]/g, '"');
+      return {
+        hasEvergreenDamage: /["']?evergreen["']?\s+damage/i.test(normalized),
+        mentionsTwoActionDamageRule: normalized.indexOf('2-action damage') !== -1
+      };
+    });
+    expect(result.hasEvergreenDamage).toBe(false);
+    expect(result.mentionsTwoActionDamageRule).toBe(true);
   });
 });
 
