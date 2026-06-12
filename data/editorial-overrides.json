@@ -2,24 +2,29 @@
   {
     "aonId": 1331,
     "name": "Exploding Earth",
-    "reason": "Cycle 07 spot-check (Heidi sample 1): Spell uses an attack roll for the primary effect. The Fortitude save and Prone condition are a double-jackpot rider — they only fire if (a) the attack roll critically hits AND (b) the target then fails the Fort save. Same spirit as Decision 011's crit-fail-only rule (jackpot riders don't drive debuff role and shouldn't populate normal save-outcome buckets). Clear conditions; keep damage role. | Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay.",
+    "reason": "Cycle 07 spot-check (Heidi sample 1): Spell uses an attack roll for the primary effect. The Fortitude save and Prone condition are a double-jackpot rider — they only fire if (a) the attack roll critically hits AND (b) the target then fails the Fort save. Same spirit as Decision 011's crit-fail-only rule (jackpot riders don't drive debuff role and shouldn't populate normal save-outcome buckets). Clear conditions; keep damage role. | Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: foundry save/attack + harm signal present [foundry]",
     "overrides": {
       "conditions_imposed": [],
       "conditions_by_outcome": null,
-      "heighten_quality": "scales-okay"
+      "heighten_quality": "scales-okay",
+      "defense_tags": [
+        "AC",
+        "Fort"
+      ]
     }
   },
   {
     "aonId": 1124,
     "name": "Scouring Pulse",
-    "reason": "Cycle 07 spot-check (Heidi sample 4): Spell does NOT impose Concealed — it PREVENTS Concealed (anti-stealth) and downgrades Undetected invisible creatures to Concealed (a perceptibility upgrade, not a debuff). spell.json's saving_throw is empty so basic_save defaulted to false; spell text says 'basic Reflex save'. Editorial override clears the false condition AND sets basic_save=true so Success-effect derives correctly.",
+    "reason": "Cycle 07 spot-check (Heidi sample 4): Spell does NOT impose Concealed — it PREVENTS Concealed (anti-stealth) and downgrades Undetected invisible creatures to Concealed (a perceptibility upgrade, not a debuff). spell.json's saving_throw is empty so basic_save defaulted to false; spell text says 'basic Reflex save'. Editorial override clears the false condition AND sets basic_save=true so Success-effect derives correctly. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): heighten_quality: fixed pattern needs fixed-* label [model]",
     "overrides": {
       "conditions_imposed": [],
       "conditions_by_outcome": null,
       "basic_save": true,
       "reliability_tags": [
         "Success-effect"
-      ]
+      ],
+      "heighten_quality": "fixed-meaningful"
     }
   },
   {
@@ -48,28 +53,39 @@
   {
     "aonId": 1281,
     "name": "Confetti Cloud",
-    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern (creatures inside become concealed; creatures outside are concealed to those inside). Per Decision 006 rule 5, area-obscure spells where Concealed affects both sides are not 'enemy-imposed primary intent.' Clear false positive.",
+    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern (creatures inside become concealed; creatures outside are concealed to those inside). Per Decision 006 rule 5, area-obscure spells where Concealed affects both sides are not 'enemy-imposed primary intent.' Clear false positive. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi concur on control-role flag (control already present); audit debuff-removal accepted [heidi]",
     "overrides": {
       "conditions_imposed": [],
-      "conditions_by_outcome": null
+      "conditions_by_outcome": null,
+      "roles": [
+        "control",
+        "oneAction"
+      ]
     }
   },
   {
     "aonId": 1606,
     "name": "Mist",
-    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern (Obscuring-Mist-style — creatures inside and outside both gain Concealed). Decision 006 rule 5: not 'enemy-imposed.' Clear false positive.",
+    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern (Obscuring-Mist-style — creatures inside and outside both gain Concealed). Decision 006 rule 5: not 'enemy-imposed.' Clear false positive. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: symmetric concealment is not an enemy debuff [model]",
     "overrides": {
       "conditions_imposed": [],
-      "conditions_by_outcome": null
+      "conditions_by_outcome": null,
+      "roles": [
+        "control"
+      ]
     }
   },
   {
     "aonId": 1377,
     "name": "Rust Cloud",
-    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern. The cloud also deals slashing damage but Concealed itself is not enemy-imposed — keep the slashing damage_types, clear the Concealed false positive.",
+    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern. The cloud also deals slashing damage but Concealed itself is not enemy-imposed — keep the slashing damage_types, clear the Concealed false positive. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Concealed on enemies is defensive for them, not a debuff [model]",
     "overrides": {
       "conditions_imposed": [],
-      "conditions_by_outcome": null
+      "conditions_by_outcome": null,
+      "roles": [
+        "control",
+        "damage"
+      ]
     }
   },
   {
@@ -105,7 +121,7 @@
   {
     "aonId": 1385,
     "name": "Dancing Fountain",
-    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern. Clear false positive. | Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"Ref\"]",
+    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern. Clear false positive. | Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"Ref\"] | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic + text basic-save [foundry]; roles: forced movement + concealment + damage; no conditions [model]",
     "overrides": {
       "conditions_imposed": [],
       "conditions_by_outcome": null,
@@ -117,13 +133,18 @@
       ],
       "defense_tags": [
         "Ref"
+      ],
+      "basic_save": true,
+      "roles": [
+        "control",
+        "damage"
       ]
     }
   },
   {
     "aonId": 1759,
     "name": "Wrathful Storm",
-    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern (driving snow conceals everything in or beneath the cloud). Clear false positive but keep the multi-damage and other effects intact. | Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Cold\", \"Elec\"]; defense_tags: [] -> [\"Ref\", \"Fort\"]. Blizzard: no save. Lightning: basic Reflex. Hail: basic Fortitude.",
+    "reason": "Cycle 07 spot-check Concealed audit: Area-obscure pattern (driving snow conceals everything in or beneath the cloud). Clear false positive but keep the multi-damage and other effects intact. | Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Cold\", \"Elec\"]; defense_tags: [] -> [\"Ref\", \"Fort\"]. Blizzard: no save. Lightning: basic Reflex. Hail: basic Fortitude. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): damage_types: types evidenced: ['Bludg'] [audit]; defense_tags: storm modes: auto penalties/terrain + Fort/Ref [model]; reliability_tags: Auto-effect paired with Auto [pairing-rule] | basic_save: literal basic save in mode text (Story B class); Success-effect via Path-1 rule",
     "overrides": {
       "conditions_imposed": [],
       "conditions_by_outcome": null,
@@ -131,13 +152,19 @@
         "Multi"
       ],
       "damage_types": [
+        "Bludg",
         "Cold",
         "Elec"
       ],
       "defense_tags": [
-        "Ref",
-        "Fort"
-      ]
+        "Auto",
+        "Fort",
+        "Ref"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
+      ],
+      "basic_save": true
     }
   },
   {
@@ -152,7 +179,7 @@
   {
     "aonId": 1436,
     "name": "Acid Grip",
-    "reason": "Cycle 07 Issue 1 residual: model tags Slowed despite spell text saying '-10-foot status penalty to its Speeds' (no literal 'slowed'). Editorial override clears the false condition; conditions_by_outcome cleared to keep schema consistency rule 3 happy. Cycle 21b: Added silverBullets role (Heidi-approved 2026-05-06).",
+    "reason": "Cycle 07 Issue 1 residual: model tags Slowed despite spell text saying '-10-foot status penalty to its Speeds' (no literal 'slowed'). Editorial override clears the false condition; conditions_by_outcome cleared to keep schema consistency rule 3 happy. Cycle 21b: Added silverBullets role (Heidi-approved 2026-05-06). | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic + damage-only outcome pattern (no rider conditions) [v2]",
     "overrides": {
       "conditions_imposed": [],
       "conditions_by_outcome": null,
@@ -163,13 +190,14 @@
       ],
       "special_tags": [
         "Silver Bullet"
-      ]
+      ],
+      "basic_save": true
     }
   },
   {
     "aonId": 1473,
     "name": "Control Water",
-    "reason": "Cycle 07 Issue 1 residual: model tags Slowed for the water-movement penalties even though spell text doesn't literally say 'slowed'. Editorial override clears the false condition.",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: 50x50 area affecting water-trait creatures [model] | Multi dropped: no damage/conditions, Decision 004 strips it",
     "overrides": {
       "conditions_imposed": [],
       "conditions_by_outcome": null
@@ -208,7 +236,7 @@
   {
     "aonId": 724,
     "name": "Transmute Rock and Mud",
-    "reason": "Cycle 07 Phase 2 skip: model tried to add 'Ref' to defense_tags_added (rule violation). spell.json's saving_throw field is null even though spell text describes a basic Reflex save for the mud-to-rock catch — so structured pass missed it. Editorial override sets defense_tags=['Ref'] so offense-eval gate doesn't strip our offense fields. Spell creates difficult terrain (control), can deal Bludgeoning if cast on a ceiling, and impose Prone/Grabbed when mud-to-rock catches creatures. heighten_quality scales-okay (heighten_pattern=plus_2). | Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"] | Audit 2026-05-11: conditions_by_outcome shows Prone on success. Falling prone on a successful save is a meaningful tactical consequence. Merges with existing override (updates reliability_tags).",
+    "reason": "Cycle 07 Phase 2 skip: model tried to add 'Ref' to defense_tags_added (rule violation). spell.json's saving_throw field is null even though spell text describes a basic Reflex save for the mud-to-rock catch — so structured pass missed it. Editorial override sets defense_tags=['Ref'] so offense-eval gate doesn't strip our offense fields. Spell creates difficult terrain (control), can deal Bludgeoning if cast on a ceiling, and impose Prone/Grabbed when mud-to-rock catches creatures. heighten_quality scales-okay (heighten_pattern=plus_2). | Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"] | Audit 2026-05-11: conditions_by_outcome shows Prone on success. Falling prone on a successful save is a meaningful tactical consequence. Merges with existing override (updates reliability_tags). | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_by_outcome: outcome-block conditions, negation-checked (dropped: none) [foundry]; conditions_imposed: paired with outcome conditions [foundry]",
     "overrides": {
       "defense_tags": [
         "Ref"
@@ -217,8 +245,9 @@
         "Bludg"
       ],
       "conditions_imposed": [
+        "Grabbed",
         "Prone",
-        "Grabbed"
+        "Restrained"
       ],
       "conditions_by_outcome": {
         "critical_success": [],
@@ -229,7 +258,8 @@
           "Grabbed"
         ],
         "critical_failure": [
-          "Grabbed"
+          "Grabbed",
+          "Restrained"
         ]
       },
       "weaknesses_imposed": [],
@@ -346,7 +376,7 @@
   {
     "aonId": 1364,
     "name": "Ymeri's Mark",
-    "reason": "Cycle 07 Phase 2 skip: model emitted invalid role 'detection' (not in valid role set). Curse spell that imposes Fatigued on the target and detonates for fire damage on dismiss (basic Reflex save). Has both tracking (utility) and combat-debuff functions. Conditions imposed: Fatigued (auto, for the duration determined by Fort save). | Cycle 23 / Decision 020 Category 9: Target-attached emanation — 10-foot detonation when the mark is discharged, hitting the target plus enemies. AoN structured data records target=1 creature, area_type=null. Editorial override adds Multi.",
+    "reason": "Cycle 07 Phase 2 skip: model emitted invalid role 'detection' (not in valid role set). Curse spell that imposes Fatigued on the target and detonates for fire damage on dismiss (basic Reflex save). Has both tracking (utility) and combat-debuff functions. Conditions imposed: Fatigued (auto, for the duration determined by Fort save). | Cycle 23 / Decision 020 Category 9: Target-attached emanation — 10-foot detonation when the mark is discharged, hitting the target plus enemies. AoN structured data records target=1 creature, area_type=null. Editorial override adds Multi. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: +Ref:text/foundry [audit]; basic_save: foundry basic + text basic-save [foundry]",
     "overrides": {
       "damage_types": [
         "Fire"
@@ -379,13 +409,18 @@
       "targeting_tags": [
         "ST",
         "Multi"
-      ]
+      ],
+      "defense_tags": [
+        "Fort",
+        "Ref"
+      ],
+      "basic_save": true
     }
   },
   {
     "aonId": 2127,
     "name": "Sawtooth Terrain",
-    "reason": "Cycle 07 Phase 2 skip: model tried to add 'Ref' to defense_tags_added (rule violation). spell.json's saving_throw is null even though spell text says 'basic Reflex save' — structured pass missed it. Editorial override sets defense_tags=['Ref'] AND basic_save=true so offense gate retains our values and Success-effect rule applies. Difficult terrain + slashing + persistent bleed + speed penalty. Speed penalty is NOT Slowed (literal text says '-10-foot circumstance penalty to their Speed'). | Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]",
+    "reason": "Cycle 07 Phase 2 skip: model tried to add 'Ref' to defense_tags_added (rule violation). spell.json's saving_throw is null even though spell text says 'basic Reflex save' — structured pass missed it. Editorial override sets defense_tags=['Ref'] AND basic_save=true so offense gate retains our values and Success-effect rule applies. Difficult terrain + slashing + persistent bleed + speed penalty. Speed penalty is NOT Slowed (literal text says '-10-foot circumstance penalty to their Speed'). | Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"] | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_subtypes: foundry area=burst [audit]; basic_save: no basic signal anywhere [v2] | basic_save change DROPPED: Cycle 07 reviewed fix: AoN markdown says basic despite null field",
     "overrides": {
       "defense_tags": [
         "Ref"
@@ -408,13 +443,16 @@
       "heighten_quality": "scales-well",
       "targeting_tags": [
         "Multi"
+      ],
+      "targeting_subtypes": [
+        "Burst"
       ]
     }
   },
   {
     "aonId": 2496,
     "name": "Clockwork Devotion",
-    "reason": "Cycle 07 Phase 2 skip: model tried to add 'Ref' to defense_tags_added (rule violation). spell.json's saving_throw is null even though spell text says 'basic Reflex save' — structured pass missed it. Editorial override sets defense_tags=['Ref'] AND basic_save=true. Summon spell with two damage waves: arrival slash + departure slash + fire (basic Reflex save), persistent fire on crit fail. Treat as damage + summon-control.",
+    "reason": "Cycle 07 Phase 2 skip: model tried to add 'Ref' to defense_tags_added (rule violation). spell.json's saving_throw is null even though spell text says 'basic Reflex save' — structured pass missed it. Editorial override sets defense_tags=['Ref'] AND basic_save=true. Summon spell with two damage waves: arrival slash + departure slash + fire (basic Reflex save), persistent fire on crit fail. Treat as damage + summon-control. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: Multi:ok [audit]; roles: Jassim ruling applied: Clockwork Devotion's effect is pure damage (basic Reflex AoE), not  [heidi]",
     "overrides": {
       "defense_tags": [
         "Ref"
@@ -428,13 +466,15 @@
       "conditions_by_outcome": null,
       "weaknesses_imposed": [],
       "roles": [
-        "damage",
-        "control"
+        "damage"
       ],
       "reliability_tags": [
         "Success-effect"
       ],
-      "heighten_quality": "no-heighten"
+      "heighten_quality": "no-heighten",
+      "targeting_tags": [
+        "Multi"
+      ]
     }
   },
   {
@@ -454,7 +494,7 @@
   {
     "aonId": 1574,
     "name": "Infuse Vitality",
-    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): heighten_quality: fixed pattern label fix [model]",
     "overrides": {
       "roles": [
         "buff",
@@ -463,7 +503,8 @@
       ],
       "special_tags": [
         "Silver Bullet"
-      ]
+      ],
+      "heighten_quality": "fixed-meaningful"
     }
   },
   {
@@ -576,7 +617,7 @@
   {
     "aonId": 1583,
     "name": "Laughing Fit",
-    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet. Preserves populator-derived debuff role. | Cycle 24 (A1): Reclassified from no-heighten to scaling-irrelevant — silver bullet value is situation-solving, not scaling.",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet. Preserves populator-derived debuff role. | Cycle 24 (A1): Reclassified from no-heighten to scaling-irrelevant — silver bullet value is situation-solving, not scaling. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): heighten_quality: pattern none [model]; reliability_tags: success: no reactions [model] | heighten_quality change DROPPED: same Cycle 24 A1 class",
     "overrides": {
       "roles": [
         "debuff",
@@ -585,7 +626,10 @@
       "special_tags": [
         "Silver Bullet"
       ],
-      "heighten_quality": "scaling-irrelevant"
+      "heighten_quality": "scaling-irrelevant",
+      "reliability_tags": [
+        "Success-effect"
+      ]
     }
   },
   {
@@ -625,9 +669,10 @@
   {
     "aonId": 1651,
     "name": "Resist Energy",
-    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet.",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged silver bullet. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: defensive buff role required alongside editorial silverBullets [model]",
     "overrides": {
       "roles": [
+        "buff",
         "silverBullets"
       ],
       "special_tags": [
@@ -680,10 +725,12 @@
   {
     "aonId": 1534,
     "name": "Fly",
-    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged mobility silver bullet.",
+    "reason": "Cycle 21b: Silver bullet role population (Heidi-approved 2026-05-06). Mathfinder-tagged mobility silver bullet. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Fly is buff+utility; silverBullets editorial kept [model]",
     "overrides": {
       "roles": [
-        "silverBullets"
+        "buff",
+        "silverBullets",
+        "utility"
       ],
       "special_tags": [
         "Silver Bullet"
@@ -783,7 +830,7 @@
   {
     "aonId": 1345,
     "name": "Weaken Earth",
-    "reason": "Cycle 23: Sonnet repeatedly produced JSON parse errors for this spell (5 retries failed). Manual data entry per Heidi review. Weaken Earth weakens hardness OR imposes weakness 3 to physical damage on a target without hardness, with a Fortitude save to negate. Per remaster, physical damage is tagged across Bludgeoning, Piercing, Slashing. Imposes weakness → debuff role per Decision 011. Also has an out-of-combat utility component (weakening structures and objects). Heightened (+2) increases hardness reduction, object size, and weakness.",
+    "reason": "Cycle 23: Sonnet repeatedly produced JSON parse errors for this spell (5 retries failed). Manual data entry per Heidi review. Weaken Earth weakens hardness OR imposes weakness 3 to physical damage on a target without hardness, with a Fortitude save to negate. Per remaster, physical damage is tagged across Bludgeoning, Piercing, Slashing. Imposes weakness → debuff role per Decision 011. Also has an out-of-combat utility component (weakening structures and objects). Heightened (+2) increases hardness reduction, object size, and weakness. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): heighten_quality: plus_2 pattern label fix [model]",
     "overrides": {
       "damage_types": [],
       "weaknesses_imposed": [
@@ -797,7 +844,7 @@
       ],
       "conditions_imposed": [],
       "conditions_by_outcome": null,
-      "heighten_quality": "fixed-meaningful"
+      "heighten_quality": "scales-okay"
     }
   },
   {
@@ -898,7 +945,7 @@
   {
     "aonId": 866,
     "name": "Bandit's Doom",
-    "reason": "Cycle 24 (A2): D020 Category 8 spot-check fix. Missing targeting_tags, defense_tags, damage_types, reliability_tags. | Audit 2026-05-12: 'basic_save' is not a valid reliability_tags entry (pipeline bug — basic_save boolean leaked into reliability_tags as a string). Success effect confirmed: half damage and doomed 1. Merges with existing override (updates reliability_tags).",
+    "reason": "Cycle 24 (A2): D020 Category 8 spot-check fix. Missing targeting_tags, defense_tags, damage_types, reliability_tags. | Audit 2026-05-12: 'basic_save' is not a valid reliability_tags entry (pipeline bug — basic_save boolean leaked into reliability_tags as a string). Success effect confirmed: half damage and doomed 1. Merges with existing override (updates reliability_tags). | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_by_outcome: outcome-block conditions, negation-checked (dropped: none) [foundry]; conditions_imposed: paired with outcome conditions [foundry]; conditions_by_outcome: outcome-block conditions, negation-checked (dropped: none) [foundry]; conditions_imposed: paired with outcome conditions [foundry]; conditions_by_outcome: outcome-block conditions, negation-checked (dropped: none) [foundry]; conditions_imposed: paired with outcome conditions [foundry]",
     "overrides": {
       "targeting_tags": [
         "ST"
@@ -911,6 +958,21 @@
       ],
       "reliability_tags": [
         "Success-effect"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [
+          "Doomed"
+        ],
+        "failure": [
+          "Doomed"
+        ],
+        "critical_failure": [
+          "Doomed"
+        ]
+      },
+      "conditions_imposed": [
+        "Doomed"
       ]
     }
   },
@@ -940,9 +1002,10 @@
   {
     "aonId": 1595,
     "name": "Mask of Terror",
-    "reason": "Cycle 24 (A2): D020 Category 8 spot-check fix. Missing targeting_tags, defense_tags, conditions fields.",
+    "reason": "Cycle 24 (A2): D020 Category 8 spot-check fix. Missing targeting_tags, defense_tags, conditions fields. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: Heidi: spell explicitly heightens to multi-target -> Multi belongs (Fear precedent); debuf [heidi]",
     "overrides": {
       "targeting_tags": [
+        "Multi",
         "ST"
       ],
       "defense_tags": [
@@ -983,7 +1046,7 @@
   {
     "aonId": 1292,
     "name": "Percussive Impact",
-    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors. | Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Bludg\", \"Sonic\"]; defense_tags: [] -> [\"AC\"]. Spell attack roll against target",
+    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors. | Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Bludg\", \"Sonic\"]; defense_tags: [] -> [\"AC\"]. Spell attack roll against target | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_imposed: all conditions evidenced in text: ['Deafened'] [audit]",
     "overrides": {
       "heighten_quality": "scales-okay",
       "targeting_tags": [
@@ -995,17 +1058,27 @@
       ],
       "defense_tags": [
         "AC"
+      ],
+      "conditions_imposed": [
+        "Deafened"
       ]
     }
   },
   {
     "aonId": 1687,
     "name": "Spiritual Armament",
-    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors. | Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
+    "reason": "Cycle 27 — damage-only H+2 rule. Damage spells with +2 heighten pattern cap at scales-okay; +2 scaling leaves dead levels where the spell is below-curve compared to +1 competitors. | Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"] | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): damage_types: types evidenced: ['Bludg', 'Pierc', 'Slash'] [audit]",
     "overrides": {
       "heighten_quality": "scales-okay",
       "targeting_tags": [
         "ST"
+      ],
+      "damage_types": [
+        "Bludg",
+        "Pierc",
+        "Slash",
+        "Spirit",
+        "Varies"
       ]
     }
   },
@@ -1024,17 +1097,20 @@
   {
     "aonId": 2342,
     "name": "Animus Mine",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]. Triggers against one creature that attempts mental manipulation; deals damage to 'the triggering creature' (singular)",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]. Triggers against one creature that attempts mental manipulation; deals damage to 'the triggering creature' (singular) | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Path 2: half-damage on success (spelled out) [v2]",
     "overrides": {
       "targeting_tags": [
         "ST"
+      ],
+      "reliability_tags": [
+        "Success-effect"
       ]
     }
   },
   {
     "aonId": 1236,
     "name": "Aqueous Blast",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"AC\"]. Ranged spell attack roll against one target; deals bludgeoning damage on hit",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"AC\"]. Ranged spell attack roll against one target; deals bludgeoning damage on hit | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_imposed: all conditions evidenced in text: ['Prone'] [audit]; roles: Prone is crit-hit-only rider [model]",
     "overrides": {
       "targeting_tags": [
         "ST"
@@ -1044,13 +1120,20 @@
       ],
       "defense_tags": [
         "AC"
+      ],
+      "conditions_imposed": [
+        "Prone"
+      ],
+      "roles": [
+        "damage",
+        "oneAction"
       ]
     }
   },
   {
     "aonId": 2524,
     "name": "Armor of Thorn and Claw",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Bleed\", \"Pierc\"]; defense_tags: [] -> [\"Auto\"]. Reactive damage to creatures that touch/hit you; no save, no attack roll; affects one attacker at a time",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Bleed\", \"Pierc\"]; defense_tags: [] -> [\"Auto\"]. Reactive damage to creatures that touch/hit you; no save, no attack roll; affects one attacker at a time | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi concur: anti-grab/swallow silver bullet. Audit damage-role strip REJECTED (retaliato [heidi]; special_tags: Heidi concur: anti-grab/swallow silver bullet. Audit damage-role strip REJECTED (retaliato [heidi]",
     "overrides": {
       "targeting_tags": [
         "ST"
@@ -1061,6 +1144,14 @@
       ],
       "defense_tags": [
         "Auto"
+      ],
+      "roles": [
+        "buff",
+        "damage",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
       ]
     }
   },
@@ -1077,7 +1168,7 @@
   {
     "aonId": 2153,
     "name": "Beseech Arcanotheign",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Elec\", \"Sonic\"]; defense_tags: [] -> [\"Ref\"]. Incarnate spell; 60-foot emanation hits all enemies",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Elec\", \"Sonic\"]; defense_tags: [] -> [\"Ref\"]. Incarnate spell; 60-foot emanation hits all enemies | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic=None; text basic-save=True [audit]; conditions_imposed: all conditions evidenced in text: ['Deafened'] [audit]; conditions_by_outcome: all conditions evidenced in text: ['Deafened'] [audit]",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -1088,7 +1179,19 @@
       ],
       "defense_tags": [
         "Ref"
-      ]
+      ],
+      "basic_save": true,
+      "conditions_imposed": [
+        "Deafened"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [],
+        "critical_failure": [
+          "Deafened"
+        ]
+      }
     }
   },
   {
@@ -1125,11 +1228,12 @@
   {
     "aonId": 1279,
     "name": "Blinding Foam",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): st_incap: computed st_incap=True (incap=True, tt=['ST']) [audit]; conditions_by_outcome: normalize empty cbo to null [v2] | cbo:null override removed — audit proposal was wrong; real outcome conditions exist",
     "overrides": {
       "targeting_tags": [
         "ST"
-      ]
+      ],
+      "st_incap": true
     }
   },
   {
@@ -1184,10 +1288,14 @@
   {
     "aonId": 1262,
     "name": "Bound in Death",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"] | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: no success-effect evidence (no basic signal, no success rider) [v2]; roles: damage shunt, no conditions [model]",
     "overrides": {
       "targeting_tags": [
         "ST"
+      ],
+      "reliability_tags": [],
+      "roles": [
+        "damage"
       ]
     }
   },
@@ -1278,7 +1386,7 @@
   {
     "aonId": 2346,
     "name": "Cloak of Light",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Vitality\"]; defense_tags: [] -> [\"Fort\"]. Affects all undead creatures that begin turn adjacent; basic Fortitude save",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Vitality\"]; defense_tags: [] -> [\"Fort\"]. Affects all undead creatures that begin turn adjacent; basic Fortitude save | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic=True; text basic-save=True [audit]",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -1288,24 +1396,26 @@
       ],
       "defense_tags": [
         "Fort"
-      ]
+      ],
+      "basic_save": true
     }
   },
   {
     "aonId": 1979,
     "name": "Concordant Choir",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\", \"Multi\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\", \"Multi\"] | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): heighten_quality: Heidi: Concordant Choir definitely scales well [heidi]",
     "overrides": {
       "targeting_tags": [
         "ST",
         "Multi"
-      ]
+      ],
+      "heighten_quality": "scales-well"
     }
   },
   {
     "aonId": 2497,
     "name": "Conquering Soldiers",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Mental\"]; defense_tags: [] -> [\"Will\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Mental\"]; defense_tags: [] -> [\"Will\"] | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi: remove prebuff; control removed per her Jassim ruling (effect is fright debuff, not [heidi]; conditions_imposed: Heidi: remove prebuff; control removed per her Jassim ruling (effect is fright debuff, not [heidi]; conditions_by_outcome: Heidi: remove prebuff; control removed per her Jassim ruling (effect is fright debuff, not [heidi]; reliability_tags: Heidi: remove prebuff; control removed per her Jassim ruling (effect is fright debuff, not [heidi]",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -1315,6 +1425,31 @@
       ],
       "defense_tags": [
         "Will"
+      ],
+      "roles": [
+        "buff",
+        "damage",
+        "debuff"
+      ],
+      "conditions_imposed": [
+        "Fleeing",
+        "Frightened"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [
+          "Frightened"
+        ],
+        "failure": [
+          "Frightened"
+        ],
+        "critical_failure": [
+          "Fleeing",
+          "Frightened"
+        ]
+      },
+      "reliability_tags": [
+        "Success-effect"
       ]
     }
   },
@@ -1365,7 +1500,7 @@
   {
     "aonId": 1982,
     "name": "Corrosive Muck",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Acid\"]; defense_tags: [] -> [\"Ref\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Acid\"]; defense_tags: [] -> [\"Ref\"] | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic=True; text basic-save=True [audit]; targeting_subtypes: two 10-foot bursts [model]",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -1375,13 +1510,17 @@
       ],
       "defense_tags": [
         "Ref"
+      ],
+      "basic_save": true,
+      "targeting_subtypes": [
+        "Burst"
       ]
     }
   },
   {
     "aonId": 1301,
     "name": "Cyclone Rondo",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Unspecified\"]; defense_tags: [] -> [\"Ref\"]. Deals '4d6 damage' with no type specified; basic Reflex save; also Reflex to avoid prone",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Unspecified\"]; defense_tags: [] -> [\"Ref\"]. Deals '4d6 damage' with no type specified; basic Reflex save; also Reflex to avoid prone | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: Heidi concur: dual-save spell, basic applies to damage component; Success-effect via new P [heidi]; conditions_imposed: Heidi concur: dual-save spell, basic applies to damage component; Success-effect via new P [heidi]; conditions_by_outcome: Heidi concur: dual-save spell, basic applies to damage component; Success-effect via new P [heidi]",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -1391,13 +1530,27 @@
       ],
       "defense_tags": [
         "Ref"
-      ]
+      ],
+      "basic_save": true,
+      "conditions_imposed": [
+        "Prone"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Prone"
+        ],
+        "critical_failure": [
+          "Prone"
+        ]
+      }
     }
   },
   {
     "aonId": 2468,
     "name": "Defended By Spirits",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Spirit\"]; defense_tags: [] -> [\"Auto\"]. Enemy takes spirit damage automatically when attacking the ally; no save or attack roll",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Spirit\"]; defense_tags: [] -> [\"Auto\"]. Enemy takes spirit damage automatically when attacking the ally; no save or attack roll | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Auto defense tag present; Auto-effect pairs with it [v2]",
     "overrides": {
       "targeting_tags": [
         "ST"
@@ -1407,13 +1560,16 @@
       ],
       "defense_tags": [
         "Auto"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
       ]
     }
   },
   {
     "aonId": 892,
     "name": "Deity's Strike",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Force\"]; defense_tags: [] -> [\"AC\", \"Ref\"]. Primary attack uses spell attack roll (AC); secondary area effect requires basic Reflex save | Data-fix C35: Audit — shock wave area is Multi-target offensive effect alongside ST primary attack",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Force\"]; defense_tags: [] -> [\"AC\", \"Ref\"]. Primary attack uses spell attack roll (AC); secondary area effect requires basic Reflex save | Data-fix C35: Audit — shock wave area is Multi-target offensive effect alongside ST primary attack | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic + text basic-save [foundry]",
     "overrides": {
       "targeting_tags": [
         "ST",
@@ -1425,7 +1581,8 @@
       "defense_tags": [
         "AC",
         "Ref"
-      ]
+      ],
+      "basic_save": true
     }
   },
   {
@@ -1474,7 +1631,7 @@
   {
     "aonId": 2327,
     "name": "Devouring Void",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Void\"]; defense_tags: [] -> [\"Fort\", \"Ref\"]. Basic Fortitude save for void damage; Reflex save to avoid move disruption",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Void\"]; defense_tags: [] -> [\"Fort\", \"Ref\"]. Basic Fortitude save for void damage; Reflex save to avoid move disruption | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: Heidi doctrine + audit + Foundry agree: text says basic save though AoN field is null (Sto [heidi]; targeting_subtypes: Heidi doctrine + audit + Foundry agree: text says basic save though AoN field is null (Sto [heidi]",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -1485,13 +1642,17 @@
       "defense_tags": [
         "Fort",
         "Ref"
+      ],
+      "basic_save": true,
+      "targeting_subtypes": [
+        "Burst"
       ]
     }
   },
   {
     "aonId": 2163,
     "name": "Diadem of Divine Radiance",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Spirit\"]; defense_tags: [] -> [\"AC\"]. Ranged spell attack against one target; deals spirit damage",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Spirit\"]; defense_tags: [] -> [\"AC\"]. Ranged spell attack against one target; deals spirit damage | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_imposed: all conditions evidenced in text: ['Dazzled'] [audit]",
     "overrides": {
       "targeting_tags": [
         "ST"
@@ -1501,13 +1662,16 @@
       ],
       "defense_tags": [
         "AC"
+      ],
+      "conditions_imposed": [
+        "Dazzled"
       ]
     }
   },
   {
     "aonId": 2528,
     "name": "Divine Dragon's Watch",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Spirit\"]; defense_tags: [] -> [\"Ref\"]. Dragon's retributive breath has basic Reflex save",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Spirit\"]; defense_tags: [] -> [\"Ref\"]. Dragon's retributive breath has basic Reflex save | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: KO-prevention contingency; breath is a rider [model]",
     "overrides": {
       "targeting_tags": [
         "ST"
@@ -1517,29 +1681,38 @@
       ],
       "defense_tags": [
         "Ref"
+      ],
+      "roles": [
+        "buff",
+        "prebuffs"
       ]
     }
   },
   {
     "aonId": 2529,
     "name": "Dragon Turret",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Ref\"]. Damage type depends on tradition used: arcane=force, divine=spirit, occult=mental, primal=fire. 'Varies' because it changes per caster.",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Ref\"]. Damage type depends on tradition used: arcane=force, divine=spirit, occult=mental, primal=fire. 'Varies' because it changes per caster. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): damage_types: types evidenced: ['Fire', 'Force', 'Mental', 'Spirit'] [audit]; basic_save: foundry basic + text basic-save [foundry]",
     "overrides": {
       "targeting_tags": [
         "Multi"
       ],
       "damage_types": [
+        "Fire",
+        "Force",
+        "Mental",
+        "Spirit",
         "Varies"
       ],
       "defense_tags": [
         "Ref"
-      ]
+      ],
+      "basic_save": true
     }
   },
   {
     "aonId": 1507,
     "name": "Earthquake",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"Ref\"]. Collapse deals bludgeoning damage; basic Reflex save; Reflex to avoid fissures",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"Ref\"]. Collapse deals bludgeoning damage; basic Reflex save; Reflex to avoid fissures | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_imposed: all conditions evidenced in text: ['Prone'] [audit]; conditions_by_outcome: all conditions evidenced in text: ['Prone'] [audit]; basic_save: foundry basic + text basic-save [foundry]; defense_tags: auto terrain/penalties + Ref save [model]; reliability_tags: pairs with Auto [model]",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -1548,7 +1721,27 @@
         "Bludg"
       ],
       "defense_tags": [
+        "Auto",
         "Ref"
+      ],
+      "conditions_imposed": [
+        "Prone"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [
+          "Prone"
+        ],
+        "failure": [
+          "Prone"
+        ],
+        "critical_failure": [
+          "Prone"
+        ]
+      },
+      "basic_save": true,
+      "reliability_tags": [
+        "Auto-effect"
       ]
     }
   },
@@ -1600,7 +1793,7 @@
   {
     "aonId": 2570,
     "name": "Falling Sky",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"Fort\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\"]; defense_tags: [] -> [\"Fort\"] | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: Heidi concur: anti-flight silver bullet; audit offensive package accepted (negation-checke [heidi]; targeting_subtypes: Heidi concur: anti-flight silver bullet; audit offensive package accepted (negation-checke [heidi]; conditions_imposed: Heidi concur: anti-flight silver bullet; audit offensive package accepted (negation-checke [heidi]; conditions_by_outcome: Heidi concur: anti-flight silver bullet; audit offensive package accepted (negation-checke [heidi]; reliability_tags: Heidi concur: anti-flight silver bullet; audit offensive package accepted (negation-checke [heidi]; roles",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -1609,24 +1802,63 @@
         "Bludg"
       ],
       "defense_tags": [
+        "Auto",
         "Fort"
+      ],
+      "targeting_subtypes": [
+        "Cylinder"
+      ],
+      "conditions_imposed": [
+        "Prone",
+        "Stunned"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [
+          "Prone"
+        ],
+        "failure": [
+          "Prone",
+          "Stunned"
+        ],
+        "critical_failure": [
+          "Prone",
+          "Stunned"
+        ]
+      },
+      "reliability_tags": [
+        "Auto-effect",
+        "Success-effect"
+      ],
+      "roles": [
+        "control",
+        "damage",
+        "debuff",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
       ]
     }
   },
   {
     "aonId": 1526,
     "name": "Field of Life",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"] | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: no terrain/zone/movement mechanism [model]",
     "overrides": {
       "targeting_tags": [
         "Multi"
+      ],
+      "roles": [
+        "damage",
+        "healing"
       ]
     }
   },
   {
     "aonId": 2155,
     "name": "Final Fate of The Locust Host",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Pierc\", \"Poison\"]; defense_tags: [] -> [\"Fort\", \"Ref\"]. Depart deals 5d8 piercing + 5d8 poison damage (fixed types, not a choice). Fort save for Arrive sickened; Reflex save for Depart damage.",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Pierc\", \"Poison\"]; defense_tags: [] -> [\"Fort\", \"Ref\"]. Depart deals 5d8 piercing + 5d8 poison damage (fixed types, not a choice). Fort save for Arrive sickened; Reflex save for Depart damage. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic=None; text basic-save=True [audit]; conditions_imposed: all conditions evidenced in text: ['Deafened', 'Drained', 'Sickened', 'Stunned'] [audit]; conditions_by_outcome: outcome-block conditions, negation-checked (dropped: none) [foundry]; conditions_imposed: paired with outcome conditions [foundry]; conditions_by_outcome: outcome-block conditions, negation-checked (dropped: none) [foundry]; conditions_imposed: paired with outcome conditions [foundry]; conditions_by_outcome: outcome-block conditions, negation-checked (dropped: none) [foundry]; conditions_imposed: paire",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -1638,16 +1870,50 @@
       "defense_tags": [
         "Fort",
         "Ref"
-      ]
+      ],
+      "basic_save": true,
+      "conditions_imposed": [
+        "Deafened",
+        "Drained",
+        "Sickened",
+        "Stunned"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [
+          "Sickened"
+        ],
+        "failure": [
+          "Deafened",
+          "Sickened"
+        ],
+        "critical_failure": [
+          "Sickened",
+          "Stunned"
+        ]
+      }
     }
   },
   {
     "aonId": 1529,
     "name": "Fire Shield",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]. Reactive damage to attacker when Shield Blocking melee; affects one creature at a time",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]. Reactive damage to attacker when Shield Blocking melee; affects one creature at a time | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: removed ['AC']: no evidence in foundry/text (source-data error class) [v2]; targeting_tags: evidence + harm [v2] | targeting_tags change DROPPED: Fire Shield keeps retaliatory damage (ST stands) | retaliatory-damage buff class: explicit roles override required — the Auto-strip consistency rule evaluates combat roles before the damage-role rule adds 'damage', stripping Auto and re-firing the offense gate (rule-ordering subtlety -> Bug List)",
     "overrides": {
       "targeting_tags": [
         "ST"
+      ],
+      "defense_tags": [
+        "Auto"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
+      ],
+      "damage_types": [
+        "Fire"
+      ],
+      "roles": [
+        "buff",
+        "damage"
       ]
     }
   },
@@ -1695,7 +1961,7 @@
   {
     "aonId": 1265,
     "name": "Flense",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Bleed\", \"Slash\"]; defense_tags: [] -> [\"AC\"]. Spell attack roll against living creatures",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Bleed\", \"Slash\"]; defense_tags: [] -> [\"AC\"]. Spell attack roll against living creatures | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_imposed: all conditions evidenced in text: ['Enfeebled'] [audit]; roles: Enfeebled is crit-only vs-undead rider [model]",
     "overrides": {
       "targeting_tags": [
         "ST"
@@ -1706,6 +1972,12 @@
       ],
       "defense_tags": [
         "AC"
+      ],
+      "conditions_imposed": [
+        "Enfeebled"
+      ],
+      "roles": [
+        "damage"
       ]
     }
   },
@@ -1728,17 +2000,21 @@
   {
     "aonId": 2352,
     "name": "Fungal Hyphae",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"] | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: no terrain/zone mechanism [model]",
     "overrides": {
       "targeting_tags": [
         "ST"
+      ],
+      "roles": [
+        "damage",
+        "utility"
       ]
     }
   },
   {
     "aonId": 2156,
     "name": "Garden Of The Green Man's Growth",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\", \"Slash\"]; defense_tags: [] -> [\"Ref\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\", \"Slash\"]; defense_tags: [] -> [\"Ref\"] | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic=None; text basic-save=True [audit]; conditions_imposed: all conditions evidenced in text: ['Grabbed', 'Prone', 'Restrained'] [audit]",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -1749,23 +2025,34 @@
       ],
       "defense_tags": [
         "Ref"
+      ],
+      "basic_save": true,
+      "conditions_imposed": [
+        "Prone",
+        "Grabbed",
+        "Restrained"
       ]
     }
   },
   {
     "aonId": 1998,
     "name": "Grisly Growths",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"] | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: +Will:text/foundry [audit]; targeting_tags: 1 creature + heighten [model]",
     "overrides": {
       "targeting_tags": [
+        "Multi",
         "ST"
+      ],
+      "defense_tags": [
+        "Fort",
+        "Will"
       ]
     }
   },
   {
     "aonId": 1552,
     "name": "Harm",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\", \"Multi\"]; damage_types: [] -> [\"Void\"]; defense_tags: [] -> [\"Fort\"]. 1-action: touch, single target (ST). 3-action: 30-foot emanation (Multi). Basic Fortitude save.",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\", \"Multi\"]; damage_types: [] -> [\"Void\"]; defense_tags: [] -> [\"Fort\"]. 1-action: touch, single target (ST). 3-action: 30-foot emanation (Multi). Basic Fortitude save. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic=True; text basic-save=True [audit]",
     "overrides": {
       "targeting_tags": [
         "ST",
@@ -1776,23 +2063,45 @@
       ],
       "defense_tags": [
         "Fort"
-      ]
+      ],
+      "basic_save": true
     }
   },
   {
     "aonId": 2508,
     "name": "Holy Host",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"AC\"]. Incarnate summon with multiple army choices (Agathions=fire, Angels=spirit, Archons=sonic). Caster chooses which army. 'Varies' is appropriate.",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"AC\"]. Incarnate summon with multiple army choices (Agathions=fire, Angels=spirit, Archons=sonic). Caster chooses which army. 'Varies' is appropriate. | Cycle 40 integrated data correction: Heidi: remove prebuffs (1-round duration) + ensure damage role; control removed per Jassim ruling (squadron effects, not zone control); defense Fort/Ref/Will per audit read (no attack rolls in text); all six audit conditions text-evidenced; basic_save true (modes use literal basic saves) -> Success-effect via Path-1 rule; damage types Varies + evidenced types",
     "overrides": {
       "targeting_tags": [
         "Multi"
       ],
       "damage_types": [
+        "Fire",
+        "Mental",
+        "Slash",
+        "Sonic",
+        "Spirit",
         "Varies"
       ],
       "defense_tags": [
-        "AC"
-      ]
+        "Fort",
+        "Ref",
+        "Will"
+      ],
+      "roles": [
+        "buff",
+        "damage",
+        "debuff"
+      ],
+      "conditions_imposed": [
+        "Blinded",
+        "Deafened",
+        "Enfeebled",
+        "Frightened",
+        "Prone",
+        "Stunned"
+      ],
+      "basic_save": true
     }
   },
   {
@@ -1818,10 +2127,13 @@
   {
     "aonId": 2572,
     "name": "Implement of Destruction",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"] | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: success: 2d6 mental still applies [model]",
     "overrides": {
       "targeting_tags": [
         "ST"
+      ],
+      "reliability_tags": [
+        "Success-effect"
       ]
     }
   },
@@ -1838,7 +2150,7 @@
   {
     "aonId": 1102,
     "name": "Incendiary Fog",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Fire\"]; defense_tags: [] -> [\"Ref\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Fire\"]; defense_tags: [] -> [\"Ref\"] | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic=True; text basic-save=True [audit]",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -1848,7 +2160,8 @@
       ],
       "defense_tags": [
         "Ref"
-      ]
+      ],
+      "basic_save": true
     }
   },
   {
@@ -1864,7 +2177,7 @@
   {
     "aonId": 1229,
     "name": "Inkshot",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Poison\"]; defense_tags: [] -> [\"AC\"]. Spell attack roll against one target",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Poison\"]; defense_tags: [] -> [\"AC\"]. Spell attack roll against one target | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_imposed: all conditions evidenced in text: ['Dazzled'] [audit]",
     "overrides": {
       "targeting_tags": [
         "ST"
@@ -1874,13 +2187,16 @@
       ],
       "defense_tags": [
         "AC"
+      ],
+      "conditions_imposed": [
+        "Dazzled"
       ]
     }
   },
   {
     "aonId": 2509,
     "name": "Instant Minefield",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Fire\", \"Pierc\"]; defense_tags: [] -> [\"Ref\"]. Mines explode in 5-foot emanation; basic Reflex save; can affect multiple creatures",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Fire\", \"Pierc\"]; defense_tags: [] -> [\"Ref\"]. Mines explode in 5-foot emanation; basic Reflex save; can affect multiple creatures | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic + text basic-save [foundry]",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -1891,13 +2207,14 @@
       ],
       "defense_tags": [
         "Ref"
-      ]
+      ],
+      "basic_save": true
     }
   },
   {
     "aonId": 2510,
     "name": "Jassim's Allegiance",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Fire\", \"Pierc\", \"Slash\"]; defense_tags: [] -> [\"Fort\", \"Ref\"]. Fixed damage types: Arrive deals fire+piercing, Depart deals slashing. All three always apply.",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Fire\", \"Pierc\", \"Slash\"]; defense_tags: [] -> [\"Fort\", \"Ref\"]. Fixed damage types: Arrive deals fire+piercing, Depart deals slashing. All three always apply. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_imposed: Audit conditions accepted (text-evidenced); Heidi: roles damage+debuff correct as-is (no c [heidi]; reliability_tags: Audit conditions accepted (text-evidenced); Heidi: roles damage+debuff correct as-is (no c [heidi]",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -1910,6 +2227,13 @@
       "defense_tags": [
         "Fort",
         "Ref"
+      ],
+      "conditions_imposed": [
+        "Drained",
+        "Sickened"
+      ],
+      "reliability_tags": [
+        "Success-effect"
       ]
     }
   },
@@ -1959,10 +2283,13 @@
   {
     "aonId": 1078,
     "name": "Mirecloak",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"] | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: text + foundry both say Will (replaces Fort) [model]",
     "overrides": {
       "targeting_tags": [
         "Multi"
+      ],
+      "defense_tags": [
+        "Will"
       ]
     }
   },
@@ -1985,7 +2312,7 @@
   {
     "aonId": 1093,
     "name": "Nettleskin",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Pierc\"]; defense_tags: [] -> [\"Auto\"]. Thorns deal piercing damage to adjacent creatures that hit you with melee; no save; one attacker at a time",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Pierc\"]; defense_tags: [] -> [\"Auto\"]. Thorns deal piercing damage to adjacent creatures that hit you with melee; no save; one attacker at a time | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Heidi rejected prebuff flag; audit Auto-effect ACCEPTED (Auto defense tag requires Auto-ef [heidi]",
     "overrides": {
       "targeting_tags": [
         "ST"
@@ -1995,6 +2322,9 @@
       ],
       "defense_tags": [
         "Auto"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
       ]
     }
   },
@@ -2070,17 +2400,31 @@
   {
     "aonId": 2512,
     "name": "Pest Swarm",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Fort\", \"Ref\"]. Auto-override: Incarnate summon with multiple pest choices (Cockroaches=pierc, Mosquitoes=pierc, Rats=slash, etc). Caster chooses which pest. 'Varies' is appropriate.",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Fort\", \"Ref\"]. Auto-override: Incarnate summon with multiple pest choices (Cockroaches=pierc, Mosquitoes=pierc, Rats=slash, etc). Caster chooses which pest. 'Varies' is appropriate. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_imposed: all conditions evidenced in text: ['Clumsy', 'Dazzled', 'Drained', 'Prone', 'Sickened'] [audit]; damage_types: types evidenced: ['Acid', 'Bleed', 'Bludg', 'Pierc', 'Poison', 'Slash', 'Sonic'] [audit]",
     "overrides": {
       "targeting_tags": [
         "Multi"
       ],
       "damage_types": [
+        "Acid",
+        "Bleed",
+        "Bludg",
+        "Pierc",
+        "Poison",
+        "Slash",
+        "Sonic",
         "Varies"
       ],
       "defense_tags": [
         "Fort",
         "Ref"
+      ],
+      "conditions_imposed": [
+        "Sickened",
+        "Drained",
+        "Dazzled",
+        "Prone",
+        "Clumsy"
       ]
     }
   },
@@ -2117,7 +2461,7 @@
   {
     "aonId": 1230,
     "name": "Phantasmal Protagonist",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Mental\"]; defense_tags: [] -> [\"AC\", \"Will\"]. Melee Strike uses spell attack roll (AC); also has Will save for flat-footed/slowed effect",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Mental\"]; defense_tags: [] -> [\"AC\", \"Will\"]. Melee Strike uses spell attack roll (AC); also has Will save for flat-footed/slowed effect | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_imposed: all conditions evidenced in text: ['Off-Guard', 'Slowed'] [audit]; conditions_by_outcome: all conditions evidenced in text: ['Off-Guard', 'Slowed'] [audit]",
     "overrides": {
       "targeting_tags": [
         "ST"
@@ -2128,7 +2472,22 @@
       "defense_tags": [
         "AC",
         "Will"
-      ]
+      ],
+      "conditions_imposed": [
+        "Off-Guard",
+        "Slowed"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Off-Guard"
+        ],
+        "critical_failure": [
+          "Off-Guard",
+          "Slowed"
+        ]
+      }
     }
   },
   {
@@ -2144,7 +2503,7 @@
   {
     "aonId": 1407,
     "name": "Pollen Pods",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Poison\"]; defense_tags: [] -> [\"Fort\"]. Deals poison damage; Fortitude save",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Poison\"]; defense_tags: [] -> [\"Fort\"]. Deals poison damage; Fortitude save | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_imposed: all conditions evidenced in text: ['Dazzled', 'Stupefied'] [audit]; conditions_by_outcome: all conditions evidenced in text: ['Dazzled', 'Stupefied'] [audit]; reliability_tags: success outcome block has conditions (Path 2) [audit]",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -2154,6 +2513,27 @@
       ],
       "defense_tags": [
         "Fort"
+      ],
+      "conditions_imposed": [
+        "Dazzled",
+        "Stupefied"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [
+          "Dazzled"
+        ],
+        "failure": [
+          "Dazzled",
+          "Stupefied"
+        ],
+        "critical_failure": [
+          "Dazzled",
+          "Stupefied"
+        ]
+      },
+      "reliability_tags": [
+        "Success-effect"
       ]
     }
   },
@@ -2262,10 +2642,14 @@
   {
     "aonId": 1266,
     "name": "Ravenous Darkness",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"] | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_by_outcome: normalize empty cbo to null [v2]; defense_tags: attack roll vs Fortitude DC — defense tested is Fort [model]",
     "overrides": {
       "targeting_tags": [
         "Multi"
+      ],
+      "conditions_by_outcome": null,
+      "defense_tags": [
+        "Fort"
       ]
     }
   },
@@ -2301,23 +2685,29 @@
   {
     "aonId": 2362,
     "name": "Reflective Scales",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Ref\"]. Caster chooses acid/cold/fire/electricity/poison; explodes in 20-foot emanation; basic Reflex save",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Ref\"]. Caster chooses acid/cold/fire/electricity/poison; explodes in 20-foot emanation; basic Reflex save | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): damage_types: types evidenced: ['Acid', 'Cold', 'Elec', 'Fire', 'Poison'] [audit]; basic_save: foundry basic=None; text basic-save=True [audit]",
     "overrides": {
       "targeting_tags": [
         "Multi"
       ],
       "damage_types": [
+        "Acid",
+        "Cold",
+        "Elec",
+        "Fire",
+        "Poison",
         "Varies"
       ],
       "defense_tags": [
         "Ref"
-      ]
+      ],
+      "basic_save": true
     }
   },
   {
     "aonId": 711,
     "name": "Rusting Grasp",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Unspecified\"]; defense_tags: [] -> [\"Fort\", \"Ref\"]. Damage has no named type (it's rust damage); Fortitude save for metal creatures, Reflex save for items | Audit 2026-05-11 Silver Bullet: Extremely effective against metal creatures and for destroying metal equipment. Heidi concurs. Merges with existing override (adds silverBullets to roles, Silver Bullet to special_tags).",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Unspecified\"]; defense_tags: [] -> [\"Fort\", \"Ref\"]. Damage has no named type (it's rust damage); Fortitude save for metal creatures, Reflex save for items | Audit 2026-05-11 Silver Bullet: Extremely effective against metal creatures and for destroying metal equipment. Heidi concurs. Merges with existing override (adds silverBullets to roles, Silver Bullet to special_tags). | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic + text basic-save [foundry]",
     "overrides": {
       "targeting_tags": [
         "ST"
@@ -2335,7 +2725,8 @@
       ],
       "special_tags": [
         "Silver Bullet"
-      ]
+      ],
+      "basic_save": true
     }
   },
   {
@@ -2386,50 +2777,62 @@
   {
     "aonId": 2161,
     "name": "Seize Identity",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"] | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: success: appearance taken [model]",
     "overrides": {
       "targeting_tags": [
         "ST"
+      ],
+      "reliability_tags": [
+        "Success-effect"
       ]
     }
   },
   {
     "aonId": 1666,
     "name": "Shadow Blast",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Ref\", \"Will\"]. Caster chooses damage type from long list; area spell (cone/burst/line); target chooses Reflex or Will save",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Ref\", \"Will\"]. Caster chooses damage type from long list; area spell (cone/burst/line); target chooses Reflex or Will save | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): damage_types: types evidenced: ['Acid', 'Bludg', 'Cold', 'Elec', 'Fire', 'Force', 'Pierc', 'Slash', 'Son [audit]; basic_save: Defense line literally 'reflex|basic' (target's choice of save) [model]",
     "overrides": {
       "targeting_tags": [
         "Multi"
       ],
       "damage_types": [
+        "Acid",
+        "Bludg",
+        "Cold",
+        "Elec",
+        "Fire",
+        "Force",
+        "Pierc",
+        "Slash",
+        "Sonic",
+        "Spirit",
         "Varies"
       ],
       "defense_tags": [
         "Ref",
         "Will"
-      ]
+      ],
+      "basic_save": true
     }
   },
   {
     "aonId": 1670,
     "name": "Shatter",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Sonic\"]; defense_tags: [] -> [\"Auto\"]. Targets unattended object; no save, no attack roll; sonic damage to object",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Sonic\"]; defense_tags: [] -> [\"Auto\"]. Targets unattended object; no save, no attack roll; sonic damage to object | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: removed ['Auto']: no evidence in foundry/text (source-data error class) [v2]; targeting_tags: evidence + harm [v2]; roles: object-only damage (FieldDef damage rule #1) [model]; damage_types: object-only damage cleared so damage role isn't rule-re-added [model]; heighten_quality: heighten only matters vs objects [model]; damage_types: object-only damage (paired with roles) [model]",
     "overrides": {
-      "targeting_tags": [
-        "ST"
+      "targeting_tags": [],
+      "damage_types": [],
+      "defense_tags": [],
+      "roles": [
+        "utility"
       ],
-      "damage_types": [
-        "Sonic"
-      ],
-      "defense_tags": [
-        "Auto"
-      ]
+      "heighten_quality": "scaling-irrelevant"
     }
   },
   {
     "aonId": 2364,
     "name": "Shattering Gem",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Slash\"]; defense_tags: [] -> [\"Ref\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"ST\"]; damage_types: [] -> [\"Slash\"]; defense_tags: [] -> [\"Ref\"] | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic=True; text basic-save=True [audit]",
     "overrides": {
       "targeting_tags": [
         "ST"
@@ -2439,30 +2842,44 @@
       ],
       "defense_tags": [
         "Ref"
-      ]
+      ],
+      "basic_save": true
     }
   },
   {
     "aonId": 1362,
     "name": "Signal Skyrocket",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Fire\", \"Sonic\"]; defense_tags: [] -> [\"Ref\"]. Reflex save when exploding in enclosed space",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Fire\", \"Sonic\"]; defense_tags: [] -> [\"Ref\"]. Reflex save when exploding in enclosed space | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_imposed: all conditions evidenced in text: ['Blinded', 'Dazzled'] [audit]; conditions_by_outcome: all conditions evidenced in text: ['Blinded', 'Dazzled'] [audit]; damage_types: only sonic damage dealt; fire is flavor [model]",
     "overrides": {
       "targeting_tags": [
         "Multi"
       ],
       "damage_types": [
-        "Fire",
         "Sonic"
       ],
       "defense_tags": [
         "Ref"
-      ]
+      ],
+      "conditions_imposed": [
+        "Dazzled",
+        "Blinded"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Dazzled"
+        ],
+        "critical_failure": [
+          "Blinded"
+        ]
+      }
     }
   },
   {
     "aonId": 2515,
     "name": "Skeleton Army",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bleed\", \"Pierc\", \"Slash\"]; defense_tags: [] -> [\"Ref\"]. Incarnate spell; 20-foot emanation affects all enemies",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bleed\", \"Pierc\", \"Slash\"]; defense_tags: [] -> [\"Ref\"]. Incarnate spell; 20-foot emanation affects all enemies | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_imposed: all conditions evidenced in text: ['Frightened'] [audit]; conditions_by_outcome: all conditions evidenced in text: ['Frightened'] [audit]; roles: conditions crit-fail-only [model] | basic_save: literal basic save in mode text (Story B class); Success-effect via Path-1 rule",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -2474,7 +2891,23 @@
       ],
       "defense_tags": [
         "Ref"
-      ]
+      ],
+      "conditions_imposed": [
+        "Frightened"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [],
+        "critical_failure": [
+          "Frightened"
+        ]
+      },
+      "roles": [
+        "control",
+        "damage"
+      ],
+      "basic_save": true
     }
   },
   {
@@ -2506,7 +2939,7 @@
   {
     "aonId": 1256,
     "name": "Summon Ancient Fleshforged",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"AC\"]. Caster chooses which Fleshforged to summon; each deals different damage types. 'Varies' is appropriate.",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"AC\"]. Caster chooses which Fleshforged to summon; each deals different damage types. 'Varies' is appropriate. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: Heidi supplied truncated Thorn Caller text: auto Dazzled+Off-Guard (flat-footed) on foes + [heidi]; conditions_imposed: Heidi supplied truncated Thorn Caller text: auto Dazzled+Off-Guard (flat-footed) on foes + [heidi]; conditions_by_outcome: Heidi supplied truncated Thorn Caller text: auto Dazzled+Off-Guard (flat-footed) on foes + [heidi]; reliability_tags: Heidi supplied truncated Thorn Caller text: auto Dazzled+Off-Guard (flat-footed) on foes + [heidi]",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -2515,7 +2948,32 @@
         "Varies"
       ],
       "defense_tags": [
-        "AC"
+        "AC",
+        "Fort"
+      ],
+      "conditions_imposed": [
+        "Dazzled",
+        "Enfeebled",
+        "Off-Guard"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [
+          "Enfeebled"
+        ],
+        "failure": [
+          "Dazzled",
+          "Enfeebled",
+          "Off-Guard"
+        ],
+        "critical_failure": [
+          "Dazzled",
+          "Enfeebled",
+          "Off-Guard"
+        ]
+      },
+      "reliability_tags": [
+        "Success-effect"
       ]
     }
   },
@@ -2581,7 +3039,7 @@
   {
     "aonId": 1423,
     "name": "Summon Elemental Herald",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bleed\", \"Bludg\", \"Cold\", \"Elec\", \"Fire\", \"Pierc\", \"Slash\", \"Sonic\"]; defense_tags: [] -> [\"Fort\", \"Ref\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bleed\", \"Bludg\", \"Cold\", \"Elec\", \"Fire\", \"Pierc\", \"Slash\", \"Sonic\"]; defense_tags: [] -> [\"Fort\", \"Ref\"] | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: Heidi supplied truncated Water-herald text: basic Fortitude saves (Story B class) + Pushed [heidi]; conditions_imposed: Heidi supplied truncated Water-herald text: basic Fortitude saves (Story B class) + Pushed [heidi]; conditions_by_outcome: Heidi supplied truncated Water-herald text: basic Fortitude saves (Story B class) + Pushed [heidi]",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -2599,13 +3057,32 @@
       "defense_tags": [
         "Fort",
         "Ref"
-      ]
+      ],
+      "basic_save": true,
+      "conditions_imposed": [
+        "Deafened",
+        "Prone",
+        "Pushed"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Prone",
+          "Pushed"
+        ],
+        "critical_failure": [
+          "Deafened",
+          "Prone",
+          "Pushed"
+        ]
+      }
     }
   },
   {
     "aonId": 2162,
     "name": "Summon Oliphaunt Of Jandelay",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\", \"Force\"]; defense_tags: [] -> [\"Fort\", \"Ref\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Bludg\", \"Force\"]; defense_tags: [] -> [\"Fort\", \"Ref\"] | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic=None; text basic-save=True [audit]",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -2617,13 +3094,14 @@
       "defense_tags": [
         "Fort",
         "Ref"
-      ]
+      ],
+      "basic_save": true
     }
   },
   {
     "aonId": 1209,
     "name": "Swallow Light",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Cold\", \"Void\"]; defense_tags: [] -> [\"Ref\"]. Breath weapon is 15-foot cone (Multi); primary target is a light effect but damage delivery is AoE",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Cold\", \"Void\"]; defense_tags: [] -> [\"Ref\"]. Breath weapon is 15-foot cone (Multi); primary target is a light effect but damage delivery is AoE | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic=True; text basic-save=True [audit]",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -2634,7 +3112,8 @@
       ],
       "defense_tags": [
         "Ref"
-      ]
+      ],
+      "basic_save": true
     }
   },
   {
@@ -2673,17 +3152,22 @@
   {
     "aonId": 1725,
     "name": "Tree of Seasons",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Ref\"]. Each pod explodes in 5-foot burst; damage type varies by season chosen (electricity/fire/poison/cold); basic Reflex save",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Ref\"]. Each pod explodes in 5-foot burst; damage type varies by season chosen (electricity/fire/poison/cold); basic Reflex save | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: Heidi: basic Reflex correct (text says so; AoN field null). Her question answered: YES aud [heidi]; damage_types: Heidi: basic Reflex correct (text says so; AoN field null). Her question answered: YES aud [heidi]",
     "overrides": {
       "targeting_tags": [
         "Multi"
       ],
       "damage_types": [
+        "Cold",
+        "Elec",
+        "Fire",
+        "Poison",
         "Varies"
       ],
       "defense_tags": [
         "Ref"
-      ]
+      ],
+      "basic_save": true
     }
   },
   {
@@ -2699,19 +3183,61 @@
   {
     "aonId": 2518,
     "name": "Unholy Army",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Fort\", \"Ref\", \"Will\"]. Auto-override: Incarnate summon with multiple army choices (Asuras=slash/bludg, Daemons=varies, Demons=fire, Devils=spirit). Caster chooses army. 'Varies' is appropriate.",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Varies\"]; defense_tags: [] -> [\"Fort\", \"Ref\", \"Will\"]. Auto-override: Incarnate summon with multiple army choices (Asuras=slash/bludg, Daemons=varies, Demons=fire, Devils=spirit). Caster chooses army. 'Varies' is appropriate. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): damage_types: types evidenced: ['Bleed', 'Bludg', 'Fire', 'Mental', 'Pierc', 'Slash', 'Spirit'] [audit]; conditions_imposed: all conditions evidenced in text: ['Blinded', 'Clumsy', 'Confused', 'Deafened', 'Drained', [audit]; conditions_by_outcome: all conditions evidenced in text: ['Blinded', 'Clumsy', 'Confused', 'Deafened', 'Drained', [audit]",
     "overrides": {
       "targeting_tags": [
         "Multi"
       ],
       "damage_types": [
+        "Bleed",
+        "Bludg",
+        "Fire",
+        "Mental",
+        "Pierc",
+        "Slash",
+        "Spirit",
         "Varies"
       ],
       "defense_tags": [
         "Fort",
         "Ref",
         "Will"
-      ]
+      ],
+      "conditions_imposed": [
+        "Clumsy",
+        "Sickened",
+        "Drained",
+        "Confused",
+        "Prone",
+        "Immobilized",
+        "Blinded",
+        "Frightened",
+        "Deafened"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Clumsy",
+          "Sickened",
+          "Drained",
+          "Confused",
+          "Prone",
+          "Frightened",
+          "Deafened"
+        ],
+        "critical_failure": [
+          "Clumsy",
+          "Sickened",
+          "Drained",
+          "Confused",
+          "Prone",
+          "Immobilized",
+          "Blinded",
+          "Frightened",
+          "Deafened"
+        ]
+      }
     }
   },
   {
@@ -2782,7 +3308,7 @@
   {
     "aonId": 1748,
     "name": "Wall of Fire",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Fire\"]; defense_tags: [] -> [\"Auto\"]",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Fire\"]; defense_tags: [] -> [\"Auto\"] | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Auto defense tag present; Auto-effect pairs with it [v2]",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -2792,13 +3318,16 @@
       ],
       "defense_tags": [
         "Auto"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
       ]
     }
   },
   {
     "aonId": 2042,
     "name": "Wall of Flesh",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Pierc\"]; defense_tags: [] -> [\"AC\", \"Ref\"]. Mouths use spell attack modifier (AC) for Strikes; Arms variant has Reflex save",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Pierc\"]; defense_tags: [] -> [\"AC\", \"Ref\"]. Mouths use spell attack modifier (AC) for Strikes; Arms variant has Reflex save | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_imposed: all conditions evidenced in text: ['Grabbed', 'Restrained'] [audit]; conditions_by_outcome: all conditions evidenced in text: ['Grabbed', 'Restrained'] [audit]",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -2809,13 +3338,27 @@
       "defense_tags": [
         "AC",
         "Ref"
-      ]
+      ],
+      "conditions_imposed": [
+        "Grabbed",
+        "Restrained"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Grabbed"
+        ],
+        "critical_failure": [
+          "Restrained"
+        ]
+      }
     }
   },
   {
     "aonId": 2546,
     "name": "Wall of Mirrors",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Mental\"]; defense_tags: [] -> [\"Will\"]. Deals mental damage to creatures that Strike it; basic Will save",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Mental\"]; defense_tags: [] -> [\"Will\"]. Deals mental damage to creatures that Strike it; basic Will save | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: barrier + concealment; retaliation is enemy-choice rider [model]; heighten_quality: heighten only scales the rider [model] | basic_save: literal basic save in mode text (Story B class); Success-effect via Path-1 rule",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -2825,7 +3368,12 @@
       ],
       "defense_tags": [
         "Will"
-      ]
+      ],
+      "roles": [
+        "control"
+      ],
+      "heighten_quality": "scaling-irrelevant",
+      "basic_save": true
     }
   },
   {
@@ -2847,7 +3395,7 @@
   {
     "aonId": 1127,
     "name": "Wall of Virtue",
-    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Spirit\", \"Vitality\"]; defense_tags: [] -> [\"Auto\"]. Legacy \"good\" damage = Spirit in remaster schema; positive = Vitality. No save for wall damage = Auto.",
+    "reason": "Cycle 30: Data-fix: targeting_tags: [] -> [\"Multi\"]; damage_types: [] -> [\"Spirit\", \"Vitality\"]; defense_tags: [] -> [\"Auto\"]. Legacy \"good\" damage = Spirit in remaster schema; positive = Vitality. No save for wall damage = Auto. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Auto defense tag present; Auto-effect pairs with it [v2]",
     "overrides": {
       "targeting_tags": [
         "Multi"
@@ -2858,6 +3406,9 @@
       ],
       "defense_tags": [
         "Auto"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
       ]
     }
   },
@@ -3289,11 +3840,12 @@
   {
     "aonId": 898,
     "name": "Draw the Lightning",
-    "reason": "Data-fix C35: Audit — spell text says 'basic Reflex save'; half damage on success = Success-effect",
+    "reason": "Data-fix C35: Audit — spell text says 'basic Reflex save'; half damage on success = Success-effect | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic + text basic-save [foundry]",
     "overrides": {
       "reliability_tags": [
         "Success-effect"
-      ]
+      ],
+      "basic_save": true
     }
   },
   {
@@ -3338,14 +3890,15 @@
   {
     "aonId": 930,
     "name": "Inevitable Disaster",
-    "reason": "Data-fix C35: Audit — damage has no named type (GM determines); Unspecified per FDR. Basic Fortitude = Success-effect.",
+    "reason": "Data-fix C35: Audit — damage has no named type (GM determines); Unspecified per FDR. Basic Fortitude = Success-effect. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic + text basic-save [foundry]",
     "overrides": {
       "damage_types": [
         "Unspecified"
       ],
       "reliability_tags": [
         "Success-effect"
-      ]
+      ],
+      "basic_save": true
     }
   },
   {
@@ -3714,7 +4267,2491 @@
   {
     "aonId": 1631,
     "name": "Phantasmal Minion",
-    "reason": "Cycle 39 (Heidi, 2026-06-11): Re-roled to pure utility. Summon trait triggered the Summon->control rule, but it summons an EFFECT (always-on telekinesis for fetch/carry), not a creature with HP/actions usable in combat. Decision 011 exception.",
+    "reason": "Cycle 39 (Heidi, 2026-06-11): Re-roled to pure utility. Summon trait triggered the Summon->control rule, but it summons an EFFECT (always-on telekinesis for fetch/carry), not a creature with HP/actions usable in combat. Decision 011 exception. | Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): action_tags: invalid 'Action Efficiency' enum value [model] | action_tags removal REVERTED: Action Efficiency is a real Decision 002/C23 tag; Field Definition Reference valid-values list was incomplete (doc defect fixed this cycle)",
+    "overrides": {
+      "roles": [
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 714,
+    "name": "Sculpt Sound",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: foundry save/attack + harm signal present [foundry]; conditions_by_outcome: outcome-block conditions, negation-checked (dropped: none) [foundry]; conditions_imposed: paired with outcome conditions [foundry]",
+    "overrides": {
+      "defense_tags": [
+        "Will"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [],
+        "critical_failure": [
+          "Stupefied"
+        ]
+      },
+      "conditions_imposed": [
+        "Stupefied"
+      ]
+    }
+  },
+  {
+    "aonId": 859,
+    "name": "Mind Games",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_by_outcome: outcome-block conditions, negation-checked (dropped: none) [foundry]; conditions_imposed: paired with outcome conditions [foundry]",
+    "overrides": {
+      "conditions_by_outcome": {
+        "critical_success": [
+          "Stunned"
+        ],
+        "success": [],
+        "failure": [
+          "Stunned"
+        ],
+        "critical_failure": [
+          "Stunned"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 883,
+    "name": "Chromatic Ray",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: foundry save/attack + harm signal present [foundry]",
+    "overrides": {
+      "defense_tags": [
+        "AC",
+        "Fort"
+      ]
+    }
+  },
+  {
+    "aonId": 888,
+    "name": "Corrosive Body",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): damage_types: text evidences ['Acid'] [foundry] | defense Auto added (retaliatory-damage buff, Nettleskin precedent) | retaliatory-damage buff class: explicit roles override required — the Auto-strip consistency rule evaluates combat roles before the damage-role rule adds 'damage', stripping Auto and re-firing the offense gate (rule-ordering subtlety -> Bug List)",
+    "overrides": {
+      "damage_types": [
+        "Acid"
+      ],
+      "defense_tags": [
+        "Auto"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
+      ],
+      "roles": [
+        "buff",
+        "damage"
+      ]
+    }
+  },
+  {
+    "aonId": 1030,
+    "name": "Warrior's Regret",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: curse damage, no conditions (rubric) [model]; heighten_quality: damage-only plus_2 cap [model]",
+    "overrides": {
+      "roles": [
+        "damage"
+      ],
+      "heighten_quality": "scales-okay"
+    }
+  },
+  {
+    "aonId": 1063,
+    "name": "Catch Your Name",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: Heidi rejected silverBullets flag (no role change); audit def-removal ACCEPTED per harm ru [heidi]",
+    "overrides": {
+      "defense_tags": []
+    }
+  },
+  {
+    "aonId": 1075,
+    "name": "Swampcall",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: +Ref:text/foundry [audit]; targeting_tags: Multi:ok [audit]; conditions_imposed: all conditions evidenced in text: ['Off-Guard'] [audit]; conditions_by_outcome: all conditions evidenced in text: ['Off-Guard'] [audit]",
+    "overrides": {
+      "defense_tags": [
+        "Ref"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "conditions_imposed": [
+        "Off-Guard"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Off-Guard"
+        ],
+        "critical_failure": [
+          "Off-Guard"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 1088,
+    "name": "Temporal Ward",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Confused is crit-fail-only rider [model]",
+    "overrides": {
+      "roles": [
+        "control"
+      ]
+    }
+  },
+  {
+    "aonId": 1094,
+    "name": "Impart Empathy",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: non-offensive social utility (harm rubric) [model]",
+    "overrides": {
+      "defense_tags": []
+    }
+  },
+  {
+    "aonId": 1098,
+    "name": "Boneshaker",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_by_outcome: outcome-block conditions, negation-checked (dropped: none) [foundry]; conditions_imposed: paired with outcome conditions [foundry]",
+    "overrides": {
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [
+          "Prone"
+        ],
+        "failure": [
+          "Enfeebled"
+        ],
+        "critical_failure": [
+          "Enfeebled",
+          "Prone"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 1107,
+    "name": "Sage's Curse",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: Heidi concur: Attack trait is AoN source error (text has only Will save) -> AC removed; au [heidi]; reliability_tags: Heidi concur: Attack trait is AoN source error (text has only Will save) -> AC removed; au [heidi]",
+    "overrides": {
+      "defense_tags": [
+        "Will"
+      ],
+      "reliability_tags": []
+    }
+  },
+  {
+    "aonId": 1109,
+    "name": "Buffeting Winds",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic=True; text basic-save=True [audit]",
+    "overrides": {
+      "basic_save": true
+    }
+  },
+  {
+    "aonId": 1116,
+    "name": "Enhance Senses",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): heighten_quality: plus_2 pattern needs scales-* label [model]",
+    "overrides": {
+      "heighten_quality": "scales-okay"
+    }
+  },
+  {
+    "aonId": 1122,
+    "name": "Purifying Icicle",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: Heidi concur: Fortitude in stat block is AoN source error; text has only a spell attack ro [heidi]",
+    "overrides": {
+      "defense_tags": [
+        "AC"
+      ]
+    }
+  },
+  {
+    "aonId": 1125,
+    "name": "Sign of Conviction",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_by_outcome: normalize empty cbo to null [v2]",
+    "overrides": {
+      "conditions_by_outcome": null
+    }
+  },
+  {
+    "aonId": 1208,
+    "name": "Shadow Zombie",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: 1 zombie target, control-harm [model]",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 1211,
+    "name": "Umbral Mindtheft",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): damage_types: text evidences ['Mental'] [foundry]; roles: Steal mechanism is a skill check; damage role re-added by rule if Mental damage lands [model] | Mental damage dropped: no clear defense for the Steal mechanism; offense gate incompatible",
+    "overrides": {
+      "roles": [
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 1216,
+    "name": "Hag's Fruit",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: Heidi rejected silverBullets flag; audit ST ACCEPTED (1-creature target, Unconscious impos [heidi]",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 1225,
+    "name": "Radiant Heart of Devotion",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_by_outcome: all conditions evidenced in text: ['Blinded', 'Dazzled'] [audit]",
+    "overrides": {
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Dazzled",
+          "Blinded"
+        ],
+        "critical_failure": [
+          "Dazzled",
+          "Blinded"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 1238,
+    "name": "Vision of Beauty",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): st_incap: computed from Incapacitation trait + final targeting (deterministic definition) [v2]; heighten_quality: plus_2 adds targets — Fear precedent label [model]; targeting_tags: 1 creature + heighten adds targets (Fear precedent) [model]",
+    "overrides": {
+      "heighten_quality": "scales-okay",
+      "targeting_tags": [
+        "Multi",
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 1240,
+    "name": "Infectious Comedy",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: success: can't use reactions [model]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1257,
+    "name": "Summon Healing Servitor",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: +Fort:text/foundry [audit]; targeting_tags: Multi:ok [audit]; damage_types: types evidenced: ['Vitality'] [audit]; basic_save: foundry basic=True; text basic-save=True [audit]; defense_tags: Heal convention: Summon Healing Servitor deals vitality damage to undead w/ basic Fort (fo [heidi]; damage_types: Heal convention: Summon Healing Servitor deals vitality damage to undead w/ basic Fort (fo [heidi]; basic_save: Heal convention: Summon Healing Servitor deals vitality damage to undead w/ basic Fort (fo [heidi]",
+    "overrides": {
+      "defense_tags": [
+        "Fort"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Vitality"
+      ],
+      "basic_save": true
+    }
+  },
+  {
+    "aonId": 1263,
+    "name": "Dirge of Remembrance",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi concur: silver bullet vs incorporeal; audit Success-effect accepted (Path 2) [heidi]; special_tags: Heidi concur: silver bullet vs incorporeal; audit Success-effect accepted (Path 2) [heidi]; reliability_tags: Heidi concur: silver bullet vs incorporeal; audit Success-effect accepted (Path 2) [heidi]",
+    "overrides": {
+      "roles": [
+        "damage",
+        "debuff",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ],
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1268,
+    "name": "Steal Voice",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi concur: silver bullet vs casters; empty cbo normalized to null per audit [heidi]; special_tags: Heidi concur: silver bullet vs casters; empty cbo normalized to null per audit [heidi]; conditions_by_outcome: Heidi concur: silver bullet vs casters; empty cbo normalized to null per audit [heidi]",
+    "overrides": {
+      "roles": [
+        "debuff",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ],
+      "conditions_by_outcome": null
+    }
+  },
+  {
+    "aonId": 1269,
+    "name": "Suffocate",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): st_incap: computed from Incapacitation trait + final targeting (deterministic definition) [v2]; targeting_tags: audit AoN read: heightened multi-target [model]; reliability_tags: success retains suffocation effect (audit AoN read) [model]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi",
+        "ST"
+      ],
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1278,
+    "name": "Belittling Boast",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: Multi:ok [audit]; conditions_imposed: all conditions evidenced in text: ['Frightened'] [audit]; defense_tags: Demoralize tests Will DC; Frightened imposed [model]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "conditions_imposed": [
+        "Frightened"
+      ],
+      "defense_tags": [
+        "Will"
+      ]
+    }
+  },
+  {
+    "aonId": 1280,
+    "name": "Bursting Bloom",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Path 2: half-damage on success (spelled out) [v2]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1284,
+    "name": "Firework Blast",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: +Fort:text/foundry [audit]",
+    "overrides": {
+      "defense_tags": [
+        "Fort",
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 1294,
+    "name": "Rose's Thorns",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic=True; text basic-save=True [audit]",
+    "overrides": {
+      "basic_save": true
+    }
+  },
+  {
+    "aonId": 1295,
+    "name": "Sparkleskin",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: Audit+Foundry agree: retaliatory Dazzled w/ Fort save = harm; accepted [heidi]; targeting_tags: Audit+Foundry agree: retaliatory Dazzled w/ Fort save = harm; accepted [heidi]; conditions_imposed: Audit+Foundry agree: retaliatory Dazzled w/ Fort save = harm; accepted [heidi]; conditions_by_outcome: Audit+Foundry agree: retaliatory Dazzled w/ Fort save = harm; accepted [heidi]",
+    "overrides": {
+      "defense_tags": [
+        "Fort"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "conditions_imposed": [
+        "Dazzled"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Dazzled"
+        ],
+        "critical_failure": [
+          "Dazzled"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 1300,
+    "name": "Glass Sand",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Path 2: half-damage on success (spelled out) [v2]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1303,
+    "name": "Airlift",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: transport reposition; harm rubric [model]",
+    "overrides": {
+      "defense_tags": [],
+      "targeting_subtypes": []
+    }
+  },
+  {
+    "aonId": 1322,
+    "name": "Stifling Stillness",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_by_outcome: all conditions evidenced in text: ['Fatigued'] [audit]; defense_tags: auto Fatigued for breathers + Fort save damage [model]; reliability_tags: auto Fatigued + existing Success-effect [model]",
+    "overrides": {
+      "conditions_by_outcome": {
+        "critical_success": [
+          "Fatigued"
+        ],
+        "success": [
+          "Fatigued"
+        ],
+        "failure": [
+          "Fatigued"
+        ],
+        "critical_failure": [
+          "Fatigued"
+        ]
+      },
+      "defense_tags": [
+        "Auto",
+        "Fort"
+      ],
+      "reliability_tags": [
+        "Auto-effect",
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1328,
+    "name": "Burrow Ward",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi concur: silver bullet vs burrowers. Foundry Fort finding rubric-REJECTED (no conditi [heidi]; special_tags: Heidi concur: silver bullet vs burrowers. Foundry Fort finding rubric-REJECTED (no conditi [heidi]",
+    "overrides": {
+      "roles": [
+        "control",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
+    }
+  },
+  {
+    "aonId": 1335,
+    "name": "Heaving Earth",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic=True; text basic-save=True [audit]; targeting_tags: Multi:ok; ST:ok [audit]",
+    "overrides": {
+      "basic_save": true,
+      "targeting_tags": [
+        "Multi",
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 1344,
+    "name": "Vitrifying Blast",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: +Fort:text/foundry [audit]",
+    "overrides": {
+      "defense_tags": [
+        "Fort",
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 1356,
+    "name": "Flame Dancer",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: weapon-rider damage belongs to ally Strikes (weapon-buff rule) [model]",
+    "overrides": {
+      "roles": [
+        "buff"
+      ]
+    }
+  },
+  {
+    "aonId": 1361,
+    "name": "Rainbow Fumarole",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_by_outcome: all conditions evidenced in text: ['Confused', 'Paralyzed', 'Prone', 'Sickened', 'Slowed'] [audit]",
+    "overrides": {
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Prone",
+          "Sickened",
+          "Paralyzed",
+          "Confused",
+          "Slowed"
+        ],
+        "critical_failure": [
+          "Prone",
+          "Sickened",
+          "Paralyzed",
+          "Confused",
+          "Slowed"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 1372,
+    "name": "Magnetic Dominion",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: pure reposition, no damage/condition (harm rubric, Trade Items class) [model]",
+    "overrides": {
+      "defense_tags": [],
+      "targeting_subtypes": []
+    }
+  },
+  {
+    "aonId": 1388,
+    "name": "Freezing Rain",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Path 2: half-damage on success (spelled out) [v2]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1390,
+    "name": "Grasp of the Deep",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: Multi:ok; ST:ok [audit]; reliability_tags: Path 2: half-damage on success (spelled out) [v2]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi",
+        "ST"
+      ],
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1398,
+    "name": "Whirlpool",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Path 2: half-damage on success (spelled out) [v2]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1399,
+    "name": "Arrow Salvo",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Prone crit-fail-only [model]",
+    "overrides": {
+      "roles": [
+        "damage"
+      ]
+    }
+  },
+  {
+    "aonId": 1402,
+    "name": "Helpful Wood Spirits",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: +Ref:text/foundry [audit]; targeting_tags: Multi:ok [audit]; conditions_imposed: all conditions evidenced in text: ['Off-Guard'] [audit]; conditions_by_outcome: all conditions evidenced in text: ['Off-Guard'] [audit]",
+    "overrides": {
+      "defense_tags": [
+        "Ref"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "conditions_imposed": [
+        "Off-Guard"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Off-Guard"
+        ],
+        "critical_failure": [
+          "Off-Guard"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 1406,
+    "name": "Mantle of the Unwavering Heart",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: Multi:ok [audit]; conditions_imposed: all conditions evidenced in text: ['Sickened'] [audit]; roles: Overwhelming Perfume aura imposes Sickened on enemies [model]; defense_tags: auto Sickened aura [model]; reliability_tags: auto Sickened aura (pairs with Auto) [model]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "conditions_imposed": [
+        "Sickened"
+      ],
+      "roles": [
+        "buff",
+        "debuff"
+      ],
+      "defense_tags": [
+        "Auto"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1420,
+    "name": "Elemental Breath",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_imposed: all conditions evidenced in text: ['Prone'] [audit]; conditions_by_outcome: all conditions evidenced in text: ['Prone'] [audit]",
+    "overrides": {
+      "conditions_imposed": [
+        "Prone"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Prone"
+        ],
+        "critical_failure": [
+          "Prone"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 1427,
+    "name": "Fate's Travels",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: corpse info; harm rubric [model]",
+    "overrides": {
+      "defense_tags": [],
+      "targeting_tags": []
+    }
+  },
+  {
+    "aonId": 1431,
+    "name": "Binding Muzzle",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi concur: silver bullet vs mouth-dependent creatures [heidi]; special_tags: Heidi concur: silver bullet vs mouth-dependent creatures [heidi]",
+    "overrides": {
+      "roles": [
+        "debuff",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
+    }
+  },
+  {
+    "aonId": 1433,
+    "name": "Blast of the Bellows",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi concur: silver bullet anti-flight zone [heidi]; special_tags: Heidi concur: silver bullet anti-flight zone [heidi]",
+    "overrides": {
+      "roles": [
+        "control",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
+    }
+  },
+  {
+    "aonId": 1434,
+    "name": "Call Fluxwraith",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: +Will:text/foundry [audit]; targeting_tags: Multi:ok [audit]; conditions_imposed: all conditions evidenced in text: ['Frightened', 'Slowed'] [audit]; conditions_by_outcome: all conditions evidenced in text: ['Frightened', 'Slowed'] [audit]",
+    "overrides": {
+      "defense_tags": [
+        "Will"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "conditions_imposed": [
+        "Frightened",
+        "Slowed"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Frightened",
+          "Slowed"
+        ],
+        "critical_failure": [
+          "Frightened",
+          "Slowed"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 1439,
+    "name": "Alarm",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi: 'make utility, not prebuff' — Alarm is utility only [heidi]",
+    "overrides": {
+      "roles": [
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 1447,
+    "name": "Bane",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_by_outcome: normalize empty cbo to null [v2]; targeting_tags: evidence + harm [v2] | Multi dropped: penalty-only debuff has no damage/conditions, Decision 004 strips it",
+    "overrides": {
+      "conditions_by_outcome": null
+    }
+  },
+  {
+    "aonId": 1448,
+    "name": "Banishment",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): st_incap: computed st_incap=False (incap=True, tt=['Multi', 'ST']) [audit]",
+    "overrides": {
+      "st_incap": false
+    }
+  },
+  {
+    "aonId": 1449,
+    "name": "Bind Undead",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: minion conversion imposes no condition [model]",
+    "overrides": {
+      "roles": [
+        "control"
+      ]
+    }
+  },
+  {
+    "aonId": 1452,
+    "name": "Blessed Boundary",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic + damage-only outcome pattern (no rider conditions) [v2]",
+    "overrides": {
+      "basic_save": true
+    }
+  },
+  {
+    "aonId": 1464,
+    "name": "Chilling Darkness",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: no success-effect evidence (no basic signal, no success rider) [v2]",
+    "overrides": {
+      "reliability_tags": []
+    }
+  },
+  {
+    "aonId": 1470,
+    "name": "Command",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: Multi:ok; ST:ok [audit]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi",
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 1478,
+    "name": "Crisis of Faith",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Path 2: half-damage on success (spelled out) [v2]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1495,
+    "name": "Divine Decree",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Path 2: half-damage on success (spelled out) [v2]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1496,
+    "name": "Divine Immolation",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic + damage-only outcome pattern (no rider conditions) [v2]",
+    "overrides": {
+      "basic_save": true
+    }
+  },
+  {
+    "aonId": 1515,
+    "name": "Entangling Flora",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: Multi:ok [audit]; conditions_imposed: all conditions evidenced in text: ['Immobilized'] [audit]; conditions_by_outcome: all conditions evidenced in text: ['Immobilized'] [audit]; defense_tags: auto difficult terrain + Ref save [model]; reliability_tags: pairs with Auto [model]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "conditions_imposed": [
+        "Immobilized"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [],
+        "critical_failure": [
+          "Immobilized"
+        ]
+      },
+      "defense_tags": [
+        "Auto",
+        "Ref"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1516,
+    "name": "Enthrall",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: Multi:ok [audit]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 1527,
+    "name": "Fiery Body",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: combat polymorph = buff (Decision 011 pattern) [model]",
+    "overrides": {
+      "roles": [
+        "buff"
+      ]
+    }
+  },
+  {
+    "aonId": 1531,
+    "name": "Fleet Step",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi: remove prebuff (1 min duration) [heidi]",
+    "overrides": {
+      "roles": [
+        "buff"
+      ]
+    }
+  },
+  {
+    "aonId": 1533,
+    "name": "Floating Flame",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic=True; text basic-save=True [audit]",
+    "overrides": {
+      "basic_save": true
+    }
+  },
+  {
+    "aonId": 1547,
+    "name": "Grease",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: +Ref:text/foundry [audit]; targeting_tags: Multi:ok [audit]; conditions_imposed: all conditions evidenced in text: ['Prone'] [audit]; conditions_by_outcome: all conditions evidenced in text: ['Prone'] [audit]",
+    "overrides": {
+      "defense_tags": [
+        "Ref"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "conditions_imposed": [
+        "Prone"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Prone"
+        ],
+        "critical_failure": []
+      }
+    }
+  },
+  {
+    "aonId": 1548,
+    "name": "Grim Tendrils",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Path 2: half-damage on success (spelled out) [v2]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1550,
+    "name": "Gust of Wind",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: damage is crit-fail-only rider [model]",
+    "overrides": {
+      "roles": [
+        "control",
+        "debuff"
+      ]
+    }
+  },
+  {
+    "aonId": 1554,
+    "name": "Heal",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: +Fort:text/foundry [audit]; damage_types: types evidenced: ['Vitality'] [audit]; basic_save: foundry basic=True; text basic-save=True [audit]; defense_tags: Heal convention: vs-undead vitality damage w/ basic Fort (text explicit); ST touch / Multi [heidi]; damage_types: Heal convention: vs-undead vitality damage w/ basic Fort (text explicit); ST touch / Multi [heidi]; basic_save: Heal convention: vs-undead vitality damage w/ basic Fort (text explicit); ST touch / Multi [heidi]; targeting_tags: Heal convention: vs-undead vitality damage w/ basic Fort (text explicit); ST touch / Mu",
+    "overrides": {
+      "defense_tags": [
+        "Fort"
+      ],
+      "damage_types": [
+        "Vitality"
+      ],
+      "basic_save": true,
+      "targeting_tags": [
+        "Multi",
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 1562,
+    "name": "Hydraulic Torrent",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic=True; text basic-save=True [audit]",
+    "overrides": {
+      "basic_save": true
+    }
+  },
+  {
+    "aonId": 1564,
+    "name": "Hypnotize",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_imposed: all conditions evidenced in text: ['Dazzled', 'Fascinated'] [audit]; defense_tags: auto Dazzled in cloud + Will save [model]; reliability_tags: pairs with Auto [model]; conditions_imposed: auto Dazzled (cloud) + Fascinated save outcomes [model]; conditions_by_outcome: auto condition in failure slots per pipeline convention [model]",
+    "overrides": {
+      "conditions_imposed": [
+        "Dazzled",
+        "Fascinated"
+      ],
+      "defense_tags": [
+        "Auto",
+        "Will"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Dazzled",
+          "Fascinated"
+        ],
+        "critical_failure": [
+          "Dazzled",
+          "Fascinated"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 1571,
+    "name": "Impaling Spike",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Path 2: half-damage on success (spelled out) [v2]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1573,
+    "name": "Indestructibility",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: 1-round panic button is not a prebuff [model]",
+    "overrides": {
+      "roles": [
+        "buff"
+      ]
+    }
+  },
+  {
+    "aonId": 1578,
+    "name": "Invoke Spirits",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic=True; text basic-save=True [audit]; roles: Frightened/Fleeing crit-fail-only [model]",
+    "overrides": {
+      "basic_save": true,
+      "roles": [
+        "control",
+        "damage"
+      ]
+    }
+  },
+  {
+    "aonId": 1579,
+    "name": "Item Facade",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: object target; not a creature buff [model]",
+    "overrides": {
+      "roles": [
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 1584,
+    "name": "Levitate",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi: add prebuff (consistent with her Ghostly Weapon 5-min ruling) [heidi]",
+    "overrides": {
+      "roles": [
+        "buff",
+        "prebuffs",
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 1589,
+    "name": "Lock",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: object target [model]",
+    "overrides": {
+      "roles": [
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 1590,
+    "name": "Mad Monkeys",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: +Fort:text/foundry; +Ref:text/foundry [audit]; targeting_tags: Multi:ok [audit]; conditions_imposed: all conditions evidenced in text: ['Deafened'] [audit]; conditions_by_outcome: Deafened per audit text read (key-normalized) [model]; conditions_imposed: paired with cbo [model]",
+    "overrides": {
+      "defense_tags": [
+        "Fort",
+        "Ref"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "conditions_imposed": [
+        "Deafened"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Deafened"
+        ],
+        "critical_failure": [
+          "Deafened"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 1602,
+    "name": "Mind Reading",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: no success-effect evidence (no basic signal, no success rider) [v2]; roles: no damage/condition/weakness at any outcome [model]; defense_tags: non-offensive (paired with utility roles) [model]",
+    "overrides": {
+      "reliability_tags": [],
+      "roles": [
+        "utility"
+      ],
+      "defense_tags": [],
+      "targeting_tags": []
+    }
+  },
+  {
+    "aonId": 1616,
+    "name": "Noise Blast",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Heidi: not a basic save (conditions in outcomes) but has a success effect — Path 2 [heidi]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1622,
+    "name": "Paralyze",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: Multi:ok; ST:ok [audit]; st_incap: computed st_incap=False (incap=True, tt=['Multi', 'ST']) [audit]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi",
+        "ST"
+      ],
+      "st_incap": false
+    }
+  },
+  {
+    "aonId": 1623,
+    "name": "Paranoia",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: success outcome block has conditions (Path 2) [audit]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1625,
+    "name": "Peaceful Rest",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: corpse target [model]",
+    "overrides": {
+      "roles": [
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 1627,
+    "name": "Pet Cache",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi: Pet Cache is utility (drop buff/prebuffs) [heidi]",
+    "overrides": {
+      "roles": [
+        "oneAction",
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 1628,
+    "name": "Petrify",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi: Petrify is debuff only (drop control) [heidi]",
+    "overrides": {
+      "roles": [
+        "debuff"
+      ]
+    }
+  },
+  {
+    "aonId": 1630,
+    "name": "Phantasmal Calamity",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: +Ref:text/foundry [audit]; basic_save: foundry basic + text basic-save [foundry]",
+    "overrides": {
+      "defense_tags": [
+        "Ref",
+        "Will"
+      ],
+      "basic_save": true
+    }
+  },
+  {
+    "aonId": 1632,
+    "name": "Phantom Pain",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: success: full initial damage [model]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1636,
+    "name": "Planar Tether",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: success: 1-minute lockdown [model]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1638,
+    "name": "Possession",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_imposed: all conditions evidenced in text: ['Controlled'] [audit]; conditions_by_outcome: Controlled/Unconscious per possession text [model]; conditions_imposed: paired with cbo [model]",
+    "overrides": {
+      "conditions_by_outcome": {
+        "success": [],
+        "failure": [
+          "Controlled"
+        ],
+        "critical_failure": [
+          "Controlled"
+        ],
+        "critical_success": []
+      }
+    }
+  },
+  {
+    "aonId": 1642,
+    "name": "Pummeling Rubble",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Path 2: half-damage on success (spelled out) [v2]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1656,
+    "name": "Ring of Truth",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi: utility only, not control/debuff; Will save gates a -2 penalty (not a condition) -> [heidi]; defense_tags: Heidi: utility only, not control/debuff; Will save gates a -2 penalty (not a condition) -> [heidi]",
+    "overrides": {
+      "roles": [
+        "utility"
+      ],
+      "defense_tags": [],
+      "targeting_subtypes": []
+    }
+  },
+  {
+    "aonId": 1657,
+    "name": "Runic Body",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi concur: prebuff (10-min willing-target buff) [heidi]",
+    "overrides": {
+      "roles": [
+        "buff",
+        "prebuffs"
+      ]
+    }
+  },
+  {
+    "aonId": 1658,
+    "name": "Runic Weapon",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi concur: prebuff (Runic Weapon, same flag) [heidi]",
+    "overrides": {
+      "roles": [
+        "buff",
+        "prebuffs"
+      ]
+    }
+  },
+  {
+    "aonId": 1662,
+    "name": "Scrying",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: scrying resist; harm rubric [model]",
+    "overrides": {
+      "defense_tags": [],
+      "targeting_tags": []
+    }
+  },
+  {
+    "aonId": 1675,
+    "name": "Sleep",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: success: -1 Perception (rubric-cited) [model]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1680,
+    "name": "Speak with Animals",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: sibling consistency (Speak with Plants/Stones) [model]",
+    "overrides": {
+      "roles": [
+        "prebuffs",
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 1681,
+    "name": "Speak with Plants",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): heighten_quality: 8x duration extension (See the Unseen precedent) [model]",
+    "overrides": {
+      "heighten_quality": "fixed-meaningful"
+    }
+  },
+  {
+    "aonId": 1682,
+    "name": "Speak with Stones",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): heighten_quality: same pattern [model]",
+    "overrides": {
+      "heighten_quality": "fixed-meaningful"
+    }
+  },
+  {
+    "aonId": 1684,
+    "name": "Spider Sting",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: success: 1d4 poison [model]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1692,
+    "name": "Subconscious Suggestion",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): st_incap: computed st_incap=False (incap=True, tt=['Multi', 'ST']) [audit]; conditions_by_outcome: normalize empty cbo to null [v2] | cbo:null override removed — audit proposal was wrong; real outcome conditions exist",
+    "overrides": {
+      "st_incap": false
+    }
+  },
+  {
+    "aonId": 1693,
+    "name": "Suggestion",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): st_incap: computed st_incap=False (incap=True, tt=['Multi', 'ST']) [audit]",
+    "overrides": {
+      "st_incap": false
+    }
+  },
+  {
+    "aonId": 1707,
+    "name": "Sunburst",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Heidi: Reflex correct, NOT basic (Blinded rider disqualifies); spelled-out half-damage suc [heidi]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1712,
+    "name": "Talking Corpse",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: corpse Q&A; harm rubric [model]",
+    "overrides": {
+      "defense_tags": [],
+      "targeting_tags": []
+    }
+  },
+  {
+    "aonId": 1714,
+    "name": "Tangling Creepers",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: no success-effect evidence (no basic signal, no success rider) [v2]; targeting_tags: per-round single-target creeper grab [model]",
+    "overrides": {
+      "reliability_tags": [],
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 1726,
+    "name": "True Target",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: 1-round duration, not a prebuff [model]",
+    "overrides": {
+      "roles": [
+        "buff",
+        "oneAction"
+      ]
+    }
+  },
+  {
+    "aonId": 1741,
+    "name": "Vibrant Pattern",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_imposed: all conditions evidenced in text: ['Blinded', 'Dazzled'] [audit]; defense_tags: auto Dazzled + Will save [model]; reliability_tags: pairs with Auto [model]; conditions_imposed: auto Dazzled + Will-gated Blinded [model]; conditions_by_outcome: auto + save-gated conditions in failure slots [model]",
+    "overrides": {
+      "conditions_imposed": [
+        "Blinded",
+        "Dazzled"
+      ],
+      "defense_tags": [
+        "Auto",
+        "Will"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Blinded",
+          "Dazzled"
+        ],
+        "critical_failure": [
+          "Blinded",
+          "Dazzled"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 1746,
+    "name": "Volcanic Eruption",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Path 2: half-damage on success (spelled out) [v2]; defense_tags: lava terrain auto + Ref save [model]",
+    "overrides": {
+      "reliability_tags": [
+        "Auto-effect",
+        "Success-effect"
+      ],
+      "defense_tags": [
+        "Auto",
+        "Ref"
+      ]
+    }
+  },
+  {
+    "aonId": 1747,
+    "name": "Wails of the Damned",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: success: full damage [model]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1750,
+    "name": "Wall of Ice",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): damage_types: text evidences ['Cold'] [foundry] | defense Auto added (wall class, Wall of Fire precedent) so Cold damage passes the offense gate",
+    "overrides": {
+      "damage_types": [
+        "Cold"
+      ],
+      "defense_tags": [
+        "Auto"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1758,
+    "name": "Weapon Storm",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Path 2: half-damage on success (spelled out) [v2]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1946,
+    "name": "Albatross Curse",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: ally attack bonus = buff; cursed target = debuff; no zone control [model]; defense_tags: auto ally-bonus component + Will-gated curse [model]; reliability_tags: auto component + Stupefied success block [model]",
+    "overrides": {
+      "roles": [
+        "buff",
+        "debuff"
+      ],
+      "defense_tags": [
+        "Auto",
+        "Will"
+      ],
+      "reliability_tags": [
+        "Auto-effect",
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1947,
+    "name": "Antlion Trap",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Immobilized crit-fail-only; pit terrain = control [model]",
+    "overrides": {
+      "roles": [
+        "control"
+      ]
+    }
+  },
+  {
+    "aonId": 1961,
+    "name": "Summon Warden of the Wild",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: Multi:ok [audit]; damage_types: types evidenced: ['Bludg', 'Mental', 'Pierc', 'Sonic'] [audit]; conditions_imposed: all conditions evidenced in text: ['Immobilized', 'Sickened'] [audit]; basic_save: foundry basic=None; text basic-save=True [audit]; roles: four warden modes: damage + conditions + ally buffs (under-tagged) [model]; defense_tags: four warden modes [model]; conditions_by_outcome: warden conditions (key-normalized) [model]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "damage_types": [
+        "Bludg",
+        "Mental",
+        "Pierc",
+        "Sonic"
+      ],
+      "conditions_imposed": [
+        "Immobilized",
+        "Sickened"
+      ],
+      "basic_save": true,
+      "roles": [
+        "buff",
+        "control",
+        "damage",
+        "debuff"
+      ],
+      "defense_tags": [
+        "Fort",
+        "Ref",
+        "Will"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Immobilized"
+        ],
+        "critical_failure": [
+          "Immobilized",
+          "Sickened"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 1964,
+    "name": "Animated Assault",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: sustained AoE damage, no control mechanism [model]; heighten_quality: damage-only plus_2 cap [model]",
+    "overrides": {
+      "roles": [
+        "damage"
+      ],
+      "heighten_quality": "scales-okay"
+    }
+  },
+  {
+    "aonId": 1967,
+    "name": "Blanket of Stars",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: retaliatory effect on multiple attackers [model]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 1969,
+    "name": "Blister",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: Multi:ok; ST:ok [audit]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi",
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 1970,
+    "name": "Blistering Invective",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Path 2: half-damage on success (spelled out) [v2]; targeting_tags: audit full-text read [model]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ],
+      "targeting_tags": [
+        "Multi",
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 1972,
+    "name": "Carryall",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: cargo platform; no combat value -> Heidi's Alarm/Resplendent Mansion pattern (deviates fro [model]",
+    "overrides": {
+      "roles": [
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 1975,
+    "name": "Chilling Spray",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Path 2: half-damage on success (spelled out) [v2]; basic_save: Chilling Spray is a basic-save spell (populator prompt's own example) [model]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ],
+      "basic_save": true
+    }
+  },
+  {
+    "aonId": 1977,
+    "name": "Cloak of Colors",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: Heidi's explanation matches audit: auto-dazzle (no save) on adjacent creatures + Will-gate [heidi]; targeting_tags: Heidi's explanation matches audit: auto-dazzle (no save) on adjacent creatures + Will-gate [heidi]; conditions_imposed: Heidi's explanation matches audit: auto-dazzle (no save) on adjacent creatures + Will-gate [heidi]; conditions_by_outcome: Heidi's explanation matches audit: auto-dazzle (no save) on adjacent creatures + Will-gate [heidi]; reliability_tags: Heidi's explanation matches audit: auto-dazzle (no save) on adjacent creatures + Will-gate [heidi]",
+    "overrides": {
+      "defense_tags": [
+        "Auto",
+        "Will"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "conditions_imposed": [
+        "Blinded",
+        "Dazzled",
+        "Stunned"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Blinded"
+        ],
+        "critical_failure": [
+          "Stunned"
+        ]
+      },
+      "reliability_tags": [
+        "Auto-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1980,
+    "name": "Confusing Colors",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_imposed: all conditions evidenced in text: ['Confused', 'Dazzled', 'Stunned'] [audit]; defense_tags: auto Dazzled + Will [model]; reliability_tags: pairs with Auto [model]",
+    "overrides": {
+      "conditions_imposed": [
+        "Dazzled",
+        "Confused",
+        "Stunned"
+      ],
+      "defense_tags": [
+        "Auto",
+        "Will"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 1992,
+    "name": "Final Sacrifice",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: Multi:ok [audit]; targeting_subtypes: explosion burst [model]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "targeting_subtypes": [
+        "Burst"
+      ]
+    }
+  },
+  {
+    "aonId": 2002,
+    "name": "Imaginary Lockbox",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi (twice): strictly utility, not buff/prebuff [heidi]",
+    "overrides": {
+      "roles": [
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 2010,
+    "name": "Nature’s Enmity",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: +Ref:text/foundry [audit]; targeting_tags: Multi:ok [audit]; targeting_subtypes: foundry area=burst [audit]; damage_types: types evidenced: ['Slash'] [audit]; conditions_imposed: all conditions evidenced in text: ['Off-Guard'] [audit]; basic_save: foundry basic=False; text basic-save=True [audit]; conditions_by_outcome: Off-Guard etc. per audit read (key-normalized) [model]; conditions_imposed: paired [model]",
+    "overrides": {
+      "defense_tags": [
+        "Ref"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "targeting_subtypes": [
+        "Burst"
+      ],
+      "damage_types": [
+        "Slash"
+      ],
+      "conditions_imposed": [
+        "Off-Guard"
+      ],
+      "basic_save": true,
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [
+          "Off-Guard"
+        ],
+        "failure": [
+          "Off-Guard"
+        ],
+        "critical_failure": [
+          "Off-Guard"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 2011,
+    "name": "Noxious Vapors",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Sickened crit-fail-only [model]",
+    "overrides": {
+      "roles": [
+        "damage"
+      ]
+    }
+  },
+  {
+    "aonId": 2017,
+    "name": "Reaper’s Lantern",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): action_tags: Heidi: add sustain (text has Sustain behavior; duration field omits it). Audit name-change [heidi]",
+    "overrides": {
+      "action_tags": [
+        "Sustain-action"
+      ]
+    }
+  },
+  {
+    "aonId": 2018,
+    "name": "Resplendent Mansion",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi: Resplendent Mansion is utility (drop buff/prebuffs) [heidi]",
+    "overrides": {
+      "roles": [
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 2019,
+    "name": "Rouse Skeletons",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic=True; text basic-save=True [audit]",
+    "overrides": {
+      "basic_save": true
+    }
+  },
+  {
+    "aonId": 2022,
+    "name": "Schadenfreude",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: Heidi: NOT a silver bullet; audit ST + Success-effect accepted (1 target, Stunned/Stupefie [heidi]; reliability_tags: Heidi: NOT a silver bullet; audit ST + Success-effect accepted (1 target, Stunned/Stupefie [heidi]",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ],
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 2029,
+    "name": "Spirit Song",
+    "reason": "Cycle 40:  reliability: Path-2 Success-effect (half damage on success spelled out; basic stays false per Noise Blast rule)",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 2032,
+    "name": "Strange Geometry",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi: Strange Geometry should be a control spell (movement denial, like walls); debuff dr [heidi]",
+    "overrides": {
+      "roles": [
+        "control"
+      ]
+    }
+  },
+  {
+    "aonId": 2039,
+    "name": "Vampiric Maiden",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Path 2: half-damage on success (spelled out) [v2]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 2043,
+    "name": "Wanderer’s Guide",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: explicitly no encounter effect -> no prebuffs [model]",
+    "overrides": {
+      "roles": [
+        "buff",
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 2045,
+    "name": "Web",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: +Ref:text/foundry [audit]; targeting_tags: Multi:ok [audit]; targeting_subtypes: foundry area=burst [audit]; conditions_imposed: all conditions evidenced in text: ['Immobilized'] [audit]; conditions_by_outcome: all conditions evidenced in text: ['Immobilized'] [audit]",
+    "overrides": {
+      "defense_tags": [
+        "Ref"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "targeting_subtypes": [
+        "Burst"
+      ],
+      "conditions_imposed": [
+        "Immobilized"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [],
+        "critical_failure": [
+          "Immobilized"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 2046,
+    "name": "Whispers of the Void",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: success: 2d8 persistent void [model]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 2124,
+    "name": "Crimson Breath",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_by_outcome: outcome-block conditions, negation-checked (dropped: none) [foundry]; conditions_imposed: paired with outcome conditions [foundry]",
+    "overrides": {
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [],
+        "critical_failure": [
+          "Drained"
+        ]
+      },
+      "conditions_imposed": [
+        "Drained"
+      ]
+    }
+  },
+  {
+    "aonId": 2125,
+    "name": "Mantis's Grasp",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: Multi:ok; ST:ok [audit]; reliability_tags: Path 2: half-damage on success (spelled out) [v2]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi",
+        "ST"
+      ],
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 2126,
+    "name": "Mark of Blood",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_by_outcome: outcome-block conditions, negation-checked (dropped: none) [foundry]; conditions_imposed: paired with outcome conditions [foundry]",
+    "overrides": {
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [
+          "Concealed"
+        ],
+        "failure": [],
+        "critical_failure": []
+      },
+      "conditions_imposed": [
+        "Concealed"
+      ]
+    }
+  },
+  {
+    "aonId": 2152,
+    "name": "Banishing Touch",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_by_outcome: normalize empty cbo to null [v2]",
+    "overrides": {
+      "conditions_by_outcome": null
+    }
+  },
+  {
+    "aonId": 2157,
+    "name": "It Is Written",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: 1-round duration [model]",
+    "overrides": {
+      "roles": [
+        "buff",
+        "oneAction"
+      ]
+    }
+  },
+  {
+    "aonId": 2159,
+    "name": "Perceive the Threads of Fate",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): action_tags: Heidi: this is a sustain spell [heidi]",
+    "overrides": {
+      "action_tags": [
+        "1-action",
+        "Sustain-action"
+      ]
+    }
+  },
+  {
+    "aonId": 2164,
+    "name": "Travel by Turtle",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: travel utility, no combat value [model]",
+    "overrides": {
+      "roles": [
+        "buff",
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 2291,
+    "name": "Pocket Library",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): heighten_quality: null -> assessed; +1..+4 status scaling is real [model]",
+    "overrides": {
+      "heighten_quality": "fixed-meaningful"
+    }
+  },
+  {
+    "aonId": 2294,
+    "name": "Bridge of Vines",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: +Ref:text/foundry [audit]; targeting_tags: Multi:ok [audit]; conditions_imposed: all conditions evidenced in text: ['Grabbed', 'Prone'] [audit]; conditions_by_outcome: all conditions evidenced in text: ['Grabbed', 'Prone'] [audit]; reliability_tags: success: difficult terrain for enemies [model]",
+    "overrides": {
+      "defense_tags": [
+        "Ref"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "conditions_imposed": [
+        "Prone",
+        "Grabbed"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Prone"
+        ],
+        "critical_failure": [
+          "Prone",
+          "Grabbed"
+        ]
+      },
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 2295,
+    "name": "Mental Map",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi: utility spell for out-of-combat info gathering -> non-offensive per harm rubric (de [heidi]; defense_tags: Heidi: utility spell for out-of-combat info gathering -> non-offensive per harm rubric (de [heidi]; targeting_tags: Heidi: utility spell for out-of-combat info gathering -> non-offensive per harm rubric (de [heidi]",
+    "overrides": {
+      "defense_tags": [],
+      "targeting_tags": []
+    }
+  },
+  {
+    "aonId": 2309,
+    "name": "The Parrot's Whisper",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: info-gathering; Mental Map/Parrot's Whisper consistency [model]",
+    "overrides": {
+      "defense_tags": [],
+      "targeting_tags": []
+    }
+  },
+  {
+    "aonId": 2317,
+    "name": "Disruptive Transfer",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: adjacent creatures damaged on teleport [model]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 2326,
+    "name": "Chrysopoetic Curse",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: ST:ok [audit]",
+    "overrides": {
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 2329,
+    "name": "Love's Sacrifice",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi: damage, not debuff; audit ST accepted (1 creature, lethal damage) [heidi]; targeting_tags: Heidi: damage, not debuff; audit ST accepted (1 creature, lethal damage) [heidi]",
+    "overrides": {
+      "roles": [
+        "control",
+        "damage",
+        "reactions"
+      ],
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 2349,
+    "name": "Expeditious Excavation",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: +Ref:text/foundry [audit]; conditions_imposed: all conditions evidenced in text: ['Prone'] [audit]; targeting_tags: pit affects the creature standing there [model]; conditions_by_outcome: Prone on falling into pit [model]; conditions_imposed: paired [model]",
+    "overrides": {
+      "defense_tags": [
+        "Ref"
+      ],
+      "conditions_imposed": [
+        "Prone"
+      ],
+      "targeting_tags": [
+        "ST"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Prone"
+        ],
+        "critical_failure": [
+          "Prone"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 2355,
+    "name": "Malediction",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): conditions_by_outcome: normalize empty cbo to null [v2]",
+    "overrides": {
+      "conditions_by_outcome": null
+    }
+  },
+  {
+    "aonId": 2357,
+    "name": "Moonburst",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Path 2: half-damage on success (spelled out) [v2]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 2358,
+    "name": "Moonlight Ray",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: no success-effect evidence (no basic signal, no success rider) [v2]",
+    "overrides": {
+      "reliability_tags": []
+    }
+  },
+  {
+    "aonId": 2366,
+    "name": "Shockwave",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: function is prone/off-guard; damage crit-fail-only [model]",
+    "overrides": {
+      "roles": [
+        "debuff"
+      ]
+    }
+  },
+  {
+    "aonId": 2372,
+    "name": "Wall of Radiance",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): basic_save: foundry basic=True; text basic-save=True [audit]; defense_tags: auto dazzled adjacent + Fort [model]; conditions_by_outcome: Dazzled restructured per audit [model]; reliability_tags: Auto-effect paired with Auto [pairing-rule]",
+    "overrides": {
+      "basic_save": true,
+      "defense_tags": [
+        "Auto",
+        "Fort"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [
+          "Dazzled"
+        ],
+        "success": [
+          "Dazzled"
+        ],
+        "failure": [
+          "Dazzled"
+        ],
+        "critical_failure": [
+          "Dazzled"
+        ]
+      },
+      "reliability_tags": [
+        "Auto-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 2373,
+    "name": "Wall of Shadow",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: vision-blocking barrier [model]",
+    "overrides": {
+      "roles": [
+        "control"
+      ]
+    }
+  },
+  {
+    "aonId": 2446,
+    "name": "Cordyceps Command",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): st_incap: computed st_incap=True (incap=True, tt=['ST']) [audit]",
+    "overrides": {
+      "st_incap": true
+    }
+  },
+  {
+    "aonId": 2450,
+    "name": "Musical Shift",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: auto key-signature effects on enemies [model]",
+    "overrides": {
+      "reliability_tags": [
+        "Auto-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 2452,
+    "name": "Vibrant Vibrato",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: success: 5d10 persistent sonic [model]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 2457,
+    "name": "Tanglecurse",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: success: moving difficult-terrain emanation [model]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 2469,
+    "name": "Manifestation Of Spirits",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: Multi:ok; ST:ok [audit]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi",
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 2471,
+    "name": "Spirit Ward",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi: 'hm. ok. Let's add it.' — silver bullet vs spirits/haunts [heidi]; special_tags: Heidi: 'hm. ok. Let's add it.' — silver bullet vs spirits/haunts [heidi]",
+    "overrides": {
+      "roles": [
+        "buff",
+        "oneAction",
+        "silverBullets"
+      ],
+      "special_tags": [
+        "Silver Bullet"
+      ]
+    }
+  },
+  {
+    "aonId": 2484,
+    "name": "Sudden Transposition",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Prone crit-fail-only [model]",
+    "overrides": {
+      "roles": [
+        "control",
+        "damage"
+      ]
+    }
+  },
+  {
+    "aonId": 2485,
+    "name": "Trade Items",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: item swap; harm rubric (textbook case) [model]",
+    "overrides": {
+      "defense_tags": []
+    }
+  },
+  {
+    "aonId": 2493,
+    "name": "Blinding Bottle",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: success: 3d6 poison [model]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 2495,
+    "name": "Boots on the Ground",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: removed ['Will']: no evidence in foundry/text (source-data error class) [v2]",
+    "overrides": {
+      "defense_tags": []
+    }
+  },
+  {
+    "aonId": 2503,
+    "name": "Fallen Soldier's Lament",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: Multi:ok [audit]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 2527,
+    "name": "Cloud Current",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi concur: remove prebuffs (travel utility) [heidi]",
+    "overrides": {
+      "roles": [
+        "buff",
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 2530,
+    "name": "Earth and Sky",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: Multi:ok [audit]; roles: launch + fall damage [model] | fall damage (~50 from 100 ft) is the spell damage; carries Multi through Decision 004 rule",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ],
+      "roles": [
+        "control",
+        "damage",
+        "utility"
+      ],
+      "damage_types": [
+        "Bludg"
+      ]
+    }
+  },
+  {
+    "aonId": 2531,
+    "name": "Horde of Underlings",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: underling damage is the spell's own (not Summon trait) [model]; defense_tags: automatic underling attacks [model]; targeting_tags: cone + per-underling single attacks [model]; reliability_tags: pairs with Auto [model]; damage_types: text: 'bludgeoning, piercing, or slashing' (chooseable) [model]",
+    "overrides": {
+      "roles": [
+        "control",
+        "damage"
+      ],
+      "defense_tags": [
+        "Auto"
+      ],
+      "targeting_tags": [
+        "Multi",
+        "ST"
+      ],
+      "reliability_tags": [
+        "Auto-effect"
+      ],
+      "damage_types": [
+        "Bludg",
+        "Pierc",
+        "Slash",
+        "Varies"
+      ]
+    }
+  },
+  {
+    "aonId": 2535,
+    "name": "Briny Bolt",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: attack-roll spell: hit-degree blocks are not save outcomes — Success-effect removed [model]",
+    "overrides": {
+      "reliability_tags": []
+    }
+  },
+  {
+    "aonId": 2537,
+    "name": "Cycle of Retribution",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: no conditions at any outcome [model]",
+    "overrides": {
+      "roles": [
+        "damage"
+      ]
+    }
+  },
+  {
+    "aonId": 2539,
+    "name": "Fated Healing",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: HP restoration = healing [model]",
+    "overrides": {
+      "roles": [
+        "healing",
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 2541,
+    "name": "Entangle Fate",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: Multi:ok [audit]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 2542,
+    "name": "Life's Fresh Bloom",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: +Fort:text/foundry [audit]; targeting_tags: Multi:ok [audit]; conditions_imposed: all conditions evidenced in text: ['Sickened'] [audit]; conditions_by_outcome: all conditions evidenced in text: ['Sickened'] [audit]",
+    "overrides": {
+      "defense_tags": [
+        "Fort"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "conditions_imposed": [
+        "Sickened"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Sickened"
+        ],
+        "critical_failure": [
+          "Sickened"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 2543,
+    "name": "Prophet's Luck",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi concur: remove prebuffs (reaction cast) [heidi]",
+    "overrides": {
+      "roles": [
+        "buff",
+        "reactions"
+      ]
+    }
+  },
+  {
+    "aonId": 2545,
+    "name": "Tomorrow's Dawn",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): targeting_tags: radius effect [model]",
+    "overrides": {
+      "targeting_tags": [
+        "Multi"
+      ]
+    }
+  },
+  {
+    "aonId": 2565,
+    "name": "False Nature",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: Heidi concur: remove prebuffs (deception utility) [heidi]",
+    "overrides": {
+      "roles": [
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 2568,
+    "name": "Empty Pack",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: item concealment [model]",
+    "overrides": {
+      "roles": [
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 2573,
+    "name": "Kinetic Ram",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: forced movement; damage/prone crit-fail riders [model]; targeting_tags: audit proposal as read [model]",
+    "overrides": {
+      "roles": [
+        "control",
+        "oneAction"
+      ],
+      "targeting_tags": [
+        "ST"
+      ]
+    }
+  },
+  {
+    "aonId": 2579,
+    "name": "Sea of Thought",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: speed penalty isn't Slowed; Prone crit-fail-only [model]",
+    "overrides": {
+      "roles": [
+        "control"
+      ]
+    }
+  },
+  {
+    "aonId": 2582,
+    "name": "Telekinetic Bombardment",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): reliability_tags: Path 2: half-damage on success (spelled out) [v2]",
+    "overrides": {
+      "reliability_tags": [
+        "Success-effect"
+      ]
+    }
+  },
+  {
+    "aonId": 2602,
+    "name": "Loose Time's Arrow",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: 1-round duration, not prebuff [model]",
+    "overrides": {
+      "roles": [
+        "buff"
+      ]
+    }
+  },
+  {
+    "aonId": 2603,
+    "name": "Morass of Ages",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: +Fort:text/foundry [audit]; targeting_tags: Multi:ok [audit]; targeting_subtypes: foundry area=emanation [audit]; conditions_imposed: all conditions evidenced in text: ['Restrained', 'Slowed'] [audit]; conditions_by_outcome: Slowed/Restrained per text [model]; conditions_imposed: paired [model]",
+    "overrides": {
+      "defense_tags": [
+        "Fort"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "targeting_subtypes": [
+        "Emanation"
+      ],
+      "conditions_imposed": [
+        "Restrained",
+        "Slowed"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Slowed"
+        ],
+        "critical_failure": [
+          "Slowed",
+          "Restrained"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 2605,
+    "name": "Stagnate Time",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): defense_tags: +Will:text/foundry [audit]; targeting_tags: Multi:ok [audit]; targeting_subtypes: foundry area=burst [audit]; conditions_imposed: all conditions evidenced in text: ['Slowed'] [audit]; conditions_by_outcome: Slowed f/cf (Foundry lane F agrees) [model]; conditions_imposed: paired [model]",
+    "overrides": {
+      "defense_tags": [
+        "Will"
+      ],
+      "targeting_tags": [
+        "Multi"
+      ],
+      "targeting_subtypes": [
+        "Burst"
+      ],
+      "conditions_imposed": [
+        "Slowed"
+      ],
+      "conditions_by_outcome": {
+        "critical_success": [],
+        "success": [],
+        "failure": [
+          "Slowed"
+        ],
+        "critical_failure": [
+          "Slowed"
+        ]
+      }
+    }
+  },
+  {
+    "aonId": 2608,
+    "name": "Temporal Twin",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: ally action grant = buff [model]",
+    "overrides": {
+      "roles": [
+        "buff",
+        "utility"
+      ]
+    }
+  },
+  {
+    "aonId": 2610,
+    "name": "Time Pocket",
+    "reason": "Cycle 40 integrated data correction (audit+Foundry+Heidi adjudication): roles: item storage [model]",
     "overrides": {
       "roles": [
         "utility"

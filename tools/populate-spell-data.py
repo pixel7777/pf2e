@@ -407,18 +407,30 @@ Valid values: "Auto-effect", "Success-effect"
 
 Add "Auto-effect" if AND ONLY IF you added "Auto" to defense_tags_added (above).
 
-Add "Success-effect" if AND ONLY IF ALL of:
-1. basic_save is FALSE, AND
-2. The spell text contains an explicit "Success" entry in its degrees-of-success block, AND
-3. That Success entry describes a HARMFUL effect on the enemy (a condition like Frightened/Slowed, partial damage, a tactical consequence). "The target is unaffected" or "no effect" or absence of a Success entry means NO Success-effect.
+THE MEANING OF THIS TAG: a spell earns "Success-effect" when something strategically
+meaningful still happens to the enemy even when their save SUCCEEDS. There are two paths:
+- Path 1 (basic save): basic_save=TRUE spells ALWAYS qualify — half damage on success IS the
+  meaningful effect. The structured pipeline adds the tag for them automatically, so YOU must
+  not re-emit it (division of labor, not a statement about the spell).
+- Path 2 (explicit success rider): basic_save=FALSE and the Success entry describes a real
+  consequence — a condition, partial/full damage, persistent damage, a penalty, lost reactions,
+  difficult terrain. THIS INCLUDES text that spells out the basic-save-shaped pattern ("the
+  target takes half damage") without using the word "basic" — a spelled-out half-damage success
+  outcome QUALIFIES. The word "basic" is an inclusion shortcut, never an exclusion filter.
 
-⚠️ ABSOLUTE RULE — basic_save=TRUE: DO NOT emit Success-effect. Ever. Basic-save spells get Success-effect from the structured pass automatically. Re-emitting it is a HARD ERROR. Check basic_save FIRST in SPELL CONTEXT — if true, your reliability_tags_added list cannot contain "Success-effect".
+Emit "Success-effect" if AND ONLY IF: basic_save is FALSE AND the Success entry describes a
+meaningful consequence (Path 2). "The target is unaffected" / "no effect" / no Success entry → [].
 
-NEGATIVE EXAMPLES (basic_save=TRUE → NEVER emit Success-effect):
-- **Fireball** (basic Reflex) → reliability_tags_added: [] — DO NOT emit Success-effect.
-- **Chilling Spray** (basic Reflex) → reliability_tags_added: [] — DO NOT emit Success-effect (the half-damage on success is captured by the basic-save mechanic, not by this tag).
-- **Cinder Swarm** (basic Fortitude or basic Reflex) → reliability_tags_added: [] — DO NOT emit.
-- **Dehydrate** (basic Fortitude) → reliability_tags_added: [] — DO NOT emit even though Failure adds Enfeebled.
+basic_save=TRUE: emit [] for this tag — the structured pass supplies it (Path 1). Do not re-emit.
+
+NEGATIVE EXAMPLES (basic_save=TRUE → the pipeline already tags these; emit []):
+- **Fireball** (basic Reflex) → reliability_tags_added: [] (tag arrives via Path 1, not you).
+- **Cinder Swarm** (basic Fortitude or Reflex) → [] (same).
+- **Dehydrate** (basic Fortitude) → [] (same — even though Failure adds Enfeebled).
+POSITIVE EXAMPLE (spelled-out half damage, basic_save=FALSE → Path 2, DO emit):
+- **Wails of the Damned** (Will, not basic) — Success = "The creature takes full damage" → ["Success-effect"] ✓
+- A spell whose Success line reads "the target takes half damage" but whose saving_throw field
+  lacks the word "basic" → ["Success-effect"] ✓ (the AoN field sometimes omits "basic").
 - **Blood Vendetta** (Will, NOT basic) → may emit if Success has a meaningful rider. Check rule below.
 
 POSITIVE EXAMPLES (basic_save=FALSE AND Success has a harmful rider → DO emit):
@@ -752,7 +764,9 @@ LEGACY_DAMAGE_REMAP = {
 PREBUFF_DURATION_PATTERNS = [
     r'\d+\s*hours?', r'\d+\s*days?',
     r'(\d+)\s*minutes',
-    r'until.*(next|daily\s*prep)',
+    # 'until your next daily preparations' is ~24h; a bare 'next' also matched
+    # 'until the end of your next turn' (1 round) — Cycle 40 bug fix.
+    r'until.*daily\s*prep', r'until.*next\s*daily',
 ]
 
 def likely_prebuff_duration(duration_raw):
@@ -926,6 +940,15 @@ def _apply_consistency_rules(spell):
         if 'prebuffs' not in spell.get('roles', []):
             spell['roles'] = sorted(set(spell.get('roles', []) + ['prebuffs']))
             fixes.append("added prebuffs role (heuristic: duration=%s)" % spell.get('duration_raw', ''))
+
+    # Rule: basic_save=true guarantees Success-effect (Path 1 — basic saves give half
+    # damage on success, which IS a meaningful success effect). Cycle 40: previously this
+    # only happened in build-spell-data.py step 1, so an editorial basic_save override
+    # silently lost the tag. Additive union — cannot fight an editorial reliability override
+    # that ADDS tags; an editorial removal pairs with basic_save=false (Noise Blast rule).
+    if spell.get("basic_save") and "Success-effect" not in spell.get("reliability_tags", []):
+        spell["reliability_tags"] = sorted(set(spell.get("reliability_tags", [])) | {"Success-effect"})
+        fixes.append("added Success-effect (basic_save=true, Path 1)")
 
     # Rule: every spell must have at least one role. If empty, default to utility.
     if not spell.get("roles"):

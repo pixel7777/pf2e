@@ -9824,6 +9824,30 @@
           "applies_to": {
             "trait": "Arcane"
           }
+        },
+        {
+          "source": "Theoretical vs Practical Utility Spells.md",
+          "observation": "Buying heuristic: scroll for once-per-adventure needs, wand for once-per-day needs. Consumable utility costs zero combat prowess.",
+          "source_type": "category",
+          "applies_to": {
+            "role": "utility"
+          }
+        },
+        {
+          "source": "Theoretical vs Practical Utility Spells.md",
+          "observation": "Past ~level 7, surplus low-rank slots make slot-cast utility nearly free - skipping it leaves power on the table.",
+          "source_type": "category",
+          "applies_to": {
+            "role": "utility"
+          }
+        },
+        {
+          "source": "Theoretical vs Practical Utility Spells.md",
+          "observation": "PF2e utility is weaker spell-for-spell than D&D's but sees more table play - opportunity cost, not raw power, drives actual usage.",
+          "source_type": "category",
+          "applies_to": {
+            "role": "utility"
+          }
         }
       ]
     },
@@ -87524,6 +87548,30 @@
           "applies_to": {
             "trait": "Divine"
           }
+        },
+        {
+          "source": "Theoretical vs Practical Utility Spells.md",
+          "observation": "Buying heuristic: scroll for once-per-adventure needs, wand for once-per-day needs. Consumable utility costs zero combat prowess.",
+          "source_type": "category",
+          "applies_to": {
+            "role": "utility"
+          }
+        },
+        {
+          "source": "Theoretical vs Practical Utility Spells.md",
+          "observation": "Past ~level 7, surplus low-rank slots make slot-cast utility nearly free - skipping it leaves power on the table.",
+          "source_type": "category",
+          "applies_to": {
+            "role": "utility"
+          }
+        },
+        {
+          "source": "Theoretical vs Practical Utility Spells.md",
+          "observation": "PF2e utility is weaker spell-for-spell than D&D's but sees more table play - opportunity cost, not raw power, drives actual usage.",
+          "source_type": "category",
+          "applies_to": {
+            "role": "utility"
+          }
         }
       ]
     },
@@ -88388,38 +88436,6 @@
       "mathfinder_reviewed": false,
       "observations": [
         {
-          "source": "Elemental Sorcerer Blaster Guide.md",
-          "observation": "Cantrips carry you at levels 1-2, then steadily fall off — by level 7, cantrips are mostly filler.",
-          "source_type": "category",
-          "applies_to": {
-            "role": "damage"
-          }
-        },
-        {
-          "source": "How to Blast GOOD in Pathfinder 2e.md",
-          "observation": "DPR is a misleading metric for AoE spells. Evaluate AoE by looking at the probability distribution of outcomes, not the average DPR number.",
-          "source_type": "category",
-          "applies_to": {
-            "role": "damage"
-          }
-        },
-        {
-          "source": "Pathfinder 2e Spellcaster MYTHS - NEVER Use Attack Roll Spells.md",
-          "observation": "Some attack roll spells have built-in action economy that moderates accuracy risk, such as multi-turn attacks or half-hit options.",
-          "source_type": "category",
-          "applies_to": {
-            "role": "damage"
-          }
-        },
-        {
-          "source": "Spell Selection Basics.md",
-          "observation": "Carry at least 2 damage types and/or traits to avoid immunities. Always avoid the highest defense, don't chase the lowest.",
-          "source_type": "category",
-          "applies_to": {
-            "role": "damage"
-          }
-        },
-        {
           "source": "Who are the BEST Blasters in Pathfinder 2e.md",
           "observation": "Very strong for blasting but struggles with Will saves, with only Fear and Lose the Path as real Will-targeting options.",
           "source_type": "category",
@@ -88441,6 +88457,62 @@
           "source_type": "category",
           "applies_to": {
             "custom": "heightened spells"
+          }
+        },
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "The vast majority of utility spells just solve problems outright with no check. The 'Knock Problem' is the exception, not the rule.",
+          "source_type": "category",
+          "applies_to": {
+            "role": "utility"
+          }
+        },
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Utility spell selection is inherently campaign-dependent. There is no one optimal utility list.",
+          "source_type": "category",
+          "applies_to": {
+            "role": "utility"
+          }
+        },
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "At low levels, using a spell slot for utility is expensive but can outperform skills. At high levels, that same low-rank slot is cheap but skills have caught up or surpassed it.",
+          "source_type": "category",
+          "applies_to": {
+            "role": "utility"
+          }
+        },
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Spells that contest a foe's skill involve a check because the world has adapted to magic, creating stable worldbuilding where non-magical skill remains relevant.",
+          "source_type": "category",
+          "applies_to": {
+            "role": "utility"
+          }
+        },
+        {
+          "source": "Theoretical vs Practical Utility Spells.md",
+          "observation": "Buying heuristic: scroll for once-per-adventure needs, wand for once-per-day needs. Consumable utility costs zero combat prowess.",
+          "source_type": "category",
+          "applies_to": {
+            "role": "utility"
+          }
+        },
+        {
+          "source": "Theoretical vs Practical Utility Spells.md",
+          "observation": "Past ~level 7, surplus low-rank slots make slot-cast utility nearly free - skipping it leaves power on the table.",
+          "source_type": "category",
+          "applies_to": {
+            "role": "utility"
+          }
+        },
+        {
+          "source": "Theoretical vs Practical Utility Spells.md",
+          "observation": "PF2e utility is weaker spell-for-spell than D&D's but sees more table play - opportunity cost, not raw power, drives actual usage.",
+          "source_type": "category",
+          "applies_to": {
+            "role": "utility"
           }
         }
       ]
@@ -122854,6 +122926,62 @@
           "source_type": "category",
           "applies_to": {
             "custom": "heightened spells"
+          }
+        },
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "The vast majority of utility spells just solve problems outright with no check. The 'Knock Problem' is the exception, not the rule.",
+          "source_type": "category",
+          "applies_to": {
+            "role": "utility"
+          }
+        },
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Utility spell selection is inherently campaign-dependent. There is no one optimal utility list.",
+          "source_type": "category",
+          "applies_to": {
+            "role": "utility"
+          }
+        },
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "At low levels, using a spell slot for utility is expensive but can outperform skills. At high levels, that same low-rank slot is cheap but skills have caught up or surpassed it.",
+          "source_type": "category",
+          "applies_to": {
+            "role": "utility"
+          }
+        },
+        {
+          "source": "Are Utility Spells BAD in Pathfinder 2e.md",
+          "observation": "Spells that contest a foe's skill involve a check because the world has adapted to magic, creating stable worldbuilding where non-magical skill remains relevant.",
+          "source_type": "category",
+          "applies_to": {
+            "role": "utility"
+          }
+        },
+        {
+          "source": "Theoretical vs Practical Utility Spells.md",
+          "observation": "Buying heuristic: scroll for once-per-adventure needs, wand for once-per-day needs. Consumable utility costs zero combat prowess.",
+          "source_type": "category",
+          "applies_to": {
+            "role": "utility"
+          }
+        },
+        {
+          "source": "Theoretical vs Practical Utility Spells.md",
+          "observation": "Past ~level 7, surplus low-rank slots make slot-cast utility nearly free - skipping it leaves power on the table.",
+          "source_type": "category",
+          "applies_to": {
+            "role": "utility"
+          }
+        },
+        {
+          "source": "Theoretical vs Practical Utility Spells.md",
+          "observation": "PF2e utility is weaker spell-for-spell than D&D's but sees more table play - opportunity cost, not raw power, drives actual usage.",
+          "source_type": "category",
+          "applies_to": {
+            "role": "utility"
           }
         }
       ]

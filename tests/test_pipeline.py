@@ -1314,6 +1314,68 @@ def test_c31_deleted_spells_absent(spells):
     return True
 
 
+def test_c40_basic_save_success_effect_invariant(spells):
+    """C40 Story B: every basic_save=true spell carries Success-effect (Path 1 rule).
+    Basic saves guarantee half damage on success — that IS a meaningful success effect.
+    Guards the consistency rule added in Cycle 40 (editorial basic_save overrides used
+    to silently lose the tag because Path 1 only ran in build step 1)."""
+    errors = []
+    for s in spells:
+        if s.get("basic_save") and "Success-effect" not in (s.get("reliability_tags") or []):
+            errors.append("  %s (aon %s): basic_save=true without Success-effect" % (s["name"], s["aonId"]))
+    if errors:
+        print("FAIL: basic_save => Success-effect invariant")
+        print("\n".join(errors[:10]))
+        return False
+    n = sum(1 for s in spells if s.get("basic_save"))
+    print("PASS: basic_save => Success-effect invariant (%d basic-save spells)" % n)
+    return True
+
+
+def test_c40_integrated_corrections(spells):
+    """C40 Story A/B/C: fossil record of the integrated audit+Foundry correction cycle.
+    Asserts a representative sample of the 284-spell fix package landed and survives rebuilds."""
+    by_aon = {s["aonId"]: s for s in spells}
+    errors = []
+
+    def check(aid, field, expected, why):
+        s = by_aon.get(aid)
+        if not s:
+            errors.append("  aon %s missing" % aid)
+            return
+        if s.get(field) != expected:
+            errors.append("  %s (aon %s) %s: expected %r, got %r (%s)"
+                          % (s["name"], aid, field, expected, s.get(field), why))
+
+    check(1547, "defense_tags", ["Ref"], "Grease: Foundry oracle catch")
+    check(2045, "defense_tags", ["Ref"], "Web: Foundry oracle catch")
+    check(1552, "basic_save", True, "Harm: text says basic Fortitude")
+    check(1562, "basic_save", True, "Hydraulic Torrent: text says basic Fortitude")
+    check(1554, "defense_tags", ["Fort"], "Heal convention: vs-undead offense")
+    check(1554, "damage_types", ["Vitality"], "Heal convention")
+    check(1750, "damage_types", ["Cold"], "Wall of Ice: audit-approved false-negative caught by Foundry")
+    check(1078, "defense_tags", ["Will"], "Mirecloak: text+Foundry agree on Will")
+    check(1707, "basic_save", False, "Sunburst: Heidi verdict — Reflex, not basic")
+    check(1075, "defense_tags", ["Ref"], "Swampcall: both-source agreement")
+    check(2123, "roles", ["buff"], "Bone Flense: weapon-buff convention (buff only)")
+    check(1751, "defense_tags", ["Auto"], "Wall of Stone keeps Auto (canonical auto-effect control)")
+    # Sunburst still gets Success-effect via Path 2 (spelled-out half damage on success)
+    s = by_aon.get(1707)
+    if s and "Success-effect" not in (s.get("reliability_tags") or []):
+        errors.append("  Sunburst: Path-2 Success-effect missing")
+    # Prismatic Shield: prebuff-duration heuristic bug fix (1-round spells are not prebuffs)
+    s = by_aon.get(838)
+    if s and "prebuffs" in (s.get("roles") or []):
+        errors.append("  Prismatic Shield: bogus heuristic prebuffs returned (%r)" % (s["roles"],))
+
+    if errors:
+        print("FAIL: C40 integrated corrections")
+        print("\n".join(errors))
+        return False
+    print("PASS: C40 integrated corrections (14 fossil-record assertions)")
+    return True
+
+
 def test_c39_observation_integration(spells):
     """C39: 'Theoretical vs Practical Utility Spells' video integration + utility role fixes.
     Story A (named spells carry the video), Story B (utility category enrichment + tag def),
@@ -1480,6 +1542,15 @@ def main():
     print()
     print("=== C39: Utility Video Integration + Role Fixes ===")
     if not test_c39_observation_integration(spells):
+        passed = False
+
+    print()
+    print("=== C40: Integrated Data Correction (audit + Foundry oracle) ===")
+    c40_tests = [
+        test_c40_basic_save_success_effect_invariant(spells),
+        test_c40_integrated_corrections(spells),
+    ]
+    if [r for r in c40_tests if r is False]:
         passed = False
 
     print()

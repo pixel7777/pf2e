@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generated": "2026-06-11",
+  "generated": "2026-06-12",
   "tier_counts": {
     "deterministic": 71,
     "advice": 56,
@@ -46,7 +46,7 @@
       "observation": "The vast majority of utility spells just solve problems outright with no check. The 'Knock Problem' is the exception, not the rule.",
       "tier": "deterministic",
       "match_rule": "roles contains \"utility\"",
-      "match_count": 311
+      "match_count": 313
     },
     {
       "index": 4,
@@ -57,7 +57,7 @@
       "observation": "Utility spell selection is inherently campaign-dependent. There is no one optimal utility list.",
       "tier": "deterministic",
       "match_rule": "roles contains \"utility\"",
-      "match_count": 311
+      "match_count": 313
     },
     {
       "index": 5,
@@ -68,7 +68,7 @@
       "observation": "At low levels, using a spell slot for utility is expensive but can outperform skills. At high levels, that same low-rank slot is cheap but skills have caught up or surpassed it.",
       "tier": "deterministic",
       "match_rule": "roles contains \"utility\"",
-      "match_count": 311
+      "match_count": 313
     },
     {
       "index": 6,
@@ -79,7 +79,7 @@
       "observation": "Spells that contest a foe's skill involve a check because the world has adapted to magic, creating stable worldbuilding where non-magical skill remains relevant.",
       "tier": "deterministic",
       "match_rule": "roles contains \"utility\"",
-      "match_count": 311
+      "match_count": 313
     },
     {
       "index": 7,
@@ -212,7 +212,7 @@
       "observation": "One-action sustained damage is premium action economy. Getting cantrip-level damage for a single action on subsequent turns frees two actions for focus spells, slotted spells, or cantrips each turn.",
       "tier": "deterministic",
       "match_rule": "tag_fields contains \"Sustain-action\"",
-      "match_count": 160
+      "match_count": 162
     },
     {
       "index": 20,
@@ -223,7 +223,7 @@
       "observation": "Sustained spells shift the DPR advantage toward longer combats. The longer a fight goes, the more value you extract from that initial spell slot.",
       "tier": "deterministic",
       "match_rule": "tag_fields contains \"Sustain-action\"",
-      "match_count": 160
+      "match_count": 162
     },
     {
       "index": 21,
@@ -234,7 +234,7 @@
       "observation": "Lower risk profiles compound over multiple turns. A character making two basic saves per turn has a ~4% chance of doing zero damage, vs. ~12% for a character making one save + one attack roll.",
       "tier": "deterministic",
       "match_rule": "basic_save is true",
-      "match_count": 101
+      "match_count": 147
     },
     {
       "index": 22,
@@ -246,7 +246,7 @@
       "observation": "Emanations are significantly larger than bursts of the same size and often ignore allies — both major tactical advantages.",
       "tier": "deterministic",
       "match_rule": "targeting_subtypes contains \"Emanation\"",
-      "match_count": 31
+      "match_count": 30
     },
     {
       "index": 23,
@@ -289,7 +289,7 @@
       "observation": "Spells that target Fortitude have a hidden advantage over Reflex-targeting AoEs, as most iconic AoE spells target Reflex and many monster stat blocks have weaker Fortitude saves.",
       "tier": "deterministic",
       "match_rule": "defense_tags contains \"Fort\"",
-      "match_count": 152
+      "match_count": 164
     },
     {
       "index": 27,
@@ -340,7 +340,7 @@
       "observation": "Rider effects on blasting spells add massive value. A fireball that also moves enemies and frightens them turns every blast into crowd control.",
       "tier": "deterministic",
       "match_rule": "targeting_subtypes is non-empty",
-      "match_count": 161
+      "match_count": 167
     },
     {
       "index": 32,
@@ -383,7 +383,7 @@
       "observation": "Cantrips carry you at levels 1-2, then steadily fall off — by level 7, cantrips are mostly filler.",
       "tier": "deterministic",
       "match_rule": "roles contains \"damage\"",
-      "match_count": 342
+      "match_count": 345
     },
     {
       "index": 36,
@@ -515,7 +515,7 @@
       "observation": "Don't put too many eggs into attack roll spells — one signature attack spell is fine as an option you can choose not to cast, but loading up on them is risky outside Mythic proficiency.",
       "tier": "deterministic",
       "match_rule": "defense_tags contains \"AC\"",
-      "match_count": 61
+      "match_count": 57
     },
     {
       "index": 49,
@@ -546,7 +546,7 @@
       "observation": "DPR is a misleading metric for AoE spells. Evaluate AoE by looking at the probability distribution of outcomes, not the average DPR number.",
       "tier": "deterministic",
       "match_rule": "roles contains \"damage\"",
-      "match_count": 342
+      "match_count": 345
     },
     {
       "index": 52,
@@ -557,7 +557,7 @@
       "observation": "Against three targets at on-level DCs, there is an ~83% chance at least one target fails the save. The 'three successes' outcome is about half as likely as 'two fails, one success'.",
       "tier": "deterministic",
       "match_rule": "targeting_subtypes is non-empty",
-      "match_count": 161
+      "match_count": 167
     },
     {
       "index": 53,
@@ -568,7 +568,7 @@
       "observation": "AoE creates focus fire opportunities. The spike damage on a failed save brings one target into kill range; allies finish that target while the caster continues softening the rest.",
       "tier": "deterministic",
       "match_rule": "targeting_subtypes is non-empty",
-      "match_count": 161
+      "match_count": 167
     },
     {
       "index": 54,
@@ -620,7 +620,7 @@
       "observation": "Better than save spells for confirmed kills because they benefit from Sure Strike, hero points, and ally buffs to attack.",
       "tier": "deterministic",
       "match_rule": "defense_tags contains \"AC\"",
-      "match_count": 61
+      "match_count": 57
     },
     {
       "index": 59,
@@ -684,7 +684,7 @@
       "observation": "Auto-effect spells (no saving throw) at low ranks are extremely rare and valuable. At rank 3, auto-effect spells are almost nonexistent, making any auto-debuff at this tier inherently underrated.",
       "tier": "deterministic",
       "match_rule": "defense_tags contains \"Auto\"",
-      "match_count": 27
+      "match_count": 41
     },
     {
       "index": 65,
@@ -695,7 +695,7 @@
       "observation": "Sustained spells are often free action economy once the enemy is trapped or has chosen to stay in the zone. If the enemy moves out, you just drop the spell — no wasted sustain.",
       "tier": "deterministic",
       "match_rule": "action_tags contains \"Sustain-action\" AND roles contains \"debuff\"",
-      "match_count": 57
+      "match_count": 53
     },
     {
       "index": 66,
@@ -706,7 +706,7 @@
       "observation": "Spells that create zones combine with prone/immobilize effects to create action-denial stacks through party coordination.",
       "tier": "deterministic",
       "match_rule": "roles contains \"control\" AND targeting_subtypes is non-empty",
-      "match_count": 83
+      "match_count": 88
     },
     {
       "index": 67,
@@ -767,7 +767,7 @@
       "observation": "Evaluate debuffs by outcomes changed, not raw numbers. A -1 to AC that converts a miss to a hit or a hit to a crit is worth one 'outcome changed.'",
       "tier": "deterministic",
       "match_rule": "roles contains \"debuff\"",
-      "match_count": 367
+      "match_count": 344
     },
     {
       "index": 73,
@@ -819,7 +819,7 @@
       "observation": "Sustained spells front-load value by casting a 2-3 action spell on turn one, then sustaining for one action on subsequent turns — freeing two actions for more offense.",
       "tier": "deterministic",
       "match_rule": "action_tags contains \"Sustain-action\"",
-      "match_count": 160
+      "match_count": 162
     },
     {
       "index": 78,
@@ -876,7 +876,7 @@
       "observation": "Basic saves provide guaranteed damage floor and higher reliability by spreading damage across many d20 rolls.",
       "tier": "deterministic",
       "match_rule": "basic_save is true",
-      "match_count": 101
+      "match_count": 147
     },
     {
       "index": 83,
@@ -917,7 +917,7 @@
       "observation": "Evaluate by success effect since against bosses 2-4 levels above you, success is the expected outcome (~50% chance).",
       "tier": "deterministic",
       "match_rule": "targeting_tags contains \"ST\"",
-      "match_count": 266
+      "match_count": 267
     },
     {
       "index": 87,
@@ -928,7 +928,7 @@
       "observation": "Evaluate primarily by failure effects since against multiple targets, at least one failure occurs much more frequently than all successes.",
       "tier": "deterministic",
       "match_rule": "targeting_tags contains \"Multi\"",
-      "match_count": 251
+      "match_count": 290
     },
     {
       "index": 88,
@@ -971,7 +971,7 @@
       "observation": "Even critical failure effects become plannable. Against six level-minus-3 foes, there is a 62% chance at least one enemy critically fails.",
       "tier": "deterministic",
       "match_rule": "targeting_subtypes is non-empty",
-      "match_count": 161
+      "match_count": 167
     },
     {
       "index": 92,
@@ -983,7 +983,7 @@
       "observation": "Attack roll spells are situational, not bad. They benefit from teamwork far more easily than save spells and become flat-out better than corresponding save spells after sufficient bonuses stack.",
       "tier": "deterministic",
       "match_rule": "defense_tags contains \"AC\"",
-      "match_count": 61
+      "match_count": 57
     },
     {
       "index": 93,
@@ -1006,7 +1006,7 @@
       "observation": "Attack roll spells have no partial effect — miss/hit/crit only. The baseline math IS worse for attack rolls because casters lack potency runes, falling 1-3 behind martials in attack bonus.",
       "tier": "deterministic",
       "match_rule": "defense_tags contains \"AC\"",
-      "match_count": 61
+      "match_count": 57
     },
     {
       "index": 95,
@@ -1017,7 +1017,7 @@
       "observation": "Some attack roll spells have built-in action economy that moderates accuracy risk, such as multi-turn attacks or half-hit options.",
       "tier": "deterministic",
       "match_rule": "roles contains \"damage\"",
-      "match_count": 342
+      "match_count": 345
     },
     {
       "index": 96,
@@ -1059,7 +1059,7 @@
       "observation": "The usual downside of stationary AoEs (messing with melee allies, enemies walking out) is reduced when the spell can switch to single-target mode on sustain.",
       "tier": "deterministic",
       "match_rule": "targeting_subtypes is non-empty",
-      "match_count": 161
+      "match_count": 167
     },
     {
       "index": 100,
@@ -1070,7 +1070,7 @@
       "observation": "Sustain spells gain value when you can change the effect each round, providing excellent action economy by adapting to the evolving fight.",
       "tier": "deterministic",
       "match_rule": "tag_fields contains \"Sustain-action\"",
-      "match_count": 160
+      "match_count": 162
     },
     {
       "index": 101,
@@ -1092,7 +1092,7 @@
       "observation": "Carry at least 2 damage types and/or traits to avoid immunities. Always avoid the highest defense, don't chase the lowest.",
       "tier": "deterministic",
       "match_rule": "roles contains \"damage\"",
-      "match_count": 342
+      "match_count": 345
     },
     {
       "index": 103,
@@ -1114,7 +1114,7 @@
       "observation": "Prioritize ones with success effects (bosses succeed ~50% of the time).",
       "tier": "deterministic",
       "match_rule": "targeting_tags contains \"ST\"",
-      "match_count": 266
+      "match_count": 267
     },
     {
       "index": 105,
@@ -1125,7 +1125,7 @@
       "observation": "Don't need success effects as badly — with multiple targets, someone will fail.",
       "tier": "deterministic",
       "match_rule": "targeting_subtypes is non-empty",
-      "match_count": 161
+      "match_count": 167
     },
     {
       "index": 106,
@@ -1136,7 +1136,7 @@
       "observation": "Many control spells have automatic effects providing unconditional reliability.",
       "tier": "deterministic",
       "match_rule": "roles contains \"control\"",
-      "match_count": 307
+      "match_count": 299
     },
     {
       "index": 107,
@@ -1167,7 +1167,7 @@
       "observation": "Good for classes with lots of spell slots but weak focus spells. Cast spell then sustain on subsequent turns while casting 2-action spells.",
       "tier": "deterministic",
       "match_rule": "tag_fields contains \"Sustain-action\"",
-      "match_count": 160
+      "match_count": 162
     },
     {
       "index": 110,
@@ -1233,7 +1233,7 @@
       "observation": "Major source of action compression for primal casters — set up a big spell turn one, then sustain it while using focus spells.",
       "tier": "deterministic",
       "match_rule": "tag_fields contains \"Sustain-action\"",
-      "match_count": 160
+      "match_count": 162
     },
     {
       "index": 116,
@@ -1276,7 +1276,7 @@
       "observation": "Bypass saves or AC entirely, providing reliable damage output against high-defense enemies.",
       "tier": "deterministic",
       "match_rule": "defense_tags contains \"Auto\"",
-      "match_count": 27
+      "match_count": 41
     },
     {
       "index": 120,
@@ -1320,7 +1320,7 @@
       "observation": "Sustain spells are fundamentally good for three-slot casters — they let you get repeated value from a single spell slot. Sustain spells can be cast one rank below max and still be very good because repeated damage over multiple rounds compensates for the slightly lower per-hit numbers.",
       "tier": "deterministic",
       "match_rule": "action_tags contains \"Sustain-action\"",
-      "match_count": 160
+      "match_count": 162
     },
     {
       "index": 124,
@@ -1384,7 +1384,7 @@
       "observation": "Buying heuristic: scroll for once-per-adventure needs, wand for once-per-day needs. Consumable utility costs zero combat prowess.",
       "tier": "deterministic",
       "match_rule": "roles contains \"utility\"",
-      "match_count": 311
+      "match_count": 313
     },
     {
       "index": 130,
@@ -1395,7 +1395,7 @@
       "observation": "Past ~level 7, surplus low-rank slots make slot-cast utility nearly free — skipping it leaves power on the table.",
       "tier": "deterministic",
       "match_rule": "roles contains \"utility\"",
-      "match_count": 311
+      "match_count": 313
     },
     {
       "index": 131,
@@ -1406,7 +1406,7 @@
       "observation": "PF2e utility is weaker spell-for-spell than D&D's but sees more table play — opportunity cost, not raw power, drives actual usage.",
       "tier": "deterministic",
       "match_rule": "roles contains \"utility\"",
-      "match_count": 311
+      "match_count": 313
     }
   ]
 }
