@@ -169,7 +169,6 @@
     "heighten_pattern": "plus_1",
     "roles": [
       "damage",
-      "debuff",
       "oneAction"
     ],
     "defense_tags": [
@@ -269,8 +268,6 @@
     ],
     "heighten_pattern": "fixed",
     "roles": [
-      "buff",
-      "prebuffs",
       "utility"
     ],
     "defense_tags": [],
@@ -285,8 +282,7 @@
     ],
     "heighten_pattern": "none",
     "roles": [
-      "buff",
-      "prebuffs"
+      "utility"
     ],
     "defense_tags": [],
     "era": "remaster_core"
@@ -533,8 +529,6 @@
     ],
     "heighten_pattern": "fixed",
     "roles": [
-      "buff",
-      "prebuffs",
       "utility"
     ],
     "defense_tags": [],
@@ -775,7 +769,8 @@
     "heighten_pattern": "plus_2",
     "roles": [
       "buff",
-      "damage"
+      "damage",
+      "silverBullets"
     ],
     "defense_tags": [
       "Auto"

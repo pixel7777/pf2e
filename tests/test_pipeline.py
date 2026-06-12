@@ -1027,10 +1027,22 @@ def test_c23_heighten_quality(spells):
 
 
 def test_c23_summon_control(spells):
-    """C23-4: All spells with Summon trait have 'control' in roles."""
+    """C23-4: Summon-trait spells have 'control' in roles, EXCEPT spells carrying an
+    editorial roles override (authoritative per Cycle 39). The Summon->control rule
+    assumes a summon adds an allied combatant; effect-summons (e.g. Phantasmal Minion,
+    which summons an effect with no HP/actions) are corrected to utility via an editorial
+    roles override, which wins over the consistency rule."""
+    import os
+    ovr_path = os.path.join(os.path.dirname(__file__), "..", "data", "editorial-overrides.json")
+    with open(ovr_path, encoding="utf-8") as f:
+        role_override_ids = {e["aonId"] for e in json.load(f) if "roles" in e.get("overrides", {})}
     errors = []
+    exempt = 0
     for s in spells:
         if "Summon" in (s.get("trait_raw") or []):
+            if s["aonId"] in role_override_ids:
+                exempt += 1
+                continue
             if "control" not in (s.get("roles") or []):
                 errors.append(f"  {s['name']} (aon {s['aonId']}): has Summon trait but no control role")
     if errors:
@@ -1039,7 +1051,7 @@ def test_c23_summon_control(spells):
             print(e)
         return False
     summon_count = sum(1 for s in spells if "Summon" in (s.get("trait_raw") or []))
-    print(f"  PASS: All {summon_count} Summon-trait spells have control role")
+    print(f"  PASS: {summon_count - exempt} Summon-trait spells have control role ({exempt} editorial-override exempt)")
     return True
 
 
@@ -1302,6 +1314,125 @@ def test_c31_deleted_spells_absent(spells):
     return True
 
 
+def test_c40_basic_save_success_effect_invariant(spells):
+    """C40 Story B: every basic_save=true spell carries Success-effect (Path 1 rule).
+    Basic saves guarantee half damage on success — that IS a meaningful success effect.
+    Guards the consistency rule added in Cycle 40 (editorial basic_save overrides used
+    to silently lose the tag because Path 1 only ran in build step 1)."""
+    errors = []
+    for s in spells:
+        if s.get("basic_save") and "Success-effect" not in (s.get("reliability_tags") or []):
+            errors.append("  %s (aon %s): basic_save=true without Success-effect" % (s["name"], s["aonId"]))
+    if errors:
+        print("FAIL: basic_save => Success-effect invariant")
+        print("\n".join(errors[:10]))
+        return False
+    n = sum(1 for s in spells if s.get("basic_save"))
+    print("PASS: basic_save => Success-effect invariant (%d basic-save spells)" % n)
+    return True
+
+
+def test_c40_integrated_corrections(spells):
+    """C40 Story A/B/C: fossil record of the integrated audit+Foundry correction cycle.
+    Asserts a representative sample of the 284-spell fix package landed and survives rebuilds."""
+    by_aon = {s["aonId"]: s for s in spells}
+    errors = []
+
+    def check(aid, field, expected, why):
+        s = by_aon.get(aid)
+        if not s:
+            errors.append("  aon %s missing" % aid)
+            return
+        if s.get(field) != expected:
+            errors.append("  %s (aon %s) %s: expected %r, got %r (%s)"
+                          % (s["name"], aid, field, expected, s.get(field), why))
+
+    check(1547, "defense_tags", ["Ref"], "Grease: Foundry oracle catch")
+    check(2045, "defense_tags", ["Ref"], "Web: Foundry oracle catch")
+    check(1552, "basic_save", True, "Harm: text says basic Fortitude")
+    check(1562, "basic_save", True, "Hydraulic Torrent: text says basic Fortitude")
+    check(1554, "defense_tags", ["Fort"], "Heal convention: vs-undead offense")
+    check(1554, "damage_types", ["Vitality"], "Heal convention")
+    check(1750, "damage_types", ["Cold"], "Wall of Ice: audit-approved false-negative caught by Foundry")
+    check(1078, "defense_tags", ["Will"], "Mirecloak: text+Foundry agree on Will")
+    check(1707, "basic_save", False, "Sunburst: Heidi verdict — Reflex, not basic")
+    check(1075, "defense_tags", ["Ref"], "Swampcall: both-source agreement")
+    check(2123, "roles", ["buff"], "Bone Flense: weapon-buff convention (buff only)")
+    check(1751, "defense_tags", ["Auto"], "Wall of Stone keeps Auto (canonical auto-effect control)")
+    check(1345, "heighten_quality", "scales-well", "Weaken Earth: G5 Heidi ruling — heightens well")
+    check(2010, "basic_save", True, "Nature's Enmity: G5 Heidi ruling — nested basic Reflex save is real (Foundry-side error)")
+    # Sunburst still gets Success-effect via Path 2 (spelled-out half damage on success)
+    s = by_aon.get(1707)
+    if s and "Success-effect" not in (s.get("reliability_tags") or []):
+        errors.append("  Sunburst: Path-2 Success-effect missing")
+    # Prismatic Shield: prebuff-duration heuristic bug fix (1-round spells are not prebuffs)
+    s = by_aon.get(838)
+    if s and "prebuffs" in (s.get("roles") or []):
+        errors.append("  Prismatic Shield: bogus heuristic prebuffs returned (%r)" % (s["roles"],))
+
+    if errors:
+        print("FAIL: C40 integrated corrections")
+        print("\n".join(errors))
+        return False
+    print("PASS: C40 integrated corrections (16 fossil-record assertions)")
+    return True
+
+
+def test_c39_observation_integration(spells):
+    """C39: 'Theoretical vs Practical Utility Spells' video integration + utility role fixes.
+    Story A (named spells carry the video), Story B (utility category enrichment + tag def),
+    plus the editorial role corrections this cycle made."""
+    import os
+    SRC = "Theoretical vs Practical Utility Spells.md"
+    SRC_URL = "https://www.youtube.com/watch?v=bnMhmd5iTqA"
+    errors = []
+    by_aon = {s["aonId"]: s for s in spells}
+
+    # Story A: the 9 named spells carry the new video in mathfinder_sources and are reviewed
+    named = [1972, 1442, 1631, 1755, 1541, 1581, 1663, 1422, 335]
+    for aid in named:
+        s = by_aon.get(aid)
+        if not s:
+            errors.append(f"  named spell aon {aid} missing from spell-data")
+            continue
+        if SRC_URL not in [x.get("url") for x in (s.get("mathfinder_sources") or [])]:
+            errors.append(f"  {s['name']} (aon {aid}): new video not in mathfinder_sources")
+        if not s.get("mathfinder_reviewed"):
+            errors.append(f"  {s['name']} (aon {aid}): not mathfinder_reviewed")
+
+    # Story B: every utility-role spell carries the 3 new category observations
+    util = [s for s in spells if "utility" in (s.get("roles") or [])]
+    missing = [s["name"] for s in util
+               if sum(1 for o in (s.get("mathfinder_observations") or []) if o.get("source") == SRC) < 3]
+    if missing:
+        errors.append(f"  {len(missing)} utility spells missing the 3 category obs (e.g. {missing[:3]})")
+
+    # Story B: Utility tag definition carries the scroll-vs-wand buying heuristic
+    tagdef = open(os.path.join(os.path.dirname(__file__), "..", "data", "tag-definitions.js"), encoding="utf-8").read()
+    if "scroll for utility you'll want about once per adventure" not in tagdef:
+        errors.append("  Utility tag definition missing the scroll-vs-wand buying heuristic")
+
+    # Editorial role corrections (overrides are authoritative)
+    for aid, want in {1442: ["utility"], 1631: ["utility"], 1007: ["buff"]}.items():
+        got = by_aon.get(aid, {}).get("roles")
+        if got != want:
+            errors.append(f"  aon {aid}: roles {got} != expected {want}")
+    stu = by_aon.get(1663, {}).get("roles") or []
+    for r in ("utility", "buff", "prebuffs"):
+        if r not in stu:
+            errors.append(f"  See the Unseen (1663): missing role {r} (roles={stu})")
+    if "control" in (by_aon.get(1631, {}).get("roles") or []):
+        errors.append("  Phantasmal Minion (1631): still has control despite the utility override")
+
+    if errors:
+        print(f"FAIL: C39 observation integration — {len(errors)} error(s):")
+        for e in errors:
+            print(e)
+        return False
+    print(f"  PASS: C39 — 9 named spells carry the new video; {len(util)} utility spells carry 3 category obs; role fixes + tag definition applied")
+    return True
+
+
 def main():
     if "--update-snapshot" in sys.argv:
         obj = load_spell_data()
@@ -1408,6 +1539,20 @@ def main():
     ]
     c31_failed = [r for r in c31_tests if r is False]
     if c31_failed:
+        passed = False
+
+    print()
+    print("=== C39: Utility Video Integration + Role Fixes ===")
+    if not test_c39_observation_integration(spells):
+        passed = False
+
+    print()
+    print("=== C40: Integrated Data Correction (audit + Foundry oracle) ===")
+    c40_tests = [
+        test_c40_basic_save_success_effect_invariant(spells),
+        test_c40_integrated_corrections(spells),
+    ]
+    if [r for r in c40_tests if r is False]:
         passed = False
 
     print()
