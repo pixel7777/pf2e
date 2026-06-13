@@ -815,6 +815,21 @@ test.describe('C41: AI disclosure FAQ and low-rank wording', () => {
     expect(result.hasEvergreenDamage).toBe(false);
     expect(result.mentionsTwoActionDamageRule).toBe(true);
   });
+
+  test('low-rank guidance names Incapacitation and cautions summons/polymorph (Mathfinder round 2)', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+    const result = await page.evaluate(() => {
+      var overview = document.getElementById('page-overview');
+      var text = overview ? overview.textContent.toLowerCase() : '';
+      return {
+        namesIncapacitation: text.indexOf('incapacitation') !== -1,
+        cautionsSummonsPolymorph: text.indexOf('summons/polymorph') !== -1
+      };
+    });
+    expect(result.namesIncapacitation).toBe(true);
+    expect(result.cautionsSummonsPolymorph).toBe(true);
+  });
 });
 
 test.describe('C28: Copy Previous ghost slot prevention for bounded casters', () => {
