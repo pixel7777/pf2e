@@ -105,7 +105,7 @@
 
       var sidebar = document.querySelector('.sidebar');
       if (sidebar) {
-        sidebar.style.display = (page === 'overview' || page === 'about' || page === 'magicitems') ? 'none' : '';
+        sidebar.style.display = (page === 'overview' || page === 'about') ? 'none' : '';
       }
 
       // Update About utility link active state
@@ -146,13 +146,19 @@
           Planner.buildMergedView();
         }
       } else if (page === 'magicitems') {
-        // Magic Items tab: self-contained (no coverage sidebar). Restore any merged-only classes.
+        // Magic Items tab: full tradition-style browser + coverage sidebar, but cross-tradition.
         var sidebarMi = document.querySelector('.sidebar');
         if (sidebarMi) {
           sidebarMi.classList.remove('merged-filters-hidden');
           sidebarMi.classList.remove('merged-pills-disabled');
+          // Un-dim any trait pills dimmed by a prior tradition visit — all traits apply here.
+          var dimmed = sidebarMi.querySelectorAll('.ctag.tag-trait.trait-dimmed');
+          for (var d = 0; d < dimmed.length; d++) dimmed[d].classList.remove('trait-dimmed');
         }
+        if (window.Browser && Browser.resetSort) Browser.resetSort();
         if (window.MagicItems && MagicItems.renderTab) MagicItems.renderTab();
+        if (window.Coverage && Coverage.updateMagicItems) Coverage.updateMagicItems();
+        if (window.Coverage && Coverage.updateRolePillVisuals) Coverage.updateRolePillVisuals();
       } else {
         // Restore sidebar state for non-merged pages
         var sidebar = document.querySelector('.sidebar');

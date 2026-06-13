@@ -2054,3 +2054,68 @@ test.describe('C43-9: Shopping list in markdown and CSV export', () => {
     expect(csv).toContain('Running Total');
   });
 });
+
+test.describe('C43-10: Magic Items browser mirrors tradition filtering, cross-tradition', () => {
+  test('role tabs + tradition-page columns + add actions; results span traditions; add works', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+    await page.click('[data-page="magicitems"]');
+    await page.waitForTimeout(400);
+
+    const r = await page.evaluate(() => {
+      Browser.setRole('magicitems', 'utility');
+      var list = Browser._getRenderedSpells('magicitems') || [];
+      var trads = {};
+      list.forEach(function(s) { (s.tradition || []).forEach(function(t) { trads[t] = 1; }); });
+      var addBtn = document.querySelector('#spellTable-magicitems tr[data-spell-idx] .mi-add-btn[data-add-kind="scroll"]');
+      var before = MagicItems.getAll().length;
+      if (addBtn) addBtn.click();
+      return {
+        roleTabs: document.querySelectorAll('#roleTabs-magicitems .browser-role-tab').length,
+        rows: list.length,
+        traditionCount: Object.keys(trads).length,
+        hasHeightenCol: !!document.querySelector('#spellTable-magicitems th[data-col="heighten"]'),
+        hasAddCol: !!document.querySelector('#spellTable-magicitems th.mi-add-col'),
+        addedDelta: MagicItems.getAll().length - before
+      };
+    });
+    expect(r.roleTabs).toBeGreaterThanOrEqual(10);
+    expect(r.rows).toBeGreaterThan(0);
+    expect(r.traditionCount).toBeGreaterThan(1); // cross-tradition, not auto-filtered to one
+    expect(r.hasHeightenCol).toBe(true);         // same columns as a tradition page
+    expect(r.hasAddCol).toBe(true);
+    expect(r.addedDelta).toBe(1);
+  });
+});
+
+test.describe('C43-11: Coverage visible + filterable on the Magic Items tab', () => {
+  test('sidebar reflects planned items; Filter Mode narrows the browser by coverage', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+    await page.click('[data-page="magicitems"]');
+    await page.waitForTimeout(300);
+
+    const r = await page.evaluate(() => {
+      var fire = window.SPELL_SCHEMA.spells.find(function(s) { return s.era !== 'legacy_core' && s.damage_types && s.damage_types.indexOf('Fire') !== -1; });
+      MagicItems.setAll([]);
+      MagicItems.add(fire, 'wand'); // → renderShopping → Coverage.updateMagicItems
+      var fireTag = document.querySelector('.sidebar .ctag[data-tag="Fire"]');
+      var litFromItem = !!(fireTag && fireTag.classList.contains('lit'));
+
+      // Filter Mode on + include Fire (damage_types) → browser narrows to Fire spells
+      Browser.setRole('magicitems', 'damage');
+      var before = (Browser._getRenderedSpells('magicitems') || []).length;
+      window.SpellFilters.coverageMode = true;
+      window.SpellFilters.coverageInclude = [{ tag: 'Fire', field: 'damage_types' }];
+      Browser.renderMagicItems();
+      var after = Browser._getRenderedSpells('magicitems') || [];
+      var allFire = after.length > 0 && after.every(function(s) { return (s.damage_types || []).indexOf('Fire') !== -1; });
+      window.SpellFilters.coverageMode = false;
+      window.SpellFilters.coverageInclude = [];
+      return { litFromItem: litFromItem, before: before, after: after.length, allFire: allFire };
+    });
+    expect(r.litFromItem).toBe(true);
+    expect(r.after).toBeLessThan(r.before);
+    expect(r.allFire).toBe(true);
+  });
+});

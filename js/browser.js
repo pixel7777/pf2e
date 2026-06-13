@@ -369,15 +369,16 @@
   function filterSpells(tradition, role, slotRank, opts) {
     opts = opts || {};
     var allSpells = getSpellSchemaSpells();
+    var ALL = (tradition === 'magicitems'); // Cycle 43 — cross-tradition, no slot-rank cap
     var tradCap = tradition.charAt(0).toUpperCase() + tradition.slice(1);
     var results = [];
     var baseCount = 0;
 
     for (var i = 0; i < allSpells.length; i++) {
       var s = allSpells[i];
-      if (s.tradition.indexOf(tradCap) === -1) continue;
+      if (!ALL && s.tradition.indexOf(tradCap) === -1) continue;
       if (s.roles.indexOf(role) === -1) continue;
-      if (s.native_rank > slotRank) continue;
+      if (!ALL && s.native_rank > slotRank) continue;
       baseCount++;
       if (!passesRarityLegacy(s)) continue;
       if (!passesRoleFilters(s)) continue;
@@ -387,7 +388,7 @@
       results.push(s);
     }
 
-    var sorted = applySortOrder(results, slotRank);
+    var sorted = applySortOrder(results, (tradition === 'magicitems') ? null : slotRank);
     if (opts.withMeta) return { results: sorted, baseCount: baseCount };
     return sorted;
   }
@@ -764,6 +765,14 @@
     }
     html += '</td>';
 
+    // Cycle 43 — Magic Items "Add as scroll / wand" actions
+    if (opts.addCol) {
+      html += '<td class="mi-add-actions mi-add-col">';
+      html += '<button type="button" class="mi-add-btn" title="Add as scroll" data-add-idx="' + idx + '" data-add-kind="scroll">&#128220;</button>';
+      html += '<button type="button" class="mi-add-btn" title="Add as wand" data-add-idx="' + idx + '" data-add-kind="wand">&#129668;</button>';
+      html += '</td>';
+    }
+
     html += '</tr>';
     return html;
   }
@@ -783,7 +792,7 @@
     return ' <button type="button" class="' + cls + '" data-col-filter="' + col + '" title="Filter this column" aria-label="Filter column">' + FUNNEL_SVG + '</button>';
   }
 
-  function buildTableHeader(isSearch) {
+  function buildTableHeader(isSearch, addCol) {
     var html = '<table class="spell-table"><thead><tr>';
     if (isSearch) {
       html += '<th>Spell</th><th>Native Rank</th><th>Action</th><th>Tags</th><th>Notes</th>';
@@ -796,6 +805,7 @@
       html += '<th data-col="tags"><span class="col-label">Tags</span> <span class="info-bubble" title="Tag filtering is available in the sidebar. Turn on Filter Mode to use coverage tags as filters, or use Trait Filters below for PF2e spell traits.">ⓘ</span></th>';
       html += '<th data-col="notes"><span class="col-label">Notes</span></th>';
     }
+    if (addCol) html += '<th class="mi-add-col">Add</th>';
     html += '</tr></thead><tbody>';
     return html;
   }
@@ -812,6 +822,7 @@
   }
 
   function getMaxRankForTradition(tradition) {
+    if (tradition === 'magicitems') return 10; // Cycle 43 — no slot cap on the shopping browser
     // Use current selected slot's rank as upper bound
     var slot = Planner.getSelectedSlot();
     return slot ? slot.rank : 10;
@@ -1229,6 +1240,12 @@
 
   // ── Re-render current view ──
   function reRenderCurrentView(tradition) {
+    if (tradition === 'magicitems') {
+      var mtab = activeTab['magicitems'] || 'role';
+      if (mtab === 'search') renderSearchResults('magicitems');
+      else Browser.renderMagicItems();
+      return;
+    }
     var slot = Planner.getSelectedSlot();
     if (!slot) return;
     var tab = activeTab[tradition] || 'role';
@@ -1269,6 +1286,7 @@
       return;
     }
 
+    var ALL = (tradition === 'magicitems'); // Cycle 43 — cross-tradition browser
     var tradCap = tradition.charAt(0).toUpperCase() + tradition.slice(1);
     var slot = Planner.getSelectedSlot();
     var slotRank = slot ? slot.rank : null;
@@ -1306,19 +1324,19 @@
     });
 
     renderedSpells[tradition] = [];
-    var html = buildTableHeader(true);
+    var html = buildTableHeader(true, ALL);
     for (var i = 0; i < displayList.length; i++) {
       var spell = displayList[i].spell;
       renderedSpells[tradition].push(spell);
       var warnings = [];
 
-      if (spell.tradition.indexOf(tradCap) === -1) {
+      if (!ALL && spell.tradition.indexOf(tradCap) === -1) {
         warnings.push('Not in ' + tradCap);
       }
-      if (slotRank !== null && spell.native_rank > slotRank) {
+      if (!ALL && slotRank !== null && spell.native_rank > slotRank) {
         warnings.push('Rank ' + spell.native_rank + ' — above selected slot');
       }
-      html += renderSpellRow(spell, i, { warnings: warnings });
+      html += renderSpellRow(spell, i, { warnings: warnings, addCol: ALL });
     }
     html += '</tbody></table>';
 
@@ -1440,6 +1458,18 @@
         if (e.target.closest('.mathfinder-star')) return;
         if (e.target.closest('.mathfinder-video-link')) return;
 
+        // Cycle 43 — Magic Items "add as scroll/wand" buttons (no slot assignment here)
+        if (tradition === 'magicitems') {
+          var addBtn = e.target.closest('.mi-add-btn');
+          if (addBtn) {
+            e.stopPropagation();
+            var aidx = parseInt(addBtn.dataset.addIdx, 10);
+            var alist = renderedSpells['magicitems'];
+            if (alist && alist[aidx] && window.MagicItems) MagicItems.add(alist[aidx], addBtn.dataset.addKind);
+            return;
+          }
+        }
+
         // Cycle 22 — Column filter icon → open dropdown OR toggle starred
         var filterIcon = e.target.closest('.col-filter-icon');
         if (filterIcon) {
@@ -1464,6 +1494,7 @@
         if (header) {
           var col = header.dataset.sortCol;
           cycleSortColumn(col);
+          if (tradition === 'magicitems') { Browser.renderMagicItems(); return; }
           var slot = Planner.getSelectedSlot();
           if (slot) Browser.renderSpells(tradition, slot.level, slot.rank);
           return;
@@ -1471,6 +1502,7 @@
 
         var row = e.target.closest('tr[data-spell-idx]');
         if (!row) return;
+        if (tradition === 'magicitems') return; // rows are not click-to-assign on the Magic Items tab
         var idx = parseInt(row.dataset.spellIdx, 10);
         var list = renderedSpells[tradition];
         if (!list || !list[idx]) return;
@@ -1547,9 +1579,13 @@
         window.SpellFilters.searchFiltersDisabled = false;
       }
 
-      var slot = Planner.getSelectedSlot();
-      if (slot) {
-        this.renderSpells(tradition, slot.level, slot.rank);
+      if (tradition === 'magicitems') {
+        this.renderMagicItems();
+      } else {
+        var slot = Planner.getSelectedSlot();
+        if (slot) {
+          this.renderSpells(tradition, slot.level, slot.rank);
+        }
       }
     },
 
@@ -1723,6 +1759,70 @@
 
       html += '</tbody></table>';
       tableEl.innerHTML = html;
+    },
+
+    // Cycle 43 — Magic Items browser: same engine as a tradition page, but cross-tradition,
+    // no slot-rank cap, and rows offer "add as scroll/wand" instead of slot assignment.
+    renderMagicItems: function() {
+      var tradition = 'magicitems';
+      var role = currentRole[tradition] || 'utility';
+
+      var slotHeaderEl = document.getElementById('slotHeader-' + tradition);
+      if (slotHeaderEl) slotHeaderEl.style.display = 'none';
+
+      var adviceEl = document.getElementById('advice-' + tradition);
+      if (adviceEl) {
+        adviceEl.style.display = '';
+        adviceEl.innerHTML = '<em>The full catalog across every tradition — not limited to a slot. Use the role tabs, the sidebar Coverage filters (Filter Mode), and Trait filters just like a tradition page, then add any spell as a 📜 scroll or 🪄 wand.</em>';
+      }
+
+      var tableEl = document.getElementById('spellTable-' + tradition);
+      if (!tableEl) return;
+
+      var meta = filterSpells(tradition, role, null, { withMeta: true });
+      var spells = meta.results;
+      renderedSpells[tradition] = spells;
+      renderActiveFilterBar(tradition);
+
+      if (spells.length === 0) {
+        if (meta.baseCount > 0) {
+          tableEl.innerHTML = '<div class="no-results-msg">No spells match your current filters. <a href="#" class="clear-filters-link" data-action="clear-all">Clear all filters</a></div>';
+          var link = tableEl.querySelector('.clear-filters-link');
+          if (link) {
+            link.addEventListener('click', function(ev) {
+              ev.preventDefault();
+              clearAllFilterValues();
+              Browser.renderMagicItems();
+            });
+          }
+        } else {
+          tableEl.innerHTML = '<div style="padding:1rem;color:var(--text-dim);text-align:center;font-style:italic;">No spells in this role.</div>';
+        }
+        return;
+      }
+
+      var html = buildTableHeader(false, true);
+      for (var i = 0; i < spells.length; i++) {
+        // slotRank = the spell's own native rank → Heightens At shows content, never "parked".
+        html += renderSpellRow(spells[i], i, { slotRank: spells[i].native_rank, addCol: true });
+      }
+      html += '</tbody></table>';
+      tableEl.innerHTML = html;
+    },
+
+    showMagicItems: function() {
+      var browser = document.getElementById('browser-magicitems');
+      if (!browser) return;
+      browser.classList.remove('browser-hidden');
+      if (!currentRole['magicitems']) currentRole['magicitems'] = 'utility';
+      if (!activeTab['magicitems']) activeTab['magicitems'] = 'role';
+      closeColumnDropdown();
+      this.buildBrowserUI('magicitems', 0, 0);
+      if (activeTab['magicitems'] === 'search') {
+        this.showSearchUI('magicitems');
+      } else {
+        this.renderMagicItems();
+      }
     },
 
     assignSpell: function(tradition, spell) {

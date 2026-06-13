@@ -224,88 +224,26 @@
         html += '<p class="section-intro">Plan the spells you\'ll buy rather than slot. A <strong>scroll</strong> suits a once-per-adventure need; a <strong>wand</strong> suits a once-per-day need. Costs and item levels are figured automatically from the spell rank.</p>';
         html += '</section>';
 
-        html += '<div class="mi-browser-wrap">';
-        html += '<input type="text" class="search-input mi-search" id="miSearch" placeholder="Search spells by name or trait to add as a scroll or wand…">';
-        html += '<div class="spell-table-wrap mi-browser" id="miBrowser"></div>';
-        html += '</div>';
+        html += '<div class="spell-browser framed browser-hidden" id="browser-magicitems"></div>';
 
         html += '<div class="mi-shopping" id="miShopping"></div>';
 
         page.innerHTML = html;
-        var search = document.getElementById('miSearch');
-        if (search) {
-          search.addEventListener('input', function() { MagicItems.renderBrowser(search.value); });
-        }
       }
-      this.renderBrowser(document.getElementById('miSearch') ? document.getElementById('miSearch').value : '');
+      // The browser IS the tradition-page engine (cross-tradition, no slot-rank cap).
+      if (window.Browser && Browser.showMagicItems) Browser.showMagicItems();
       this.renderShopping();
-    },
-
-    renderBrowser: function(query) {
-      var wrap = document.getElementById('miBrowser');
-      if (!wrap) return;
-      var all = (window.SPELL_SCHEMA && window.SPELL_SCHEMA.spells) || [];
-      var q = (query || '').toLowerCase().trim();
-      var results = [];
-      for (var i = 0; i < all.length; i++) {
-        var s = all[i];
-        if (s.era === 'legacy_core') continue; // mirror app default (hide legacy dupes)
-        var match;
-        if (!q) {
-          match = s.mathfinder_reviewed; // default: curated picks
-        } else {
-          match = s.name.toLowerCase().indexOf(q) !== -1;
-          if (!match && s.trait_raw) {
-            for (var t = 0; t < s.trait_raw.length; t++) {
-              if (s.trait_raw[t].toLowerCase().indexOf(q) !== -1) { match = true; break; }
-            }
-          }
-        }
-        if (match) results.push(s);
-      }
-      results.sort(function(a, b) { return a.name.localeCompare(b.name); });
-      var capped = results.slice(0, 100);
-
-      var idMap = [];
-      var html = '<table class="spell-table mi-table"><thead><tr>';
-      html += '<th>Spell</th><th>Rank</th><th>Tags</th><th>Add</th></tr></thead><tbody>';
-      if (capped.length === 0) {
-        html += '<tr><td colspan="4" class="mi-empty">' + (q ? 'No spells match “' + escapeHtml(query) + '”.' : 'No curated spells found.') + '</td></tr>';
-      }
-      for (var r = 0; r < capped.length; r++) {
-        var sp = capped[r];
-        var key = window.SPELL_SCHEMA.spells.indexOf(sp);
-        idMap.push(key);
-        html += '<tr>';
-        html += '<td class="slot-spell-name">';
-        if (sp.mathfinder_reviewed) html += '<span class="mathfinder-star" title="Mathfinder reviewed">★</span>';
-        html += escapeHtml(sp.name);
-        if (sp.aonId) html += '<a href="' + App.aonUrl(sp.aonId) + '" target="_blank" class="aon-link" title="Open on Archives of Nethys" onclick="event.stopPropagation()">↗</a>';
-        html += '</td>';
-        html += '<td class="slot-native-rank">' + (sp.native_rank || '') + '</td>';
-        html += '<td>' + App.renderTags(sp) + '</td>';
-        html += '<td class="mi-add-actions">';
-        html += '<button class="mi-add-btn" title="Add as scroll" onclick="MagicItems.addByIndex(' + key + ',\'scroll\')">&#128220;</button>';
-        html += '<button class="mi-add-btn" title="Add as wand" onclick="MagicItems.addByIndex(' + key + ',\'wand\')">&#129668;</button>';
-        html += '</td>';
-        html += '</tr>';
-      }
-      html += '</tbody></table>';
-      if (results.length > capped.length) {
-        html += '<div class="mi-cap-note">Showing first ' + capped.length + ' of ' + results.length + ' — refine your search.</div>';
-      }
-      wrap.innerHTML = html;
-    },
-
-    addByIndex: function(schemaIdx, kind) {
-      var all = (window.SPELL_SCHEMA && window.SPELL_SCHEMA.spells) || [];
-      var sp = all[schemaIdx];
-      if (sp) this.add(sp, kind);
     },
 
     renderShopping: function() {
       var wrap = document.getElementById('miShopping');
       if (!wrap) return;
+
+      // Keep the sidebar coverage tracker in sync with the planned list (when on this tab).
+      if (window.App && App.currentTradition && App.currentTradition() === 'magicitems' &&
+          window.Coverage && Coverage.updateMagicItems) {
+        Coverage.updateMagicItems();
+      }
 
       if (items.length === 0) {
         wrap.innerHTML = '<div class="mi-empty-list">No planned purchases yet. Search above and add a spell as a scroll or wand.</div>';
