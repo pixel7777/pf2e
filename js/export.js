@@ -90,11 +90,14 @@
       }
     }
 
-    if (sections.length === 0) {
+    var mi = generateMagicItemsMarkdown();
+    if (sections.length === 0 && !mi) {
       return '# Spell Plan\n\n_No spells assigned yet._\n';
     }
 
-    return '# Spell Plan\n\n' + sections.join('\n');
+    var body = sections.join('\n');
+    if (mi) body += (body ? '\n' : '') + mi + '\n';
+    return '# Spell Plan\n\n' + body;
   }
 
   function generateMergedMarkdown() {
@@ -154,11 +157,14 @@
       }
     }
 
-    if (!hasAnyContent) {
+    var miMerged = generateMagicItemsMarkdown();
+    if (!hasAnyContent && !miMerged) {
       return '# Merged Spell Plan\n\nNo spells assigned.\n';
     }
 
-    return lines.join('\n');
+    var out = lines.join('\n');
+    if (miMerged) out += '\n' + miMerged + '\n';
+    return out;
   }
 
   function countSpellsAndTraditions(state) {
@@ -186,6 +192,47 @@
       if (traditionHasData(state, TRADITIONS[i])) return true;
     }
     return false;
+  }
+
+  // ── Cycle 43 — Magic Items shopping list (shared by markdown + CSV) ──
+
+  function getSortedItems() {
+    var items = (window.MagicItems && MagicItems.getAll) ? MagicItems.getAll().slice() : [];
+    items.sort(function(a, b) {
+      var la = MagicItems.itemLevel(a.kind, a.chosenRank);
+      var lb = MagicItems.itemLevel(b.kind, b.chosenRank);
+      if (la !== lb) return la - lb;
+      return a.name.localeCompare(b.name);
+    });
+    return items;
+  }
+
+  function generateMagicItemsMarkdown() {
+    if (!window.MagicItems) return '';
+    var items = getSortedItems();
+    if (!items.length) return '';
+    var lines = ['## Magic Items (Shopping List)', ''];
+    lines.push('| Type | Spell | Rank | Item Lvl | Qty | Unit (gp) | Total (gp) | Buy at Lvl |');
+    lines.push('|---|---|---|---|---|---|---|---|');
+    var running = 0;
+    for (var i = 0; i < items.length; i++) {
+      var it = items[i];
+      var unit = MagicItems.unitCost(it.kind, it.chosenRank);
+      var total = unit * it.qty;
+      running += total;
+      lines.push('| ' + (it.kind === 'wand' ? 'Wand' : 'Scroll') + ' | ' + it.name + ' | ' +
+        it.chosenRank + ' | ' + MagicItems.itemLevel(it.kind, it.chosenRank) + ' | ' + it.qty +
+        ' | ' + unit + ' | ' + total + ' | ' + it.purchaseLevel + ' |');
+    }
+    lines.push('');
+    lines.push('**Running total: ' + running + ' gp**');
+    return lines.join('\n');
+  }
+
+  function csvCell(v) {
+    v = (v === undefined || v === null) ? '' : String(v);
+    if (/[",\r\n]/.test(v)) v = '"' + v.replace(/"/g, '""') + '"';
+    return v;
   }
 
   window.Export = {
@@ -225,16 +272,45 @@
       App.toast('Downloaded ' + filename);
     },
 
+    downloadCsv: function() {
+      var items = getSortedItems();
+      var rows = [['Type', 'Spell', 'Rank', 'Item Level', 'Quantity', 'Unit Cost (gp)', 'Line Total (gp)', 'Buy at Level']];
+      var running = 0;
+      for (var i = 0; i < items.length; i++) {
+        var it = items[i];
+        var unit = MagicItems.unitCost(it.kind, it.chosenRank);
+        var total = unit * it.qty;
+        running += total;
+        rows.push([it.kind === 'wand' ? 'Wand' : 'Scroll', it.name, it.chosenRank,
+          MagicItems.itemLevel(it.kind, it.chosenRank), it.qty, unit, total, it.purchaseLevel]);
+      }
+      rows.push([]);
+      rows.push(['', '', '', '', '', '', 'Running Total', running]);
+
+      var csv = rows.map(function(r) { return r.map(csvCell).join(','); }).join('\r\n');
+      var blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'shopping-list.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      App.toast(items.length ? 'Downloaded shopping-list.csv' : 'Shopping list is empty — exported an empty CSV');
+    },
+
     savePlan: function() {
       var now = new Date();
       var dateStr = now.toISOString().slice(0, 10);
 
       var saveData = {
-        formatVersion: 1,
+        formatVersion: 2,
         appVersion: 'pf2e-spell-planner',
         savedAt: now.toISOString(),
         classes: Planner.getClasses(),
-        plan: Planner.getState()
+        plan: Planner.getState(),
+        magicItems: (window.MagicItems && MagicItems.getAll) ? MagicItems.getAll() : []
       };
 
       var json = JSON.stringify(saveData, null, 2);
@@ -282,18 +358,30 @@
           return;
         }
 
-        if (data.formatVersion !== 1) {
+        if (data.formatVersion !== 1 && data.formatVersion !== 2) {
           App.toast("This save file is from a newer version and can't be loaded");
           return;
         }
 
-        if (anySpellsAssigned(Planner.getState())) {
+        var hasItems = window.MagicItems && MagicItems.getAll && MagicItems.getAll().length > 0;
+        if (anySpellsAssigned(Planner.getState()) || hasItems) {
           if (!window.confirm('Loading this plan will replace your current selections. Continue?')) {
             return;
           }
         }
 
+        // Cycle 43 — restore the shopping list (v1 files have none → empty). Set BEFORE
+        // Planner.loadPlan so the merged-view rebuild sees the items.
+        if (window.MagicItems && MagicItems.setAll) {
+          MagicItems.setAll((data.formatVersion >= 2 && Array.isArray(data.magicItems)) ? data.magicItems : []);
+        }
+
         Planner.loadPlan(data.plan, data.classes);
+
+        if (window.App && App.currentTradition && App.currentTradition() === 'magicitems' &&
+            window.MagicItems && MagicItems.renderTab) {
+          MagicItems.renderTab();
+        }
 
         var counts = countSpellsAndTraditions(Planner.getState());
         App.toast('Plan loaded — ' + counts.spells + ' spells across ' + counts.traditions + ' traditions');

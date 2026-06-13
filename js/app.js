@@ -145,6 +145,20 @@
         if (window.Planner && Planner.buildMergedView) {
           Planner.buildMergedView();
         }
+      } else if (page === 'magicitems') {
+        // Magic Items tab: full tradition-style browser + coverage sidebar, but cross-tradition.
+        var sidebarMi = document.querySelector('.sidebar');
+        if (sidebarMi) {
+          sidebarMi.classList.remove('merged-filters-hidden');
+          sidebarMi.classList.remove('merged-pills-disabled');
+          // Un-dim any trait pills dimmed by a prior tradition visit — all traits apply here.
+          var dimmed = sidebarMi.querySelectorAll('.ctag.tag-trait.trait-dimmed');
+          for (var d = 0; d < dimmed.length; d++) dimmed[d].classList.remove('trait-dimmed');
+        }
+        if (window.Browser && Browser.resetSort) Browser.resetSort();
+        if (window.MagicItems && MagicItems.renderTab) MagicItems.renderTab();
+        if (window.Coverage && Coverage.updateMagicItems) Coverage.updateMagicItems();
+        if (window.Coverage && Coverage.updateRolePillVisuals) Coverage.updateRolePillVisuals();
       } else {
         // Restore sidebar state for non-merged pages
         var sidebar = document.querySelector('.sidebar');
@@ -232,7 +246,7 @@
       var hoverTimer = null;
 
       document.addEventListener('mouseover', function(e) {
-        var el = e.target.closest('.info-bubble');
+        var el = e.target.closest('.info-bubble, .mi-offlist');
         if (!el) return;
         var text = el.getAttribute('title') || el.dataset.tooltip;
         if (!text) return;
@@ -253,7 +267,7 @@
       });
 
       document.addEventListener('mouseout', function(e) {
-        var el = e.target.closest('.info-bubble');
+        var el = e.target.closest('.info-bubble, .mi-offlist');
         if (el) {
           if (hoverTimer) { clearTimeout(hoverTimer); hoverTimer = null; }
           tooltipEl.style.display = 'none';
@@ -459,6 +473,15 @@
       document.addEventListener('click', function(e) {
         var star = e.target.closest('.mathfinder-star');
         if (star) {
+          // Cycle 43 — merged-view + item stars carry data-aon → look up the full spell.
+          if (star.dataset.aon) {
+            var aonId = parseInt(star.dataset.aon, 10);
+            var all = (window.SPELL_SCHEMA && SPELL_SCHEMA.spells) || [];
+            for (var k = 0; k < all.length; k++) {
+              if (all[k].aonId === aonId) { App.showPopover(star, all[k]); return; }
+            }
+            return;
+          }
           var row = star.closest('tr[data-spell-idx]');
           if (!row) return;
           var idx = parseInt(row.dataset.spellIdx, 10);

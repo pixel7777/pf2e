@@ -966,6 +966,8 @@
           var level = Planner.getCurrentLevel(tradition);
           if (tradition === 'merged') {
             this.updateMerged(level);
+          } else if (tradition === 'magicitems') {
+            this.updateMagicItems();
           } else {
             this.update(tradition, level);
           }
@@ -987,6 +989,14 @@
         }
       }
 
+      // Cycle 43 — planned item-spells contribute here only: wands always, scrolls with the view toggle.
+      if (window.MagicItems && MagicItems.coverageSpellsForLevel) {
+        var itemSpells = MagicItems.coverageSpellsForLevel(level || 0);
+        for (var k = 0; k < itemSpells.length; k++) {
+          allSpells.push(itemSpells[k]);
+        }
+      }
+
       var activeTags = collectActiveTags(allSpells);
       var weaknessTypes = collectWeaknessTypes(allSpells);
 
@@ -1003,6 +1013,23 @@
         if (el.classList.contains('tag-damage') && weaknessTypes[tag]) {
           el.classList.add('has-weakness');
         }
+      }
+    },
+
+    // Cycle 43 — coverage of the planned shopping list, shown on the Magic Items tab.
+    updateMagicItems: function() {
+      ensureBindings();
+      if (window.SpellFilters && window.SpellFilters.coverageMode) return;
+      var items = (window.MagicItems && MagicItems.getAll) ? MagicItems.getAll() : [];
+      var activeTags = collectActiveTags(items);
+      var weaknessTypes = collectWeaknessTypes(items);
+      var ctags = document.querySelectorAll('.sidebar .ctag');
+      for (var i = 0; i < ctags.length; i++) {
+        var el = ctags[i];
+        var tag = el.dataset.tag;
+        if (activeTags[tag]) { el.classList.add('lit'); } else { el.classList.remove('lit'); }
+        el.classList.remove('has-weakness');
+        if (el.classList.contains('tag-damage') && weaknessTypes[tag]) { el.classList.add('has-weakness'); }
       }
     },
 
