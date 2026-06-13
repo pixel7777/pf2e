@@ -71,6 +71,9 @@
     // Cycle 22 — trait filters (always active, not gated by coverageMode)
     traitInclude: [],   // ["Fire", ...] — spell must have ALL
     traitExclude: [],   // ["Mental", ...] — spell must have NONE
+    // Cycle 43 — Magic Items tradition filter (OR includes / NOT excludes; magicitems tab only)
+    miTraditionInclude: [],  // ["Arcane","Occult"] — spell must have AT LEAST ONE (OR)
+    miTraditionExclude: [],  // ["Divine"] — spell must have NONE of these
     // Cycle 22 — column filters (suspended in Search tab)
     columnNameFilter: '',
     columnRankFilter: null,    // null = all, or array of allowed ranks
@@ -385,6 +388,18 @@
       if (!passesCoverageFilters(s)) continue;
       if (!passesTraitFilters(s)) continue;
       if (!passesColumnFilters(s, tradition)) continue;
+      if (ALL) {
+        var miExc = window.SpellFilters.miTraditionExclude || [];
+        var miInc = window.SpellFilters.miTraditionInclude || [];
+        var excHit = false;
+        for (var x = 0; x < miExc.length; x++) { if (s.tradition.indexOf(miExc[x]) !== -1) { excHit = true; break; } }
+        if (excHit) continue;
+        if (miInc.length) {
+          var incHit = false;
+          for (var y = 0; y < miInc.length; y++) { if (s.tradition.indexOf(miInc[y]) !== -1) { incHit = true; break; } }
+          if (!incHit) continue;
+        }
+      }
       results.push(s);
     }
 

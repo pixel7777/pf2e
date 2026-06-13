@@ -224,6 +224,7 @@
         html += '<p class="section-intro">Plan the spells you\'ll buy rather than slot. A <strong>scroll</strong> suits a once-per-adventure need; a <strong>wand</strong> suits a once-per-day need. Costs and item levels are figured automatically from the spell rank.</p>';
         html += '</section>';
 
+        html += '<div class="mi-tradition-filter" id="miTraditionFilter"></div>';
         html += '<div class="spell-browser framed browser-hidden" id="browser-magicitems"></div>';
 
         html += '<div class="mi-shopping" id="miShopping"></div>';
@@ -232,7 +233,57 @@
       }
       // The browser IS the tradition-page engine (cross-tradition, no slot-rank cap).
       if (window.Browser && Browser.showMagicItems) Browser.showMagicItems();
+      this.renderTraditionFilter();
       this.renderShopping();
+    },
+
+    // Tradition OR/NOT filter (magic-items browser only). Click cycles include → NOT → off.
+    renderTraditionFilter: function() {
+      var bar = document.getElementById('miTraditionFilter');
+      if (!bar) return;
+      var f = window.SpellFilters;
+      var inc = f.miTraditionInclude || [];
+      var exc = f.miTraditionExclude || [];
+      var trads = ['Arcane', 'Divine', 'Occult', 'Primal'];
+      var html = '<span class="mi-tf-label">Tradition:</span>';
+      for (var i = 0; i < trads.length; i++) {
+        var t = trads[i];
+        var state = inc.indexOf(t) !== -1 ? 'included' : (exc.indexOf(t) !== -1 ? 'excluded' : 'neutral');
+        var cls = 'mi-tf-btn' + (state === 'included' ? ' filter-included' : '') + (state === 'excluded' ? ' filter-excluded' : '');
+        var label = (state === 'excluded' ? 'NOT ' : '') + t;
+        html += '<button type="button" class="' + cls + '" onclick="MagicItems.toggleTradition(\'' + t + '\')">' + label + '</button>';
+      }
+      if (inc.length || exc.length) {
+        html += '<button type="button" class="mi-tf-clear" onclick="MagicItems.clearTraditionFilter()">Clear</button>';
+      }
+      html += '<span class="mi-tf-hint">click: include (OR) → NOT → off</span>';
+      bar.innerHTML = html;
+    },
+
+    toggleTradition: function(t) {
+      var f = window.SpellFilters;
+      f.miTraditionInclude = f.miTraditionInclude || [];
+      f.miTraditionExclude = f.miTraditionExclude || [];
+      var iIdx = f.miTraditionInclude.indexOf(t);
+      var eIdx = f.miTraditionExclude.indexOf(t);
+      if (iIdx === -1 && eIdx === -1) {
+        f.miTraditionInclude.push(t);          // neutral → include (OR)
+      } else if (iIdx !== -1) {
+        f.miTraditionInclude.splice(iIdx, 1);
+        f.miTraditionExclude.push(t);          // include → NOT
+      } else {
+        f.miTraditionExclude.splice(eIdx, 1);  // NOT → off
+      }
+      this.renderTraditionFilter();
+      if (window.Browser && Browser.renderMagicItems) Browser.renderMagicItems();
+    },
+
+    clearTraditionFilter: function() {
+      var f = window.SpellFilters;
+      f.miTraditionInclude = [];
+      f.miTraditionExclude = [];
+      this.renderTraditionFilter();
+      if (window.Browser && Browser.renderMagicItems) Browser.renderMagicItems();
     },
 
     renderShopping: function() {
@@ -264,9 +315,11 @@
       html += '<h2 class="section-label">Planned Purchases</h2>';
       html += '<table class="mi-shop-table"><thead><tr>';
       html += '<th></th><th>Spell</th><th>Type</th><th>Rank</th>';
-      html += '<th>Item Lvl</th><th>Qty</th><th>Unit</th><th>Total</th>';
+      html += '<th class="mi-num">Item Lvl</th>';
       html += '<th>Buy at Lvl <span class="info-bubble" title="The character level you plan to buy this. From this level up, the spell counts toward your Merged-view coverage (wands always; scrolls only with the toggle).">ⓘ</span></th>';
-      html += '<th>Price <span class="info-bubble" title="Standard list purchase price (Player Core). Actual cost varies by settlement, region, and GM. Crafting your own can be cheaper if you have downtime and the right feats.">ⓘ</span></th>';
+      html += '<th>Qty</th>';
+      html += '<th class="mi-num">Unit <span class="info-bubble" title="Standard list purchase price (Player Core) for a scroll/wand of this rank. Actual cost varies by settlement, region, and GM. Crafting your own can be cheaper if you have downtime and the right feats.">ⓘ</span></th>';
+      html += '<th class="mi-num">Total</th>';
       html += '<th></th></tr></thead><tbody>';
 
       for (var o = 0; o < order.length; o++) {
@@ -298,22 +351,21 @@
         }
         html += '</select></td>';
         html += '<td class="mi-num">' + lvl + '</td>';
-        html += '<td><input type="number" min="1" class="mi-input mi-qty" value="' + it.qty + '" onchange="MagicItems.update(' + idx + ',\'qty\',this.value)"></td>';
-        html += '<td class="mi-num">' + unit.toLocaleString() + ' gp</td>';
-        html += '<td class="mi-num mi-line-total">' + lineTotal.toLocaleString() + ' gp</td>';
-        // purchase level
+        // Buy at Lvl — placed right after Item Lvl
         html += '<td><select class="mi-input" onchange="MagicItems.update(' + idx + ',\'purchaseLevel\',this.value)">';
         for (var pl = 1; pl <= 20; pl++) {
           html += '<option value="' + pl + '"' + (pl === it.purchaseLevel ? ' selected' : '') + '>' + pl + '</option>';
         }
         html += '</select></td>';
-        html += '<td class="mi-num">' + characterWealthAt(it.purchaseLevel).toLocaleString() + ' gp</td>';
+        html += '<td><input type="number" min="1" class="mi-input mi-qty" value="' + it.qty + '" onchange="MagicItems.update(' + idx + ',\'qty\',this.value)"></td>';
+        html += '<td class="mi-num">' + unit.toLocaleString() + ' gp</td>';
+        html += '<td class="mi-num mi-line-total">' + lineTotal.toLocaleString() + ' gp</td>';
         html += '<td><button class="slot-delete-btn" title="Remove" onclick="MagicItems.remove(' + idx + ')">✕</button></td>';
         html += '</tr>';
       }
       html += '</tbody>';
-      html += '<tfoot><tr class="mi-total-row"><td colspan="7" class="mi-num"><strong>Running total</strong></td>';
-      html += '<td class="mi-num"><strong>' + runningTotal.toLocaleString() + ' gp</strong></td><td colspan="3"></td></tr></tfoot>';
+      html += '<tfoot><tr class="mi-total-row"><td colspan="8" class="mi-num"><strong>Running total</strong></td>';
+      html += '<td class="mi-num"><strong>' + runningTotal.toLocaleString() + ' gp</strong></td><td></td></tr></tfoot>';
       html += '</table>';
       html += '</section>';
 
@@ -329,7 +381,7 @@
       if (levels.length === 0) return '';
       var html = '<section class="overview-section mi-budget-section">';
       html += '<h2 class="section-label">Budget by Purchase Level <span class="info-bubble" title="Rough sanity check. Expected wealth is the cumulative gear+gold a single character is assumed to have by this level (AoN Treasure for New Characters). It is a per-character estimate and varies widely by party size and GM — treat it as a band, not a hard limit.">ⓘ</span></h2>';
-      html += '<table class="mi-budget-table"><thead><tr><th>By Level</th><th>Cumulative item cost</th><th>Expected wealth (rough)</th></tr></thead><tbody>';
+      html += '<table class="mi-budget-table"><thead><tr><th class="mi-num">Buy at Level</th><th class="mi-num">Cumulative item cost</th><th class="mi-num">Expected wealth (rough)</th></tr></thead><tbody>';
       for (var i = 0; i < levels.length; i++) {
         var L = levels[i];
         var cumulative = 0;

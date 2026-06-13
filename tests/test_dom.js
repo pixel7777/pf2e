@@ -2119,3 +2119,108 @@ test.describe('C43-11: Coverage visible + filterable on the Magic Items tab', ()
     expect(r.allFire).toBe(true);
   });
 });
+
+test.describe('C43-12: Tradition OR/NOT filter on the Magic Items browser', () => {
+  test('include Arcane OR Occult, NOT Divine → results respect it', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+    await page.click('[data-page="magicitems"]');
+    await page.waitForTimeout(300);
+
+    const r = await page.evaluate(() => {
+      MagicItems.toggleTradition('Arcane');            // → include
+      MagicItems.toggleTradition('Occult');            // → include
+      MagicItems.toggleTradition('Divine');            // → include
+      MagicItems.toggleTradition('Divine');            // include → NOT
+      var list = Browser._getRenderedSpells('magicitems') || [];
+      var res = {
+        buttons: document.querySelectorAll('#miTraditionFilter .mi-tf-btn').length,
+        count: list.length,
+        divineLeak: list.some(function(s){ return s.tradition.indexOf('Divine') !== -1; }),
+        allArcOrOcc: list.every(function(s){ return s.tradition.indexOf('Arcane') !== -1 || s.tradition.indexOf('Occult') !== -1; })
+      };
+      MagicItems.clearTraditionFilter();
+      return res;
+    });
+    expect(r.buttons).toBe(4);
+    expect(r.count).toBeGreaterThan(0);
+    expect(r.divineLeak).toBe(false);
+    expect(r.allArcOrOcc).toBe(true);
+  });
+});
+
+test.describe('C43-13: Shopping table column order + alignment', () => {
+  test('Buy at Lvl sits between Item Lvl and Qty; header/body column counts match; no wealth column', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+    await page.click('[data-page="magicitems"]');
+    await page.waitForTimeout(300);
+
+    const r = await page.evaluate(() => {
+      var sp = window.SPELL_SCHEMA.spells.find(function(s){ return s.era !== 'legacy_core'; });
+      MagicItems.setAll([]);
+      MagicItems.add(sp, 'scroll');
+      var heads = Array.prototype.map.call(document.querySelectorAll('#miShopping .mi-shop-table thead th'),
+        function(th){ return th.textContent.replace(/[ⓘ\s]+$/, '').trim(); });
+      var headerCount = document.querySelectorAll('#miShopping .mi-shop-table thead th').length;
+      var bodyCount = document.querySelectorAll('#miShopping .mi-shop-table tbody tr:first-child td').length;
+      var iItem = heads.indexOf('Item Lvl'), iBuy = heads.indexOf('Buy at Lvl'), iQty = heads.indexOf('Qty');
+      return { heads: heads, headerCount: headerCount, bodyCount: bodyCount, iItem: iItem, iBuy: iBuy, iQty: iQty,
+        hasPriceCol: heads.indexOf('Price') !== -1 };
+    });
+    expect(r.headerCount).toBe(r.bodyCount);
+    expect(r.iBuy).toBe(r.iItem + 1);
+    expect(r.iQty).toBe(r.iBuy + 1);
+    expect(r.hasPriceCol).toBe(false); // the confusing wealth "Price" column was removed
+  });
+});
+
+test.describe('C43-14: Merged-view Mathfinder star opens the popover', () => {
+  test('a reviewed item-spell star in merged carries data-aon and opens the curation popover', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+
+    const r = await page.evaluate(() => {
+      var reviewed = window.SPELL_SCHEMA.spells.find(function(s){ return s.mathfinder_reviewed && s.era !== 'legacy_core'; });
+      MagicItems.setAll([]);
+      MagicItems.add(reviewed, 'wand');
+      MagicItems.update(0, 'purchaseLevel', 3);
+      App.switchTab('merged');
+      Planner.buildMergedView(3);
+      var star = document.querySelector('#levelPanels-merged .mathfinder-star[data-aon]');
+      if (star) star.click();
+      var pop = document.getElementById('curation-popover');
+      return {
+        hasDataAon: !!star,
+        opened: pop ? pop.style.display === 'block' : false,
+        hasTitle: pop ? !!pop.querySelector('.popover-title') : false
+      };
+    });
+    expect(r.hasDataAon).toBe(true);
+    expect(r.opened).toBe(true);
+    expect(r.hasTitle).toBe(true);
+  });
+});
+
+test.describe('C43-15: Off-list flag renders with tooltip on the shopping row', () => {
+  test('a Divine-only scroll while only Arcane is populated shows the ⚠ with Trick Magic Item text', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+    await page.click('[data-page="arcane"]');
+    await page.waitForTimeout(300);
+
+    const r = await page.evaluate(() => {
+      var st = Planner.getState();
+      st.arcane[1][1] = [window.SPELL_SCHEMA.spells.find(function(s){ return s.tradition.indexOf('Arcane') !== -1; })];
+      var divineOnly = window.SPELL_SCHEMA.spells.find(function(s){ return s.tradition.length === 1 && s.tradition[0] === 'Divine'; });
+      MagicItems.setAll([]);
+      MagicItems.add(divineOnly, 'scroll');
+      App.switchTab('magicitems');
+      var flag = document.querySelector('#miShopping .mi-offlist');
+      var tip = flag ? (flag.getAttribute('title') || flag.dataset.tooltip || '') : '';
+      return { present: !!flag, mentionsTrick: tip.indexOf('Trick Magic Item') !== -1 };
+    });
+    expect(r.present).toBe(true);
+    expect(r.mentionsTrick).toBe(true);
+  });
+});

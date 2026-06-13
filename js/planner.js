@@ -767,7 +767,7 @@
               if (spell) {
                 panelHtml += '<td class="slot-spell-name">';
                 if (spell.mathfinder_reviewed) {
-                  panelHtml += '<span class="mathfinder-star" style="cursor:default;" title="Mathfinder reviewed">★</span>';
+                  panelHtml += '<span class="mathfinder-star" data-aon="' + spell.aonId + '" title="Mathfinder reviewed — click for details">★</span>';
                 }
                 panelHtml += spell.name;
                 if (spell.aonId) {
@@ -796,7 +796,7 @@
             panelHtml += '<td class="slot-tradition-badge"><span class="tradition-circle item-' + it.kind + '" title="' + (it.kind === 'wand' ? 'Wand' : 'Scroll') + '">' + glyph + '</span></td>';
             panelHtml += '<td class="slot-spell-name">';
             if (it.mathfinder_reviewed) {
-              panelHtml += '<span class="mathfinder-star" style="cursor:default;" title="Mathfinder reviewed">★</span>';
+              panelHtml += '<span class="mathfinder-star" data-aon="' + it.aonId + '" title="Mathfinder reviewed — click for details">★</span>';
             }
             panelHtml += it.name;
             if (it.aonId) {

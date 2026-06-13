@@ -246,7 +246,7 @@
       var hoverTimer = null;
 
       document.addEventListener('mouseover', function(e) {
-        var el = e.target.closest('.info-bubble');
+        var el = e.target.closest('.info-bubble, .mi-offlist');
         if (!el) return;
         var text = el.getAttribute('title') || el.dataset.tooltip;
         if (!text) return;
@@ -267,7 +267,7 @@
       });
 
       document.addEventListener('mouseout', function(e) {
-        var el = e.target.closest('.info-bubble');
+        var el = e.target.closest('.info-bubble, .mi-offlist');
         if (el) {
           if (hoverTimer) { clearTimeout(hoverTimer); hoverTimer = null; }
           tooltipEl.style.display = 'none';
@@ -473,6 +473,15 @@
       document.addEventListener('click', function(e) {
         var star = e.target.closest('.mathfinder-star');
         if (star) {
+          // Cycle 43 — merged-view + item stars carry data-aon → look up the full spell.
+          if (star.dataset.aon) {
+            var aonId = parseInt(star.dataset.aon, 10);
+            var all = (window.SPELL_SCHEMA && SPELL_SCHEMA.spells) || [];
+            for (var k = 0; k < all.length; k++) {
+              if (all[k].aonId === aonId) { App.showPopover(star, all[k]); return; }
+            }
+            return;
+          }
           var row = star.closest('tr[data-spell-idx]');
           if (!row) return;
           var idx = parseInt(row.dataset.spellIdx, 10);
