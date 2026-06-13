@@ -765,8 +765,8 @@ test.describe('C25-2: About page loads', () => {
     });
     expect(result.pageActive).toBe(true);
     expect(result.tocExists).toBe(true);
-    expect(result.tocLinkCount).toBe(15);
-    expect(result.sectionCount).toBe(15);
+    expect(result.tocLinkCount).toBe(16); // Cycle 43 added the Magic Items FAQ section
+    expect(result.sectionCount).toBe(16);
     expect(result.firstSectionId).toBe('about-what');
     expect(result.firstSectionHeading).toBe('What Is This Tool?');
     expect(result.sidebarHidden).toBe(true);
@@ -1804,5 +1804,253 @@ test.describe('C38-3: Role filter pills present and functional', () => {
     });
 
     expect(result.visible).toBe(false);
+  });
+});
+
+// ════════════════════════════════════════════════════════════════════
+// Cycle 43 — Magic Items: scroll & wand shopping list
+// ════════════════════════════════════════════════════════════════════
+
+test.describe('C43-1: Cost/level engine matches AoN tables', () => {
+  test('scroll and wand unit cost + item level are correct (incl. rank-5 wand = 1400)', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+    const r = await page.evaluate(() => ({
+      scroll3: MagicItems.unitCost('scroll', 3),
+      scroll10: MagicItems.unitCost('scroll', 10),
+      wand5: MagicItems.unitCost('wand', 5),
+      wand9: MagicItems.unitCost('wand', 9),
+      scrollLvl3: MagicItems.itemLevel('scroll', 3),
+      wandLvl3: MagicItems.itemLevel('wand', 3),
+      wealth9: MagicItems.characterWealthAt(9)
+    }));
+    expect(r.scroll3).toBe(30);
+    expect(r.scroll10).toBe(8000);
+    expect(r.wand5).toBe(1400);
+    expect(r.wand9).toBe(40000);
+    expect(r.scrollLvl3).toBe(5);   // 2*3-1
+    expect(r.wandLvl3).toBe(7);     // 2*3+1
+    expect(r.wealth9).toBe(1600);
+  });
+});
+
+test.describe('C43-2: Add scroll/wand and see computed list + running total', () => {
+  test('adding a scroll and a wand renders rows with unit, item level, line total, running total', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+    await page.click('[data-page="magicitems"]');
+    await page.waitForTimeout(300);
+
+    const r = await page.evaluate(() => {
+      const sp = window.SPELL_SCHEMA.spells.find(s => s.era !== 'legacy_core');
+      MagicItems.add(sp, 'scroll');
+      MagicItems.add(sp, 'wand');
+      const rows = document.querySelectorAll('#miShopping .mi-shop-table tbody tr');
+      const totalRow = document.querySelector('#miShopping .mi-total-row');
+      return {
+        rowCount: rows.length,
+        hasBubble: !!document.querySelector('#miShopping .tradition-circle.item-wand'),
+        totalText: totalRow ? totalRow.textContent : ''
+      };
+    });
+    expect(r.rowCount).toBe(2);
+    expect(r.hasBubble).toBe(true);
+    expect(r.totalText).toMatch(/gp/);
+  });
+});
+
+test.describe('C43-3: Editing rank recomputes cost', () => {
+  test('changing chosenRank changes unit cost', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+    const r = await page.evaluate(() => {
+      // A spell that can heighten to at least rank 3 as a scroll.
+      const sp = window.SPELL_SCHEMA.spells.find(s =>
+        s.era !== 'legacy_core' && MagicItems.legalRanks(s, 'scroll').filter(x => x >= 1 && x <= 4).length >= 2);
+      MagicItems.setAll([]);
+      MagicItems.add(sp, 'scroll');
+      const ranks = MagicItems.legalRanks(sp, 'scroll');
+      const lo = ranks[0], hi = ranks[ranks.length - 1];
+      MagicItems.update(0, 'rank', lo);
+      const costLo = MagicItems.unitCost('scroll', MagicItems.getAll()[0].chosenRank);
+      MagicItems.update(0, 'rank', hi);
+      const costHi = MagicItems.unitCost('scroll', MagicItems.getAll()[0].chosenRank);
+      return { lo, hi, costLo, costHi };
+    });
+    expect(r.hi).toBeGreaterThan(r.lo);
+    expect(r.costHi).toBeGreaterThan(r.costLo);
+  });
+});
+
+test.describe('C43-4: Rank picker is constrained to legal ranks; wands cap at 9', () => {
+  test('legalRanks caps wands at 9 and includes native rank', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+    const r = await page.evaluate(() => {
+      const spells = window.SPELL_SCHEMA.spells.filter(s => s.era !== 'legacy_core');
+      let maxWand = 0, nativeIncluded = true;
+      for (let i = 0; i < spells.length; i++) {
+        const lr = MagicItems.legalRanks(spells[i], 'wand');
+        for (let j = 0; j < lr.length; j++) if (lr[j] > maxWand) maxWand = lr[j];
+        const nr = spells[i].native_rank;
+        if (nr && nr <= 9 && lr.indexOf(nr) === -1) nativeIncluded = false;
+      }
+      // The shopping-table rank <select> offers exactly the legal ranks.
+      const sp = spells.find(s => MagicItems.legalRanks(s, 'wand').length >= 1);
+      MagicItems.setAll([]);
+      MagicItems.add(sp, 'wand');
+      document.getElementById('page-magicitems').dataset.built = '';
+      MagicItems.renderTab();
+      const sel = document.querySelector('#miShopping .mi-shop-table tbody tr td:nth-child(4) select');
+      const optionCount = sel ? sel.querySelectorAll('option').length : -1;
+      return { maxWand, nativeIncluded, optionCount, legalLen: MagicItems.legalRanks(sp, 'wand').length };
+    });
+    expect(r.maxWand).toBeLessThanOrEqual(9);
+    expect(r.nativeIncluded).toBe(true);
+    expect(r.optionCount).toBe(r.legalLen);
+  });
+});
+
+test.describe('C43-5: Off-list flag', () => {
+  test('item not on a populated tradition is flagged; matching tradition is not', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+    await page.click('[data-page="arcane"]'); // init planState.arcane levels/ranks
+    await page.waitForTimeout(300);
+    const r = await page.evaluate(() => {
+      // Populate ONLY arcane with one assigned spell.
+      const st = window.Planner.getState();
+      const anySpell = window.SPELL_SCHEMA.spells[0];
+      st.arcane[1][1] = [anySpell];
+      const arcaneSpell = window.SPELL_SCHEMA.spells.find(s => s.tradition.indexOf('Arcane') !== -1);
+      const nonArcane = window.SPELL_SCHEMA.spells.find(s => s.tradition.length > 0 && s.tradition.indexOf('Arcane') === -1);
+      return {
+        offForNonArcane: MagicItems.isOffList({ tradition: nonArcane.tradition }),
+        offForArcane: MagicItems.isOffList({ tradition: arcaneSpell.tradition })
+      };
+    });
+    expect(r.offForNonArcane).toBe(true);
+    expect(r.offForArcane).toBe(false);
+  });
+});
+
+test.describe('C43-6: Coverage — wands count by default, scrolls only with toggle', () => {
+  test('a wand lights a damage tag in merged coverage; a scroll does not until toggled', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+
+    // WAND case
+    const wandLit = await page.evaluate(() => {
+      const sp = window.SPELL_SCHEMA.spells.find(s => s.era !== 'legacy_core' && s.damage_types && s.damage_types.length > 0);
+      const dt = sp.damage_types[0];
+      MagicItems.setAll([]);
+      const snap = JSON.parse(JSON.stringify(sp));
+      // add via API then force purchaseLevel low
+      MagicItems.add(sp, 'wand');
+      MagicItems.update(0, 'purchaseLevel', 1);
+      App.switchTab('merged');
+      const lvl = Planner.getCurrentLevel('merged');
+      Coverage.updateMerged(lvl);
+      const tag = document.querySelector('.sidebar .ctag[data-tag="' + dt + '"]');
+      return { dt, lit: !!(tag && tag.classList.contains('lit')) };
+    });
+    expect(wandLit.lit).toBe(true);
+
+    // SCROLL case (fresh)
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+    const scrollCase = await page.evaluate(() => {
+      const sp = window.SPELL_SCHEMA.spells.find(s => s.era !== 'legacy_core' && s.damage_types && s.damage_types.length > 0);
+      const dt = sp.damage_types[0];
+      MagicItems.setAll([]);
+      MagicItems.add(sp, 'scroll');
+      MagicItems.update(0, 'purchaseLevel', 1);
+      App.switchTab('merged');
+      const lvl = Planner.getCurrentLevel('merged');
+      Coverage.updateMerged(lvl);
+      const before = document.querySelector('.sidebar .ctag[data-tag="' + dt + '"]');
+      const litBefore = !!(before && before.classList.contains('lit'));
+      MagicItems.setIncludeScrolls(true);
+      const after = document.querySelector('.sidebar .ctag[data-tag="' + dt + '"]');
+      const litAfter = !!(after && after.classList.contains('lit'));
+      return { litBefore, litAfter };
+    });
+    expect(scrollCase.litBefore).toBe(false);
+    expect(scrollCase.litAfter).toBe(true);
+  });
+});
+
+test.describe('C43-7: Item appears in merged view with source bubble', () => {
+  test('a planned wand renders an item bubble in the merged view at its purchase level', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+    const r = await page.evaluate(() => {
+      const sp = window.SPELL_SCHEMA.spells.find(s => s.era !== 'legacy_core');
+      MagicItems.setAll([]);
+      MagicItems.add(sp, 'wand');
+      MagicItems.update(0, 'purchaseLevel', 5);
+      App.switchTab('merged');
+      Planner.buildMergedView(5);
+      return {
+        hasItemTable: !!document.querySelector('#levelPanels-merged .merged-item-table'),
+        hasItemBubble: !!document.querySelector('#levelPanels-merged .tradition-circle.item-wand'),
+        toggleVisible: document.getElementById('merged-scroll-toggle').style.display !== 'none'
+      };
+    });
+    expect(r.hasItemTable).toBe(true);
+    expect(r.hasItemBubble).toBe(true);
+    expect(r.toggleVisible).toBe(true);
+  });
+});
+
+test.describe('C43-8: Save format v2 + backward-compatible load', () => {
+  test('v2 file restores the shopping list; v1 file loads with an empty list', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+    await page.click('[data-page="magicitems"]');
+    await page.waitForTimeout(200);
+
+    const v2 = path.resolve(__dirname, 'fixtures', 'plan-v2-items.json');
+    await page.setInputFiles('#page-magicitems input[type="file"]', v2);
+    await page.waitForTimeout(300);
+    const afterV2 = await page.evaluate(() => MagicItems.getAll().length);
+    expect(afterV2).toBe(1);
+
+    const v1 = path.resolve(__dirname, 'fixtures', 'plan-v1-no-items.json');
+    page.once('dialog', d => d.accept()); // load-over-existing confirm
+    await page.setInputFiles('#page-magicitems input[type="file"]', v1);
+    await page.waitForTimeout(300);
+    const afterV1 = await page.evaluate(() => MagicItems.getAll().length);
+    expect(afterV1).toBe(0);
+  });
+});
+
+test.describe('C43-9: Shopping list in markdown and CSV export', () => {
+  test('downloadMd includes the Magic Items section; downloadCsv includes the rows', async ({ page }) => {
+    await page.goto(APP_URL);
+    await page.waitForLoadState('domcontentloaded');
+    await page.evaluate(() => {
+      const sp = window.SPELL_SCHEMA.spells.find(s => s.era !== 'legacy_core');
+      MagicItems.setAll([]);
+      MagicItems.add(sp, 'wand');
+    });
+
+    const [mdDownload] = await Promise.all([
+      page.waitForEvent('download'),
+      page.evaluate(() => Export.downloadMd())
+    ]);
+    const mdPath = await mdDownload.path();
+    const md = fs.readFileSync(mdPath, 'utf8');
+    expect(md).toContain('Magic Items (Shopping List)');
+    expect(md).toContain('Running total');
+
+    const [csvDownload] = await Promise.all([
+      page.waitForEvent('download'),
+      page.evaluate(() => Export.downloadCsv())
+    ]);
+    const csvPath = await csvDownload.path();
+    const csv = fs.readFileSync(csvPath, 'utf8');
+    expect(csv).toContain('Type,Spell,Rank,Item Level');
+    expect(csv).toContain('Running Total');
   });
 });

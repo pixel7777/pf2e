@@ -987,6 +987,14 @@
         }
       }
 
+      // Cycle 43 — planned item-spells contribute here only: wands always, scrolls with the view toggle.
+      if (window.MagicItems && MagicItems.coverageSpellsForLevel) {
+        var itemSpells = MagicItems.coverageSpellsForLevel(level || 0);
+        for (var k = 0; k < itemSpells.length; k++) {
+          allSpells.push(itemSpells[k]);
+        }
+      }
+
       var activeTags = collectActiveTags(allSpells);
       var weaknessTypes = collectWeaknessTypes(allSpells);
 

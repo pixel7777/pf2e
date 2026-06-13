@@ -1,0 +1,32 @@
+{
+  "formatVersion": 2,
+  "appVersion": "pf2e-spell-planner",
+  "savedAt": "2026-06-13T00:00:00.000Z",
+  "classes": { "arcane": null, "divine": null, "occult": null, "primal": null },
+  "plan": {},
+  "magicItems": [
+    {
+      "kind": "wand",
+      "aonId": 12345,
+      "name": "Fixture Wand Spell",
+      "tradition": ["Arcane"],
+      "roles": ["utility"],
+      "native_rank": 1,
+      "heighten_ranks": [1],
+      "basic_save": false,
+      "st_incap": false,
+      "mathfinder_reviewed": false,
+      "defense_tags": [],
+      "targeting_tags": [],
+      "damage_types": [],
+      "conditions_imposed": [],
+      "reliability_tags": [],
+      "action_tags": [],
+      "special_tags": [],
+      "weaknesses_imposed": [],
+      "chosenRank": 1,
+      "qty": 2,
+      "purchaseLevel": 3
+    }
+  ]
+}

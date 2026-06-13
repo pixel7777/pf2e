@@ -635,10 +635,26 @@
         if (hasSpell) populatedLevels.push(lv);
       }
 
+      // Cycle 43 — levels that exist purely from planned item purchases also get a tab.
+      var itemPLevels = (window.MagicItems && MagicItems.itemPurchaseLevels) ? MagicItems.itemPurchaseLevels() : [];
+      for (var ip = 0; ip < itemPLevels.length; ip++) {
+        if (populatedLevels.indexOf(itemPLevels[ip]) === -1) populatedLevels.push(itemPLevels[ip]);
+      }
+      populatedLevels.sort(function(a, b) { return a - b; });
+
       var emptyMsg = document.getElementById('merged-empty-msg');
       var tabBar = document.getElementById('levelTabBar-merged');
       var panels = document.getElementById('levelPanels-merged');
       var legend = document.getElementById('merged-legend');
+
+      // Cycle 43 — show the view-only "count scrolls" toggle whenever any item exists.
+      var scrollToggle = document.getElementById('merged-scroll-toggle');
+      var anyItems = !!(window.MagicItems && MagicItems.getAll().length > 0);
+      if (scrollToggle) {
+        scrollToggle.style.display = anyItems ? '' : 'none';
+        var scrollCb = document.getElementById('mergedScrollCoverage');
+        if (scrollCb) scrollCb.checked = anyItems && MagicItems.getIncludeScrolls();
+      }
 
       if (populatedLevels.length === 0) {
         if (emptyMsg) emptyMsg.style.display = '';
@@ -686,58 +702,112 @@
           legendHtml += '</div>';
         }
       }
+      // Cycle 43 — item sources in the legend, sorted after the traditions.
+      var legendItems = (window.MagicItems && MagicItems.displayItemsForLevel) ? MagicItems.displayItemsForLevel(level) : [];
+      var legHasScroll = false, legHasWand = false;
+      for (var li = 0; li < legendItems.length; li++) {
+        if (legendItems[li].kind === 'wand') { legHasWand = true; } else { legHasScroll = true; }
+      }
+      if (legHasScroll) legendHtml += '<div class="merged-legend-item"><span class="tradition-circle item-scroll">&#128220;</span><span>Scroll</span></div>';
+      if (legHasWand) legendHtml += '<div class="merged-legend-item"><span class="tradition-circle item-wand">&#129668;</span><span>Wand</span></div>';
       legend.innerHTML = legendHtml;
 
-      // Build slot display: grouped by rank (descending) then tradition
+      // Build slot display: grouped by rank (descending), traditions first, then planned items (Cycle 43)
       var maxRank = Math.ceil(level / 2);
+      var itemsHere = (window.MagicItems && MagicItems.displayItemsForLevel) ? MagicItems.displayItemsForLevel(level) : [];
+      var topRank = maxRank;
+      for (var ih = 0; ih < itemsHere.length; ih++) {
+        if (itemsHere[ih].chosenRank > topRank) topRank = itemsHere[ih].chosenRank;
+      }
       var panelHtml = '';
 
-      for (var r = maxRank; r >= 1; r--) {
-        // Check if any tradition has slots at this rank
+      for (var r = topRank; r >= 1; r--) {
+        var withinPrep = r <= maxRank;
+
+        // Tradition slots at this rank (only within preparation max rank)
         var rankHasSlots = false;
-        for (var ti = 0; ti < traditions.length; ti++) {
-          var t = traditions[ti];
-          if (planState[t] && planState[t][level] && planState[t][level][r] && planState[t][level][r].length > 0) {
-            rankHasSlots = true;
-            break;
+        if (withinPrep) {
+          for (var ti = 0; ti < traditions.length; ti++) {
+            var t = traditions[ti];
+            if (planState[t] && planState[t][level] && planState[t][level][r] && planState[t][level][r].length > 0) {
+              rankHasSlots = true;
+              break;
+            }
           }
         }
-        if (!rankHasSlots) continue;
 
-        var tier = App.getTier(level, r);
+        // Planned scroll/wand items at this rank
+        var itemsAtRank = [];
+        for (var ir = 0; ir < itemsHere.length; ir++) {
+          if (itemsHere[ir].chosenRank === r) itemsAtRank.push(itemsHere[ir]);
+        }
+
+        if (!rankHasSlots && itemsAtRank.length === 0) continue;
+
         panelHtml += '<div class="merged-rank-header">';
         panelHtml += '<span class="rank-label">Rank ' + r + '</span>';
-        panelHtml += '<span class="tier-badge ' + tier + '">' + App.tierLabel(tier) + '</span>';
+        if (withinPrep) {
+          var tier = App.getTier(level, r);
+          panelHtml += '<span class="tier-badge ' + tier + '">' + App.tierLabel(tier) + '</span>';
+        }
         panelHtml += '</div>';
 
-        for (var ti = 0; ti < traditions.length; ti++) {
-          var t = traditions[ti];
-          if (!planState[t] || !planState[t][level] || !planState[t][level][r]) continue;
-          var slots = planState[t][level][r];
-          if (slots.length === 0) continue;
+        if (rankHasSlots) {
+          for (var ti = 0; ti < traditions.length; ti++) {
+            var t = traditions[ti];
+            if (!planState[t] || !planState[t][level] || !planState[t][level][r]) continue;
+            var slots = planState[t][level][r];
+            if (slots.length === 0) continue;
 
-          panelHtml += '<table class="merged-slot-table"><tbody>';
-          for (var idx = 0; idx < slots.length; idx++) {
-            var spell = slots[idx];
-            panelHtml += '<tr>';
-            panelHtml += '<td class="slot-tradition-badge"><span class="tradition-circle ' + t + '">' + TRAD_INITIALS[t] + '</span></td>';
-            if (spell) {
-              panelHtml += '<td class="slot-spell-name">';
-              if (spell.mathfinder_reviewed) {
-                panelHtml += '<span class="mathfinder-star" style="cursor:default;" title="Mathfinder reviewed">★</span>';
+            panelHtml += '<table class="merged-slot-table"><tbody>';
+            for (var idx = 0; idx < slots.length; idx++) {
+              var spell = slots[idx];
+              panelHtml += '<tr>';
+              panelHtml += '<td class="slot-tradition-badge"><span class="tradition-circle ' + t + '">' + TRAD_INITIALS[t] + '</span></td>';
+              if (spell) {
+                panelHtml += '<td class="slot-spell-name">';
+                if (spell.mathfinder_reviewed) {
+                  panelHtml += '<span class="mathfinder-star" style="cursor:default;" title="Mathfinder reviewed">★</span>';
+                }
+                panelHtml += spell.name;
+                if (spell.aonId) {
+                  panelHtml += '<a href="' + App.aonUrl(spell.aonId) + '" target="_blank" class="aon-link" title="Open on Archives of Nethys" onclick="event.stopPropagation()">↗</a>';
+                }
+                panelHtml += '</td>';
+                panelHtml += '<td class="slot-native-rank">' + (spell.native_rank || '') + '</td>';
+                panelHtml += '<td class="slot-action">' + App.formatActions(spell.action_tags) + '</td>';
+                panelHtml += '<td>' + App.renderTags(spell) + '</td>';
+                panelHtml += '<td class="spell-notes">' + App.renderNotes(spell) + '</td>';
+              } else {
+                panelHtml += '<td colspan="5" class="slot-empty">_(empty slot)_</td>';
               }
-              panelHtml += spell.name;
-              if (spell.aonId) {
-                panelHtml += '<a href="' + App.aonUrl(spell.aonId) + '" target="_blank" class="aon-link" title="Open on Archives of Nethys" onclick="event.stopPropagation()">↗</a>';
-              }
-              panelHtml += '</td>';
-              panelHtml += '<td class="slot-native-rank">' + (spell.native_rank || '') + '</td>';
-              panelHtml += '<td class="slot-action">' + App.formatActions(spell.action_tags) + '</td>';
-              panelHtml += '<td>' + App.renderTags(spell) + '</td>';
-              panelHtml += '<td class="spell-notes">' + App.renderNotes(spell) + '</td>';
-            } else {
-              panelHtml += '<td colspan="5" class="slot-empty">_(empty slot)_</td>';
+              panelHtml += '</tr>';
             }
+            panelHtml += '</tbody></table>';
+          }
+        }
+
+        if (itemsAtRank.length > 0) {
+          panelHtml += '<table class="merged-slot-table merged-item-table"><tbody>';
+          for (var im = 0; im < itemsAtRank.length; im++) {
+            var it = itemsAtRank[im];
+            var glyph = it.kind === 'wand' ? '&#129668;' : '&#128220;';
+            panelHtml += '<tr>';
+            panelHtml += '<td class="slot-tradition-badge"><span class="tradition-circle item-' + it.kind + '" title="' + (it.kind === 'wand' ? 'Wand' : 'Scroll') + '">' + glyph + '</span></td>';
+            panelHtml += '<td class="slot-spell-name">';
+            if (it.mathfinder_reviewed) {
+              panelHtml += '<span class="mathfinder-star" style="cursor:default;" title="Mathfinder reviewed">★</span>';
+            }
+            panelHtml += it.name;
+            if (it.aonId) {
+              panelHtml += '<a href="' + App.aonUrl(it.aonId) + '" target="_blank" class="aon-link" title="Open on Archives of Nethys" onclick="event.stopPropagation()">↗</a>';
+            }
+            panelHtml += ' <span class="mi-kind-note">(' + (it.kind === 'wand' ? 'wand' : 'scroll') + ')</span>';
+            panelHtml += '</td>';
+            panelHtml += '<td class="slot-native-rank">' + it.chosenRank + '</td>';
+            panelHtml += '<td class="slot-action">' + App.formatActions(it.action_tags) + '</td>';
+            panelHtml += '<td>' + App.renderTags(it) + '</td>';
+            panelHtml += '<td class="spell-notes"></td>';
             panelHtml += '</tr>';
           }
           panelHtml += '</tbody></table>';

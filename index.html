@@ -23,7 +23,7 @@
 <title>PF2e Spell Planner — Prepared Caster Edition</title>
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
-<link rel="stylesheet" href="css/styles.css?v=49">
+<link rel="stylesheet" href="css/styles.css?v=50">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -83,6 +83,7 @@
     <button class="tab-btn" data-page="occult">Occult</button>
     <button class="tab-btn" data-page="primal">Primal</button>
     <button class="tab-btn" data-page="merged">Merged</button>
+    <button class="tab-btn" data-page="magicitems">Magic Items</button>
   </nav>
 </header>
 
@@ -579,6 +580,7 @@
             </div>
           </div>
         </div>
+        <p class="section-intro"><a href="#" onclick="App.switchTab('magicitems');return false;"><strong>→ Open the Magic Items tab</strong></a> to actually plan scroll &amp; wand purchases — any catalog spell, auto-priced by rank, with a running cost against your expected wealth by level.</p>
         </section>
 
       </div>
@@ -662,6 +664,7 @@
             <li><strong>Staves</strong> — Your best friend as a prepared caster. Grants encounter-to-encounter flexibility you otherwise lack. Budget for a fully upgraded staff.</li>
             <li><strong>Scrolls</strong> — Silver bullets you don't want to burn a preparation slot on.</li>
             <li><strong>Wands</strong> — Repeatable low-rank buffs: Longstrider, See the Unseen, Resist Energy.</li>
+            <li><a href="#" onclick="App.switchTab('magicitems');return false;"><strong>→ Plan these on the Magic Items tab</strong></a> — auto-priced by rank, with a running cost vs. expected wealth.</li>
           </ul>
         </div>
       </div>
@@ -756,6 +759,7 @@
             <li><strong>Staves</strong> — Look for staves with damage options to compensate for Divine's thin blasting.</li>
             <li><strong>Scrolls</strong> — Offensive scrolls for gap-filling. Scrolls of Breath of Life as backup.</li>
             <li><strong>Wands</strong> — Repeatable low-rank buffs: Bless, Resist Energy, Restoration.</li>
+            <li><a href="#" onclick="App.switchTab('magicitems');return false;"><strong>→ Plan these on the Magic Items tab</strong></a> — auto-priced by rank, with a running cost vs. expected wealth.</li>
           </ul>
         </div>
       </div>
@@ -844,6 +848,7 @@
             <li><strong>Staves</strong> — Grants encounter-to-encounter flexibility. Budget for a fully upgraded staff.</li>
             <li><strong>Scrolls</strong> — Elemental damage scrolls to cover the Mental-only gap (fire, cold, electricity).</li>
             <li><strong>Wands</strong> — Repeatable low-rank buffs: Soothe, Resist Energy, False Vitality, Invisibility.</li>
+            <li><a href="#" onclick="App.switchTab('magicitems');return false;"><strong>→ Plan these on the Magic Items tab</strong></a> — auto-priced by rank, with a running cost vs. expected wealth.</li>
           </ul>
         </div>
       </div>
@@ -935,6 +940,7 @@
             <li><strong>Staves</strong> — Your best friend as a prepared caster. Primal's breadth across damage, control, and healing makes staff flexibility especially impactful. Budget for a fully upgraded staff.</li>
             <li><strong>Scrolls</strong> — Will-targeting scrolls from other traditions if your class allows.</li>
             <li><strong>Wands</strong> — Repeatable low-rank buffs: Longstrider, Resist Energy, Barkskin.</li>
+            <li><a href="#" onclick="App.switchTab('magicitems');return false;"><strong>→ Plan these on the Magic Items tab</strong></a> — auto-priced by rank, with a running cost vs. expected wealth.</li>
           </ul>
         </div>
       </div>
@@ -956,10 +962,18 @@
       </div>
 
       <div class="merged-legend" id="merged-legend"></div>
+      <div class="mi-coverage-toggle" id="merged-scroll-toggle" style="display:none;">
+        <label><input type="checkbox" id="mergedScrollCoverage" onchange="MagicItems.setIncludeScrolls(this.checked)"> Count scrolls toward coverage <span class="info-bubble" title="Off by default: a scroll is one use, so it shouldn't imply reliable coverage. Wands recharge daily, so they always count. This toggle is view-only and isn't saved.">ⓘ</span></label>
+      </div>
       <div class="level-tab-bar" id="levelTabBar-merged"></div>
       <div id="merged-empty-msg" class="merged-empty-msg" style="display:none;">No spells assigned. Prepare spells on tradition pages, then return here to see your combined list.</div>
       <div id="levelPanels-merged"></div>
     </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- MAGIC ITEMS (Scroll & Wand Shopping List) -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="tradition-page" id="page-magicitems"></div>
 
     <!-- ═══════════════════════════════════════════════════ -->
     <!-- ABOUT PAGE -->
@@ -975,6 +989,7 @@
           <a href="#about-tiers" class="about-toc-link">What is the Tier System?</a>
           <a href="#about-tags" class="about-toc-link">What Do the Tags and Properties in the Coverage Tracker and on the Spells Mean?</a>
           <a href="#about-filtering" class="about-toc-link">How Do I Use the Filtering System?</a>
+          <a href="#about-items" class="about-toc-link">What's the Magic Items Tab?</a>
           <a href="#about-mathfinder" class="about-toc-link">What's with all the Mathfinder References?</a>
           <a href="#about-ai" class="about-toc-link">Was AI Used to Build This?</a>
           <a href="#about-data" class="about-toc-link">How Was the Data Derived?</a>
@@ -1167,6 +1182,18 @@
             </div>
           </section>
 
+          <!-- Section: What's the Magic Items Tab? -->
+          <section class="overview-section" id="about-items">
+            <h2 class="section-label">What's the Magic Items Tab?</h2>
+            <div class="about-body">
+              <p>Utility casting in PF2e is often better <em>bought</em> than slotted — a scroll for the thing you need about once an adventure, a wand for the thing you want once a day. The <strong>Magic Items</strong> tab is where you plan those purchases. Search the full catalog, add any spell as a scroll or a wand, and the tool fills in the gold cost and item level automatically from the spell rank (change the rank and it recomputes). Set a quantity and the character level you plan to buy it at.</p>
+              <p>The list sorts by item level and keeps a running total, with a rough <em>expected wealth by level</em> reference so you can sanity-check spending as you go — it's a per-character estimate that varies a lot by party and GM, so treat it as a band, not a hard limit.</p>
+              <p>Anything you plan to buy folds into your <strong>Merged</strong> view from its purchase level onward, marked with a 📜 (scroll) or 🪄 (wand) bubble. Wands count toward your coverage there by default because they recharge; scrolls don't, unless you flip the "count scrolls" toggle for a look. If a scroll or wand is for a spell on none of the traditions you've actually been preparing, it gets a small ⚠ flag — you'd hand it to another caster or use Trick Magic Item.</p>
+              <p>The shopping list rides along in your saved plan and the Markdown export, and there's a one-way CSV export if you'd rather finish your shopping list — mundane gear and all — in a spreadsheet.</p>
+              <p><strong>Not yet covered:</strong> staves. They hold multiple spells with their own charge economy and pricing, so they're a job for a later update — for now this tab is scrolls and wands of single spells.</p>
+            </div>
+          </section>
+
           <!-- Section: What's with all the Mathfinder References? -->
           <section class="overview-section" id="about-mathfinder">
             <h2 class="section-label">What's with all the Mathfinder References?</h2>
@@ -1307,11 +1334,12 @@
 <script src="data/tag-definitions.js?v=2"></script>
 
 <!-- App modules -->
-<script src="js/app.js?v=48"></script>
-<script src="js/planner.js?v=44"></script>
+<script src="js/app.js?v=49"></script>
+<script src="js/planner.js?v=45"></script>
 <script src="js/browser.js?v=52"></script>
-<script src="js/coverage.js?v=45"></script>
-<script src="js/export.js?v=41"></script>
+<script src="js/coverage.js?v=46"></script>
+<script src="js/export.js?v=42"></script>
+<script src="js/magicitems.js?v=1"></script>
 
 </body>
 </html>

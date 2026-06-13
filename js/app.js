@@ -105,7 +105,7 @@
 
       var sidebar = document.querySelector('.sidebar');
       if (sidebar) {
-        sidebar.style.display = (page === 'overview' || page === 'about') ? 'none' : '';
+        sidebar.style.display = (page === 'overview' || page === 'about' || page === 'magicitems') ? 'none' : '';
       }
 
       // Update About utility link active state
@@ -145,6 +145,14 @@
         if (window.Planner && Planner.buildMergedView) {
           Planner.buildMergedView();
         }
+      } else if (page === 'magicitems') {
+        // Magic Items tab: self-contained (no coverage sidebar). Restore any merged-only classes.
+        var sidebarMi = document.querySelector('.sidebar');
+        if (sidebarMi) {
+          sidebarMi.classList.remove('merged-filters-hidden');
+          sidebarMi.classList.remove('merged-pills-disabled');
+        }
+        if (window.MagicItems && MagicItems.renderTab) MagicItems.renderTab();
       } else {
         // Restore sidebar state for non-merged pages
         var sidebar = document.querySelector('.sidebar');
