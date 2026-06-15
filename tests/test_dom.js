@@ -728,17 +728,22 @@ test.describe('C25-1: Header utility links', () => {
     const result = await page.evaluate(() => {
       var container = document.querySelector('.header-utility-links');
       var about = container.querySelector('a[href="#page-about"]');
-      var feedback = container.querySelector('a[target="_blank"]');
-      var support = container.querySelector('.utility-link-inert');
+      var feedback = container.querySelector('a[href*="featurebase"]');
+      var support = container.querySelector('a[href="https://ko-fi.com/pixel7777"]');
       return {
         aboutText: about ? about.textContent.trim() : null,
         feedbackText: feedback ? feedback.textContent.trim() : null,
-        supportText: support ? support.textContent.trim() : null
+        supportText: support ? support.textContent.trim() : null,
+        supportTarget: support ? support.getAttribute('target') : null,
+        // Cycle 44: the dormant "Coming soon" placeholder is gone — the tip jar is live.
+        inertGone: !container.querySelector('.utility-link-inert')
       };
     });
     expect(result.aboutText).toBe('About');
     expect(result.feedbackText).toContain('Feedback');
-    expect(result.supportText).toBe('Support Me');
+    expect(result.supportText).toContain('Support Me');
+    expect(result.supportTarget).toBe('_blank');
+    expect(result.inertGone).toBe(true);
   });
 });
 
